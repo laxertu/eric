@@ -63,7 +63,6 @@ class MessageQueueListener(ABC):
     async def stop(self) -> None:
         self.__is_running = False
 
-    @abstractmethod
     def on_message(self, msg: Message) -> None:
         ...
 
