@@ -13,18 +13,18 @@ from eric.model import create_simple_mesage, InvalidChannelException
 
 logger = eric.get_logger()
 
-class SocketServerListener(MessageQueueListener):
+class SimpleServerListener(MessageQueueListener):
 
     def on_message(self, msg: Message) -> None:
-        SocketServer.eric.get_channel('main').broadcast(msg)
+        SimpleServer.eric.get_channel('main').broadcast(msg)
 
     def close(self) -> None:
         pass
 
 
-class SocketServer:
+class SimpleServer:
     eric = Eric()
-    __main_listener = SocketServerListener()
+    __main_listener = SimpleServerListener()
 
     def __init__(self, file_descriptor_path: str):
         self.__file_descriptor_path = file_descriptor_path
@@ -33,12 +33,12 @@ class SocketServer:
     @staticmethod
     async def __prepare():
         try:
-            SocketServer.eric.get_channel('main')
+            SimpleServer.eric.get_channel('main')
         except InvalidChannelException:
             try:
-                SocketServer.eric.register_channel('main')
-                SocketServer.eric.get_channel('main').register_listener(SocketServer.__main_listener)
-                await SocketServer.__main_listener.start()
+                SimpleServer.eric.register_channel('main')
+                SimpleServer.eric.get_channel('main').register_listener(SimpleServer.__main_listener)
+                await SimpleServer.__main_listener.start()
             except Exception as e:
                 print(e)
 
@@ -48,11 +48,11 @@ class SocketServer:
 
     @staticmethod
     async def connect_callback(reader: StreamReader, writer: StreamWriter):
-        await SocketServer.__prepare()
+        await SimpleServer.__prepare()
         message_content = await reader.read()
         message = create_simple_mesage(message_content.decode())
 
-        SocketServer.eric.get_channel('main').dispatch(SocketServer.__main_listener, message)
+        SimpleServer.eric.get_channel('main').dispatch(SimpleServer.__main_listener, message)
         writer.write('ack'.encode())
         writer.write_eof()
         await writer.drain()
@@ -65,7 +65,7 @@ class SocketServer:
         logger.info("done")
 
     async def main(self):
-        server = await start_unix_server(SocketServer.connect_callback, path=Path(self.__file_descriptor_path))
+        server = await start_unix_server(SimpleServer.connect_callback, path=Path(self.__file_descriptor_path))
         addr = server.sockets[0].getsockname()
         logger.info(f'Serving on {addr}')
 
@@ -80,7 +80,7 @@ class SocketServer:
     def start(file_descriptor_path: str):
         logger.info('starting')
         try:
-            server = SocketServer(file_descriptor_path)
+            server = SimpleServer(file_descriptor_path)
             asyncio.run(server.main())
         except CancelledError:
             exit(0)
