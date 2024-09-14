@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "Eric"
 description = "A lightweigth message dispatcher based on SSE protocol data transfer objects format"
-version = "0.0.1"
+version = "0.0.0"
 authors = ["Luca Stretti <laxertu@gmail.com>"]
 
 [tool.poetry.dependencies]
