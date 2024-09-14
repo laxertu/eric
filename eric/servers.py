@@ -15,7 +15,7 @@ logger = eric.get_logger()
 class EricBroadCastListener(MessageQueueListener):
 
     def on_message(self, msg: Message) -> None:
-        SocketServer.eric.get_channel('main').broadcast(msg)
+        SocketServer.channel.broadcast(msg)
 
     def close(self) -> None:
         pass
