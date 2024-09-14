@@ -1,17 +1,17 @@
 import asyncio
-import logging
 import signal
+
 from asyncio import StreamReader, StreamWriter, start_unix_server
 from asyncio.exceptions import CancelledError
 from pathlib import Path
 
-from eric.__init__ import logger
-from eric import Message
+import eric
+from eric.model import Message
 from eric.listeners import MessageQueueListener
-from eric import Eric
+from eric.eric import Eric
 from eric.model import create_simple_mesage, InvalidChannelException
 
-
+logger = eric.get_logger()
 
 class SocketServerListener(MessageQueueListener):
 

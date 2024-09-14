@@ -1,4 +1,4 @@
-from eric import MessageQueueListener, Message
+from eric.model import MessageQueueListener, Message
 
 class LocalHostMessageQueueListener(MessageQueueListener):
 

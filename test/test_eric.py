@@ -1,6 +1,7 @@
 from unittest import TestCase
 from pytest import raises
-from eric import Eric, InvalidChannelException, Message, InvalidListenerException, MessageQueueListener
+from eric.model import InvalidChannelException, Message, InvalidListenerException, MessageQueueListener
+from eric.eric import Eric
 from unittest import IsolatedAsyncioTestCase
 
 class MessageQueueListenerMock(MessageQueueListener):

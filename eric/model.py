@@ -1,16 +1,13 @@
 import asyncio
 import json
-import logging
 from threading import Lock
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from logging import getLogger, DEBUG, Formatter
 
-
-logger = getLogger(__name__)
-logger.setLevel(DEBUG)
-logger.addHandler(logging.StreamHandler())
+import eric
+logger = eric.get_logger()
 
 class PrefixedFormatter(Formatter):
 
