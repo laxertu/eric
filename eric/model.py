@@ -153,7 +153,7 @@ class SSEChannel(AbstractChannel):
         async def event_generator():
             while True:
                 # If client closes connection, stop sending events
-                if await listener.is_running():
+                if not await listener.is_running():
                     break
 
                 try:
