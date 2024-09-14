@@ -4,16 +4,9 @@ from threading import Lock
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from logging import getLogger, DEBUG, Formatter
 
 import eric
 logger = eric.get_logger()
-
-class PrefixedFormatter(Formatter):
-
-    def formatMessage(self, record):
-        return f'[ERIC] {super().formatMessage(record)}'
-
 
 class InvalidChannelException(Exception):
     ...
@@ -40,8 +33,10 @@ def create_from_json(raw_txt: str) -> Message:
             type=parsed['type'],
             payload=parsed['payload']
         )
-    except KeyError:
-        raise InvalidMessageFormat
+    except json.JSONDecodeError as e:
+        raise InvalidMessageFormat(e)
+    except KeyError as e:
+        raise InvalidMessageFormat(e)
 
 def create_simple_mesage(txt: str) -> Message:
     return Message(type='txt', payload=txt)
@@ -70,10 +65,6 @@ class MessageQueueListener(ABC):
 
     @abstractmethod
     def on_message(self, msg: Message) -> None:
-        ...
-
-    @abstractmethod
-    def close(self) -> None:
         ...
 
 class AbstractChannel(ABC):
