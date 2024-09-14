@@ -2,50 +2,69 @@ from unittest import TestCase
 from eric.model import Message, MessageQueueListener, SSEChannel
 from unittest import IsolatedAsyncioTestCase
 
+class DummyQueueListener(MessageQueueListener):
+
+    def on_message(self, msg: Message) -> None:
+        pass
+
+
+
 class MessageQueueListenerMock(MessageQueueListener):
 
     def __init__(self, num_messages_before_disconnect=1, fixtures: dict[int, Message] = None):
         super().__init__()
         self.disconnect_after = num_messages_before_disconnect
         self.num_received = 0
-        self.last_msg: Message | None = None
         self.fixtures = fixtures
-
-    async def start(self):
-        pass
 
     async def is_running(self) -> bool:
         return self.num_received >= self.disconnect_after
 
-    async def stop(self) -> None:
-        pass
-
     def on_message(self, msg: Message) -> None:
         self.num_received += 1
-        self.last_msg = msg
-        if self.fixtures is not None and self.fixtures.get(self.num_received):
-            assert msg.type == self.last_msg.type
-            assert msg.payload == self.last_msg.payload
-
-    def close(self) -> None:
-        pass
+        if self.fixtures is not None:
+            assert msg.type == self.fixtures[self.num_received].type
+            assert msg.payload == self.fixtures[self.num_received].payload
 
 
-class EricTestCase(TestCase):
+class ListenerTestCase(IsolatedAsyncioTestCase):
+    def setUp(self):
+        self.sut = DummyQueueListener()
+
+    async def test_start_stop(self):
+        self.assertFalse(await self.sut.is_running())
+
+        await self.sut.start()
+        self.assertTrue(await self.sut.is_running())
+
+        await self.sut.stop()
+        self.assertFalse(await self.sut.is_running())
+
+        await self.sut.start()
+        self.assertTrue(await self.sut.is_running())
+
+
+class SSEChannelTestCase(TestCase):
 
     def setUp(self):
         self.sut = SSEChannel()
+        SSEChannel.NEXT_ID = 1
+        MessageQueueListener.NEXT_ID = 1
 
+    def test_listeners_ids_generation(self):
+        l_1 = MessageQueueListenerMock()
+        self.assertEqual('1', l_1.id)
 
-    def test_broadcast_no_listeners(self):
-        self.sut.broadcast(msg=Message(type= 'test'))
-        self.assertDictEqual({}, self.sut.queues)
+        l_2 = MessageQueueListenerMock()
+        self.assertEqual('2', l_2.id)
+
+        l_3 = self.sut.add_listener(MessageQueueListenerMock)
+        self.assertEqual('3', l_3.id)
 
     def test_broadcast_ok(self):
 
         # scenario is: 1 channel and 2 listeners
-        sut = self.sut
-        c = sut
+        c = self.sut
         l_1 = c.add_listener(MessageQueueListenerMock)
         l_2 = c.add_listener(MessageQueueListenerMock)
 
