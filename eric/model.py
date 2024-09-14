@@ -119,7 +119,10 @@ class AbstractChannel(ABC):
 
 
     def dispatch(self, listener: MessageQueueListener, msg: Message):
-        self._add_to_queue(listener.id, msg)
+        try:
+            self._add_to_queue(listener.id, msg)
+        except InvalidListenerException:
+            self.register_listener(listener)
         logger.debug(f"Pending {len(self.queues[listener.id])} messages")
 
     def _add_to_queue(self, listener_id: str, msg: Message):

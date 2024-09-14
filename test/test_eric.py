@@ -1,7 +1,5 @@
 from unittest import TestCase
-from pytest import raises
-from eric.model import InvalidChannelException, Message, InvalidListenerException, MessageQueueListener
-from eric.eric import Eric
+from eric.model import Message, MessageQueueListener, SSEChannel
 from unittest import IsolatedAsyncioTestCase
 
 class MessageQueueListenerMock(MessageQueueListener):
@@ -36,40 +34,18 @@ class MessageQueueListenerMock(MessageQueueListener):
 class EricTestCase(TestCase):
 
     def setUp(self):
-        self.sut = Eric()
+        self.sut = SSEChannel()
 
-    def test_register_channel(self):
-
-        sut = Eric()
-        sut.register_channel('1')
-        self.assertDictEqual({}, sut.channels['1'].listeners)
-
-
-    def test_no_channel(self):
-        with raises(InvalidChannelException):
-            self.sut.get_channel(channel_id="unexixtent").dispatch(
-                listener=MessageQueueListenerMock(), msg=Message(type='test')
-            )
-
-    def test_no_listener(self):
-        sut = self.sut
-
-        with raises(InvalidListenerException):
-            sut.register_channel(channel_id='1')
-            l = MessageQueueListenerMock()
-            sut.get_channel('1').dispatch(l, msg=Message(type='test'))
 
     def test_broadcast_no_listeners(self):
-        sut = self.sut
-        sut.register_channel('1')
-        sut.get_channel('1').broadcast(msg=Message(type= 'test'))
-        self.assertDictEqual({}, sut.channels['1'].queues)
+        self.sut.broadcast(msg=Message(type= 'test'))
+        self.assertDictEqual({}, self.sut.queues)
 
     def test_broadcast_ok(self):
 
         # scenario is: 1 channel and 2 listeners
         sut = self.sut
-        c = sut.register_channel('channelid')
+        c = sut
         l_1 = c.add_listener(MessageQueueListenerMock)
         l_2 = c.add_listener(MessageQueueListenerMock)
 
@@ -80,10 +56,10 @@ class EricTestCase(TestCase):
             l_1.id: [msg_to_send],
             l_2.id: [msg_to_send]
         }
-        self.assertEqual(expected, sut.channels['channelid'].queues)
+        self.assertEqual(expected, c.queues)
 
         # message is received correctly
-        msg_received = sut.get_channel('channelid').deliver_next(listener_id=l_1.id)
+        msg_received = c.deliver_next(listener_id=l_1.id)
         self.assertEqual(msg_to_send, msg_received)
 
         # queue is ok
@@ -91,42 +67,27 @@ class EricTestCase(TestCase):
             l_1.id: [],
             l_2.id: [msg_to_send]
         }
-        self.assertEqual(expected, sut.channels['channelid'].queues)
+        self.assertEqual(expected, c.queues)
 
-
-    def test_delete(self):
-        sut = self.sut
-        sid = 'channelid'
-        c = sut.register_channel(sid)
-        listener = c.add_listener(MessageQueueListenerMock)
-        sut.get_channel(sid).dispatch(listener=listener, msg=Message(type='test'))
-        sut.delete_channel(sid)
-
-        self.assertDictEqual({}, sut.channels)
 
 class StreamTestCase(IsolatedAsyncioTestCase):
     def setUp(self):
-        Eric.QUEUES = {}
-        self.sut = Eric()
+        self.sut = SSEChannel()
 
     async def test_message_stream(self):
-        sut = self.sut
-        ch_id = 'channelid'
-        c = sut.register_channel(channel_id=ch_id)
+        c = self.sut
         listener = c.add_listener(MessageQueueListenerMock)
         await listener.start()
 
-        sut.get_channel(ch_id).dispatch(listener, Message(type='test', payload={'a': 1}))
-        async for msg in await sut.get_channel(ch_id).message_stream(listener):
+        c.dispatch(listener, Message(type='test', payload={'a': 1}))
+        async for msg in await c.message_stream(listener):
             self.assertDictEqual({'data': {'a': 1}, 'event': 'test', 'retry': c.retry_timeout_millisedonds}, msg)
-            self.assertDictEqual({listener.id: []}, sut.channels[ch_id].queues)
+            self.assertDictEqual({listener.id: []}, c.queues)
             await listener.stop()
 
 
     async def test_watch(self):
-        sut = self.sut
-        sid = 'channelid'
-        c = sut.register_channel(channel_id=sid)
+        c = self.sut
         msg1 = Message('test', {'a': 1})
         msg2 = Message('test', {'a': 1})
 
@@ -135,7 +96,7 @@ class StreamTestCase(IsolatedAsyncioTestCase):
         )
         c.register_listener(listener)
 
-        sut.get_channel(sid).dispatch(listener, msg1)
-        sut.get_channel(sid).dispatch(listener, msg2)
+        c.dispatch(listener, msg1)
+        c.dispatch(listener, msg2)
 
         await listener.start()
