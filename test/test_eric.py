@@ -1,5 +1,5 @@
 from unittest import TestCase
-from eric.model import Message, MessageQueueListener, SSEChannel
+from eric.entities import Message, MessageQueueListener, SSEChannel
 from unittest import IsolatedAsyncioTestCase
 
 class DummyQueueListener(MessageQueueListener):

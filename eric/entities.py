@@ -4,21 +4,12 @@ from threading import Lock
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from typing import AsyncGenerator, AsyncIterable
 
 import eric
+from eric.exception import InvalidChannelException, InvalidListenerException, NoMessagesException, InvalidMessageFormat
+
 logger = eric.get_logger()
-
-class InvalidChannelException(Exception):
-    ...
-
-class InvalidListenerException(Exception):
-    ...
-
-class NoMessagesException(Exception):
-    ...
-
-class InvalidMessageFormat(Exception):
-    ...
 
 
 @dataclass
@@ -26,17 +17,6 @@ class Message:
     type: str
     payload: dict | list | str | None = None
 
-def create_from_json(raw_txt: str) -> Message:
-    try:
-        parsed = json.loads(raw_txt)
-        return Message(
-            type=parsed['type'],
-            payload=parsed['payload']
-        )
-    except json.JSONDecodeError as e:
-        raise InvalidMessageFormat(e)
-    except KeyError as e:
-        raise InvalidMessageFormat(e)
 
 def create_simple_mesage(txt: str) -> Message:
     return Message(type='txt', payload=txt)
@@ -52,10 +32,6 @@ class MessageQueueListener(ABC):
 
     async def start(self) -> None:
         self.__is_running = True
-        await self.on_start()
-
-    async def on_start(self) -> None:
-        pass
 
     async def is_running(self) -> bool:
         return self.__is_running
@@ -136,12 +112,12 @@ class AbstractChannel(ABC):
 
 class SSEChannel(AbstractChannel):
 
-    def __init__(self):
+    def __init__(self, stream_delay_seconds: int = 1, retry_timeout_millisedonds: int = 15000):
         super().__init__()
-        self.stream_delay_seconds = 1
-        self.retry_timeout_millisedonds = 15000
+        self.stream_delay_seconds = stream_delay_seconds
+        self.retry_timeout_millisedonds = retry_timeout_millisedonds
 
-    async def message_stream(self, listener: MessageQueueListener):
+    async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[dict]:
 
         def new_messages():
             try:
@@ -149,7 +125,7 @@ class SSEChannel(AbstractChannel):
             except NoMessagesException:
                 ...
 
-        async def event_generator():
+        async def event_generator() -> AsyncIterable[dict]:
             while True:
                 # If client closes connection, stop sending events
                 if not await listener.is_running():
@@ -165,6 +141,7 @@ class SSEChannel(AbstractChannel):
 
                     await asyncio.sleep(self.stream_delay_seconds)
                 except InvalidChannelException as e:
+                    logger.info(f"Stopping listener {listener.id}")
                     logger.debug(e)
                     await listener.stop()
                     yield {

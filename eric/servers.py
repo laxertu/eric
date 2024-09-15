@@ -1,44 +1,109 @@
 import asyncio
+import json
+import os
 import signal
+from os import linesep
 
 from asyncio import StreamReader, StreamWriter, start_unix_server
 from asyncio.exceptions import CancelledError
 from pathlib import Path
 
 import eric
-from eric.model import Message
-from eric.listeners import MessageQueueListener
-from eric.model import create_simple_mesage, SSEChannel
+from eric.entities import Message, MessageQueueListener
+from eric.exception import InvalidChannelException, InvalidListenerException, InvalidMessageFormat
+from eric.entities import SSEChannel
 
 logger = eric.get_logger()
 
-class EricBroadCastListener(MessageQueueListener):
 
-    def on_message(self, msg: Message) -> None:
-        SocketServer.channel.broadcast(msg)
+class ChannelContainer:
 
-    def close(self) -> None:
-        pass
+    def __init__(self):
+        self.__channels: dict[str: SSEChannel] = {}
+
+    def add(self) -> SSEChannel:
+        channel = SSEChannel()
+        if channel.id in self.__channels:
+            raise InvalidListenerException(f'Channel with id {channel.id} already exists')
+        self.__channels[channel.id] = channel
+        return channel
+
+    def get(self, channel_id: str) -> SSEChannel:
+        try:
+            return self.__channels[channel_id]
+        except KeyError:
+            raise InvalidChannelException(f'No channel with id {channel_id}')
+
+    def rm(self, channel_id: str):
+        del self.__channels[channel_id]
 
 
 class SocketServer:
-    channel = SSEChannel()
-    __main_listener = EricBroadCastListener()
+    cc = ChannelContainer()
 
     def __init__(self, file_descriptor_path: str):
         self.__file_descriptor_path = file_descriptor_path
-        self.channel = SSEChannel()
+
+    @staticmethod
+    def __parse(json_raw: str) -> (str, Message, str):
+        try:
+            parsed = json.loads(json_raw)
+            channel_id = parsed['c']
+            verb = parsed['v']
+            message = Message(type=parsed['t'], payload=parsed.get('p'))
+            receiver_id: str = parsed.get('r')
+            return channel_id, verb, message, receiver_id
+
+        except KeyError as e:
+            logger.error(repr(e))
+            raise InvalidMessageFormat(json_raw)
 
 
     @staticmethod
     async def connect_callback(reader: StreamReader, writer: StreamWriter):
-        message_content = await reader.read()
-        message = create_simple_mesage(message_content.decode())
+        try:
+            message_content = await reader.read()
+            channel_id, verb, message, receiver_id = SocketServer.__parse(message_content.decode())
+            channel = SocketServer.cc.get(channel_id)
 
-        SocketServer.channel.dispatch(SocketServer.__main_listener, message)
-        writer.write('ack'.encode())
-        writer.write_eof()
-        await writer.drain()
+            logger.info(f'received command {verb}')
+
+            if verb == 'd':
+                channel.dispatch(channel.get_listener(receiver_id), message)
+                writer.write('ack'.encode())
+                writer.write_eof()
+                await writer.drain()
+
+
+            elif verb == 'b':
+                channel.broadcast(message)
+                writer.write('ack'.encode())
+                writer.write_eof()
+                await writer.drain()
+
+
+            elif verb == 'c':
+                l = channel.add_listener(MessageQueueListener())
+                writer.write(l.id.encode())
+                writer.write_eof()
+                await writer.drain()
+
+
+            elif verb == 'w':
+                logger.info(f"Client watching on listener {receiver_id}")
+                async for m in await channel.message_stream(channel.get_listener(receiver_id)):
+                    message = f'{json.dumps(m)}{os.linesep}'
+                    logger.info(f"received message {message}")
+                    writer.write(message.encode())
+                    #await writer.drain()
+
+
+
+        except Exception as e:
+                logger.error(e)
+                writer.write(repr(e).encode())
+                writer.write_eof()
+                await writer.drain()
 
     async def shutdown(self, server: asyncio.Server):
         logger.info("graceful shutdown")
