@@ -8,31 +8,25 @@ async def main():
     try:
 
         channel_id = sys.argv[1]
+        receiver_id = sys.argv[2]
 
         r, w = await asyncio.open_unix_connection(Path(SOCKET_FILE_DESCIPTOR_PATH))
         payload = {
+            't': 'z',
             'c': channel_id,
-            'v': 'b',
-            't': 'txt',
-            'p': 'Hi there!'
+            'r': receiver_id,
+            'v': 'w',
         }
         w.write(json.dumps(payload).encode())
         w.write_eof()
-
-        response = await r.read()
-        print(response.decode())
-
-        # Close
         await w.drain()
-        #w.write_eof()
-        w.close()
-        await w.wait_closed()
-        print("message sent")
+        print('waiting...')
 
-
-
+        while not r.at_eof():
+            m = await r.readline()
+            print(m.decode())
 
     except Exception as e:
         print(e)
 
-asyncio.get_event_loop().run_until_complete(main())
+asyncio.run(main())
