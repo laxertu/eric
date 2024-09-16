@@ -45,6 +45,9 @@ class MessageQueueListener(ABC):
     async def stop(self) -> None:
         self.__is_running = False
 
+    async def stop_sync(self) -> None:
+        self.__is_running = False
+
     def on_message(self, msg: Message) -> None:
         ...
 
