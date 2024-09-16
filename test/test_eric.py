@@ -68,6 +68,9 @@ class SSEChannelTestCase(TestCase):
         l_1 = c.add_listener(MessageQueueListenerMock)
         l_2 = c.add_listener(MessageQueueListenerMock)
 
+        l_1.start_sync()
+        l_2.start_sync()
+
         # 1 broadcast
         msg_to_send = Message(type= 'test', payload={})
         c.broadcast(msg=msg_to_send)
@@ -98,7 +101,7 @@ class StreamTestCase(IsolatedAsyncioTestCase):
         listener = c.add_listener(MessageQueueListenerMock)
         await listener.start()
 
-        c.dispatch(listener, Message(type='test', payload={'a': 1}))
+        c.dispatch(listener.id, Message(type='test', payload={'a': 1}))
         async for msg in await c.message_stream(listener):
             self.assertDictEqual({'data': {'a': 1}, 'event': 'test', 'retry': c.retry_timeout_millisedonds}, msg)
             self.assertDictEqual({listener.id: []}, c.queues)
@@ -115,7 +118,7 @@ class StreamTestCase(IsolatedAsyncioTestCase):
         )
         c.register_listener(listener)
 
-        c.dispatch(listener, msg1)
-        c.dispatch(listener, msg2)
+        c.dispatch(listener.id, msg1)
+        c.dispatch(listener.id, msg2)
 
         await listener.start()

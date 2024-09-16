@@ -95,20 +95,17 @@ class AbstractChannel(ABC):
             raise InvalidListenerException(f"Invalid listener {listener_id}")
 
 
-    def dispatch(self, listener: MessageQueueListener, msg: Message):
-        try:
-            self._add_to_queue(listener.id, msg)
-        except InvalidListenerException:
-            self.register_listener(listener)
-            self._add_to_queue(listener.id, msg)
-        logger.debug(f"Pending {len(self.queues[listener.id])} messages")
+    def dispatch(self, listener_id: str, msg: Message):
+
+        self._add_to_queue(listener_id, msg)
+        logger.debug(f"Pending {len(self.queues[listener_id])} messages")
 
     def _add_to_queue(self, listener_id: str, msg: Message):
         self.__get_queue(listener_id).append(msg)
 
     def broadcast(self, msg: Message):
         for listener_id in self.listeners.keys():
-            self.dispatch(listener=self.get_listener(listener_id), msg=msg)
+            self.dispatch(listener_id, msg=msg)
 
 
     def get_listener(self, listener_id: str) -> MessageQueueListener:

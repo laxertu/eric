@@ -69,7 +69,7 @@ class SocketServer:
             logger.info(f'received command {verb}')
 
             if verb == 'd':
-                channel.dispatch(channel.get_listener(receiver_id), message)
+                channel.dispatch(receiver_id, message)
                 writer.write('ack'.encode())
                 writer.write_eof()
                 await writer.drain()

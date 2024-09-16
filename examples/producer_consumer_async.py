@@ -10,7 +10,7 @@ class Producer:
     @staticmethod
     def produce_num(c: SSEChannel, l: MessageQueueListener, num: int):
         for i in range(1, num):
-            c.dispatch(l, Message(type='counter', payload=i))
+            c.dispatch(l.id, Message(type='counter', payload=i))
 
 class Consumer(MessageQueueListener):
     def on_message(self, msg: Message) -> None:
