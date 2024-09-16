@@ -15,7 +15,7 @@ logger = eric.get_logger()
 @dataclass
 class Message:
     type: str
-    payload: dict | list | str | None = None
+    payload: dict | list | str | int | None = None
 
 
 def create_simple_mesage(txt: str) -> Message:
@@ -33,7 +33,13 @@ class MessageQueueListener(ABC):
     async def start(self) -> None:
         self.__is_running = True
 
+    def start_sync(self) -> None:
+        self.__is_running = True
+
     async def is_running(self) -> bool:
+        return self.__is_running
+
+    def is_running_sync(self) -> bool:
         return self.__is_running
 
     async def stop(self) -> None:
@@ -69,13 +75,15 @@ class AbstractChannel(ABC):
         del self.listeners[l_id]
 
     def deliver_next(self, listener_id: str) -> Message:
-        try:
-            msg = self.__get_queue(listener_id).pop(0)
-            self.get_listener(listener_id).on_message(msg)
+        if self.get_listener(listener_id).is_running_sync():
+            try:
+                msg = self.__get_queue(listener_id).pop(0)
+                self.get_listener(listener_id).on_message(msg)
 
-            return msg
-        except IndexError:
-            raise NoMessagesException
+                return msg
+            except IndexError:
+                raise NoMessagesException
+
 
     def __get_queue(self, listener_id: str) -> list[Message]:
         try:
@@ -89,6 +97,7 @@ class AbstractChannel(ABC):
             self._add_to_queue(listener.id, msg)
         except InvalidListenerException:
             self.register_listener(listener)
+            self._add_to_queue(listener.id, msg)
         logger.debug(f"Pending {len(self.queues[listener.id])} messages")
 
     def _add_to_queue(self, listener_id: str, msg: Message):
@@ -112,7 +121,7 @@ class AbstractChannel(ABC):
 
 class SSEChannel(AbstractChannel):
 
-    def __init__(self, stream_delay_seconds: int = 1, retry_timeout_millisedonds: int = 15000):
+    def __init__(self, stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 15000):
         super().__init__()
         self.stream_delay_seconds = stream_delay_seconds
         self.retry_timeout_millisedonds = retry_timeout_millisedonds
