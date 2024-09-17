@@ -2,7 +2,6 @@ import asyncio
 import json
 import os
 import signal
-from os import linesep
 
 from asyncio import StreamReader, StreamWriter, start_unix_server
 from asyncio.exceptions import CancelledError
@@ -126,6 +125,7 @@ class SocketServer:
 
     @staticmethod
     def start(file_descriptor_path: str):
+        """Shortcut to start a server"""
         logger.info('starting')
         try:
             server = SocketServer(file_descriptor_path)

@@ -2,13 +2,6 @@ from unittest import TestCase
 from eric.entities import Message, MessageQueueListener, SSEChannel
 from unittest import IsolatedAsyncioTestCase
 
-class DummyQueueListener(MessageQueueListener):
-
-    def on_message(self, msg: Message) -> None:
-        pass
-
-
-
 class MessageQueueListenerMock(MessageQueueListener):
 
     def __init__(self, num_messages_before_disconnect=1, fixtures: dict[int, Message] = None):
@@ -29,7 +22,7 @@ class MessageQueueListenerMock(MessageQueueListener):
 
 class ListenerTestCase(IsolatedAsyncioTestCase):
     def setUp(self):
-        self.sut = DummyQueueListener()
+        self.sut = MessageQueueListener()
 
     async def test_start_stop(self):
         self.assertFalse(await self.sut.is_running())

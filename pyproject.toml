@@ -1,13 +1,15 @@
 [tool.poetry]
 name = "eric"
 description = "A lightweigth message dispatcher based on SSE protocol data transfer objects format"
-version = "0.0.2"
+version = "0.0.3"
 authors = ["Luca Stretti <laxertu@gmail.com>"]
 keywords = ["sse", "queue"]
 
 [tool.poetry.dependencies]
 python = ">= 3.10"
 asyncio = ">= 3.4.3"
+
+[tool.setuptools_scm]
 
 [build-system]
 requires = ["poetry-core"]

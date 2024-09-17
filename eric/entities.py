@@ -1,13 +1,12 @@
 import asyncio
-import json
 from threading import Lock
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import AsyncGenerator, AsyncIterable
+from typing import AsyncIterable, Any
 
 import eric
-from eric.exception import InvalidChannelException, InvalidListenerException, NoMessagesException, InvalidMessageFormat
+from eric.exception import InvalidChannelException, InvalidListenerException, NoMessagesException
 
 logger = eric.get_logger()
 
@@ -15,13 +14,16 @@ logger = eric.get_logger()
 @dataclass
 class Message:
     type: str
-    payload: dict | list | str | int | None = None
+    payload: dict | list | str | int | float | None = None
 
 
 def create_simple_mesage(txt: str) -> Message:
     return Message(type='txt', payload=txt)
 
 class MessageQueueListener(ABC):
+    """
+    Base class for listeners
+    """
     NEXT_ID = 1
 
     def __init__(self):
@@ -31,34 +33,43 @@ class MessageQueueListener(ABC):
         self.__is_running: bool = False
 
     async def start(self) -> None:
+        """Starts listening"""
         self.__is_running = True
 
     def start_sync(self) -> None:
+        """Starts listening"""
         self.__is_running = True
 
     async def is_running(self) -> bool:
+        """Returns listener's state: stopped vs. running"""
         return self.__is_running
 
     def is_running_sync(self) -> bool:
+        """Returns listener's state: stopped vs. running"""
         return self.__is_running
 
     async def stop(self) -> None:
+        """Stops listening"""
         self.__is_running = False
 
     async def stop_sync(self) -> None:
+        """Stops listening"""
         self.__is_running = False
 
     def on_message(self, msg: Message) -> None:
-        ...
+        """
+        Event handler. It executes whan a message is delivered to client
+        """
+        pass
 
 class AbstractChannel(ABC):
     NEXT_ID = 1
 
     def __init__(self):
-        logger.info(f'Creating channel {SSEChannel.NEXT_ID}')
+        logger.info(f'Creating channel {AbstractChannel.NEXT_ID}')
         with Lock():
-            self.id: str = str(SSEChannel.NEXT_ID)
-            SSEChannel.NEXT_ID += 1
+            self.id: str = str(AbstractChannel.NEXT_ID)
+            AbstractChannel.NEXT_ID += 1
 
         self.listeners: dict[str: MessageQueueListener] = {}
         self.queues: dict[str: list[Message]] = {}
@@ -115,7 +126,7 @@ class AbstractChannel(ABC):
             raise InvalidListenerException
 
     @abstractmethod
-    async def message_stream(self, listener: MessageQueueListener):
+    async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
         ...
 
 
