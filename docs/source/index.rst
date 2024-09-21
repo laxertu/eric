@@ -1,6 +1,8 @@
 
 Eric. The async library nobody expects.
 =======================================
+.. autoclass:: eric.entities.Message
+   :members:
 
 Core Entities
 =============

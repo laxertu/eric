@@ -176,12 +176,9 @@ class AbstractChannel(ABC):
 class SSEChannel(AbstractChannel):
     """
     SSE streaming channel.
+
     See https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
-
     Currently, 'id' field is not supported.
-
-    In case of failure at channel resulution time, a special message with type='_eric_channel_closed' is sent, and
-    correspondant listener is stopped
     """
 
     def __init__(self, stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 15000):
@@ -190,6 +187,13 @@ class SSEChannel(AbstractChannel):
         self.retry_timeout_millisedonds = retry_timeout_millisedonds
 
     async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[dict]:
+        """
+        In case of failure at channel resulution time, a special message with type='_eric_channel_closed' is sent, and
+        correspondant listener is stopped
+
+        :param listener:
+        :return:
+        """
 
         def new_messages():
             try:
