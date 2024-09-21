@@ -88,7 +88,7 @@ class SocketServer:
 
 
             elif verb == 'c':
-                l = channel.add_listener(MessageQueueListener())
+                l = channel.add_listener(MessageQueueListener)
                 writer.write(l.id.encode())
                 writer.write_eof()
                 await writer.drain()
