@@ -3,10 +3,11 @@ from threading import Lock
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import AsyncIterable, Any
+from typing import AsyncIterable, Any, Callable
 
 import eric
 from eric.exception import InvalidChannelException, InvalidListenerException, NoMessagesException
+from listeners import ThreadPoolListener
 
 logger = eric.get_logger()
 
@@ -216,3 +217,14 @@ class SSEChannel(AbstractChannel):
             "retry": self.retry_timeout_millisedonds,
             "data": msg.payload
         }
+
+class DataProcessingChannel(SSEChannel):
+
+    def notify_end(self):
+        self.broadcast(Message(type='_eric_channel_closed'))
+
+    def add_threaded_listener(self, callback: Callable, max_workers: int) -> ThreadPoolListener:
+
+        l = ThreadPoolListener(callback, max_workers)
+        self.register_listener(l)
+        return l
