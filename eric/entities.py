@@ -3,7 +3,7 @@ from threading import Lock
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import AsyncIterable, Any
+from typing import AsyncIterable, Any, Callable
 
 import eric
 from eric.exception import InvalidChannelException, InvalidListenerException, NoMessagesException
@@ -216,3 +216,34 @@ class SSEChannel(AbstractChannel):
             "retry": self.retry_timeout_millisedonds,
             "data": msg.payload
         }
+
+
+class ThreadPoolListener(MessageQueueListener):
+    """
+    Listener intended for consurrent processing of data.
+
+    Relies on concurrent.futures.ThreadPoolExecutor.
+    '_eric_channel_closed' Message type is intended as end of stream. Is shouls be considered as a reserved Message type
+    """
+    def __init__(self, callback: Callable, max_workers: int):
+        from concurrent.futures import ThreadPoolExecutor
+        super().__init__()
+        self.executor = ThreadPoolExecutor(max_workers=max_workers)
+        self.__callback = callback
+
+    def on_message(self, msg: Message) -> None:
+        if msg.type == '_eric_channel_closed':
+            self.stop_sync()
+        else:
+            self.executor.submit(self.__callback, msg.payload)
+
+class DataProcessingChannel(SSEChannel):
+
+    def notify_end(self):
+        self.broadcast(Message(type='_eric_channel_closed'))
+
+    def add_threaded_listener(self, callback: Callable, max_workers: int) -> ThreadPoolListener:
+
+        l = ThreadPoolListener(callback, max_workers)
+        self.register_listener(l)
+        return l
