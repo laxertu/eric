@@ -1,9 +1,3 @@
-"""
-Eric: the async library nobody expects
-
-Bla bla
-"""
-
 import logging
 from logging import getLogger, StreamHandler, Logger
 
