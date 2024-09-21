@@ -169,11 +169,7 @@ class AbstractChannel(ABC):
 
     @abstractmethod
     async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
-        """
-        Entry point for message streaming.
-
-        :param listener:
-        """
+        """Entry point for message streaming"""
         ...
 
 
