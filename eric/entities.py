@@ -79,7 +79,7 @@ class AbstractChannel(ABC):
     """
     NEXT_ID = 1
 
-    def __init__(self):
+    def __init__(self, stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 15000):
         logger.info(f'Creating channel {AbstractChannel.NEXT_ID}')
         with Lock():
             self.id: str = str(AbstractChannel.NEXT_ID)
@@ -87,6 +87,8 @@ class AbstractChannel(ABC):
 
         self.listeners: dict[str: MessageQueueListener] = {}
         self.queues: dict[str: list[Message]] = {}
+        self.stream_delay_seconds = stream_delay_seconds
+        self.retry_timeout_millisedonds = retry_timeout_millisedonds
 
 
     def add_listener(self, l_class: MessageQueueListener.__class__) -> MessageQueueListener:
@@ -168,23 +170,8 @@ class AbstractChannel(ABC):
             raise InvalidListenerException
 
     @abstractmethod
-    async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
-        """Entry point for message streaming"""
+    def adapt(self, msg: Message) -> Any:
         ...
-
-
-class SSEChannel(AbstractChannel):
-    """
-    SSE streaming channel.
-
-    See https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
-    Currently, 'id' field is not supported.
-    """
-
-    def __init__(self, stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 15000):
-        super().__init__()
-        self.stream_delay_seconds = stream_delay_seconds
-        self.retry_timeout_millisedonds = retry_timeout_millisedonds
 
     async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[dict]:
         """
@@ -209,20 +196,28 @@ class SSEChannel(AbstractChannel):
 
                 try:
                     for message in new_messages():
-                        yield {
-                            "event": message.type,
-                            "retry": self.retry_timeout_millisedonds,
-                            "data": message.payload
-                        }
+                        yield self.adapt(message)
 
                     await asyncio.sleep(self.stream_delay_seconds)
                 except InvalidChannelException as e:
                     logger.info(f"Stopping listener {listener.id}")
                     logger.debug(e)
                     await listener.stop()
-                    yield {
-                        "event": "_eric_channel_closed",
-                        "data": None
-                    }
+                    yield self.adapt(Message(type='_eric_channel_closed'))
 
         return event_generator()
+
+
+class SSEChannel(AbstractChannel):
+    """
+    SSE streaming channel.
+
+    See https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
+    Currently, 'id' field is not supported.
+    """
+    def adapt(self, msg: Message) -> Any:
+        return {
+            "event": msg.type,
+            "retry": self.retry_timeout_millisedonds,
+            "data": msg.payload
+        }
