@@ -34,10 +34,7 @@ SSEChannel is the default implementation
 
 #### add_listener() → [MessageQueueListener](#eric.entities.MessageQueueListener)
 
-Adds a the default listener to channel
-
-* **Parameters:**
-  **l_class** – a valid MessageQueueListener class constructor.
+Adds a default listener to channel
 
 #### broadcast(msg: [Message](#eric.entities.Message))
 
