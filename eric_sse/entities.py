@@ -5,10 +5,10 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import AsyncIterable, Any, Callable
 
-import eric
-from eric.exception import InvalidChannelException, InvalidListenerException, NoMessagesException
+import eric_sse
+from eric_sse.exception import InvalidChannelException, InvalidListenerException, NoMessagesException
 
-logger = eric.get_logger()
+logger = eric_sse.get_logger()
 
 
 @dataclass

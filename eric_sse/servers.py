@@ -7,12 +7,12 @@ from asyncio import StreamReader, StreamWriter, start_unix_server
 from asyncio.exceptions import CancelledError
 from pathlib import Path
 
-import eric
-from eric.entities import Message
-from eric.exception import InvalidChannelException, InvalidListenerException, InvalidMessageFormat
-from eric.entities import SSEChannel
+import eric_sse
+from eric_sse.entities import Message
+from eric_sse.exception import InvalidChannelException, InvalidListenerException, InvalidMessageFormat
+from eric_sse.entities import SSEChannel
 
-logger = eric.get_logger()
+logger = eric_sse.get_logger()
 
 
 class ChannelContainer:
