@@ -2,7 +2,7 @@
 name = "eric-sse"
 description = "A lightweigth message dispatcher based on SSE protocol data transfer objects format"
 version = "0.0.5"
-authors = ["  Luca Stretti <laxertu@gmail.com>"]
+authors = ["Luca Stretti <laxertu@gmail.com>"]
 keywords = ["sse", "queue"]
 
 [tool.poetry.dependencies]
