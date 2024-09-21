@@ -98,6 +98,7 @@ class AbstractChannel(ABC):
         :param l_class: a valid MessageQueueListener class constructor.
         :return:
         """
+        logger.warning('Deprecated method, it will be removed from 0.0.4. Please movw to register_listener')
         l = l_class()
         self.register_listener(l)
         return l
