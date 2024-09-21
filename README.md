@@ -32,10 +32,9 @@ Base class for channels.
 Provides functionalities for listeners and message delivery management.
 SSEChannel is the default implementation
 
-#### add_listener(l_class: ABCMeta) → [MessageQueueListener](#eric.entities.MessageQueueListener)
+#### add_listener() → [MessageQueueListener](#eric.entities.MessageQueueListener)
 
-DEPRECATED in favor of register_listener. Will be removed from 0.0.4
-Adds a listener to channel
+Adds a the default listener to channel
 
 * **Parameters:**
   **l_class** – a valid MessageQueueListener class constructor.

@@ -21,7 +21,8 @@ async def main():
 
     # Here you can control message deliver frequency
     channel = SSEChannel(stream_delay_seconds=1)
-    consumer = channel.add_listener(Consumer)
+    consumer = Consumer()
+    channel.register_listener(consumer)
     Producer.produce_num(c=channel, l=consumer, num=10)
 
     await consumer.start()

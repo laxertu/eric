@@ -51,36 +51,38 @@ class SSEChannelTestCase(TestCase):
         l_2 = MessageQueueListenerMock()
         self.assertEqual('2', l_2.id)
 
-        l_3 = self.sut.add_listener(MessageQueueListenerMock)
+        l_3 = MessageQueueListenerMock()
         self.assertEqual('3', l_3.id)
 
     def test_broadcast_ok(self):
 
         # scenario is: 1 channel and 2 listeners
         c = self.sut
-        l_1 = c.add_listener(MessageQueueListenerMock)
-        l_2 = c.add_listener(MessageQueueListenerMock)
+        m_1 = MessageQueueListenerMock()
+        m_2 = MessageQueueListenerMock()
+        c.register_listener(m_1)
+        c.register_listener(m_2)
 
-        l_1.start_sync()
-        l_2.start_sync()
+        m_1.start_sync()
+        m_2.start_sync()
 
         # 1 broadcast
         msg_to_send = Message(type= 'test', payload={})
         c.broadcast(msg=msg_to_send)
         expected = {
-            l_1.id: [msg_to_send],
-            l_2.id: [msg_to_send]
+            m_1.id: [msg_to_send],
+            m_2.id: [msg_to_send]
         }
         self.assertEqual(expected, c.queues)
 
         # message is received correctly
-        msg_received = c.deliver_next(listener_id=l_1.id)
+        msg_received = c.deliver_next(listener_id=m_1.id)
         self.assertEqual(msg_to_send, msg_received)
 
         # queue is ok
         expected = {
-            l_1.id: [],
-            l_2.id: [msg_to_send]
+            m_1.id: [],
+            m_2.id: [msg_to_send]
         }
         self.assertEqual(expected, c.queues)
 
@@ -91,7 +93,8 @@ class StreamTestCase(IsolatedAsyncioTestCase):
 
     async def test_message_stream(self):
         c = self.sut
-        listener = c.add_listener(MessageQueueListenerMock)
+        listener = MessageQueueListenerMock()
+        c.register_listener(listener)
         await listener.start()
 
         c.dispatch(listener.id, Message(type='test', payload={'a': 1}))
