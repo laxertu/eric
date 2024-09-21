@@ -2,7 +2,7 @@
 
 Features
 
-* Send to listener and broadcast
+* Send to one listener and broadcast
 * SSE format was adopted by design, is order to make library suitable for such kind of model
 * Sockets
 * Callbacks
