@@ -16,6 +16,7 @@ Trivia
 
 Library name pretends to be a tribute to the following movie https://en.wikipedia.org/wiki/Looking_for_Eric
 
+## Core Entities
 Models a message
 <a name="eric.entities.Message"></a>
 ### *class* eric.entities.Message(type: str, payload: dict | list | str | int | float | None = None)
@@ -23,7 +24,6 @@ Models a message
 It’s just a container of information identified by a type.
 For validation purposes you can override MessageQueueListener.on_message
 
-## Core Entities
 
 ### *class* eric.entities.AbstractChannel
 
@@ -40,14 +40,14 @@ Adds a listener to channel
 * **Parameters:**
   **l_class** – a valid MessageQueueListener class constructor.
 
-#### broadcast(msg: [Message](#id0))
+#### broadcast(msg: [Message](#eric.entities.Message))
 
 Enqueue a message to all listeners
 
 * **Parameters:**
   **msg**
 
-#### deliver_next(listener_id: str) → [Message](#id0)
+#### deliver_next(listener_id: str) → [Message](#eric.entities.Message)
 
 Returns next message for given listener id.
 Raises a NoMessagesException if queue is empty
@@ -55,7 +55,7 @@ Raises a NoMessagesException if queue is empty
 * **Parameters:**
   **listener_id**
 
-#### dispatch(listener_id: str, msg: [Message](#id0))
+#### dispatch(listener_id: str, msg: [Message](#eric.entities.Message))
 
 Adds a message to listener’s queue
 
@@ -95,7 +95,7 @@ Returns listener’s state: stopped vs. running
 
 Returns listener’s state: stopped vs. running
 
-#### on_message(msg: [Message](#id0)) → None
+#### on_message(msg: [Message](#eric.entities.Message)) → None
 
 Event handler. It executes whan a message is delivered to client
 
