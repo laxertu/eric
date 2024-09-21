@@ -16,16 +16,15 @@ Trivia
 
 Library name pretends to be a tribute to the following movie https://en.wikipedia.org/wiki/Looking_for_Eric
 
-## Core Entities
-Models a message
+## Entities
 <a name="eric.entities.Message"></a>
 ### *class* eric.entities.Message(type: str, payload: dict | list | str | int | float | None = None)
+Models a message
 
 It’s just a container of information identified by a type.
 For validation purposes you can override MessageQueueListener.on_message
 
-
-### *class* eric.entities.AbstractChannel
+### *class* eric.entities.AbstractChannel(stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 5)
 
 Base class for channels.
 
@@ -59,9 +58,10 @@ Adds a message to listener’s queue
   * **listener_id**
   * **msg**
 
-#### *abstract async* message_stream(listener: [MessageQueueListener](#eric.entities.MessageQueueListener)) → AsyncIterable[Any]
+#### *async* message_stream(listener: [MessageQueueListener](#eric.entities.MessageQueueListener)) → AsyncIterable[dict]
 
-Entry point for message streaming
+In case of failure at channel resulution time, a special message with type=’_eric_channel_closed’ is sent, and
+correspondant listener is stopped
 
 #### register_listener(l: [MessageQueueListener](#eric.entities.MessageQueueListener))
 
@@ -70,12 +70,7 @@ Adds a listener to channel
 * **Parameters:**
   **l**
 
-### *class* eric.entities.Message(type: str, payload: dict | list | str | int | float | None = None)
-
-Models a message
-
-It’s just a container of information identified by a type.
-For validation purposes you can override MessageQueueListener.on_message
+### *class* eric.entities.DataProcessingChannel(stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 5)
 
 ### *class* <a name="eric.entities.MessageQueueListener">eric.entities.MessageQueueListener</a>
 
@@ -107,11 +102,11 @@ Starts listening
 
 Stops listening
 
-#### *async* stop_sync() → None
+#### stop_sync() → None
 
 Stops listening
 
-### *class* eric.entities.SSEChannel(stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 15000)
+### *class* eric.entities.SSEChannel(stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 5)
 
 SSE streaming channel.
 
@@ -119,13 +114,24 @@ See [https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_s
 Currently, ‘id’ field is not supported.
 
 #### *async* message_stream(listener: [MessageQueueListener](#eric.entities.MessageQueueListener)) → AsyncIterable[dict]
-
 In case of failure at channel resulution time, a special message with type=’_eric_channel_closed’ is sent, and
 correspondant listener is stopped
 
 * **Parameters:**
   **listener**
 * **Returns:**
+
+## Prefab listeners
+### *class* eric.entities.ThreadPoolListener(callback: Callable, max_workers: int)
+
+Listener intended for consurrent processing of data.
+
+Relies on concurrent.futures.ThreadPoolExecutor.
+‘_eric_channel_closed’ Message type is intended as end of stream. Is shouls be considered as a reserved Message type
+
+#### on_message(msg: [Message](#id0)) → None
+
+Event handler. It executes whan a message is delivered to client
 
 ## Prefab servers
 
