@@ -12,6 +12,7 @@ Possible applications
 
 * Message delivery mechanisms based on SSE
 * Message queue processing (logging, etc)
+* See https://github.com/laxertu/eric-api
 
 Trivia
 
