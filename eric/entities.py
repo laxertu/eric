@@ -79,7 +79,7 @@ class AbstractChannel(ABC):
     """
     NEXT_ID = 1
 
-    def __init__(self, stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 15000):
+    def __init__(self, stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 5):
         logger.info(f'Creating channel {AbstractChannel.NEXT_ID}')
         with Lock():
             self.id: str = str(AbstractChannel.NEXT_ID)
