@@ -13,6 +13,12 @@ logger = eric.get_logger()
 
 @dataclass
 class Message:
+    """
+    Models a message
+
+    It's just a container of information identified by a type.
+    For validation purposes you can override MessageQueueListener.on_message
+    """
     type: str
     payload: dict | list | str | int | float | None = None
 
@@ -22,7 +28,9 @@ def create_simple_mesage(txt: str) -> Message:
 
 class MessageQueueListener(ABC):
     """
-    Base class for listeners
+    Base class for listeners.
+
+    Optionally you can override on_message method if you need to inject code at message delivery time.
     """
     NEXT_ID = 1
 
@@ -63,6 +71,12 @@ class MessageQueueListener(ABC):
         pass
 
 class AbstractChannel(ABC):
+    """
+    Base class for channels.
+
+    Provides functionalities for listeners and message delivery management.
+    SSEChannel is the default implementation
+    """
     NEXT_ID = 1
 
     def __init__(self):
@@ -76,11 +90,25 @@ class AbstractChannel(ABC):
 
 
     def add_listener(self, l_class: MessageQueueListener.__class__) -> MessageQueueListener:
+        """
+        DEPRECATED in favor of register_listener. Will be removed from 0.0.4
+
+        Adds a listener to channel
+
+        :param l_class: a valid MessageQueueListener class constructor.
+        :return:
+        """
         l = l_class()
         self.register_listener(l)
         return l
 
     def register_listener(self, l: MessageQueueListener):
+        """
+        Adds a listener to channel
+
+        :param l:
+        :return:
+        """
         self.listeners[l.id] = l
         self.queues[l.id] = []
 
@@ -89,6 +117,13 @@ class AbstractChannel(ABC):
         del self.listeners[l_id]
 
     def deliver_next(self, listener_id: str) -> Message:
+        """
+        Returns next message for given listener id.
+        Raises a NoMessagesException if queue is empty
+
+        :param listener_id:
+        :return:
+        """
         if self.get_listener(listener_id).is_running_sync():
             try:
                 msg = self.__get_queue(listener_id).pop(0)
@@ -107,7 +142,13 @@ class AbstractChannel(ABC):
 
 
     def dispatch(self, listener_id: str, msg: Message):
+        """
+        Adds a message to listener's queue
 
+        :param listener_id:
+        :param msg:
+        :return:
+        """
         self._add_to_queue(listener_id, msg)
         logger.debug(f"Pending {len(self.queues[listener_id])} messages")
 
@@ -115,6 +156,12 @@ class AbstractChannel(ABC):
         self.__get_queue(listener_id).append(msg)
 
     def broadcast(self, msg: Message):
+        """
+        Enqueue a message to all listeners
+
+        :param msg:
+        :return:
+        """
         for listener_id in self.listeners.keys():
             self.dispatch(listener_id, msg=msg)
 
@@ -127,10 +174,25 @@ class AbstractChannel(ABC):
 
     @abstractmethod
     async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
+        """
+        Entry point for message streanung.
+
+        :param listener:
+        :return:
+        """
         ...
 
 
 class SSEChannel(AbstractChannel):
+    """
+    SSE streaming channel.
+    See https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
+
+    Currently, 'id' field is not supported.
+
+    In case of failure at channel resulution time, a special message with type='_eric_channel_closed' is sent, and
+    correspondant listener is stopped
+    """
 
     def __init__(self, stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 15000):
         super().__init__()
