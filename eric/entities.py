@@ -92,11 +92,9 @@ class AbstractChannel(ABC):
     def add_listener(self, l_class: MessageQueueListener.__class__) -> MessageQueueListener:
         """
         DEPRECATED in favor of register_listener. Will be removed from 0.0.4
-
         Adds a listener to channel
 
         :param l_class: a valid MessageQueueListener class constructor.
-        :return:
         """
         logger.warning('Deprecated method, it will be removed from 0.0.4. Please movw to register_listener')
         l = l_class()
@@ -108,7 +106,6 @@ class AbstractChannel(ABC):
         Adds a listener to channel
 
         :param l:
-        :return:
         """
         self.listeners[l.id] = l
         self.queues[l.id] = []
@@ -123,7 +120,6 @@ class AbstractChannel(ABC):
         Raises a NoMessagesException if queue is empty
 
         :param listener_id:
-        :return:
         """
         if self.get_listener(listener_id).is_running_sync():
             try:
@@ -148,7 +144,6 @@ class AbstractChannel(ABC):
 
         :param listener_id:
         :param msg:
-        :return:
         """
         self._add_to_queue(listener_id, msg)
         logger.debug(f"Pending {len(self.queues[listener_id])} messages")
@@ -161,7 +156,6 @@ class AbstractChannel(ABC):
         Enqueue a message to all listeners
 
         :param msg:
-        :return:
         """
         for listener_id in self.listeners.keys():
             self.dispatch(listener_id, msg=msg)
@@ -176,10 +170,9 @@ class AbstractChannel(ABC):
     @abstractmethod
     async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
         """
-        Entry point for message streanung.
+        Entry point for message streaming.
 
         :param listener:
-        :return:
         """
         ...
 
