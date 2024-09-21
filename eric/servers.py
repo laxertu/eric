@@ -8,7 +8,7 @@ from asyncio.exceptions import CancelledError
 from pathlib import Path
 
 import eric
-from eric.entities import Message, MessageQueueListener
+from eric.entities import Message
 from eric.exception import InvalidChannelException, InvalidListenerException, InvalidMessageFormat
 from eric.entities import SSEChannel
 
@@ -88,7 +88,7 @@ class SocketServer:
 
 
             elif verb == 'c':
-                l = channel.add_listener(MessageQueueListener)
+                l = channel.add_listener()
                 writer.write(l.id.encode())
                 writer.write_eof()
                 await writer.drain()

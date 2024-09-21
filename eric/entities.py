@@ -91,15 +91,10 @@ class AbstractChannel(ABC):
         self.retry_timeout_millisedonds = retry_timeout_millisedonds
 
 
-    def add_listener(self, l_class: MessageQueueListener.__class__) -> MessageQueueListener:
-        """
-        DEPRECATED in favor of register_listener. Will be removed from 0.0.4
-        Adds a listener to channel
-
-        :param l_class: a valid MessageQueueListener class constructor.
-        """
+    def add_listener(self) -> MessageQueueListener:
+        """Add the default listener"""
         logger.warning('Deprecated method, it will be removed from 0.0.4. Please movw to register_listener')
-        l = l_class()
+        l = MessageQueueListener()
         self.register_listener(l)
         return l
 
