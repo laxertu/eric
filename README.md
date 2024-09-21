@@ -1,4 +1,4 @@
-A lightweight library for async messaging
+# The lightweight library for async messaging nobody expects. 
 
 Features
 
@@ -20,7 +20,7 @@ Library name pretends to be a tribute to the following movie https://en.wikipedi
 Documentation
 
 
-# Core Entities
+## Core Entities
 
 ### *class* eric.entities.AbstractChannel
 
@@ -126,7 +126,7 @@ correspondant listener is stopped
 
 Entry point for message streaming
 
-# Prefab servers
+## Prefab servers
 
 ### *class* eric.servers.ChannelContainer
 
@@ -142,7 +142,7 @@ A static shortcut for starting a basic server is provided. See examples.
 
 Shortcut to start a server
 
-# Exceptions
+## Exceptions
 
 ### *exception* eric.exception.InvalidChannelException
 
