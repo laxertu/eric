@@ -54,9 +54,6 @@ Enqueue a message to all listeners
 Returns next message for given listener id.
 Raises a NoMessagesException if queue is empty
 
-* **Parameters:**
-  **listener_id**
-
 <a id="eric_sse.entities.AbstractChannel.dispatch"></a>
 
 #### dispatch(listener_id: str, msg: [Message](#eric_sse.entities.Message))
@@ -77,9 +74,6 @@ correspondant listener is stopped
 #### register_listener(l: [MessageQueueListener](#eric_sse.entities.MessageQueueListener))
 
 Adds a listener to channel
-
-* **Parameters:**
-  **l**
 
 <a id="eric_sse.entities.Message"></a>
 
