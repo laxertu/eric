@@ -47,7 +47,7 @@ class ThreadPoolListener(MessageQueueListener):
             self.executor.submit(self.__callback, msg.payload)
 
 
-class DataProcessingChannel(AbstractChannel):
+class DataProcessingChannel(SSEChannel):
     """Channel that invokes a callable in a Pool of threads"""
 
     def notify_end(self):
@@ -58,6 +58,3 @@ class DataProcessingChannel(AbstractChannel):
         l = ThreadPoolListener(callback, max_workers)
         self.register_listener(l)
         return l
-
-    def adapt(self, msg: Message) -> None:
-        return None
