@@ -5,7 +5,7 @@
 Features
 
 * Send to one listener and broadcast
-* SSE format was adopted by design, in order to make library suitable for such kind of model
+* SSE format was adopted by design, is order to make library suitable for such kind of model
 * Sockets
 * Callbacks
 * Threading support for large data processing
@@ -39,13 +39,13 @@ SSEChannel is the default implementation
 
 #### add_listener() → [MessageQueueListener](#eric_sse.entities.MessageQueueListener)
 
-Adds the default listener
+Add the default listener
 
 <a id="eric_sse.entities.AbstractChannel.broadcast"></a>
 
 #### broadcast(msg: [Message](#eric_sse.entities.Message))
 
-Enqueues a message to all listeners
+Enqueue a message to all listeners
 
 <a id="eric_sse.entities.AbstractChannel.deliver_next"></a>
 
@@ -67,7 +67,7 @@ Adds a message to listener’s queue
 Entry point for message streaming
 
 In case of failure at channel resolution time, a special message with type=MESSAGE_TYPE_CLOSED is sent, and
-correspondent listener is stopped
+correspondant listener is stopped
 
 <a id="eric_sse.entities.AbstractChannel.register_listener"></a>
 
@@ -96,7 +96,7 @@ Optionally you can override on_message method if you need to inject code at mess
 
 #### on_message(msg: [Message](#eric_sse.entities.Message)) → None
 
-Event handler. It is executed when a message is delivered to client
+Event handler. It executes when a message is delivered to client
 
 <a id="module-eric_sse.prefabs"></a>
 
