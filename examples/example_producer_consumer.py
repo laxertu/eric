@@ -4,7 +4,7 @@ import asyncio
 logger = get_logger()
 
 from eric_sse.entities import Message, MessageQueueListener, MESSAGE_TYPE_CLOSED
-from eric_sse.prefabs import SSEChannel
+from eric_sse.prefabs import SSEChannel, ThreadPoolListener
 
 
 class Producer:
@@ -15,19 +15,20 @@ class Producer:
             c.dispatch(l.id, Message(type='counter', payload=i))
         c.dispatch(l.id, Message(type=MESSAGE_TYPE_CLOSED))
 
-class Consumer(MessageQueueListener):
-    def on_message(self, msg: Message) -> None:
-        logger.info(f"Received {msg.type} {msg.payload}")
-        if msg.type == MESSAGE_TYPE_CLOSED:
-            logger.info(f"Stopping listener {self.id}")
-            self.stop_sync()
+class Consumer(ThreadPoolListener):
+    def __init__(self, max_workers: int):
+        super().__init__(callback=self._on_message, max_workers=max_workers)
+
+    @staticmethod
+    def _on_message(payload: int) -> None:
+        logger.info(f"Received {payload}")
 
 
 async def main():
 
     # Here you can control message deliver frequency
     channel = SSEChannel(stream_delay_seconds=1)
-    consumer = Consumer()
+    consumer = Consumer(max_workers=2)
     channel.register_listener(consumer)
     Producer.produce_num(c=channel, l=consumer, num=10)
 

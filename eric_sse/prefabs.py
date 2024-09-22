@@ -1,7 +1,9 @@
 from typing import Any, Callable
 
+from eric_sse import get_logger
 from eric_sse.entities import AbstractChannel, Message, MessageQueueListener, MESSAGE_TYPE_CLOSED
 
+logger = get_logger()
 
 class SSEChannel(AbstractChannel):
     """
@@ -24,7 +26,8 @@ class ThreadPoolListener(MessageQueueListener):
 
     Relies on concurrent.futures.ThreadPoolExecutor.
 
-    MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type
+    MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.
+    Note that same callback is invoked, no matter of message type
     """
     def __init__(self, callback: Callable, max_workers: int):
         from concurrent.futures import ThreadPoolExecutor
@@ -34,6 +37,7 @@ class ThreadPoolListener(MessageQueueListener):
 
     def on_message(self, msg: Message) -> None:
         if msg.type == MESSAGE_TYPE_CLOSED:
+            logger.info(f"Stopping listener {self.id}")
             self.stop_sync()
         else:
             self.executor.submit(self.__callback, msg.payload)
