@@ -1,8 +1,8 @@
-from eric import get_logger
+from eric_sse import get_logger
 
 logger = get_logger()
 
-from eric.entities import Message, MessageQueueListener, SSEChannel
+from eric_sse.entities import Message, MessageQueueListener, SSEChannel
 
 class Producer:
 

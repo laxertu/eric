@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'eric'
+project = 'eric_sse'
 copyright = '2024, Luca Stretti'
 author = 'Luca Stretti'
 
