@@ -1,4 +1,4 @@
-# The lightweight library for async messaging nobody expects. 
+# Eric. The async library nobody expects.
 
 Features
 
@@ -12,39 +12,33 @@ Possible applications
 
 * Message delivery mechanisms based on SSE
 * Message queue processing (logging, etc)
-* See https://github.com/laxertu/eric-api
+* See [https://github.com/laxertu/eric-api](https://github.com/laxertu/eric-api)
 
 Trivia
 
-Library name pretends to be a tribute to the following movie https://en.wikipedia.org/wiki/Looking_for_Eric
+Library name pretends to be a tribute to the following movie [https://en.wikipedia.org/wiki/Looking_for_Eric](https://en.wikipedia.org/wiki/Looking_for_Eric)
 
-## Entities
-<a name="eric.entities.Message"></a>
-### *class* eric.entities.Message(type: str, payload: dict | list | str | int | float | None = None)
-Models a message
+# Entities
 
-It’s just a container of information identified by a type.
-For validation purposes you can override MessageQueueListener.on_message
-
-### *class* eric.entities.AbstractChannel(stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 5)
+### *class* eric_sse.entities.AbstractChannel(stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 5)
 
 Base class for channels.
 
 Provides functionalities for listeners and message delivery management.
 SSEChannel is the default implementation
 
-#### add_listener() → [MessageQueueListener](#eric.entities.MessageQueueListener)
+#### add_listener() → [MessageQueueListener](#eric_sse.entities.MessageQueueListener)
 
-Adds a default listener to channel
+Add the default listener
 
-#### broadcast(msg: [Message](#eric.entities.Message))
+#### broadcast(msg: [Message](#eric_sse.entities.Message))
 
 Enqueue a message to all listeners
 
 * **Parameters:**
   **msg**
 
-#### deliver_next(listener_id: str) → [Message](#eric.entities.Message)
+#### deliver_next(listener_id: str) → [Message](#eric_sse.entities.Message)
 
 Returns next message for given listener id.
 Raises a NoMessagesException if queue is empty
@@ -52,7 +46,7 @@ Raises a NoMessagesException if queue is empty
 * **Parameters:**
   **listener_id**
 
-#### dispatch(listener_id: str, msg: [Message](#eric.entities.Message))
+#### dispatch(listener_id: str, msg: [Message](#eric_sse.entities.Message))
 
 Adds a message to listener’s queue
 
@@ -60,21 +54,30 @@ Adds a message to listener’s queue
   * **listener_id**
   * **msg**
 
-#### *async* message_stream(listener: [MessageQueueListener](#eric.entities.MessageQueueListener)) → AsyncIterable[dict]
+#### *async* message_stream(listener: [MessageQueueListener](#eric_sse.entities.MessageQueueListener)) → AsyncIterable[dict]
 
 In case of failure at channel resulution time, a special message with type=’_eric_channel_closed’ is sent, and
 correspondant listener is stopped
 
-#### register_listener(l: [MessageQueueListener](#eric.entities.MessageQueueListener))
+* **Parameters:**
+  **listener**
+* **Returns:**
+
+#### register_listener(l: [MessageQueueListener](#eric_sse.entities.MessageQueueListener))
 
 Adds a listener to channel
 
 * **Parameters:**
   **l**
 
-### *class* eric.entities.DataProcessingChannel(stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 5)
+### *class* eric_sse.entities.Message(type: str, payload: dict | list | str | int | float | None = None)
 
-### *class* <a name="eric.entities.MessageQueueListener">eric.entities.MessageQueueListener</a>
+Models a message
+
+It’s just a container of information identified by a type.
+For validation purposes you can override MessageQueueListener.on_message
+
+### *class* eric_sse.entities.MessageQueueListener
 
 Base class for listeners.
 
@@ -88,7 +91,7 @@ Returns listener’s state: stopped vs. running
 
 Returns listener’s state: stopped vs. running
 
-#### on_message(msg: [Message](#eric.entities.Message)) → None
+#### on_message(msg: [Message](#eric_sse.entities.Message)) → None
 
 Event handler. It executes whan a message is delivered to client
 
@@ -108,40 +111,33 @@ Stops listening
 
 Stops listening
 
-### *class* eric.entities.SSEChannel(stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 5)
+# Prefab channels and listeners
+
+### *class* eric_sse.entities.SSEChannel(stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 5)
 
 SSE streaming channel.
 
 See [https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
 Currently, ‘id’ field is not supported.
 
-#### *async* message_stream(listener: [MessageQueueListener](#eric.entities.MessageQueueListener)) → AsyncIterable[dict]
-In case of failure at channel resulution time, a special message with type=’_eric_channel_closed’ is sent, and
-correspondant listener is stopped
-
-* **Parameters:**
-  **listener**
-* **Returns:**
-
-## Prefab listeners
-### *class* eric.entities.ThreadPoolListener(callback: Callable, max_workers: int)
+### *class* eric_sse.entities.ThreadPoolListener(callback: Callable, max_workers: int)
 
 Listener intended for consurrent processing of data.
 
 Relies on concurrent.futures.ThreadPoolExecutor.
 ‘_eric_channel_closed’ Message type is intended as end of stream. Is shouls be considered as a reserved Message type
 
-#### on_message(msg: [Message](#id0)) → None
+#### on_message(msg: [Message](#eric_sse.entities.Message)) → None
 
 Event handler. It executes whan a message is delivered to client
 
-## Prefab servers
+# Prefab servers
 
-### *class* eric.servers.ChannelContainer
+### *class* eric_sse.servers.ChannelContainer
 
 Helper class for managment of multiple SSE channels cases of use.
 
-### *class* eric.servers.SocketServer(file_descriptor_path: str)
+### *class* eric_sse.servers.SocketServer(file_descriptor_path: str)
 
 An implementation of a socket server that reveives and broadcasts automatically all messages that receives
 
@@ -151,14 +147,14 @@ A static shortcut for starting a basic server is provided. See examples.
 
 Shortcut to start a server
 
-## Exceptions
+# Exceptions
 
-### *exception* eric.exception.InvalidChannelException
+### *exception* eric_sse.exception.InvalidChannelException
 
-### *exception* eric.exception.InvalidListenerException
+### *exception* eric_sse.exception.InvalidListenerException
 
-### *exception* eric.exception.InvalidMessageFormat
+### *exception* eric_sse.exception.InvalidMessageFormat
 
-### *exception* eric.exception.NoMessagesException
+### *exception* eric_sse.exception.NoMessagesException
 
 Raised when trying to fetch from an empty queue
