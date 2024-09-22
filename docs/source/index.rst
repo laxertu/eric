@@ -1,7 +1,12 @@
 The lightweight library for async messaging nobody expects.
 ===========================================================
 
+Installation
+============
+pip install eric-sse
+
 Features
+========
 
 * Send to one listener and broadcast
 * SSE format was adopted by design, is order to make library suitable for such kind of model
