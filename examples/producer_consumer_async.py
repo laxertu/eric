@@ -3,7 +3,9 @@ import asyncio
 
 logger = get_logger()
 
-from eric_sse.entities import Message, MessageQueueListener, SSEChannel
+from eric_sse.entities import Message, MessageQueueListener
+from eric_sse.prefabs import SSEChannel
+
 
 class Producer:
 
