@@ -10,6 +10,7 @@ from eric_sse.exception import InvalidChannelException, InvalidListenerException
 
 logger = eric_sse.get_logger()
 
+MESSAGE_TYPE_CLOSED = '_eric_channel_closed'
 
 @dataclass
 class Message:
@@ -22,9 +23,6 @@ class Message:
     type: str
     payload: dict | list | str | int | float | None = None
 
-
-def create_simple_mesage(txt: str) -> Message:
-    return Message(type='txt', payload=txt)
 
 class MessageQueueListener(ABC):
     """
@@ -141,10 +139,10 @@ class AbstractChannel(ABC):
         :param listener_id:
         :param msg:
         """
-        self._add_to_queue(listener_id, msg)
+        self.__add_to_queue(listener_id, msg)
         logger.debug(f"Pending {len(self.queues[listener_id])} messages")
 
-    def _add_to_queue(self, listener_id: str, msg: Message):
+    def __add_to_queue(self, listener_id: str, msg: Message):
         self.__get_queue(listener_id).append(msg)
 
     def broadcast(self, msg: Message):
@@ -169,13 +167,11 @@ class AbstractChannel(ABC):
 
     async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[dict]:
         """
-        In case of failure at channel resulution time, a special message with type='_eric_channel_closed' is sent, and
+        Entry point for message streamiong
+
+        In case of failure at channel resulution time, a special message with type='%s' is sent, and
         correspondant listener is stopped
-
-        :param listener:
-        :return:
         """
-
         def new_messages():
             try:
                 yield self.deliver_next(listener.id)
@@ -197,6 +193,6 @@ class AbstractChannel(ABC):
                     logger.info(f"Stopping listener {listener.id}")
                     logger.debug(e)
                     await listener.stop()
-                    yield self.adapt(Message(type='_eric_channel_closed'))
+                    yield self.adapt(Message(type=S))
 
         return event_generator()

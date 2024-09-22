@@ -1,6 +1,6 @@
 from typing import Any, Callable
 
-from eric_sse.entities import AbstractChannel, Message, MessageQueueListener
+from eric_sse.entities import AbstractChannel, Message, MessageQueueListener, MESSAGE_TYPE_CLOSED
 
 
 class SSEChannel(AbstractChannel):
@@ -20,10 +20,10 @@ class SSEChannel(AbstractChannel):
 
 class ThreadPoolListener(MessageQueueListener):
     """
-    Listener intended for consurrent processing of data.
+    Listener intended for concurrent processing of data.
 
     Relies on concurrent.futures.ThreadPoolExecutor.
-    '_eric_channel_closed' Message type is intended as end of stream. Is shouls be considered as a reserved Message type
+    Message.MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type
     """
     def __init__(self, callback: Callable, max_workers: int):
         from concurrent.futures import ThreadPoolExecutor
@@ -32,17 +32,17 @@ class ThreadPoolListener(MessageQueueListener):
         self.__callback = callback
 
     def on_message(self, msg: Message) -> None:
-        if msg.type == '_eric_channel_closed':
+        if msg.type == MESSAGE_TYPE_CLOSED:
             self.stop_sync()
         else:
             self.executor.submit(self.__callback, msg.payload)
 
 
 class DataProcessingChannel(SSEChannel):
-    """Channel that invoke a callable in a Pool of threads"""
+    """Channel that invokes a callable in a Pool of threads"""
 
     def notify_end(self):
-        self.broadcast(Message(type='_eric_channel_closed'))
+        self.broadcast(Message(type=MESSAGE_TYPE_CLOSED))
 
     def add_threaded_listener(self, callback: Callable, max_workers: int) -> ThreadPoolListener:
         """Adds a threaded listener"""
