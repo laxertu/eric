@@ -48,4 +48,4 @@ Exceptions
 Developers section
 ==================
 
-Update README.md scipt; update_docs.sh
+Update README.md scipt: update_docs.sh

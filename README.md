@@ -208,4 +208,4 @@ Raised when trying to fetch from an empty queue
 
 # Developers section
 
-Update README.md scipt; update_docs.sh
+Update README.md scipt: update_docs.sh
