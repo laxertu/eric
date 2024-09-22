@@ -38,6 +38,9 @@ extensions = [
     'sphinx_markdown_builder'
 ]
 
+markdown_anchor_sections = True
+markdown_anchor_signatures = True
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
