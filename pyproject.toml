@@ -4,7 +4,7 @@ Homepage = "https://github.com/laxertu/eric"
 [tool.poetry]
 name = "eric-sse"
 description = "A lightweigth message dispatcher based on SSE protocol data transfer objects format"
-version = "0.1.0"
+version = "0.1.0.1"
 authors = ["Luca Stretti <laxertu@gmail.com>"]
 keywords = ["sse", "queue"]
 

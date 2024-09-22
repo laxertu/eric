@@ -93,7 +93,6 @@ class AbstractChannel(ABC):
 
     def add_listener(self) -> MessageQueueListener:
         """Add the default listener"""
-        logger.warning('Deprecated method, it will be removed from 0.0.4. Please movw to register_listener')
         l = MessageQueueListener()
         self.register_listener(l)
         return l
