@@ -15,7 +15,7 @@ class SSEChannel(AbstractChannel):
     def adapt(self, msg: Message) -> Any:
         return {
             "event": msg.type,
-            "retry": self.retry_timeout_millisedonds,
+            "retry": self.retry_timeout_milliseconds,
             "data": msg.payload
         }
 

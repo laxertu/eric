@@ -16,7 +16,7 @@ logger = eric_sse.get_logger()
 
 
 class ChannelContainer:
-    """Helper class for managment of multiple SSE channels cases of use."""
+    """Helper class for management of multiple SSE channels cases of use."""
 
     def __init__(self):
         self.__channels: dict[str: SSEChannel] = {}
@@ -40,7 +40,7 @@ class ChannelContainer:
 
 class SocketServer:
     """
-    An implementation of a socket server that reveives and broadcasts automatically all messages that receives
+    An implementation of a socket server that receives and broadcasts automatically all messages that receives
 
     A static shortcut for starting a basic server is provided. See examples.
     """

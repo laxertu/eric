@@ -2,7 +2,8 @@ import asyncio, sys
 import json
 from pathlib import Path
 
-from examples import SOCKET_FILE_DESCIPTOR_PATH
+from examples import SOCKET_FILE_DESCRIPTOR_PATH
+
 
 async def main():
     try:
@@ -10,7 +11,7 @@ async def main():
         channel_id = sys.argv[1]
         receiver_id = sys.argv[2]
 
-        r, w = await asyncio.open_unix_connection(Path(SOCKET_FILE_DESCIPTOR_PATH))
+        r, w = await asyncio.open_unix_connection(Path(SOCKET_FILE_DESCRIPTOR_PATH))
         payload = {
             't': 'z',
             'c': channel_id,
