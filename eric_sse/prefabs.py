@@ -23,7 +23,8 @@ class ThreadPoolListener(MessageQueueListener):
     Listener intended for concurrent processing of data.
 
     Relies on concurrent.futures.ThreadPoolExecutor.
-    Message.MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type
+
+    MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type
     """
     def __init__(self, callback: Callable, max_workers: int):
         from concurrent.futures import ThreadPoolExecutor

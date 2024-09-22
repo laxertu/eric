@@ -138,7 +138,8 @@ Currently, ‘id’ field is not supported.
 Listener intended for concurrent processing of data.
 
 Relies on concurrent.futures.ThreadPoolExecutor.
-Message.MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type
+
+MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type
 
 <a id="eric_sse.prefabs.ThreadPoolListener.on_message"></a>
 
