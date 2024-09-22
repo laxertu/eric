@@ -27,7 +27,11 @@ class ThreadPoolListener(MessageQueueListener):
     Relies on concurrent.futures.ThreadPoolExecutor.
 
     MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.
-    Note that same callback is invoked, no matter of message type
+
+    Note that:
+
+     * same callback is invoked, no matter of message type
+     * callback execution order is not guaranteed (to be the same as the one while dispatching to channel)
     """
     def __init__(self, callback: Callable, max_workers: int):
         from concurrent.futures import ThreadPoolExecutor

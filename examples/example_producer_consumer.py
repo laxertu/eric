@@ -27,10 +27,13 @@ class Consumer(ThreadPoolListener):
 async def main():
 
     # Here you can control message deliver frequency
-    channel = SSEChannel(stream_delay_seconds=1)
-    consumer = Consumer(max_workers=2)
+    channel = SSEChannel(stream_delay_seconds=0)
+    # And max wprkers num
+    consumer = Consumer(max_workers=10)
     channel.register_listener(consumer)
-    Producer.produce_num(c=channel, l=consumer, num=10)
+    Producer.produce_num(c=channel, l=consumer, num=10000)
+
+    # In this scenario, dispathing order should be not respected
 
     await consumer.start()
     async for _ in await channel.message_stream(consumer):
