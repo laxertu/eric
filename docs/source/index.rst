@@ -44,3 +44,8 @@ Exceptions
 ==========
 .. automodule:: eric_sse.exception
     :members:
+
+Developers section
+==================
+
+Update README.md scipt; update_docs.sh

@@ -203,3 +203,9 @@ Shortcut to start a server
 ### *exception* eric_sse.exception.NoMessagesException
 
 Raised when trying to fetch from an empty queue
+
+<a id="developers-section"></a>
+
+# Developers section
+
+Update README.md scipt; update_docs.sh
