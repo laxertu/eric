@@ -3,7 +3,7 @@ import asyncio
 
 logger = get_logger()
 
-from eric_sse.entities import Message, MessageQueueListener
+from eric_sse.entities import Message, MessageQueueListener, MESSAGE_TYPE_CLOSED
 from eric_sse.prefabs import SSEChannel
 
 
@@ -13,10 +13,14 @@ class Producer:
     def produce_num(c: SSEChannel, l: MessageQueueListener, num: int):
         for i in range(1, num):
             c.dispatch(l.id, Message(type='counter', payload=i))
+        c.dispatch(l.id, Message(type=MESSAGE_TYPE_CLOSED))
 
 class Consumer(MessageQueueListener):
     def on_message(self, msg: Message) -> None:
         logger.info(f"Received {msg.type} {msg.payload}")
+        if msg.type == MESSAGE_TYPE_CLOSED:
+            logger.info(f"Stopping listener {self.id}")
+            self.stop_sync()
 
 
 async def main():
@@ -28,8 +32,7 @@ async def main():
     Producer.produce_num(c=channel, l=consumer, num=10)
 
     await consumer.start()
-    async for msg in await channel.message_stream(consumer):
-        if msg['data'] == 9:
-            exit(0)
+    async for _ in await channel.message_stream(consumer):
+        pass
 
 asyncio.get_event_loop().run_until_complete(main())
