@@ -92,8 +92,6 @@ class AbstractChannel(ABC):
     def register_listener(self, l: MessageQueueListener):
         """
         Adds a listener to channel
-
-        :param l:
         """
         self.listeners[l.id] = l
         self.queues[l.id] = []
@@ -106,8 +104,6 @@ class AbstractChannel(ABC):
         """
         Returns next message for given listener id.
         Raises a NoMessagesException if queue is empty
-
-        :param listener_id:
         """
         if self.get_listener(listener_id).is_running_sync():
             try:
