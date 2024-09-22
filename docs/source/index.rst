@@ -1,5 +1,5 @@
-# The lightweight library for async messaging nobody expects.
-=======================================
+The lightweight library for async messaging nobody expects.
+===========================================================
 
 Features
 
@@ -22,19 +22,18 @@ Library name pretends to be a tribute to the following movie https://en.wikipedi
 Entities
 ========
 .. automodule:: eric_sse.entities
-    :members: Message, MessageQueueListener, AbstractChannel
+    :members:
 
 Prefab channels and listeners
 =============================
-.. automodule:: eric_sse.entities
-    :no-index:
-    :members: SSEChannel, ThreadPoolListener
+.. automodule:: eric_sse.prefabs
+    :members:
 
 
 Prefab servers
 ==============
 .. automodule:: eric_sse.servers
-    :members: ChannelContainer, SocketServer
+    :members:
 
 Exceptions
 ==========

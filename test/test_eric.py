@@ -1,5 +1,6 @@
 from unittest import TestCase
-from eric_sse.entities import Message, MessageQueueListener, SSEChannel
+from eric_sse.entities import Message, MessageQueueListener
+from eric_sse.prefabs import SSEChannel
 from unittest import IsolatedAsyncioTestCase
 
 class MessageQueueListenerMock(MessageQueueListener):

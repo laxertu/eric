@@ -113,14 +113,22 @@ Stops listening
 
 # Prefab channels and listeners
 
-### *class* eric_sse.entities.SSEChannel(stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 5)
+### *class* eric_sse.prefabs.DataProcessingChannel(stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 5)
+
+Channel that invoke a callable in a Pool of threads
+
+#### add_threaded_listener(callback: Callable, max_workers: int) → [ThreadPoolListener](#eric_sse.prefabs.ThreadPoolListener)
+
+Adds a threaded listener
+
+### *class* eric_sse.prefabs.SSEChannel(stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 5)
 
 SSE streaming channel.
 
 See [https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
 Currently, ‘id’ field is not supported.
 
-### *class* eric_sse.entities.ThreadPoolListener(callback: Callable, max_workers: int)
+### *class* eric_sse.prefabs.ThreadPoolListener(callback: Callable, max_workers: int)
 
 Listener intended for consurrent processing of data.
 

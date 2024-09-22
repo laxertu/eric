@@ -10,7 +10,7 @@ from pathlib import Path
 import eric_sse
 from eric_sse.entities import Message
 from eric_sse.exception import InvalidChannelException, InvalidListenerException, InvalidMessageFormat
-from eric_sse.entities import SSEChannel
+from eric_sse.prefabs import SSEChannel
 
 logger = eric_sse.get_logger()
 
