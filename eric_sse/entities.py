@@ -155,7 +155,7 @@ class AbstractChannel(ABC):
         """
         Entry point for message streamiong
 
-        In case of failure at channel resulution time, a special message with type='%s' is sent, and
+        In case of failure at channel resulution time, a special message with type=MESSAGE_TYPE_CLOSED is sent, and
         correspondant listener is stopped
         """
         def new_messages():

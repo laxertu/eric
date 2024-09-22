@@ -69,7 +69,7 @@ Adds a message to listener’s queue
 
 Entry point for message streamiong
 
-In case of failure at channel resulution time, a special message with type=’%s’ is sent, and
+In case of failure at channel resulution time, a special message with type=MESSAGE_TYPE_CLOSED is sent, and
 correspondant listener is stopped
 
 <a id="eric_sse.entities.AbstractChannel.register_listener"></a>
