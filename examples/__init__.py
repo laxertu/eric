@@ -1,1 +1,1 @@
-SOCKET_FILE_DESCIPTOR_PATH = "./sockets/example.sock"
+SOCKET_FILE_DESCRIPTOR_PATH = "./sockets/example.sock"

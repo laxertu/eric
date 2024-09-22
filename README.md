@@ -5,7 +5,7 @@
 Features
 
 * Send to one listener and broadcast
-* SSE format was adopted by design, is order to make library suitable for such kind of model
+* SSE format was adopted by design, in order to make library suitable for such kind of model
 * Sockets
 * Callbacks
 * Threading support for large data processing
@@ -28,7 +28,7 @@ Library name pretends to be a tribute to the following movie [https://en.wikiped
 
 <a id="eric_sse.entities.AbstractChannel"></a>
 
-### *class* eric_sse.entities.AbstractChannel(stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 5)
+### *class* eric_sse.entities.AbstractChannel(stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5)
 
 Base class for channels.
 
@@ -39,13 +39,13 @@ SSEChannel is the default implementation
 
 #### add_listener() → [MessageQueueListener](#eric_sse.entities.MessageQueueListener)
 
-Add the default listener
+Adds the default listener
 
 <a id="eric_sse.entities.AbstractChannel.broadcast"></a>
 
 #### broadcast(msg: [Message](#eric_sse.entities.Message))
 
-Enqueue a message to all listeners
+Enqueues a message to all listeners
 
 <a id="eric_sse.entities.AbstractChannel.deliver_next"></a>
 
@@ -64,10 +64,10 @@ Adds a message to listener’s queue
 
 #### *async* message_stream(listener: [MessageQueueListener](#eric_sse.entities.MessageQueueListener)) → AsyncIterable[dict]
 
-Entry point for message streamiong
+Entry point for message streaming
 
-In case of failure at channel resulution time, a special message with type=MESSAGE_TYPE_CLOSED is sent, and
-correspondant listener is stopped
+In case of failure at channel resolution time, a special message with type=MESSAGE_TYPE_CLOSED is sent, and
+correspondent listener is stopped
 
 <a id="eric_sse.entities.AbstractChannel.register_listener"></a>
 
@@ -96,7 +96,7 @@ Optionally you can override on_message method if you need to inject code at mess
 
 #### on_message(msg: [Message](#eric_sse.entities.Message)) → None
 
-Event handler. It executes whan a message is delivered to client
+Event handler. It is executed when a message is delivered to client
 
 <a id="module-eric_sse.prefabs"></a>
 
@@ -106,7 +106,7 @@ Event handler. It executes whan a message is delivered to client
 
 <a id="eric_sse.prefabs.DataProcessingChannel"></a>
 
-### *class* eric_sse.prefabs.DataProcessingChannel(stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 5)
+### *class* eric_sse.prefabs.DataProcessingChannel(stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5)
 
 Channel that invokes a callable in a Pool of threads
 
@@ -118,7 +118,7 @@ Adds a threaded listener
 
 <a id="eric_sse.prefabs.SSEChannel"></a>
 
-### *class* eric_sse.prefabs.SSEChannel(stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 5)
+### *class* eric_sse.prefabs.SSEChannel(stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5)
 
 SSE streaming channel.
 
@@ -140,7 +140,7 @@ Note that same callback is invoked, no matter of message type
 
 #### on_message(msg: [Message](#eric_sse.entities.Message)) → None
 
-Event handler. It executes whan a message is delivered to client
+Event handler. It executes when a message is delivered to client
 
 <a id="module-eric_sse.servers"></a>
 
@@ -152,13 +152,13 @@ Event handler. It executes whan a message is delivered to client
 
 ### *class* eric_sse.servers.ChannelContainer
 
-Helper class for managment of multiple SSE channels cases of use.
+Helper class for management of multiple SSE channels cases of use.
 
 <a id="eric_sse.servers.SocketServer"></a>
 
 ### *class* eric_sse.servers.SocketServer(file_descriptor_path: str)
 
-An implementation of a socket server that reveives and broadcasts automatically all messages that receives
+An implementation of a socket server that receives and broadcasts automatically all messages that receives
 
 A static shortcut for starting a basic server is provided. See examples.
 

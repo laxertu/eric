@@ -3,6 +3,7 @@ from eric_sse.entities import Message, MessageQueueListener
 from eric_sse.prefabs import SSEChannel
 from unittest import IsolatedAsyncioTestCase
 
+
 class MessageQueueListenerMock(MessageQueueListener):
 
     def __init__(self, num_messages_before_disconnect=1, fixtures: dict[int, Message] = None):
@@ -68,7 +69,7 @@ class SSEChannelTestCase(TestCase):
         m_2.start_sync()
 
         # 1 broadcast
-        msg_to_send = Message(type= 'test', payload={})
+        msg_to_send = Message(type='test', payload={})
         c.broadcast(msg=msg_to_send)
         expected = {
             m_1.id: [msg_to_send],
@@ -100,10 +101,9 @@ class StreamTestCase(IsolatedAsyncioTestCase):
 
         c.dispatch(listener.id, Message(type='test', payload={'a': 1}))
         async for msg in await c.message_stream(listener):
-            self.assertDictEqual({'data': {'a': 1}, 'event': 'test', 'retry': c.retry_timeout_millisedonds}, msg)
+            self.assertDictEqual({'data': {'a': 1}, 'event': 'test', 'retry': c.retry_timeout_milliseconds}, msg)
             self.assertDictEqual({listener.id: []}, c.queues)
             await listener.stop()
-
 
     async def test_watch(self):
         c = self.sut

@@ -12,6 +12,7 @@ logger = eric_sse.get_logger()
 
 MESSAGE_TYPE_CLOSED = '_eric_channel_closed'
 
+
 @dataclass
 class Message:
     """
@@ -58,9 +59,10 @@ class MessageQueueListener(ABC):
 
     def on_message(self, msg: Message) -> None:
         """
-        Event handler. It executes whan a message is delivered to client
+        Event handler. It executes when a message is delivered to client
         """
         pass
+
 
 class AbstractChannel(ABC):
     """
@@ -71,7 +73,7 @@ class AbstractChannel(ABC):
     """
     NEXT_ID = 1
 
-    def __init__(self, stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 5):
+    def __init__(self, stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5):
         logger.info(f'Creating channel {AbstractChannel.NEXT_ID}')
         with Lock():
             self.id: str = str(AbstractChannel.NEXT_ID)
@@ -80,8 +82,7 @@ class AbstractChannel(ABC):
         self.listeners: dict[str: MessageQueueListener] = {}
         self.queues: dict[str: list[Message]] = {}
         self.stream_delay_seconds = stream_delay_seconds
-        self.retry_timeout_millisedonds = retry_timeout_millisedonds
-
+        self.retry_timeout_milliseconds = retry_timeout_milliseconds
 
     def add_listener(self) -> MessageQueueListener:
         """Add the default listener"""
@@ -114,13 +115,11 @@ class AbstractChannel(ABC):
             except IndexError:
                 raise NoMessagesException
 
-
     def __get_queue(self, listener_id: str) -> list[Message]:
         try:
             return self.queues[listener_id]
         except KeyError:
             raise InvalidListenerException(f"Invalid listener {listener_id}")
-
 
     def dispatch(self, listener_id: str, msg: Message):
         """Adds a message to listener's queue"""
@@ -136,7 +135,6 @@ class AbstractChannel(ABC):
         for listener_id in self.listeners.keys():
             self.dispatch(listener_id, msg=msg)
 
-
     def get_listener(self, listener_id: str) -> MessageQueueListener:
         try:
             return self.listeners[listener_id]
@@ -149,9 +147,9 @@ class AbstractChannel(ABC):
 
     async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[dict]:
         """
-        Entry point for message streamiong
+        Entry point for message streaming
 
-        In case of failure at channel resulution time, a special message with type=MESSAGE_TYPE_CLOSED is sent, and
+        In case of failure at channel resolution time, a special message with type=MESSAGE_TYPE_CLOSED is sent, and
         correspondant listener is stopped
         """
         def new_messages():

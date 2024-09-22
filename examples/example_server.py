@@ -1,6 +1,6 @@
 from asyncio import run, CancelledError
 
-from examples import SOCKET_FILE_DESCIPTOR_PATH
+from examples import SOCKET_FILE_DESCRIPTOR_PATH
 from eric_sse.servers import SocketServer
 from eric_sse.entities import MessageQueueListener, Message
 
@@ -13,7 +13,7 @@ class ExampleServerListener(MessageQueueListener):
 
 
 async def main():
-    server = SocketServer(SOCKET_FILE_DESCIPTOR_PATH)
+    server = SocketServer(SOCKET_FILE_DESCRIPTOR_PATH)
     channel = server.cc.add()
     listener = ExampleServerListener()
     channel.register_listener(listener)

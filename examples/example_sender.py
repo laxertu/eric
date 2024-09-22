@@ -2,14 +2,15 @@ import asyncio, sys
 import json
 from pathlib import Path
 
-from examples import SOCKET_FILE_DESCIPTOR_PATH
+from examples import SOCKET_FILE_DESCRIPTOR_PATH
+
 
 async def main():
     try:
 
         channel_id = sys.argv[1]
 
-        r, w = await asyncio.open_unix_connection(Path(SOCKET_FILE_DESCIPTOR_PATH))
+        r, w = await asyncio.open_unix_connection(Path(SOCKET_FILE_DESCRIPTOR_PATH))
         payload = {
             'c': channel_id,
             'v': 'b',
@@ -28,9 +29,6 @@ async def main():
         w.close()
         await w.wait_closed()
         print("message sent")
-
-
-
 
     except Exception as e:
         print(e)
