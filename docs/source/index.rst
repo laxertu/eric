@@ -1,4 +1,4 @@
-Eric. The async library nobody expects.
+# The lightweight library for async messaging nobody expects.
 =======================================
 
 Features
