@@ -39,27 +39,21 @@ class MessageQueueListener(ABC):
         self.__is_running: bool = False
 
     async def start(self) -> None:
-        """Starts listening"""
         self.__is_running = True
 
     def start_sync(self) -> None:
-        """Starts listening"""
         self.__is_running = True
 
     async def is_running(self) -> bool:
-        """Returns listener's state: stopped vs. running"""
         return self.__is_running
 
     def is_running_sync(self) -> bool:
-        """Returns listener's state: stopped vs. running"""
         return self.__is_running
 
     async def stop(self) -> None:
-        """Stops listening"""
         self.__is_running = False
 
     def stop_sync(self) -> None:
-        """Stops listening"""
         self.__is_running = False
 
     def on_message(self, msg: Message) -> None:
@@ -133,12 +127,8 @@ class AbstractChannel(ABC):
 
 
     def dispatch(self, listener_id: str, msg: Message):
-        """
-        Adds a message to listener's queue
+        """Adds a message to listener's queue"""
 
-        :param listener_id:
-        :param msg:
-        """
         self.__add_to_queue(listener_id, msg)
         logger.debug(f"Pending {len(self.queues[listener_id])} messages")
 
@@ -146,11 +136,7 @@ class AbstractChannel(ABC):
         self.__get_queue(listener_id).append(msg)
 
     def broadcast(self, msg: Message):
-        """
-        Enqueue a message to all listeners
-
-        :param msg:
-        """
+        """Enqueue a message to all listeners"""
         for listener_id in self.listeners.keys():
             self.dispatch(listener_id, msg=msg)
 
@@ -193,6 +179,6 @@ class AbstractChannel(ABC):
                     logger.info(f"Stopping listener {listener.id}")
                     logger.debug(e)
                     await listener.stop()
-                    yield self.adapt(Message(type=S))
+                    yield self.adapt(Message(type=MESSAGE_TYPE_CLOSED))
 
         return event_generator()

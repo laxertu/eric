@@ -47,9 +47,6 @@ Add the default listener
 
 Enqueue a message to all listeners
 
-* **Parameters:**
-  **msg**
-
 <a id="eric_sse.entities.AbstractChannel.deliver_next"></a>
 
 #### deliver_next(listener_id: str) → [Message](#eric_sse.entities.Message)
@@ -65,10 +62,6 @@ Raises a NoMessagesException if queue is empty
 #### dispatch(listener_id: str, msg: [Message](#eric_sse.entities.Message))
 
 Adds a message to listener’s queue
-
-* **Parameters:**
-  * **listener_id**
-  * **msg**
 
 <a id="eric_sse.entities.AbstractChannel.message_stream"></a>
 
@@ -105,47 +98,11 @@ Base class for listeners.
 
 Optionally you can override on_message method if you need to inject code at message delivery time.
 
-<a id="eric_sse.entities.MessageQueueListener.is_running"></a>
-
-#### *async* is_running() → bool
-
-Returns listener’s state: stopped vs. running
-
-<a id="eric_sse.entities.MessageQueueListener.is_running_sync"></a>
-
-#### is_running_sync() → bool
-
-Returns listener’s state: stopped vs. running
-
 <a id="eric_sse.entities.MessageQueueListener.on_message"></a>
 
 #### on_message(msg: [Message](#eric_sse.entities.Message)) → None
 
 Event handler. It executes whan a message is delivered to client
-
-<a id="eric_sse.entities.MessageQueueListener.start"></a>
-
-#### *async* start() → None
-
-Starts listening
-
-<a id="eric_sse.entities.MessageQueueListener.start_sync"></a>
-
-#### start_sync() → None
-
-Starts listening
-
-<a id="eric_sse.entities.MessageQueueListener.stop"></a>
-
-#### *async* stop() → None
-
-Stops listening
-
-<a id="eric_sse.entities.MessageQueueListener.stop_sync"></a>
-
-#### stop_sync() → None
-
-Stops listening
 
 <a id="module-eric_sse.prefabs"></a>
 
