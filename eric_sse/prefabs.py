@@ -39,12 +39,13 @@ class ThreadPoolListener(MessageQueueListener):
 
 
 class DataProcessingChannel(SSEChannel):
+    """Channel that invoke a callable in a Pool of threads"""
 
     def notify_end(self):
         self.broadcast(Message(type='_eric_channel_closed'))
 
     def add_threaded_listener(self, callback: Callable, max_workers: int) -> ThreadPoolListener:
-
+        """Adds a threaded listener"""
         l = ThreadPoolListener(callback, max_workers)
         self.register_listener(l)
         return l

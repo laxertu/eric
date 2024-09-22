@@ -1,4 +1,4 @@
-# The lightweight library for async messaging nobody expects.
+# # The lightweight library for async messaging nobody expects.
 
 Features
 
@@ -112,24 +112,6 @@ Stops listening
 Stops listening
 
 # Prefab channels and listeners
-
-### *class* eric_sse.entities.SSEChannel(stream_delay_seconds: int = 0, retry_timeout_millisedonds: int = 5)
-
-SSE streaming channel.
-
-See [https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
-Currently, ‘id’ field is not supported.
-
-### *class* eric_sse.entities.ThreadPoolListener(callback: Callable, max_workers: int)
-
-Listener intended for consurrent processing of data.
-
-Relies on concurrent.futures.ThreadPoolExecutor.
-‘_eric_channel_closed’ Message type is intended as end of stream. Is shouls be considered as a reserved Message type
-
-#### on_message(msg: [Message](#eric_sse.entities.Message)) → None
-
-Event handler. It executes whan a message is delivered to client
 
 # Prefab servers
 
