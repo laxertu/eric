@@ -44,7 +44,8 @@ class ThreadPoolListener(MessageQueueListener):
             logger.info(f"Stopping listener {self.id}")
             self.stop_sync()
         else:
-            self.executor.submit(self.__callback, msg)
+            future = self.executor.submit(self.__callback, msg)
+            _ = future.result()
 
 
 class DataProcessingChannel(SSEChannel):
