@@ -10,6 +10,16 @@ pip install eric-sse
 
 <a id="features"></a>
 
+
+# Changelog
+
+0.3.2
+
+* Breaking change: not ThreadPoolListener callback only accepts Message as parameter
+* Fixed a consurrency bug in ThreadPoolListener
+
+
+
 # Features
 
 * Send to one listener and broadcast
