@@ -15,7 +15,7 @@ pip install eric-sse
 0.3.2
 
 * Breaking change: now ThreadPoolListener callback only accepts Message as parameter
-* Fixed a consurrency bug in ThreadPoolListener
+* Fixed a concurrency bug in ThreadPoolListener
 
 <a id="features"></a>
 
@@ -189,8 +189,8 @@ Protocol: a plain (no nested) JSON with the following keys:
 
 “c”: “channel id”,
 “v”: “verb”
-“t” “message type”
-“p” “message payload”
+“t”: “message type”
+“p”: “message payload”
 
 Possible values of verb identifies a supported action:
 

@@ -48,8 +48,8 @@ class SocketServer:
 
     "c": "channel id",
     "v": "verb"
-    "t" "message type"
-    "p" "message payload"
+    "t": "message type"
+    "p": "message payload"
 
     Possible values of verb identifies a supported action:
 
