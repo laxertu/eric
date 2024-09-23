@@ -8,8 +8,7 @@
 
 pip install eric-sse
 
-<a id="features"></a>
-
+<a id="changelog"></a>
 
 # Changelog
 
@@ -18,7 +17,7 @@ pip install eric-sse
 * Breaking change: now ThreadPoolListener callback only accepts Message as parameter
 * Fixed a consurrency bug in ThreadPoolListener
 
-
+<a id="features"></a>
 
 # Features
 
@@ -147,7 +146,7 @@ Currently, ‘id’ field is not supported.
 
 ### *class* eric_sse.prefabs.ThreadPoolListener(callback: Callable[[[Message](#eric_sse.entities.Message)], None], max_workers: int)
 
-#### **CURRENTLY NOT SUITABLE FOR PRODUCTION ENVIRONMENTS.**
+CURRENTLY NOT SUITABLE FOR PRODUCTION ENVIRONMENTS.
 
 Listener intended for concurrent processing of data.
 
@@ -185,6 +184,37 @@ Helper class for management of multiple SSE channels cases of use.
 An implementation of a socket server that receives and broadcasts automatically all messages that receives
 
 A static shortcut for starting a basic server is provided. See examples.
+
+Protocol: a plain (no nested) JSON with the following keys:
+
+“c”: “channel id”,
+“v”: “verb”
+“t” “message type”
+“p” “message payload”
+
+Possible values of verb identifies a supported action:
+
+“d” dispatch
+“b” broadcast
+“c” add listener
+“w” watch (opens a stream)
+
+See examples
+
+<a id="eric_sse.servers.SocketServer.connect_callback"></a>
+
+#### *async static* connect_callback(reader: StreamReader, writer: StreamWriter)
+
+Integration with SocketServer.
+
+See [https://docs.python.org/3/library/asyncio-stream.html#asyncio.start_unix_server](https://docs.python.org/3/library/asyncio-stream.html#asyncio.start_unix_server)
+Handles low-lwvel communication and raw messages parsing
+
+<a id="eric_sse.servers.SocketServer.shutdown"></a>
+
+#### *async* shutdown(server: Server)
+
+Graceful Shutdown
 
 <a id="eric_sse.servers.SocketServer.start"></a>
 

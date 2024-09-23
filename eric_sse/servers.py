@@ -43,6 +43,22 @@ class SocketServer:
     An implementation of a socket server that receives and broadcasts automatically all messages that receives
 
     A static shortcut for starting a basic server is provided. See examples.
+
+    Protocol: a plain (no nested) JSON with the following keys:
+
+    "c": "channel id",
+    "v": "verb"
+    "t" "message type"
+    "p" "message payload"
+
+    Possible values of verb identifies a supported action:
+
+    "d" dispatch
+    "b" broadcast
+    "c" add listener
+    "w" watch (opens a stream)
+
+    See examples
     """
     cc = ChannelContainer()
 
@@ -66,6 +82,12 @@ class SocketServer:
 
     @staticmethod
     async def connect_callback(reader: StreamReader, writer: StreamWriter):
+        """
+        Integration with SocketServer.
+
+        See https://docs.python.org/3/library/asyncio-stream.html#asyncio.start_unix_server
+        Handles low-lwvel communication and raw messages parsing
+        """
         try:
             message_content = await reader.read()
             channel_id, verb, message, receiver_id = SocketServer.__parse(message_content.decode())
@@ -111,6 +133,7 @@ class SocketServer:
                 await writer.drain()
 
     async def shutdown(self, server: asyncio.Server):
+        """Graceful Shutdown"""
         logger.info("graceful shutdown")
         server.close()
         await server.wait_closed()

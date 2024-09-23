@@ -5,14 +5,22 @@ Installation
 ============
 pip install eric-sse
 
+
+Changelog
+=========
+0.3.2
+
+* Breaking change: now ThreadPoolListener callback only accepts Message as parameter
+* Fixed a consurrency bug in ThreadPoolListener
+
 Features
 ========
-
 * Send to one listener and broadcast
 * SSE format was adopted by design, is order to make library suitable for such kind of model
 * Sockets
 * Callbacks
-* Threading support for large data processing
+* [**Experimental**] Threading support for large data processing
+
 
 Possible applications
 
