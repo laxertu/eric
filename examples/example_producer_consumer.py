@@ -20,8 +20,8 @@ class Consumer(ThreadPoolListener):
         super().__init__(callback=self._on_message, max_workers=max_workers)
 
     @staticmethod
-    def _on_message(payload: int) -> None:
-        logger.info(f"Received {payload}")
+    def _on_message(msg: Message) -> None:
+        logger.info(f"Received {msg.payload}: {msg.payload}")
 
 
 async def main():
