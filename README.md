@@ -120,7 +120,7 @@ Channel that invokes a callable in a Pool of threads
 
 <a id="eric_sse.prefabs.DataProcessingChannel.add_threaded_listener"></a>
 
-#### add_threaded_listener(callback: Callable, max_workers: int) → [ThreadPoolListener](#eric_sse.prefabs.ThreadPoolListener)
+#### add_threaded_listener(callback: Callable[[[Message](#eric_sse.entities.Message)], None], max_workers: int) → [ThreadPoolListener](#eric_sse.prefabs.ThreadPoolListener)
 
 Adds a threaded listener
 
@@ -135,7 +135,9 @@ Currently, ‘id’ field is not supported.
 
 <a id="eric_sse.prefabs.ThreadPoolListener"></a>
 
-### *class* eric_sse.prefabs.ThreadPoolListener(callback: Callable, max_workers: int)
+### *class* eric_sse.prefabs.ThreadPoolListener(callback: Callable[[[Message](#eric_sse.entities.Message)], None], max_workers: int)
+
+CURRENTLY NOT SUITABLE FOR PRODUCTION ENVIRONMENTS.
 
 Listener intended for concurrent processing of data.
 

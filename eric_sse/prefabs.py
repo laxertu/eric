@@ -22,6 +22,8 @@ class SSEChannel(AbstractChannel):
 
 class ThreadPoolListener(MessageQueueListener):
     """
+    CURRENTLY NOT SUITABLE FOR PRODUCTION ENVIRONMENTS.
+
     Listener intended for concurrent processing of data.
 
     Relies on concurrent.futures.ThreadPoolExecutor.
@@ -33,7 +35,7 @@ class ThreadPoolListener(MessageQueueListener):
      * same callback is invoked, no matter of message type
      * callback execution order is not guaranteed (to be the same as the one while dispatching to channel)
     """
-    def __init__(self, callback: Callable, max_workers: int):
+    def __init__(self, callback: Callable[[Message], None], max_workers: int):
         from concurrent.futures import ThreadPoolExecutor
         super().__init__()
         self.executor = ThreadPoolExecutor(max_workers=max_workers)
@@ -44,7 +46,8 @@ class ThreadPoolListener(MessageQueueListener):
             logger.info(f"Stopping listener {self.id}")
             self.stop_sync()
         else:
-            self.executor.submit(self.__callback, msg.payload)
+            future = self.executor.submit(self.__callback, msg)
+            _ = future.result()
 
 
 class DataProcessingChannel(SSEChannel):
@@ -53,7 +56,7 @@ class DataProcessingChannel(SSEChannel):
     def notify_end(self):
         self.broadcast(Message(type=MESSAGE_TYPE_CLOSED))
 
-    def add_threaded_listener(self, callback: Callable, max_workers: int) -> ThreadPoolListener:
+    def add_threaded_listener(self, callback: Callable[[Message], None], max_workers: int) -> ThreadPoolListener:
         """Adds a threaded listener"""
         l = ThreadPoolListener(callback, max_workers)
         self.register_listener(l)
