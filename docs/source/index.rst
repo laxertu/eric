@@ -11,7 +11,7 @@ Changelog
 0.3.2
 
 * Breaking change: now ThreadPoolListener callback only accepts Message as parameter
-* Fixed a consurrency bug in ThreadPoolListener
+* Fixed a concurrency bug in ThreadPoolListener
 
 Features
 ========
