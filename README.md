@@ -26,7 +26,7 @@ pip install eric-sse
 * SSE format was adopted by design, is order to make library suitable for such kind of model
 * Sockets
 * Callbacks
-* Threading support for large data processing
+* [**Experimental**] Threading support for large data processing
 
 Possible applications
 
