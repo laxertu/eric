@@ -147,7 +147,7 @@ Currently, ‘id’ field is not supported.
 
 ### *class* eric_sse.prefabs.ThreadPoolListener(callback: Callable[[[Message](#eric_sse.entities.Message)], None], max_workers: int)
 
-CURRENTLY NOT SUITABLE FOR PRODUCTION ENVIRONMENTS.
+#### **CURRENTLY NOT SUITABLE FOR PRODUCTION ENVIRONMENTS.**
 
 Listener intended for concurrent processing of data.
 
