@@ -5,7 +5,6 @@ Installation
 ============
 pip install eric-sse
 
-
 Changelog
 =========
 0.3.2
