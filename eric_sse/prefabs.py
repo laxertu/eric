@@ -22,6 +22,8 @@ class SSEChannel(AbstractChannel):
 
 class ThreadPoolListener(MessageQueueListener):
     """
+    CURRENTLY NOT SUITABLE FOR PRODUCTION ENVIRONMENTS.
+
     Listener intended for concurrent processing of data.
 
     Relies on concurrent.futures.ThreadPoolExecutor.
