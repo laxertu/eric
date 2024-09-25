@@ -43,8 +43,7 @@ class SocketServer:
     An implementation of a socket server that receives and broadcasts automatically all messages that receives
 
     A static shortcut for starting a basic server is provided. See examples.
-
-    Protocol: a plain (no nested) JSON with the following keys:
+    '''Accepted format''': a plain (no nested) JSON with the following keys:
 
     "c": "channel id",
     "v": "verb"
