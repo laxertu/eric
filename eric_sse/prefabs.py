@@ -1,5 +1,7 @@
 from typing import Any, Callable
 
+from asyncio import Future
+
 from eric_sse import get_logger
 from eric_sse.entities import AbstractChannel, Message, MessageQueueListener, MESSAGE_TYPE_CLOSED
 
@@ -38,16 +40,22 @@ class ThreadPoolListener(MessageQueueListener):
     def __init__(self, callback: Callable[[Message], None], max_workers: int):
         from concurrent.futures import ThreadPoolExecutor
         super().__init__()
-        self.executor = ThreadPoolExecutor(max_workers=max_workers)
         self.__callback = callback
+        self.executor = ThreadPoolExecutor(max_workers=max_workers)
+
+        self.__exec_after = max_workers
+        self.__futures: list[Future] = []
 
     def on_message(self, msg: Message) -> None:
         if msg.type == MESSAGE_TYPE_CLOSED:
             logger.info(f"Stopping listener {self.id}")
             self.stop_sync()
         else:
-            future = self.executor.submit(self.__callback, msg)
-            _ = future.result()
+            self.__futures.append(self.executor.submit(self.__callback, msg))
+            if len(self.__futures) >= self.__exec_after:
+                for f in self.__futures:
+                    _ = f.result()
+
 
 
 class DataProcessingChannel(SSEChannel):
