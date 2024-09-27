@@ -48,6 +48,8 @@ class ThreadPoolListener(MessageQueueListener):
 
     def on_message(self, msg: Message) -> None:
         if msg.type == MESSAGE_TYPE_CLOSED:
+            for f in self.__futures:
+                _ = f.result()
             logger.info(f"Stopping listener {self.id}")
             self.stop_sync()
         else:

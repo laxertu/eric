@@ -31,7 +31,7 @@ async def main():
     # And max wprkers num
     consumer = Consumer(max_workers=10)
     channel.register_listener(consumer)
-    Producer.produce_num(c=channel, l=consumer, num=20)
+    Producer.produce_num(c=channel, l=consumer, num=21)
 
     await consumer.start()
     async for _ in await channel.message_stream(consumer):
