@@ -53,6 +53,7 @@ class ThreadPoolListener(MessageQueueListener):
             logger.info(f"Stopping listener {self.id}")
             self.stop_sync()
         else:
+            # TODO reset
             self.__futures.append(self.executor.submit(self.__callback, msg))
             if len(self.__futures) >= self.__exec_after:
                 for f in self.__futures:
