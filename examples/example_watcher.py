@@ -13,7 +13,6 @@ async def main():
 
         r, w = await asyncio.open_unix_connection(Path(SOCKET_FILE_DESCRIPTOR_PATH))
         payload = {
-            't': 'z',
             'c': channel_id,
             'r': receiver_id,
             'v': 'w',

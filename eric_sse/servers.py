@@ -65,12 +65,15 @@ class SocketServer:
         self.__file_descriptor_path = file_descriptor_path
 
     @staticmethod
-    def __parse(json_raw: str) -> (str, Message, str):
+    def __parse(json_raw: str) -> (str, str, Message | None, str):
         try:
             parsed = json.loads(json_raw)
             channel_id = parsed['c']
             verb = parsed['v']
-            message = Message(type=parsed['t'], payload=parsed.get('p'))
+            message = None
+            if verb not in ['w', 'c']:
+                message = Message(type=parsed['t'], payload=parsed.get('p'))
+
             receiver_id: str = parsed.get('r')
             return channel_id, verb, message, receiver_id
 
@@ -121,9 +124,6 @@ class SocketServer:
                     message = f'{json.dumps(m)}{os.linesep}'
                     logger.info(f"received message {message}")
                     writer.write(message.encode())
-                    #await writer.drain()
-
-
 
         except Exception as e:
                 logger.error(e)
