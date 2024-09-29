@@ -73,7 +73,7 @@ class AbstractChannel(ABC):
     """
     NEXT_ID = 1
 
-    def __init__(self, stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5):
+    def __init__(self, stream_delay_seconds: int = 0):
         logger.info(f'Creating channel {AbstractChannel.NEXT_ID}')
         with Lock():
             self.id: str = str(AbstractChannel.NEXT_ID)
@@ -82,7 +82,6 @@ class AbstractChannel(ABC):
         self.listeners: dict[str: MessageQueueListener] = {}
         self.queues: dict[str: list[Message]] = {}
         self.stream_delay_seconds = stream_delay_seconds
-        self.retry_timeout_milliseconds = retry_timeout_milliseconds
 
     def add_listener(self) -> MessageQueueListener:
         """Add the default listener"""

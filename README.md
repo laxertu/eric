@@ -12,6 +12,13 @@ pip install eric-sse
 
 # Changelog
 
+0.4.0
+
+Breaking changes:
+
+* Rework of DataProcessingChannel, now extends AbstractChannel and its methods’ signatures have been updated
+* AbstractChannel.retry_timeout_milliseconds have been moved to SSEChannel
+
 0.3.2
 
 * Breaking change: now ThreadPoolListener callback only accepts Message as parameter
@@ -45,7 +52,7 @@ Library name pretends to be a tribute to the following movie [https://en.wikiped
 
 <a id="eric_sse.entities.AbstractChannel"></a>
 
-### *class* eric_sse.entities.AbstractChannel(stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5)
+### *class* eric_sse.entities.AbstractChannel(stream_delay_seconds: int = 0)
 
 Base class for channels.
 
@@ -123,32 +130,9 @@ Event handler. It executes when a message is delivered to client
 
 <a id="eric_sse.prefabs.DataProcessingChannel"></a>
 
-### *class* eric_sse.prefabs.DataProcessingChannel(stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5)
+### *class* eric_sse.prefabs.DataProcessingChannel(max_workers: int, stream_delay_seconds: int = 0)
 
-Channel that invokes a callable in a Pool of threads
-
-<a id="eric_sse.prefabs.DataProcessingChannel.add_threaded_listener"></a>
-
-#### add_threaded_listener(callback: Callable[[[Message](#eric_sse.entities.Message)], None], max_workers: int) → [ThreadPoolListener](#eric_sse.prefabs.ThreadPoolListener)
-
-Adds a threaded listener
-
-<a id="eric_sse.prefabs.SSEChannel"></a>
-
-### *class* eric_sse.prefabs.SSEChannel(stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5)
-
-SSE streaming channel.
-
-See [https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
-Currently, ‘id’ field is not supported.
-
-<a id="eric_sse.prefabs.ThreadPoolListener"></a>
-
-### *class* eric_sse.prefabs.ThreadPoolListener(callback: Callable[[[Message](#eric_sse.entities.Message)], None], max_workers: int)
-
-CURRENTLY NOT SUITABLE FOR PRODUCTION ENVIRONMENTS.
-
-Listener intended for concurrent processing of data.
+Channel intended for concurrent processing of data.
 
 Relies on concurrent.futures.ThreadPoolExecutor.
 
@@ -158,6 +142,31 @@ Note that:
 
 > * same callback is invoked, no matter of message type
 > * callback execution order is not guaranteed (to be the same as the one while dispatching to channel)
+
+<a id="eric_sse.prefabs.DataProcessingChannel.add_threaded_listener"></a>
+
+#### add_threaded_listener(callback: Callable[[[Message](#eric_sse.entities.Message)], None]) → [ThreadPoolListener](#eric_sse.prefabs.ThreadPoolListener)
+
+Adds a threaded listener
+
+<a id="eric_sse.prefabs.DataProcessingChannel.notify_end"></a>
+
+#### notify_end()
+
+Broadcasts a MESSAGE_TYPE_CLOSED Message
+
+<a id="eric_sse.prefabs.SSEChannel"></a>
+
+### *class* eric_sse.prefabs.SSEChannel(retry_timeout_milliseconds: int = 5)
+
+SSE streaming channel.
+
+See [https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
+Currently, ‘id’ field is not supported.
+
+<a id="eric_sse.prefabs.ThreadPoolListener"></a>
+
+### *class* eric_sse.prefabs.ThreadPoolListener(callback: Callable[[[Message](#eric_sse.entities.Message)], None], executor: ThreadPoolExecutor)
 
 <a id="eric_sse.prefabs.ThreadPoolListener.on_message"></a>
 
@@ -193,10 +202,10 @@ A static shortcut for starting a basic server is provided. See examples.
 
 Possible values of verb identifies a supported action:
 
-“d” dispatch
-“b” broadcast
-“c” add listener
-“w” watch (opens a stream)
+> “d” dispatch
+> “b” broadcast
+> “c” add listener
+> “w” watch (opens a stream)
 
 See examples
 
