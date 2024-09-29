@@ -5,9 +5,16 @@ Installation
 ============
 pip install eric-sse
 
-
 Changelog
 =========
+0.4.0
+
+Breaking changes:
+
+* Rework of DataProcessingChannel, now extends AbstractChannel and its methods' signatures have been updated
+
+* AbstractChannel.retry_timeout_milliseconds have been moved to SSEChannel
+
 0.3.2
 
 * Breaking change: now ThreadPoolListener callback only accepts Message as parameter
