@@ -11,7 +11,10 @@ class SSEChannel(AbstractChannel):
     """
     SSE streaming channel.
 
+    :param retry_timeout_milliseconds: Used to indicate waiting time to clients
+
     See https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
+
     Currently, 'id' field is not supported.
     """
     def __init__(self, retry_timeout_milliseconds: int = 5):
@@ -47,9 +50,12 @@ class DataProcessingChannel(AbstractChannel):
     """
     Channel intended for concurrent processing of data.
 
+    :param max_workers: Num og workers to use
+    :param stream_delay_seconds: Can be used to limit response rate of streamings
+
     Relies on concurrent.futures.ThreadPoolExecutor.
 
-    Just override '''adapt''' method to control output returned to clients
+    Just override **adapt** method to control output returned to clients
 
 
     MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.
