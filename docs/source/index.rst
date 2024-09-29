@@ -7,6 +7,10 @@ pip install eric-sse
 
 Changelog
 =========
+0.4.1.0
+
+* Breaking: Changed DataProcessingChannel adapter to suit with SSE
+
 0.4.0
 
 Breaking changes:
