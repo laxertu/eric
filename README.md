@@ -136,12 +136,20 @@ Channel intended for concurrent processing of data.
 
 Relies on concurrent.futures.ThreadPoolExecutor.
 
+Just override ‘’’adapt’’’ method to control output returned to clients
+
 MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.
 
 Note that:
 
 > * same callback is invoked, no matter of message type
 > * callback execution order is not guaranteed (to be the same as the one while dispatching to channel)
+
+<a id="eric_sse.prefabs.DataProcessingChannel.adapt"></a>
+
+#### adapt(msg: [Message](#eric_sse.entities.Message)) → Any
+
+Models output returned to clients
 
 <a id="eric_sse.prefabs.DataProcessingChannel.add_threaded_listener"></a>
 

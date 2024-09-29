@@ -49,6 +49,9 @@ class DataProcessingChannel(AbstractChannel):
 
     Relies on concurrent.futures.ThreadPoolExecutor.
 
+    Just override '''adapt''' method to control output returned to clients
+
+
     MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.
 
     Note that:
@@ -72,6 +75,7 @@ class DataProcessingChannel(AbstractChannel):
         return l
 
     def adapt(self, msg: Message) -> Any:
+        """Models output returned to clients"""
         return {f'processed message {msg.payload}'}
 
 
