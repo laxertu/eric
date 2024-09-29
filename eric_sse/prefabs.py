@@ -82,6 +82,8 @@ class DataProcessingChannel(AbstractChannel):
 
     def adapt(self, msg: Message) -> Any:
         """Models output returned to clients"""
-        return {f'processed message {msg.payload}'}
-
+        return {
+            "event": msg.type,
+            "data": msg.payload
+        }
 
