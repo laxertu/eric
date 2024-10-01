@@ -12,6 +12,11 @@ pip install eric-sse
 
 # Changelog
 
+0.5.0
+
+* Removed Threaded listener class
+* Added DataProcessingChannel.process_queue
+
 0.4.1.0
 
 * Breaking: Changed DataProcessingChannel adapter to suit with SSE
@@ -136,7 +141,7 @@ Event handler. It executes when a message is delivered to client
 
 ### *class* eric_sse.prefabs.DataProcessingChannel(max_workers: int, stream_delay_seconds: int = 0)
 
-Channel intended for concurrent processing of data.
+[Still experimental, it was never tested on some real use case] Channel intended for concurrent processing of data.
 
 * **Parameters:**
   * **max_workers** – Num og workers to use
@@ -148,10 +153,7 @@ Just override **adapt** method to control output returned to clients
 
 MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.
 
-Note that:
-
-> * same callback is invoked, no matter of message type
-> * callback execution order is not guaranteed (to be the same as the one while dispatching to channel)
+Note that callback execution order is not guaranteed
 
 <a id="eric_sse.prefabs.DataProcessingChannel.adapt"></a>
 
@@ -159,17 +161,17 @@ Note that:
 
 Models output returned to clients
 
-<a id="eric_sse.prefabs.DataProcessingChannel.add_threaded_listener"></a>
-
-#### add_threaded_listener(callback: Callable[[[Message](#eric_sse.entities.Message)], None]) → [ThreadPoolListener](#eric_sse.prefabs.ThreadPoolListener)
-
-Adds a threaded listener
-
 <a id="eric_sse.prefabs.DataProcessingChannel.notify_end"></a>
 
 #### notify_end()
 
 Broadcasts a MESSAGE_TYPE_CLOSED Message
+
+<a id="eric_sse.prefabs.DataProcessingChannel.process_queue"></a>
+
+#### *async* process_queue(l: [MessageQueueListener](#eric_sse.entities.MessageQueueListener)) → AsyncIterable[dict]
+
+Launches the processing of the given listener’s queue
 
 <a id="eric_sse.prefabs.SSEChannel"></a>
 
@@ -183,16 +185,6 @@ SSE streaming channel.
 See [https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
 
 Currently, ‘id’ field is not supported.
-
-<a id="eric_sse.prefabs.ThreadPoolListener"></a>
-
-### *class* eric_sse.prefabs.ThreadPoolListener(callback: Callable[[[Message](#eric_sse.entities.Message)], None], executor: ThreadPoolExecutor)
-
-<a id="eric_sse.prefabs.ThreadPoolListener.on_message"></a>
-
-#### on_message(msg: [Message](#eric_sse.entities.Message)) → None
-
-Event handler. It executes when a message is delivered to client
 
 <a id="module-eric_sse.servers"></a>
 

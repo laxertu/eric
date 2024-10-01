@@ -6,6 +6,9 @@ logger = get_logger()
 from eric_sse.entities import Message, MessageQueueListener
 from eric_sse.prefabs import DataProcessingChannel
 
+from random import uniform
+from time import sleep
+
 
 class Producer:
 
@@ -15,19 +18,23 @@ class Producer:
             c.dispatch(l.id, Message(type='counter', payload=i))
         c.notify_end()
 
-def on_message(msg: Message) -> None:
-    logger.info(f"Received {msg.payload}: {msg.payload}")
+class Consumer(MessageQueueListener):
+    def on_message(self, msg: Message) -> None:
+        sleep(uniform(0, 1))
+        logger.info(f"Received {msg.type}: {msg.payload}")
+
 
 async def main():
 
-    # Here you can control message deliver frequency
-    channel = DataProcessingChannel(stream_delay_seconds=0, max_workers=2)
-    # And max wprkers num
-    listener = channel.add_threaded_listener(callback=on_message)
+    # Here you can control message deliver frequency and max workers num
+    channel = DataProcessingChannel(stream_delay_seconds=0, max_workers=6)
+    listener = Consumer()
+    channel.register_listener(listener)
+
     Producer.produce_num(c=channel, l=listener, num=21)
 
     await listener.start()
-    async for _ in await channel.message_stream(listener):
-        pass
+    async for msg in await channel.process_queue(listener):
+        print(msg)
 
 asyncio.get_event_loop().run_until_complete(main())
