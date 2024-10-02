@@ -7,6 +7,12 @@ pip install eric-sse
 
 Changelog
 =========
+0.5.0
+
+* Removed Threaded listener class
+* Added DataProcessingChannel.process_queue
+
+
 0.4.1.0
 
 * Breaking: Changed DataProcessingChannel adapter to suit with SSE
