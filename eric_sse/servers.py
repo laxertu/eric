@@ -44,18 +44,21 @@ class SocketServer:
 
     A static shortcut for starting a basic server is provided. See examples.
     **Accepted format**: a plain (no nested) JSON with the following keys:
-
-    > "c": "channel id"
-    > "v": "verb"
-    > "t": "message type"
-    > "p": "message payload"
+    ```
+    "c": "channel id"
+    "v": "verb"
+    "t": "message type"
+    "p": "message payload"
+    ```
 
     Possible values of verb identifies a supported action:
 
-    > "d" dispatch
-    > "b" broadcast
-    > "c" add listener
-    > "w" watch (opens a stream)
+    ```
+    "d" dispatch
+    "b" broadcast
+    "c" add listener
+    "w" watch (opens a stream)
+    ```
 
     See examples
     """

@@ -49,7 +49,6 @@ class DataProcessingChannel(AbstractChannel):
 
     def __init__(self, max_workers: int, stream_delay_seconds: int = 0):
         super().__init__(stream_delay_seconds=stream_delay_seconds)
-        self.__executor = ThreadPoolExecutor(max_workers=max_workers)
         self.max_workers = max_workers
 
     async def process_queue(self, l: MessageQueueListener) -> AsyncIterable[dict]:

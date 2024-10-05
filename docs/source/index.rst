@@ -5,31 +5,6 @@ Installation
 ============
 pip install eric-sse
 
-Changelog
-=========
-0.5.0
-
-* Removed Threaded listener class
-* Added DataProcessingChannel.process_queue
-
-
-0.4.1.0
-
-* Breaking: Changed DataProcessingChannel adapter to suit with SSE
-
-0.4.0
-
-Breaking changes:
-
-* Rework of DataProcessingChannel, now extends AbstractChannel and its methods' signatures have been updated
-
-* AbstractChannel.retry_timeout_milliseconds have been moved to SSEChannel
-
-0.3.2
-
-* Breaking change: now ThreadPoolListener callback only accepts Message as parameter
-* Fixed a concurrency bug in ThreadPoolListener
-
 Features
 ========
 * Send to one listener and broadcast
@@ -69,6 +44,32 @@ Exceptions
 ==========
 .. automodule:: eric_sse.exception
     :members:
+
+
+Changelog
+=========
+0.5.0
+
+* Removed Threaded listener class
+* Added DataProcessingChannel.process_queue
+
+
+0.4.1.0
+
+* Breaking: Changed DataProcessingChannel adapter to suit with SSE
+
+0.4.0
+
+Breaking changes:
+
+* Rework of DataProcessingChannel, now extends AbstractChannel and its methods' signatures have been updated
+
+* AbstractChannel.retry_timeout_milliseconds have been moved to SSEChannel
+
+0.3.2
+
+* Breaking change: now ThreadPoolListener callback only accepts Message as parameter
+* Fixed a concurrency bug in ThreadPoolListener
 
 Developers section
 ==================

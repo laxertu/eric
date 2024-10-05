@@ -8,31 +8,6 @@
 
 pip install eric-sse
 
-<a id="changelog"></a>
-
-# Changelog
-
-0.5.0
-
-* Removed Threaded listener class
-* Added DataProcessingChannel.process_queue
-
-0.4.1.0
-
-* Breaking: Changed DataProcessingChannel adapter to suit with SSE
-
-0.4.0
-
-Breaking changes:
-
-* Rework of DataProcessingChannel, now extends AbstractChannel and its methods’ signatures have been updated
-* AbstractChannel.retry_timeout_milliseconds have been moved to SSEChannel
-
-0.3.2
-
-* Breaking change: now ThreadPoolListener callback only accepts Message as parameter
-* Fixed a concurrency bug in ThreadPoolListener
-
 <a id="features"></a>
 
 # Features
@@ -206,18 +181,21 @@ An implementation of a socket server that acts as a controller to interact with 
 
 A static shortcut for starting a basic server is provided. See examples.
 **Accepted format**: a plain (no nested) JSON with the following keys:
-
-> “c”: “channel id”
-> “v”: “verb”
-> “t”: “message type”
-> “p”: “message payload”
+``
+"c": "channel id"
+"v": "verb"
+"t": "message type"
+"p": "message payload"
+``
 
 Possible values of verb identifies a supported action:
 
-> “d” dispatch
-> “b” broadcast
-> “c” add listener
-> “w” watch (opens a stream)
+``
+"d" dispatch
+"b" broadcast
+"c" add listener
+"w" watch (opens a stream)
+``
 
 See examples
 
@@ -265,6 +243,31 @@ Shortcut to start a server
 ### *exception* eric_sse.exception.NoMessagesException
 
 Raised when trying to fetch from an empty queue
+
+<a id="changelog"></a>
+
+# Changelog
+
+0.5.0
+
+* Removed Threaded listener class
+* Added DataProcessingChannel.process_queue
+
+0.4.1.0
+
+* Breaking: Changed DataProcessingChannel adapter to suit with SSE
+
+0.4.0
+
+Breaking changes:
+
+* Rework of DataProcessingChannel, now extends AbstractChannel and its methods’ signatures have been updated
+* AbstractChannel.retry_timeout_milliseconds have been moved to SSEChannel
+
+0.3.2
+
+* Breaking change: now ThreadPoolListener callback only accepts Message as parameter
+* Fixed a concurrency bug in ThreadPoolListener
 
 <a id="developers-section"></a>
 
