@@ -2,8 +2,8 @@ from typing import Any, Callable, AsyncIterable, Iterator
 
 
 from eric_sse import get_logger
-from eric_sse.entities import AbstractChannel, Message, MessageQueueListener, MESSAGE_TYPE_CLOSED
-from concurrent.futures import ThreadPoolExecutor, Future
+from eric_sse.entities import AbstractChannel, Message, MessageQueueListener
+from concurrent.futures import ThreadPoolExecutor, Future, as_completed
 
 logger = get_logger()
 
@@ -53,15 +53,14 @@ class DataProcessingChannel(AbstractChannel):
 
     async def process_queue(self, l: MessageQueueListener) -> AsyncIterable[dict]:
         """Launches the processing of the given listener's queue"""
-        from concurrent.futures import as_completed
+
         async def event_generator(listener: MessageQueueListener) -> AsyncIterable[dict]:
-            fs: Iterator[Future] = self._prepare_executor(listener)
-            for f in as_completed(fs):
+            for f in as_completed(self.__prepare_executor(listener)):
                 yield self.adapt(f.result())
 
         return event_generator(listener=l)
 
-    def _prepare_executor(self, listener: MessageQueueListener) -> Iterator[Future]:
+    def __prepare_executor(self, listener: MessageQueueListener) -> Iterator[Future]:
         with ThreadPoolExecutor(self.max_workers) as e:
             there_are_peding_messages = True
             while there_are_peding_messages:
@@ -77,10 +76,6 @@ class DataProcessingChannel(AbstractChannel):
     def __invoke_callback_and_return(callback: Callable[[Message], None], msg: Message):
         callback(msg)
         return msg
-
-    def notify_end(self):
-        """Broadcasts a MESSAGE_TYPE_CLOSED Message"""
-        self.broadcast(Message(type=MESSAGE_TYPE_CLOSED))
 
 
     def adapt(self, msg: Message) -> Any:

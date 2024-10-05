@@ -175,3 +175,8 @@ class AbstractChannel(ABC):
                     yield self.adapt(Message(type=MESSAGE_TYPE_CLOSED))
 
         return event_generator()
+
+    def notify_end(self):
+        """Broadcasts a MESSAGE_TYPE_CLOSED Message"""
+        self.broadcast(Message(type=MESSAGE_TYPE_CLOSED))
+

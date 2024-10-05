@@ -77,6 +77,12 @@ Entry point for message streaming
 In case of failure at channel resolution time, a special message with type=MESSAGE_TYPE_CLOSED is sent, and
 correspondant listener is stopped
 
+<a id="eric_sse.entities.AbstractChannel.notify_end"></a>
+
+#### notify_end()
+
+Broadcasts a MESSAGE_TYPE_CLOSED Message
+
 <a id="eric_sse.entities.AbstractChannel.register_listener"></a>
 
 #### register_listener(l: [MessageQueueListener](#eric_sse.entities.MessageQueueListener))
@@ -136,12 +142,6 @@ Note that callback execution order is not guaranteed
 
 Models output returned to clients
 
-<a id="eric_sse.prefabs.DataProcessingChannel.notify_end"></a>
-
-#### notify_end()
-
-Broadcasts a MESSAGE_TYPE_CLOSED Message
-
 <a id="eric_sse.prefabs.DataProcessingChannel.process_queue"></a>
 
 #### *async* process_queue(l: [MessageQueueListener](#eric_sse.entities.MessageQueueListener)) → AsyncIterable[dict]
@@ -181,6 +181,7 @@ An implementation of a socket server that acts as a controller to interact with 
 
 A static shortcut for starting a basic server is provided. See examples.
 **Accepted format**: a plain (no nested) JSON with the following keys:
+
 ``
 "c": "channel id"
 "v": "verb"
