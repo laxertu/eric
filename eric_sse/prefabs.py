@@ -18,8 +18,8 @@ class SSEChannel(AbstractChannel):
 
     Currently, 'id' field is not supported.
     """
-    def __init__(self, retry_timeout_milliseconds: int = 5):
-        super().__init__()
+    def __init__(self, stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5):
+        super().__init__(stream_delay_seconds = stream_delay_seconds)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
 
     def adapt(self, msg: Message) -> Any:
@@ -35,7 +35,7 @@ class DataProcessingChannel(AbstractChannel):
     [Still experimental, it was never tested on some real use case] Channel intended for concurrent processing of data.
 
     :param max_workers: Num og workers to use
-    :param stream_delay_seconds: Can be used to limit response rate of streamings
+    :param stream_delay_seconds: Can be used to limit response rate of streamings. Only applies to message_stream calls.
 
     Relies on concurrent.futures.ThreadPoolExecutor. 
 

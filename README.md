@@ -120,7 +120,7 @@ Event handler. It executes when a message is delivered to client
 
 * **Parameters:**
   * **max_workers** – Num og workers to use
-  * **stream_delay_seconds** – Can be used to limit response rate of streamings
+  * **stream_delay_seconds** – Can be used to limit response rate of streamings. Only applies to message_stream calls.
 
 Relies on concurrent.futures.ThreadPoolExecutor.
 
@@ -150,7 +150,7 @@ Launches the processing of the given listener’s queue
 
 <a id="eric_sse.prefabs.SSEChannel"></a>
 
-### *class* eric_sse.prefabs.SSEChannel(retry_timeout_milliseconds: int = 5)
+### *class* eric_sse.prefabs.SSEChannel(stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5)
 
 SSE streaming channel.
 
@@ -247,6 +247,10 @@ Raised when trying to fetch from an empty queue
 <a id="changelog"></a>
 
 # Changelog
+
+0.5.0.2
+
+Fix: SSEChannel must accept stream_delay_seconds as constructor parameter
 
 0.5.0
 

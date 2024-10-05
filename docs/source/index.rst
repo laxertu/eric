@@ -48,6 +48,10 @@ Exceptions
 
 Changelog
 =========
+0.5.0.2
+
+Fix: SSEChannel must accept stream_delay_seconds as constructor parameter
+
 0.5.0
 
 * Removed Threaded listener class
