@@ -84,6 +84,11 @@ class AbstractChannel(ABC):
         self.stream_delay_seconds = stream_delay_seconds
         self.__streaming_listeners: set[str] = set()
 
+
+    @property
+    def num_running_streams(self):
+        return len(self.__streaming_listeners)
+
     def add_listener(self) -> MessageQueueListener:
         """Add the default listener"""
         l = MessageQueueListener()

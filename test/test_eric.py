@@ -128,7 +128,13 @@ class StreamTestCase(IsolatedAsyncioTestCase):
 
     async def test_concurrent_stream(self):
         l1 = MessageQueueListenerMock()
-        _ = await self.sut.message_stream(l1)
+        stream = await self.sut.message_stream(l1)
 
         with pytest.raises(InvalidListenerException):
             _ = await self.sut.message_stream(l1)
+
+        self.assertEqual(1, self.sut.num_running_streams)
+        async for _ in stream:
+            pass
+        self.assertEqual(0, self.sut.num_running_streams)
+
