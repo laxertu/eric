@@ -2,6 +2,8 @@
 
 ![Participants of the party](overview.png)
 
+thanks a lot https://excalidraw.com/ !!
+
 <a id="module-eric_sse.entities"></a>
 
 <a id="entities"></a>
