@@ -48,6 +48,11 @@ Exceptions
 
 Changelog
 =========
+0.5.3
+
+* Restored behaviour of AbstractChannel.message_stream. Multiple streaming calls with same listener are allowed
+* Added locking to queue pop
+
 0.5.2
 
 Fixed close stream too early in AbstractChannel.message_stream

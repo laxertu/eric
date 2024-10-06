@@ -11,7 +11,7 @@ from eric_sse.exception import InvalidChannelException, InvalidListenerException
 logger = eric_sse.get_logger()
 
 MESSAGE_TYPE_CLOSED = '_eric_channel_closed'
-
+MESSAGE_TYPE_END_OF_STREAM = '_eric_channel_closed'
 
 @dataclass
 class Message:
@@ -105,6 +105,7 @@ class AbstractChannel(ABC):
     def remove_listener(self, l_id: str):
         del self.queues[l_id]
         del self.listeners[l_id]
+        self.__streaming_listeners.discard(l_id)
 
     def deliver_next(self, listener_id: str) -> Message:
         """
@@ -113,10 +114,11 @@ class AbstractChannel(ABC):
         """
         if self.get_listener(listener_id).is_running_sync():
             try:
-                msg = self.__get_queue(listener_id).pop(0)
-                self.get_listener(listener_id).on_message(msg)
+                with Lock():
+                    msg = self.__get_queue(listener_id).pop(0)
+                    self.get_listener(listener_id).on_message(msg)
 
-                return msg
+                    return msg
             except IndexError:
                 raise NoMessagesException
 
@@ -157,7 +159,6 @@ class AbstractChannel(ABC):
         In case of failure at channel resolution time, a special message with type=MESSAGE_TYPE_CLOSED is sent, and
         correspondant listener is stopped
         """
-        self.__prepare_stream(listener)
 
         def new_messages():
             try:
@@ -191,8 +192,6 @@ class AbstractChannel(ABC):
             raise InvalidListenerException(f'{listener.id} is already watching')
         self.__streaming_listeners.add(listener.id)
 
-    def __shutdown_stream(self, listener: MessageQueueListener):
-        self.__streaming_listeners.remove(listener.id)
 
     def notify_end(self):
         """Broadcasts a MESSAGE_TYPE_CLOSED Message"""
