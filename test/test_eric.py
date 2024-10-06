@@ -136,5 +136,5 @@ class StreamTestCase(IsolatedAsyncioTestCase):
         self.assertEqual(1, self.sut.num_running_streams)
         async for _ in stream:
             pass
-        self.assertEqual(0, self.sut.num_running_streams)
+        self.assertEqual(1, self.sut.num_running_streams)
 

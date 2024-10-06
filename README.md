@@ -249,6 +249,10 @@ Raised when trying to fetch from an empty queue
 
 # Changelog
 
+0.5.2
+
+Fixed close stream too early in AbstractChannel.message_stream
+
 0.5.1
 
 AbstractChannel.message_stream raises and InvalidListenerException

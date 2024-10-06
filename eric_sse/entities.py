@@ -184,8 +184,6 @@ class AbstractChannel(ABC):
                     await listener.stop()
                     yield self.adapt(Message(type=MESSAGE_TYPE_CLOSED))
 
-            self.__shutdown_stream(listener)
-
         return event_generator()
 
     def __prepare_stream(self, listener: MessageQueueListener):
