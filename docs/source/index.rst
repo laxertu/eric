@@ -48,6 +48,11 @@ Exceptions
 
 Changelog
 =========
+0.5.1
+
+AbstractChannel.message_stream raises and InvalidListenerException
+if invoked more than one time with same listener
+
 0.5.0.2
 
 Fix: SSEChannel must accept stream_delay_seconds as constructor parameter

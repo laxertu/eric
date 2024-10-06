@@ -1,5 +1,9 @@
 from unittest import TestCase
+
+import pytest
+
 from eric_sse.entities import Message, MessageQueueListener
+from eric_sse.exception import InvalidListenerException
 from eric_sse.prefabs import SSEChannel
 from unittest import IsolatedAsyncioTestCase
 
@@ -55,6 +59,7 @@ class SSEChannelTestCase(TestCase):
 
         l_3 = MessageQueueListenerMock()
         self.assertEqual('3', l_3.id)
+
 
     def test_broadcast_ok(self):
 
@@ -119,3 +124,11 @@ class StreamTestCase(IsolatedAsyncioTestCase):
         c.dispatch(listener.id, msg2)
 
         await listener.start()
+
+
+    async def test_concurrent_stream(self):
+        l1 = MessageQueueListenerMock()
+        _ = await self.sut.message_stream(l1)
+
+        with pytest.raises(InvalidListenerException):
+            _ = await self.sut.message_stream(l1)

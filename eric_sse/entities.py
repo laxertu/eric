@@ -82,6 +82,7 @@ class AbstractChannel(ABC):
         self.listeners: dict[str: MessageQueueListener] = {}
         self.queues: dict[str: list[Message]] = {}
         self.stream_delay_seconds = stream_delay_seconds
+        self.__streaming_listeners: set[str] = set()
 
     def add_listener(self) -> MessageQueueListener:
         """Add the default listener"""
@@ -151,6 +152,8 @@ class AbstractChannel(ABC):
         In case of failure at channel resolution time, a special message with type=MESSAGE_TYPE_CLOSED is sent, and
         correspondant listener is stopped
         """
+        self.__prepare_stream(listener)
+
         def new_messages():
             try:
                 yield self.deliver_next(listener.id)
@@ -158,6 +161,8 @@ class AbstractChannel(ABC):
                 ...
 
         async def event_generator() -> AsyncIterable[dict]:
+
+
             while True:
                 # If client closes connection, stop sending events
                 if not await listener.is_running():
@@ -174,7 +179,17 @@ class AbstractChannel(ABC):
                     await listener.stop()
                     yield self.adapt(Message(type=MESSAGE_TYPE_CLOSED))
 
+            self.__shutdown_stream(listener)
+
         return event_generator()
+
+    def __prepare_stream(self, listener: MessageQueueListener):
+        if listener.id in self.__streaming_listeners:
+            raise InvalidListenerException(f'{listener.id} is already watching')
+        self.__streaming_listeners.add(listener.id)
+
+    def __shutdown_stream(self, listener: MessageQueueListener):
+        self.__streaming_listeners.remove(listener.id)
 
     def notify_end(self):
         """Broadcasts a MESSAGE_TYPE_CLOSED Message"""
