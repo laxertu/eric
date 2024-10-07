@@ -114,6 +114,7 @@ class AbstractChannel(ABC):
                     return msg
             except IndexError:
                 raise NoMessagesException
+        raise NoMessagesException
 
     def __get_queue(self, listener_id: str) -> list[Message]:
         try:

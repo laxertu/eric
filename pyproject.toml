@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "eric-sse"
 description = "A lightweight message dispatcher based on SSE protocol data transfer objects format"
-version = "0.5.3.2"
+version = "0.5.3.3"
 authors = ["Luca Stretti <laxertu@gmail.com>"]
 keywords = ["sse", "queue", "API", "concurrency"]
 license = "MIT"
