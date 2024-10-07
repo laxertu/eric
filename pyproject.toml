@@ -6,7 +6,7 @@ authors = ["Luca Stretti <laxertu@gmail.com>"]
 keywords = ["sse", "queue", "API", "concurrency"]
 license = "MIT"
 readme = "README.md"
-documentation = "docs.md"
+documentation = "https://github.com/laxertu/eric/blob/master/docs.md"
 homepage = "https://github.com/laxertu/eric"
 
 [tool.poetry.dependencies]
