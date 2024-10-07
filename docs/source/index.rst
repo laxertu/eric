@@ -22,7 +22,7 @@ Features
 
 **Trivia**
 
-Library name pretends to be a tribute to the following movie https://en.wikipedia.org/wiki/Looking_for_Eric
+* Library name pretends to be a tribute to the following movie https://en.wikipedia.org/wiki/Looking_for_Eric
 
 **Documentation**
 

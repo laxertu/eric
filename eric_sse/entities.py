@@ -58,9 +58,7 @@ class MessageQueueListener(ABC):
         self.__is_running = False
 
     def on_message(self, msg: Message) -> None:
-        """
-        Event handler. It executes when a message is delivered to client
-        """
+        """Event handler. It executes when a message is delivered to client"""
         pass
 
 
@@ -68,8 +66,7 @@ class AbstractChannel(ABC):
     """
     Base class for channels.
 
-    Provides functionalities for listeners and message delivery management.
-    SSEChannel is the default implementation
+    Provides functionalities for listeners and message delivery management. SSEChannel is the default implementation
     """
     NEXT_ID = 1
 
@@ -84,10 +81,6 @@ class AbstractChannel(ABC):
         self.stream_delay_seconds = stream_delay_seconds
         self.__streaming_listeners: set[str] = set()
 
-
-    @property
-    def num_running_streams(self):
-        return len(self.__streaming_listeners)
 
     def add_listener(self) -> MessageQueueListener:
         """Add the default listener"""
@@ -105,11 +98,11 @@ class AbstractChannel(ABC):
     def remove_listener(self, l_id: str):
         del self.queues[l_id]
         del self.listeners[l_id]
-        self.__streaming_listeners.discard(l_id)
 
     def deliver_next(self, listener_id: str) -> Message:
         """
         Returns next message for given listener id.
+
         Raises a NoMessagesException if queue is empty
         """
         if self.get_listener(listener_id).is_running_sync():
@@ -168,7 +161,6 @@ class AbstractChannel(ABC):
 
         async def event_generator() -> AsyncIterable[dict]:
 
-
             while True:
                 # If client closes connection, stop sending events
                 if not await listener.is_running():
@@ -186,11 +178,6 @@ class AbstractChannel(ABC):
                     yield self.adapt(Message(type=MESSAGE_TYPE_CLOSED))
 
         return event_generator()
-
-    def __prepare_stream(self, listener: MessageQueueListener):
-        if listener.id in self.__streaming_listeners:
-            raise InvalidListenerException(f'{listener.id} is already watching')
-        self.__streaming_listeners.add(listener.id)
 
 
     def notify_end(self):

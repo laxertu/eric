@@ -26,11 +26,12 @@ pip install eric-sse
 
 **Trivia**
 
-Library name pretends to be a tribute to the following movie [https://en.wikipedia.org/wiki/Looking_for_Eric](https://en.wikipedia.org/wiki/Looking_for_Eric)
+* Library name pretends to be a tribute to the following movie [https://en.wikipedia.org/wiki/Looking_for_Eric](https://en.wikipedia.org/wiki/Looking_for_Eric)
 
 **Documentation**
 
-* [Entities](docs.md)
+* [Overview](docs.md)
+* [Entities](docs.md#module-eric_sse.entities)
   * [`AbstractChannel`](docs.md#eric_sse.entities.AbstractChannel)
     * [`AbstractChannel.add_listener()`](docs.md#eric_sse.entities.AbstractChannel.add_listener)
     * [`AbstractChannel.broadcast()`](docs.md#eric_sse.entities.AbstractChannel.broadcast)

@@ -1,8 +1,10 @@
+<a id="overview"></a>
+
 # Overview
 
-![Participants of the party](overview.png)
+![alternate text](_static/overview.png)
 
-thanks a lot https://excalidraw.com/ !!
+thanks a lot [https://excalidraw.com/](https://excalidraw.com/) !!
 
 <a id="module-eric_sse.entities"></a>
 
@@ -16,8 +18,7 @@ thanks a lot https://excalidraw.com/ !!
 
 Base class for channels.
 
-Provides functionalities for listeners and message delivery management.
-SSEChannel is the default implementation
+Provides functionalities for listeners and message delivery management. SSEChannel is the default implementation
 
 <a id="eric_sse.entities.AbstractChannel.add_listener"></a>
 
@@ -36,6 +37,7 @@ Enqueue a message to all listeners
 #### deliver_next(listener_id: str) → [Message](#eric_sse.entities.Message)
 
 Returns next message for given listener id.
+
 Raises a NoMessagesException if queue is empty
 
 <a id="eric_sse.entities.AbstractChannel.dispatch"></a>
@@ -105,12 +107,8 @@ Event handler. It executes when a message is delivered to client
   * **stream_delay_seconds** – Can be used to limit response rate of streamings. Only applies to message_stream calls.
 
 Relies on concurrent.futures.ThreadPoolExecutor.
-
 Just override **adapt** method to control output returned to clients
-
 MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.
-
-Note that callback execution order is not guaranteed
 
 <a id="eric_sse.prefabs.DataProcessingChannel.adapt"></a>
 

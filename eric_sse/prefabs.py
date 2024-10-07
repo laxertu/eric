@@ -37,14 +37,9 @@ class DataProcessingChannel(AbstractChannel):
     :param max_workers: Num og workers to use
     :param stream_delay_seconds: Can be used to limit response rate of streamings. Only applies to message_stream calls.
 
-    Relies on concurrent.futures.ThreadPoolExecutor. 
-
+    Relies on concurrent.futures.ThreadPoolExecutor.
     Just override **adapt** method to control output returned to clients
-
-
-    MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.
-
-    Note that callback execution order is not guaranteed
+    MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.  
     """
 
     def __init__(self, max_workers: int, stream_delay_seconds: int = 0):
