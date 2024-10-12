@@ -11,5 +11,4 @@ jobs:
           - name: Get Cover
             uses: orgoro/coverage@v3.2
             with:
-                coverageFile: tests-coverage.xml
                 token: ${{ secrets.GITHUB_TOKEN }}
