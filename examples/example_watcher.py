@@ -15,7 +15,7 @@ async def main():
         payload = {
             'c': channel_id,
             'r': receiver_id,
-            'v': 'w',
+            'v': 'l',
         }
         w.write(json.dumps(payload).encode())
         w.write_eof()

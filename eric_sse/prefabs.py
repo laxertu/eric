@@ -1,4 +1,4 @@
-from typing import Any, Callable, AsyncIterable, Iterator
+from typing import Callable, AsyncIterable, Iterator
 
 
 from eric_sse import get_logger
@@ -22,7 +22,7 @@ class SSEChannel(AbstractChannel):
         super().__init__(stream_delay_seconds = stream_delay_seconds)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
 
-    def adapt(self, msg: Message) -> Any:
+    def adapt(self, msg: Message) -> dict:
         return {
             "event": msg.type,
             "retry": self.retry_timeout_milliseconds,
@@ -39,6 +39,7 @@ class DataProcessingChannel(AbstractChannel):
 
     Relies on concurrent.futures.ThreadPoolExecutor.
     Just override **adapt** method to control output returned to clients
+
     MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.  
     """
 
@@ -73,7 +74,7 @@ class DataProcessingChannel(AbstractChannel):
         return msg
 
 
-    def adapt(self, msg: Message) -> Any:
+    def adapt(self, msg: Message) -> dict:
         """Models output returned to clients"""
         return {
             "event": msg.type,

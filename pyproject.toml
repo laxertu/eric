@@ -21,5 +21,10 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.group.test]
 [tool.poetry.group.test.dependencies]
-pytest = {version = ">= 8.3.2", optional = true}
+pytest = {version = "^8.3.2", optional = true}
+pytest-cov = "^5.0.0"
 
+[tool.poetry.group.doctools]
+[tool.poetry.group.doctools.dependencies]
+sphinx = "^8.1.1"
+sphinx-markdown-builder = "^0.6.7"

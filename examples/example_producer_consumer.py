@@ -14,7 +14,7 @@ class Producer:
 
     @staticmethod
     def produce_num(c: DataProcessingChannel, l: MessageQueueListener, num: int):
-        for i in range(1, num):
+        for i in range(0, num):
             c.dispatch(l.id, Message(type='counter', payload=i))
         c.notify_end()
 
@@ -31,7 +31,7 @@ async def main():
     listener = Consumer()
     channel.register_listener(listener)
 
-    Producer.produce_num(c=channel, l=listener, num=21)
+    Producer.produce_num(c=channel, l=listener, num=20)
 
     await listener.start()
     async for msg in await channel.process_queue(listener):

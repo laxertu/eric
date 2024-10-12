@@ -1,18 +1,19 @@
 import asyncio
 import json
-import os
 import signal
 
+from os import linesep
 from asyncio import StreamReader, StreamWriter, start_unix_server
 from asyncio.exceptions import CancelledError
 from pathlib import Path
+from typing import AsyncIterable
 
-import eric_sse
+from eric_sse import get_logger
 from eric_sse.entities import Message
 from eric_sse.exception import InvalidChannelException, InvalidListenerException, InvalidMessageFormat
 from eric_sse.prefabs import SSEChannel
 
-logger = eric_sse.get_logger()
+logger = get_logger()
 
 
 class ChannelContainer:
@@ -59,24 +60,28 @@ class SocketServer:
     "d" dispatch
     "b" broadcast
     "c" add listener
+    "l" listen (opens a stream)
     "w" watch (opens a stream)
     ```
 
     See examples
     """
     cc = ChannelContainer()
+    ACK = 'ack'
 
     def __init__(self, file_descriptor_path: str):
         self.__file_descriptor_path = file_descriptor_path
+        self.__unix_server: asyncio.Server | None = None
 
     @staticmethod
     def __parse(json_raw: str) -> (str, str, Message | None, str):
         try:
             parsed = json.loads(json_raw)
-            channel_id = parsed['c']
             verb = parsed['v']
+
+            channel_id = parsed.get('c')
             message = None
-            if verb not in ['w', 'c']:
+            if verb not in ['w', 'c', 'l', 'r']:
                 message = Message(type=parsed['t'], payload=parsed.get('p'))
 
             receiver_id: str = parsed.get('r')
@@ -97,38 +102,10 @@ class SocketServer:
         """
         try:
             message_content = await reader.read()
-            channel_id, verb, message, receiver_id = SocketServer.__parse(message_content.decode())
-            channel = SocketServer.cc.get(channel_id)
-
-            logger.info(f'received command {verb}')
-
-            if verb == 'd':
-                channel.dispatch(receiver_id, message)
-                writer.write('ack'.encode())
-                writer.write_eof()
-                await writer.drain()
-
-
-            elif verb == 'b':
-                channel.broadcast(message)
-                writer.write('ack'.encode())
-                writer.write_eof()
-                await writer.drain()
-
-
-            elif verb == 'c':
-                l = channel.add_listener()
-                writer.write(l.id.encode())
-                writer.write_eof()
-                await writer.drain()
-
-
-            elif verb == 'w':
-                logger.info(f"Client watching on listener {receiver_id}")
-                async for m in await channel.message_stream(channel.get_listener(receiver_id)):
-                    message = f'{json.dumps(m)}{os.linesep}'
-                    logger.info(f"received message {message}")
-                    writer.write(message.encode())
+            async for response in SocketServer.handle_command(message_content.decode()):
+                writer.write(response.encode())
+            writer.write_eof()
+            await writer.drain()
 
         except Exception as e:
                 logger.error(e)
@@ -136,24 +113,60 @@ class SocketServer:
                 writer.write_eof()
                 await writer.drain()
 
-    async def shutdown(self, server: asyncio.Server):
+    @staticmethod
+    async def handle_command(raw_command: str) -> AsyncIterable[str]:
+        channel_id, verb, message, receiver_id = SocketServer.__parse(raw_command)
+
+        logger.info(f'received command {verb}')
+
+        if verb == 'd':
+            SocketServer.cc.get(channel_id).dispatch(receiver_id, message)
+            yield SocketServer.ACK
+
+        elif verb == 'c':
+            channel = SocketServer.cc.add()
+            yield channel.id
+
+        elif verb == 'b':
+            SocketServer.cc.get(channel_id).broadcast(message)
+            yield SocketServer.ACK
+
+        elif verb == 'r':
+            l = SocketServer.cc.get(channel_id).add_listener()
+            yield l.id
+
+        elif verb == 'l':
+            logger.info(f"Client listening on {receiver_id}")
+            channel = SocketServer.cc.get(channel_id)
+            async for m in await channel.message_stream(channel.get_listener(receiver_id)):
+                yield f'{json.dumps(m)}{linesep}'
+
+        elif verb == 'w':
+            logger.info(f"Client watching channel {channel_id}")
+            channel = SocketServer.cc.get(channel_id)
+            async for m in await channel.watch():
+                yield f'{json.dumps(m)}{linesep}'
+
+    async def shutdown(self):
         """Graceful Shutdown"""
+        server = self.__unix_server
         logger.info("graceful shutdown")
         server.close()
         await server.wait_closed()
         Path(self.__file_descriptor_path).unlink()
         logger.info("done")
 
+
+
     async def main(self):
         server = await start_unix_server(SocketServer.connect_callback, path=Path(self.__file_descriptor_path))
+        self.__unix_server = server
         addr = server.sockets[0].getsockname()
         logger.info(f'Serving on {addr}')
 
         async with server:
             for sig in (signal.SIGINT, signal.SIGTERM):
-                server.get_loop().add_signal_handler(
-                    sig, lambda: asyncio.ensure_future(self.shutdown(server))
-                )
+                server.get_loop().add_signal_handler(sig, lambda: asyncio.ensure_future(self.shutdown()))
             await server.serve_forever()
 
     @staticmethod
