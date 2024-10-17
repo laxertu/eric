@@ -48,7 +48,7 @@ Adds a message to listener’s queue
 
 <a id="eric_sse.entities.AbstractChannel.message_stream"></a>
 
-#### *async* message_stream(listener: [MessageQueueListener](#eric_sse.entities.MessageQueueListener)) → AsyncIterable[dict]
+#### *async* message_stream(listener: [MessageQueueListener](#eric_sse.entities.MessageQueueListener)) → AsyncIterable[Any]
 
 Entry point for message streaming
 
@@ -108,11 +108,12 @@ Event handler. It executes when a message is delivered to client
 
 Relies on concurrent.futures.ThreadPoolExecutor.
 Just override **adapt** method to control output returned to clients
+
 MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.
 
 <a id="eric_sse.prefabs.DataProcessingChannel.adapt"></a>
 
-#### adapt(msg: [Message](#eric_sse.entities.Message)) → Any
+#### adapt(msg: [Message](#eric_sse.entities.Message)) → dict
 
 Models output returned to clients
 
@@ -169,6 +170,7 @@ Possible values of verb identifies a supported action:
 "d" dispatch
 "b" broadcast
 "c" add listener
+"l" listen (opens a stream)
 "w" watch (opens a stream)
 ``
 
@@ -185,7 +187,7 @@ Handles low-lwvel communication and raw messages parsing
 
 <a id="eric_sse.servers.SocketServer.shutdown"></a>
 
-#### *async* shutdown(server: Server)
+#### *async* shutdown()
 
 Graceful Shutdown
 
@@ -266,4 +268,4 @@ Breaking changes:
 
 # Developers section
 
-Update README.md scipt: update_docs.sh
+Update README.md script: update_docs.sh

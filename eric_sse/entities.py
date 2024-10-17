@@ -6,12 +6,13 @@ from dataclasses import dataclass
 from typing import AsyncIterable, Any
 
 import eric_sse
-from eric_sse.exception import InvalidChannelException, InvalidListenerException, NoMessagesException
+from eric_sse.exception import InvalidListenerException, NoMessagesException, InvalidChannelException
 
 logger = eric_sse.get_logger()
 
 MESSAGE_TYPE_CLOSED = '_eric_channel_closed'
 MESSAGE_TYPE_END_OF_STREAM = '_eric_channel_closed'
+MESSAGE_TYPE_INTERNAL_ERROR = '_eric_error'
 
 @dataclass
 class Message:
@@ -105,16 +106,17 @@ class AbstractChannel(ABC):
 
         Raises a NoMessagesException if queue is empty
         """
-        if self.get_listener(listener_id).is_running_sync():
+        listener = self.get_listener(listener_id)
+        if listener.is_running_sync():
             try:
                 with Lock():
                     msg = self.__get_queue(listener_id).pop(0)
-                    self.get_listener(listener_id).on_message(msg)
-
+                    listener.on_message(msg)
                     return msg
             except IndexError:
                 raise NoMessagesException
         raise NoMessagesException
+
 
     def __get_queue(self, listener_id: str) -> list[Message]:
         try:
@@ -146,7 +148,7 @@ class AbstractChannel(ABC):
     def adapt(self, msg: Message) -> Any:
         ...
 
-    async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[dict]:
+    async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
         """
         Entry point for message streaming
 
@@ -172,14 +174,18 @@ class AbstractChannel(ABC):
                         yield self.adapt(message)
 
                     await asyncio.sleep(self.stream_delay_seconds)
-                except InvalidChannelException as e:
+
+                except InvalidListenerException as e:
                     logger.info(f"Stopping listener {listener.id}")
                     logger.debug(e)
                     await listener.stop()
-                    yield self.adapt(Message(type=MESSAGE_TYPE_CLOSED))
-
+                    yield self.adapt(Message(type=MESSAGE_TYPE_END_OF_STREAM))
         return event_generator()
 
+    async def watch(self) -> AsyncIterable[Any]:
+        listener = self.add_listener()
+        listener.start_sync()
+        return await self.message_stream(listener)
 
     def notify_end(self):
         """Broadcasts a MESSAGE_TYPE_CLOSED Message"""

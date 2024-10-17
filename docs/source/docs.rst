@@ -82,4 +82,4 @@ Breaking changes:
 Developers section
 ==================
 
-Update README.md scipt: update_docs.sh
+Update README.md script: update_docs.sh

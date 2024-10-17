@@ -1,11 +1,7 @@
-from unittest import TestCase
-
-import pytest
+from unittest import TestCase, IsolatedAsyncioTestCase
 
 from eric_sse.entities import Message, MessageQueueListener
-from eric_sse.exception import InvalidListenerException
 from eric_sse.prefabs import SSEChannel
-from unittest import IsolatedAsyncioTestCase
 
 
 class MessageQueueListenerMock(MessageQueueListener):
@@ -16,14 +12,17 @@ class MessageQueueListenerMock(MessageQueueListener):
         self.num_received = 0
         self.fixtures = fixtures
 
-    async def is_running(self) -> bool:
-        return self.num_received >= self.disconnect_after
 
     def on_message(self, msg: Message) -> None:
         self.num_received += 1
+
         if self.fixtures is not None:
             assert msg.type == self.fixtures[self.num_received].type
             assert msg.payload == self.fixtures[self.num_received].payload
+
+        if self.num_received >= self.disconnect_after:
+            self.stop_sync()
+
 
 
 class ListenerTestCase(IsolatedAsyncioTestCase):
@@ -94,29 +93,33 @@ class SSEChannelTestCase(TestCase):
         self.assertEqual(expected, c.queues)
 
 
-class StreamTestCase(IsolatedAsyncioTestCase):
+class SSEStreamTestCase(IsolatedAsyncioTestCase):
     def setUp(self):
         self.sut = SSEChannel()
+        SSEChannel.NEXT_ID = 1
+        MessageQueueListener.NEXT_ID = 1
+
 
     async def test_message_stream(self):
         c = self.sut
-        listener = MessageQueueListenerMock()
+        listener = MessageQueueListenerMock(num_messages_before_disconnect=1)
         c.register_listener(listener)
         await listener.start()
-
         c.dispatch(listener.id, Message(type='test', payload={'a': 1}))
+
         async for msg in await c.message_stream(listener):
             self.assertDictEqual({'data': {'a': 1}, 'event': 'test', 'retry': c.retry_timeout_milliseconds}, msg)
-            self.assertDictEqual({listener.id: []}, c.queues)
-            await listener.stop()
 
-    async def test_watch(self):
+        self.assertDictEqual({listener.id: []}, c.queues)
+        self.assertEqual(1, listener.num_received)
+
+    async def test_listener_as_consumer(self):
         c = self.sut
         msg1 = Message('test', {'a': 1})
-        msg2 = Message('test', {'a': 1})
+        msg2 = Message('test', {'b': 2})
 
         listener = MessageQueueListenerMock(
-            num_messages_before_disconnect=1, fixtures={1: msg1, 2: msg2}
+            num_messages_before_disconnect=2, fixtures={1: msg1, 2: msg2}
         )
         c.register_listener(listener)
 
@@ -124,6 +127,9 @@ class StreamTestCase(IsolatedAsyncioTestCase):
         c.dispatch(listener.id, msg2)
 
         await listener.start()
+
+        c.deliver_next(listener.id)
+        c.deliver_next(listener.id)
 
 
     async def test_listener_start_stop(self):
@@ -140,8 +146,3 @@ class StreamTestCase(IsolatedAsyncioTestCase):
         async for m in await self.sut.message_stream(listener=l):
             self.assertEqual('test', m['event'])
             await l.stop()
-
-
-
-
-
