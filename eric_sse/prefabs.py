@@ -1,5 +1,6 @@
-from typing import Callable, AsyncIterable, Iterator
+from typing import Callable, AsyncIterable, Iterator, Any
 
+from exceptiongroup import catch
 
 from eric_sse import get_logger
 from eric_sse.entities import AbstractChannel, Message, MessageQueueListener
@@ -12,7 +13,7 @@ class SSEChannel(AbstractChannel):
     """
     SSE streaming channel.
 
-    :param retry_timeout_milliseconds: Used to indicate waiting time to clients
+    :param retry_timeout_milliseconds:
 
     See https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
 
@@ -81,3 +82,26 @@ class DataProcessingChannel(AbstractChannel):
             "data": msg.payload
         }
 
+class SimpleDistributedApplicationListener(MessageQueueListener):
+
+    def __init__(self, channel: AbstractChannel):
+        super().__init__()
+        self.__channel = channel
+        self.__actions: dict[str, Callable[[Message], Message]] = dict()
+        channel.register_listener(self)
+
+    def set_action(self, name: str, action: Callable[[Message], Message]):
+        self.__actions[name] = action
+
+    def on_message(self, msg: Message) -> None:
+        import json
+        try:
+            if msg.type == 'stop':
+                self.stop_sync()
+                return
+
+            response = self.__actions[msg.type](msg)
+            signed_response = Message(type=response.type, payload={'sender_id': self.id, 'payload': response.payload})
+            self.__channel.dispatch(msg.payload['sender_id'], signed_response)
+        except AttributeError as e:
+            logger.error(e)

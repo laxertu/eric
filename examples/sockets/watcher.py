@@ -2,7 +2,7 @@ import asyncio, sys
 import json
 from pathlib import Path
 
-from examples import SOCKET_FILE_DESCRIPTOR_PATH
+from examples.sockets import SOCKET_FILE_DESCRIPTOR_PATH
 
 
 async def main():

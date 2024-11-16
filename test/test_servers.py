@@ -4,13 +4,13 @@ from unittest import IsolatedAsyncioTestCase
 from unittest.mock import MagicMock
 
 from eric_sse.prefabs import SSEChannel
-from eric_sse.servers import SocketServer, ChannelContainer
+from eric_sse.servers import SocketServer, SSEChannelContainer
 
 
 class SocketServerTestCase(IsolatedAsyncioTestCase):
 
     def setUp(self):
-        channel_container_mock = MagicMock(ChannelContainer)
+        channel_container_mock = MagicMock(SSEChannelContainer)
         channel_mock = MagicMock(SSEChannel)
         channel_container_mock.get = MagicMock(return_value=channel_mock)
         SocketServer.cc = channel_container_mock

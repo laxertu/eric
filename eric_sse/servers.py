@@ -16,7 +16,7 @@ from eric_sse.prefabs import SSEChannel
 logger = get_logger()
 
 
-class ChannelContainer:
+class SSEChannelContainer:
     """Helper class for management of multiple SSE channels cases of use."""
 
     def __init__(self):
@@ -66,7 +66,7 @@ class SocketServer:
 
     See examples
     """
-    cc = ChannelContainer()
+    cc = SSEChannelContainer()
     ACK = 'ack'
 
     def __init__(self, file_descriptor_path: str):
@@ -95,7 +95,7 @@ class SocketServer:
     @staticmethod
     async def connect_callback(reader: StreamReader, writer: StreamWriter):
         """
-        Integration with SocketServer.
+        Integration with asyncio.
 
         See https://docs.python.org/3/library/asyncio-stream.html#asyncio.start_unix_server
         Handles low-lwvel communication and raw messages parsing

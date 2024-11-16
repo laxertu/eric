@@ -1,8 +1,7 @@
 from asyncio import run, CancelledError
-
-from examples import SOCKET_FILE_DESCRIPTOR_PATH
 from eric_sse.servers import SocketServer
 from eric_sse.entities import MessageQueueListener, Message
+from examples.sockets import SOCKET_FILE_DESCRIPTOR_PATH
 
 
 class ExampleServerListener(MessageQueueListener):

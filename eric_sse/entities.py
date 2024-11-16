@@ -25,7 +25,6 @@ class Message:
     type: str
     payload: dict | list | str | int | float | None = None
 
-
 class MessageQueueListener(ABC):
     """
     Base class for listeners.
@@ -72,6 +71,9 @@ class AbstractChannel(ABC):
     NEXT_ID = 1
 
     def __init__(self, stream_delay_seconds: int = 0):
+        """
+        :param stream_delay_seconds: Can be used to limit response rate of streamings. Only applies to message_stream calls.
+        """
         logger.info(f'Creating channel {AbstractChannel.NEXT_ID}')
         with Lock():
             self.id: str = str(AbstractChannel.NEXT_ID)
@@ -128,7 +130,7 @@ class AbstractChannel(ABC):
         """Adds a message to listener's queue"""
 
         self.__add_to_queue(listener_id, msg)
-        logger.debug(f"Pending {len(self.queues[listener_id])} messages")
+        logger.info(f"Dispatched {msg} to {listener_id}")
 
     def __add_to_queue(self, listener_id: str, msg: Message):
         self.__get_queue(listener_id).append(msg)
