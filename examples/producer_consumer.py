@@ -1,13 +1,12 @@
-from eric_sse import get_logger
 import asyncio
+from random import uniform
+from time import sleep
 
-logger = get_logger()
-
+from eric_sse import get_logger
 from eric_sse.entities import Message, MessageQueueListener
 from eric_sse.prefabs import DataProcessingChannel
 
-from random import uniform
-from time import sleep
+logger = get_logger()
 
 
 class Producer:
@@ -18,6 +17,7 @@ class Producer:
             c.dispatch(l.id, Message(type='counter', payload=i))
         c.notify_end()
 
+
 class Consumer(MessageQueueListener):
     def on_message(self, msg: Message) -> None:
         sleep(uniform(0, 1))
@@ -25,7 +25,6 @@ class Consumer(MessageQueueListener):
 
 
 async def main():
-
     # Here you can control message deliver frequency and max workers num
     channel = DataProcessingChannel(stream_delay_seconds=0, max_workers=6)
     listener = Consumer()
@@ -36,5 +35,6 @@ async def main():
     await listener.start()
     async for msg in await channel.process_queue(listener):
         print(msg)
+
 
 asyncio.get_event_loop().run_until_complete(main())

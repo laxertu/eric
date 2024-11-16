@@ -1,6 +1,6 @@
 from unittest import TestCase, IsolatedAsyncioTestCase
 
-from eric_sse.entities import Message, MessageQueueListener
+from eric_sse.entities import Message, MessageQueueListener, SignedMessage
 from eric_sse.prefabs import SSEChannel
 
 
@@ -12,7 +12,6 @@ class MessageQueueListenerMock(MessageQueueListener):
         self.num_received = 0
         self.fixtures = fixtures
 
-
     def on_message(self, msg: Message) -> None:
         self.num_received += 1
 
@@ -22,7 +21,6 @@ class MessageQueueListenerMock(MessageQueueListener):
 
         if self.num_received >= self.disconnect_after:
             self.stop_sync()
-
 
 
 class ListenerTestCase(IsolatedAsyncioTestCase):
@@ -60,7 +58,13 @@ class SSEChannelTestCase(TestCase):
         self.assertEqual('3', l_3.id)
 
 
-    def test_broadcast_ok(self):
+class SSEStreamTestCase(IsolatedAsyncioTestCase):
+    def setUp(self):
+        self.sut = SSEChannel()
+        SSEChannel.NEXT_ID = 1
+        MessageQueueListener.NEXT_ID = 1
+
+    async def test_broadcast_ok(self):
 
         # scenario is: 1 channel and 2 listeners
         c = self.sut
@@ -82,8 +86,10 @@ class SSEChannelTestCase(TestCase):
         self.assertEqual(expected, c.queues)
 
         # message is received correctly
-        msg_received = c.deliver_next(listener_id=m_1.id)
-        self.assertEqual(msg_to_send, msg_received)
+        async for msg_received in await self.sut.message_stream(listener=m_1):
+            self.assertDictEqual(
+                {'data': {}, 'event': 'test', 'retry': c.retry_timeout_milliseconds}, msg_received
+            )
 
         # queue is ok
         expected = {
@@ -92,15 +98,7 @@ class SSEChannelTestCase(TestCase):
         }
         self.assertEqual(expected, c.queues)
 
-
-class SSEStreamTestCase(IsolatedAsyncioTestCase):
-    def setUp(self):
-        self.sut = SSEChannel()
-        SSEChannel.NEXT_ID = 1
-        MessageQueueListener.NEXT_ID = 1
-
-
-    async def test_message_stream(self):
+    async def test_dispatch_ok(self):
         c = self.sut
         listener = MessageQueueListenerMock(num_messages_before_disconnect=1)
         c.register_listener(listener)
@@ -128,9 +126,8 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
 
         await listener.start()
 
-        c.deliver_next(listener.id)
-        c.deliver_next(listener.id)
-
+        async for _ in await self.sut.message_stream(listener=listener):
+            pass
 
     async def test_listener_start_stop(self):
         l = self.sut.add_listener()
@@ -146,3 +143,11 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
         async for m in await self.sut.message_stream(listener=l):
             self.assertEqual('test', m['event'])
             await l.stop()
+
+
+class SignedMessageTestCase(TestCase):
+
+    def test_signed_message(self):
+        sut = SignedMessage(sender_id='1', msg_type='test', msg_payload='hi')
+        self.assertEqual(sut.payload, {'sender_id': '1', 'payload': 'hi'})
+        self.assertEqual(sut.sender_id, '1')
