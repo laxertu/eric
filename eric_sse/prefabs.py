@@ -89,19 +89,25 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         self.__channel = channel
         self.__actions: dict[str, Callable[[Message], Message]] = dict()
         channel.register_listener(self)
+        self.__internal_actions: dict[str, Callable[[], None]] = {
+            'stop': self.stop_sync
+        }
 
     def set_action(self, name: str, action: Callable[[Message], Message]):
+        if action in self.__internal_actions:
+            raise KeyError(f'Trying to set an internal action {action}')
         self.__actions[name] = action
 
     def on_message(self, msg: Message) -> None:
-        import json
         try:
-            if msg.type == 'stop':
-                self.stop_sync()
+            try:
+                self.__internal_actions[msg.type]()
                 return
+            except KeyError:
+                pass
 
             response = self.__actions[msg.type](msg)
             signed_response = Message(type=response.type, payload={'sender_id': self.id, 'payload': response.payload})
             self.__channel.dispatch(msg.payload['sender_id'], signed_response)
-        except AttributeError as e:
-            logger.error(e)
+        except KeyError:
+            logger.error(f'Unknown action {msg.type}')
