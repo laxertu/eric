@@ -90,6 +90,12 @@ Optionally you can override on_message method if you need to inject code at mess
 
 Event handler. It executes when a message is delivered to client
 
+<a id="eric_sse.entities.SignedMessage"></a>
+
+### *class* eric_sse.entities.SignedMessage(sender_id: str, msg_type: str, msg_payload: dict | list | str | int | float | None = None)
+
+A wrapper that adds sender id
+
 <a id="module-eric_sse.prefabs"></a>
 
 <a id="prefab-channels-and-listeners"></a>
@@ -130,11 +136,21 @@ Launches the processing of the given listener’s queue
 SSE streaming channel.
 
 * **Parameters:**
-  **retry_timeout_milliseconds** – Used to indicate waiting time to clients
+  **retry_timeout_milliseconds**
 
 See [https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
 
 Currently, ‘id’ field is not supported.
+
+<a id="eric_sse.prefabs.SimpleDistributedApplicationListener"></a>
+
+### *class* eric_sse.prefabs.SimpleDistributedApplicationListener(channel: [AbstractChannel](#eric_sse.entities.AbstractChannel))
+
+<a id="eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"></a>
+
+#### on_message(msg: [Message](#eric_sse.entities.Message)) → None
+
+Event handler. It executes when a message is delivered to client
 
 <a id="module-eric_sse.servers"></a>
 
@@ -142,9 +158,9 @@ Currently, ‘id’ field is not supported.
 
 # Prefab servers
 
-<a id="eric_sse.servers.ChannelContainer"></a>
+<a id="eric_sse.servers.SSEChannelContainer"></a>
 
-### *class* eric_sse.servers.ChannelContainer
+### *class* eric_sse.servers.SSEChannelContainer
 
 Helper class for management of multiple SSE channels cases of use.
 
@@ -180,7 +196,7 @@ See examples
 
 #### *async static* connect_callback(reader: StreamReader, writer: StreamWriter)
 
-Integration with SocketServer.
+Integration with asyncio.
 
 See [https://docs.python.org/3/library/asyncio-stream.html#asyncio.start_unix_server](https://docs.python.org/3/library/asyncio-stream.html#asyncio.start_unix_server)
 Handles low-lwvel communication and raw messages parsing
@@ -224,6 +240,16 @@ Raised when trying to fetch from an empty queue
 <a id="changelog"></a>
 
 # Changelog
+
+0.6.0
+
+* Added SimpleDistributedApplicationListener
+* ChannelContainerChannelContainer renamed to SSEChannelContainer
+* Added SignedMessage entity
+
+0.5.4.1
+
+* Added SocketClient
 
 0.5.3
 

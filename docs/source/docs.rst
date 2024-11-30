@@ -38,6 +38,16 @@ Exceptions
 
 Changelog
 =========
+0.6.0
+
+* Added SimpleDistributedApplicationListener
+* ChannelContainerChannelContainer renamed to SSEChannelContainer
+* Added SignedMessage entity
+
+0.5.4.1
+
+* Added SocketClient
+
 0.5.3
 
 * Restored behaviour of AbstractChannel.message_stream. Multiple streaming calls with same listener are allowed

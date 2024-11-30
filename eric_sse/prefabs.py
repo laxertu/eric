@@ -1,25 +1,25 @@
+from concurrent.futures import ThreadPoolExecutor, Future, as_completed
 from typing import Callable, AsyncIterable, Iterator
 
-
 from eric_sse import get_logger
-from eric_sse.entities import AbstractChannel, Message, MessageQueueListener
-from concurrent.futures import ThreadPoolExecutor, Future, as_completed
+from eric_sse.entities import AbstractChannel, Message, MessageQueueListener, SignedMessage
 
 logger = get_logger()
 
-class SSEChannel(AbstractChannel):
 
+class SSEChannel(AbstractChannel):
     """
     SSE streaming channel.
 
-    :param retry_timeout_milliseconds: Used to indicate waiting time to clients
+    :param retry_timeout_milliseconds:
 
     See https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
 
     Currently, 'id' field is not supported.
     """
+
     def __init__(self, stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5):
-        super().__init__(stream_delay_seconds = stream_delay_seconds)
+        super().__init__(stream_delay_seconds=stream_delay_seconds)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
 
     def adapt(self, msg: Message) -> dict:
@@ -67,12 +67,10 @@ class DataProcessingChannel(AbstractChannel):
                 except IndexError:
                     there_are_peding_messages = False
 
-
     @staticmethod
     def __invoke_callback_and_return(callback: Callable[[Message], None], msg: Message):
         callback(msg)
         return msg
-
 
     def adapt(self, msg: Message) -> dict:
         """Models output returned to clients"""
@@ -81,3 +79,34 @@ class DataProcessingChannel(AbstractChannel):
             "data": msg.payload
         }
 
+
+class SimpleDistributedApplicationListener(MessageQueueListener):
+
+    def __init__(self, channel: AbstractChannel):
+        super().__init__()
+        self.__channel = channel
+        self.__actions: dict[str, Callable[[Message], list[Message]]] = dict()
+        channel.register_listener(self)
+        self.__internal_actions: dict[str, Callable[[], None]] = {
+            'stop': self.stop_sync
+        }
+
+    def set_action(self, name: str, action: Callable[[Message], list[Message]]):
+        if action in self.__internal_actions:
+            raise KeyError(f'Trying to set an internal action {action}')
+        self.__actions[name] = action
+
+    def on_message(self, msg: Message) -> None:
+        try:
+            try:
+                self.__internal_actions[msg.type]()
+                return
+            except KeyError:
+                pass
+
+            msgs = self.__actions[msg.type](msg)
+            for response in msgs:
+                signed_response = SignedMessage(sender_id=self.id, msg_type=response.type, msg_payload=response.payload)
+                self.__channel.dispatch(msg.payload['sender_id'], signed_response)
+        except KeyError:
+            logger.error(f'Unknown action {msg.type}')

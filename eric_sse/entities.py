@@ -1,18 +1,18 @@
 import asyncio
-from threading import Lock
-
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from threading import Lock
 from typing import AsyncIterable, Any
 
 import eric_sse
-from eric_sse.exception import InvalidListenerException, NoMessagesException, InvalidChannelException
+from eric_sse.exception import InvalidListenerException, NoMessagesException
 
 logger = eric_sse.get_logger()
 
 MESSAGE_TYPE_CLOSED = '_eric_channel_closed'
 MESSAGE_TYPE_END_OF_STREAM = '_eric_channel_closed'
 MESSAGE_TYPE_INTERNAL_ERROR = '_eric_error'
+
 
 @dataclass
 class Message:
@@ -24,6 +24,23 @@ class Message:
     """
     type: str
     payload: dict | list | str | int | float | None = None
+
+
+@dataclass
+class SignedMessage(Message):
+    """A wrapper that adds sender id"""
+    def __init__(self, sender_id: str, msg_type: str, msg_payload: dict | list | str | int | float | None = None):
+        self.sender_id = sender_id
+        self.__msg_type = msg_type
+        self.__msg_payload = msg_payload
+
+    @property
+    def type(self):
+        return self.__msg_type
+
+    @property
+    def payload(self) -> dict:
+        return {'sender_id': self.sender_id, 'payload': self.__msg_payload}
 
 
 class MessageQueueListener(ABC):
@@ -72,6 +89,9 @@ class AbstractChannel(ABC):
     NEXT_ID = 1
 
     def __init__(self, stream_delay_seconds: int = 0):
+        """
+        :param stream_delay_seconds: Can be used to limit response rate of streamings. Only applies to message_stream calls.
+        """
         logger.info(f'Creating channel {AbstractChannel.NEXT_ID}')
         with Lock():
             self.id: str = str(AbstractChannel.NEXT_ID)
@@ -81,7 +101,6 @@ class AbstractChannel(ABC):
         self.queues: dict[str: list[Message]] = {}
         self.stream_delay_seconds = stream_delay_seconds
         self.__streaming_listeners: set[str] = set()
-
 
     def add_listener(self) -> MessageQueueListener:
         """Add the default listener"""
@@ -117,7 +136,6 @@ class AbstractChannel(ABC):
                 raise NoMessagesException
         raise NoMessagesException
 
-
     def __get_queue(self, listener_id: str) -> list[Message]:
         try:
             return self.queues[listener_id]
@@ -128,7 +146,7 @@ class AbstractChannel(ABC):
         """Adds a message to listener's queue"""
 
         self.__add_to_queue(listener_id, msg)
-        logger.debug(f"Pending {len(self.queues[listener_id])} messages")
+        logger.info(f"Dispatched {msg} to {listener_id}")
 
     def __add_to_queue(self, listener_id: str, msg: Message):
         self.__get_queue(listener_id).append(msg)
@@ -155,7 +173,6 @@ class AbstractChannel(ABC):
         In case of failure at channel resolution time, a special message with type=MESSAGE_TYPE_CLOSED is sent, and
         correspondant listener is stopped
         """
-
         def new_messages():
             try:
                 yield self.deliver_next(listener.id)
@@ -167,6 +184,7 @@ class AbstractChannel(ABC):
             while True:
                 # If client closes connection, stop sending events
                 if not await listener.is_running():
+                    logger.info("Listener stopped. Exiting")
                     break
 
                 try:
@@ -180,6 +198,7 @@ class AbstractChannel(ABC):
                     logger.debug(e)
                     await listener.stop()
                     yield self.adapt(Message(type=MESSAGE_TYPE_END_OF_STREAM))
+
         return event_generator()
 
     async def watch(self) -> AsyncIterable[Any]:
@@ -190,4 +209,3 @@ class AbstractChannel(ABC):
     def notify_end(self):
         """Broadcasts a MESSAGE_TYPE_CLOSED Message"""
         self.broadcast(Message(type=MESSAGE_TYPE_CLOSED))
-

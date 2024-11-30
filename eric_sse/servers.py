@@ -1,10 +1,9 @@
 import asyncio
 import json
 import signal
-
-from os import linesep
 from asyncio import StreamReader, StreamWriter, start_unix_server
 from asyncio.exceptions import CancelledError
+from os import linesep
 from pathlib import Path
 from typing import AsyncIterable
 
@@ -16,7 +15,7 @@ from eric_sse.prefabs import SSEChannel
 logger = get_logger()
 
 
-class ChannelContainer:
+class SSEChannelContainer:
     """Helper class for management of multiple SSE channels cases of use."""
 
     def __init__(self):
@@ -66,7 +65,7 @@ class SocketServer:
 
     See examples
     """
-    cc = ChannelContainer()
+    cc = SSEChannelContainer()
     ACK = 'ack'
 
     def __init__(self, file_descriptor_path: str):
@@ -91,11 +90,10 @@ class SocketServer:
             logger.error(repr(e))
             raise InvalidMessageFormat(json_raw)
 
-
     @staticmethod
     async def connect_callback(reader: StreamReader, writer: StreamWriter):
         """
-        Integration with SocketServer.
+        Integration with asyncio.
 
         See https://docs.python.org/3/library/asyncio-stream.html#asyncio.start_unix_server
         Handles low-lwvel communication and raw messages parsing
@@ -108,10 +106,10 @@ class SocketServer:
             await writer.drain()
 
         except Exception as e:
-                logger.error(e)
-                writer.write(repr(e).encode())
-                writer.write_eof()
-                await writer.drain()
+            logger.error(e)
+            writer.write(repr(e).encode())
+            writer.write_eof()
+            await writer.drain()
 
     @staticmethod
     async def handle_command(raw_command: str) -> AsyncIterable[str]:
@@ -156,8 +154,6 @@ class SocketServer:
         Path(self.__file_descriptor_path).unlink()
         logger.info("done")
 
-
-
     async def main(self):
         server = await start_unix_server(SocketServer.connect_callback, path=Path(self.__file_descriptor_path))
         self.__unix_server = server
@@ -178,4 +174,3 @@ class SocketServer:
             asyncio.run(server.main())
         except CancelledError:
             exit(0)
-
