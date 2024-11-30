@@ -85,13 +85,13 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
     def __init__(self, channel: AbstractChannel):
         super().__init__()
         self.__channel = channel
-        self.__actions: dict[str, Callable[[Message], Message]] = dict()
+        self.__actions: dict[str, Callable[[Message], list[Message]]] = dict()
         channel.register_listener(self)
         self.__internal_actions: dict[str, Callable[[], None]] = {
             'stop': self.stop_sync
         }
 
-    def set_action(self, name: str, action: Callable[[Message], Message]):
+    def set_action(self, name: str, action: Callable[[Message], list[Message]]):
         if action in self.__internal_actions:
             raise KeyError(f'Trying to set an internal action {action}')
         self.__actions[name] = action
@@ -104,8 +104,9 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
             except KeyError:
                 pass
 
-            response = self.__actions[msg.type](msg)
-            signed_response = SignedMessage(sender_id=self.id, msg_type=response.type, msg_payload=response.payload)
-            self.__channel.dispatch(msg.payload['sender_id'], signed_response)
+            msgs = self.__actions[msg.type](msg)
+            for response in msgs:
+                signed_response = SignedMessage(sender_id=self.id, msg_type=response.type, msg_payload=response.payload)
+                self.__channel.dispatch(msg.payload['sender_id'], signed_response)
         except KeyError:
             logger.error(f'Unknown action {msg.type}')

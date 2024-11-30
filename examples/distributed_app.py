@@ -1,25 +1,29 @@
 import asyncio
-
 from eric_sse.entities import Message
 from eric_sse.prefabs import SimpleDistributedApplicationListener, SSEChannel
 
-
-def hello_response(m: Message) -> Message:
-    return Message(type='hello', payload=f'{m.payload["payload"]}!')
+ssc = SSEChannel()
 
 
-def stop(m: Message) -> Message:
-    pass
+def hello_response(m: Message) -> list[Message]:
+    return [
+        Message(type='hello', payload=f'{m.payload["payload"]}!'),
+        Message(type='stop')
+    ]
 
 
 def create_listener(ssc: SSEChannel):
     l = SimpleDistributedApplicationListener(ssc)
     l.set_action('hello', hello_response)
+    l.start_sync()
     return l
+
+async def do_stuff(buddy: SimpleDistributedApplicationListener):
+    async for m in await ssc.message_stream(buddy):
+        print(m)
 
 
 async def main():
-    ssc = SSEChannel()
 
     alice = create_listener(ssc)
     bob = create_listener(ssc)
@@ -27,23 +31,10 @@ async def main():
     # Bob says hello to Alice
     ssc.dispatch(alice.id, Message(type='hello', payload={'sender_id': bob.id, 'payload': 'hello!'}))
 
-    # Alice will receive Bob's message then a 'stop' one
-    ssc.dispatch(alice.id, Message(type='stop'))
+    f1 = asyncio.create_task(do_stuff(alice))
+    f2 = asyncio.create_task(do_stuff(bob))
 
-    await alice.start()
-    await bob.start()
-
-    print("Alice's queue")
-    async for m in await ssc.message_stream(alice):
-        print(f'output {m}')
-
-    # Let's enqueue a stop to Bob
-    ssc.dispatch(bob.id, Message(type='stop'))
-
-
-    print("Bob's queue")
-    async for m in await ssc.message_stream(bob):
-        print(f'output {m}')
-
+    await f1
+    await f2
 
 asyncio.get_event_loop().run_until_complete(main())

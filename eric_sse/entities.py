@@ -172,7 +172,6 @@ class AbstractChannel(ABC):
         In case of failure at channel resolution time, a special message with type=MESSAGE_TYPE_CLOSED is sent, and
         correspondant listener is stopped
         """
-
         def new_messages():
             try:
                 yield self.deliver_next(listener.id)
@@ -184,6 +183,7 @@ class AbstractChannel(ABC):
             while True:
                 # If client closes connection, stop sending events
                 if not await listener.is_running():
+                    logger.info("Listener stopped. Exiting")
                     break
 
                 try:
