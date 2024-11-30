@@ -3,7 +3,6 @@ Overview
 
 .. toctree::
    :maxdepth: 2
-    docs
 
 
 .. image:: _static/overview.png
