@@ -12,8 +12,8 @@ def hello_response(m: Message) -> list[Message]:
     ]
 
 
-def create_listener(ssc: SSEChannel):
-    l = SimpleDistributedApplicationListener(ssc)
+def create_listener(ch: SSEChannel):
+    l = SimpleDistributedApplicationListener(ch)
     l.set_action('hello', hello_response)
     l.start_sync()
     return l
