@@ -81,6 +81,7 @@ class DataProcessingChannel(AbstractChannel):
 
 
 class SimpleDistributedApplicationListener(MessageQueueListener):
+    """Listener for distrubuted appllications"""
 
     def __init__(self, channel: AbstractChannel):
         super().__init__()
@@ -92,11 +93,26 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         }
 
     def set_action(self, name: str, action: Callable[[Message], list[Message]]):
+        """
+        Hooks a callalble to a string key.
+
+        Callables are selected in on_message_calls depending on message type
+
+        :param name:
+        :param action:
+        :return:
+        """
         if action in self.__internal_actions:
             raise KeyError(f'Trying to set an internal action {action}')
         self.__actions[name] = action
 
     def on_message(self, msg: Message) -> None:
+        """
+        Executes action correspondant to message type. Resultant mwssages are signed and sent to channell as response
+
+        :param msg:
+        :return:
+        """
         try:
             try:
                 self.__internal_actions[msg.type]()
