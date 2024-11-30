@@ -2,9 +2,7 @@ Overview
 ========
 
 .. image:: _static/overview.png
-   :width: 200px
-   :height: 100px
-   :scale: 50 %
+   :scale: 70 %
    :alt: alternate text
    :align: right
 

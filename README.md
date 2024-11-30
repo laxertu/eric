@@ -27,7 +27,9 @@ pip install eric-sse
 
 # Documentation
 
-[https://github.com/laxertu/eric/blob/master/docs.md](https://github.com/laxertu/eric/blob/master/docs.md)
+![alternate text](_static/overview.png)
+
+[https://laxertu.github.io/eric/](https://laxertu.github.io/eric/)
 
 **Trivia**
 
