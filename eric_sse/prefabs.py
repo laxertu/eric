@@ -96,7 +96,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         """
         Hooks a callalble to a string key.
 
-        Callables are selected in on_message_calls depending on message type
+        Callables are selected in on_message calls depending on message type
 
         :param name:
         :param action:
