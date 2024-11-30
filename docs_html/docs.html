@@ -170,10 +170,37 @@ Just override <strong>adapt</strong> method to control output returned to client
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.prefabs.SimpleDistributedApplicationListener">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">eric_sse.prefabs.</span></span><span class="sig-name descname"><span class="pre">SimpleDistributedApplicationListener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><span class="pre">AbstractChannel</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationListener" title="Link to this definition">¶</a></dt>
-<dd><dl class="py method">
+<dd><p>Listener for distrubuted appllications</p>
+<dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.prefabs.SimpleDistributedApplicationListener.on_message">
 <span class="sig-name descname"><span class="pre">on_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.Message" title="eric_sse.entities.Message"><span class="pre">Message</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.on_message" title="Link to this definition">¶</a></dt>
-<dd><p>Event handler. It executes when a message is delivered to client</p>
+<dd><p>Executes action correspondant to message type. Resultant mwssages are signed and sent to channell as response</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>msg</strong></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.prefabs.SimpleDistributedApplicationListener.set_action">
+<span class="sig-name descname"><span class="pre">set_action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#eric_sse.entities.Message" title="eric_sse.entities.Message"><span class="pre">Message</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#eric_sse.entities.Message" title="eric_sse.entities.Message"><span class="pre">Message</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.set_action" title="Link to this definition">¶</a></dt>
+<dd><p>Hooks a callalble to a string key.</p>
+<p>Callables are selected in on_message_calls depending on message type</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong></p></li>
+<li><p><strong>action</strong></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -344,6 +371,7 @@ if invoked more than one time with same listener</p>
 <li><a class="reference internal" href="#eric_sse.prefabs.SSEChannel"><code class="docutils literal notranslate"><span class="pre">SSEChannel</span></code></a></li>
 <li><a class="reference internal" href="#eric_sse.prefabs.SimpleDistributedApplicationListener"><code class="docutils literal notranslate"><span class="pre">SimpleDistributedApplicationListener</span></code></a><ul>
 <li><a class="reference internal" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"><code class="docutils literal notranslate"><span class="pre">SimpleDistributedApplicationListener.on_message()</span></code></a></li>
+<li><a class="reference internal" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.set_action"><code class="docutils literal notranslate"><span class="pre">SimpleDistributedApplicationListener.set_action()</span></code></a></li>
 </ul>
 </li>
 </ul>
