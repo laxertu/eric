@@ -3,8 +3,8 @@ Overview
 
 .. image:: _static/overview.png
    :scale: 50 %
-   :alt: thanks a lot https://excalidraw.com/ !!
-   :align: right
+
+thanks a lot https://excalidraw.com !!
 
 Entities
 ========
