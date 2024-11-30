@@ -20,7 +20,7 @@ def create_listener(ch: SSEChannel):
 
 async def do_stuff(buddy: SimpleDistributedApplicationListener):
     async for m in await ssc.message_stream(buddy):
-        print(m)
+        print(buddy.id, m)
 
 
 async def main():

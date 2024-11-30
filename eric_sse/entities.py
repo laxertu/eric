@@ -39,7 +39,7 @@ class SignedMessage(Message):
         return self.__msg_type
 
     @property
-    def payload(self) -> dict:
+    def payload(self) -> dict | list | str | int | float | None:
         return {'sender_id': self.sender_id, 'payload': self.__msg_payload}
 
 
