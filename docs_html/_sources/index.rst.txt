@@ -1,10 +1,6 @@
 The lightweight library for async messaging nobody expects.
 ===========================================================
 
-.. toctree::
-   :maxdepth: 2
-
-   docs
 
 Installation
 ============
