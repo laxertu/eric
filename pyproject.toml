@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "eric-sse"
 description = "A lightweight message dispatcher based on SSE protocol data transfer objects format"
-version = "0.6.0"
+version = "0.6.0.1"
 authors = ["Luca Stretti <laxertu@gmail.com>"]
 keywords = ["sse", "queue", "API", "concurrency"]
 license = "MIT"
 readme = "README.md"
-documentation = "https://github.com/laxertu/eric/blob/master/docs.md"
-homepage = "https://github.com/laxertu/eric"
+documentation = "https://laxertu.github.io/eric/docs.html"
+homepage = "https://laxertu.github.io/eric"
 
 [tool.poetry.dependencies]
 python = ">= 3.10"
