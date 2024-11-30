@@ -1,17 +1,16 @@
 Overview
 ========
 
-.. image:: _static/overview.png
-   :scale: 70 %
-   :alt: alternate text
-   :align: right
-
-
-thanks a lot https://excalidraw.com/ !!
-
 .. toctree::
    :maxdepth: 2
     docs
+
+
+.. image:: _static/overview.png
+   :scale: 50 %
+   :alt: thanks a lot https://excalidraw.com/ !!
+   :align: right
+
 
 Entities
 ========

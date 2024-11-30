@@ -1,6 +1,11 @@
 The lightweight library for async messaging nobody expects.
 ===========================================================
 
+
+.. toctree::
+   :maxdepth: 2
+    index
+
 Installation
 ============
 pip install eric-sse
