@@ -9,6 +9,8 @@ Overview
 .. toctree::
    :maxdepth: 2
     Entities
+    Prefab channels and listeners
+    Prefab servers
     Exceptions
     Changelog
 
