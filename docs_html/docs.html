@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Overview &#8212; eric_sse 0.0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=e3a6060d"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h1>
+<a class="reference internal image-reference" href="_images/overview.png"><img alt="alternate text" class="align-right" src="_images/overview.png" style="width: 100.0px; height: 50.0px;" />
+</a>
+<div class="toctree-wrapper compound">
+</div>
+<p>thanks a lot <a class="reference external" href="https://excalidraw.com/">https://excalidraw.com/</a> !!</p>
+</section>
+<section id="module-eric_sse.entities">
+<span id="entities"></span><h1>Entities<a class="headerlink" href="#module-eric_sse.entities" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">eric_sse.entities.</span></span><span class="sig-name descname"><span class="pre">AbstractChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream_delay_seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel" title="Link to this definition">¶</a></dt>
+<dd><p>Base class for channels.</p>
+<p>Provides functionalities for listeners and message delivery management. SSEChannel is the default implementation</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.add_listener">
+<span class="sig-name descname"><span class="pre">add_listener</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#eric_sse.entities.MessageQueueListener" title="eric_sse.entities.MessageQueueListener"><span class="pre">MessageQueueListener</span></a></span></span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.add_listener" title="Link to this definition">¶</a></dt>
+<dd><p>Add the default listener</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.broadcast">
+<span class="sig-name descname"><span class="pre">broadcast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.Message" title="eric_sse.entities.Message"><span class="pre">Message</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.broadcast" title="Link to this definition">¶</a></dt>
+<dd><p>Enqueue a message to all listeners</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.deliver_next">
+<span class="sig-name descname"><span class="pre">deliver_next</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#eric_sse.entities.Message" title="eric_sse.entities.Message"><span class="pre">Message</span></a></span></span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.deliver_next" title="Link to this definition">¶</a></dt>
+<dd><p>Returns next message for given listener id.</p>
+<p>Raises a NoMessagesException if queue is empty</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.dispatch">
+<span class="sig-name descname"><span class="pre">dispatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.Message" title="eric_sse.entities.Message"><span class="pre">Message</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.dispatch" title="Link to this definition">¶</a></dt>
+<dd><p>Adds a message to listener’s queue</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.message_stream">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">message_stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.MessageQueueListener" title="eric_sse.entities.MessageQueueListener"><span class="pre">MessageQueueListener</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">AsyncIterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.message_stream" title="Link to this definition">¶</a></dt>
+<dd><p>Entry point for message streaming</p>
+<p>In case of failure at channel resolution time, a special message with type=MESSAGE_TYPE_CLOSED is sent, and
+correspondant listener is stopped</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.notify_end">
+<span class="sig-name descname"><span class="pre">notify_end</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.notify_end" title="Link to this definition">¶</a></dt>
+<dd><p>Broadcasts a MESSAGE_TYPE_CLOSED Message</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.register_listener">
+<span class="sig-name descname"><span class="pre">register_listener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.MessageQueueListener" title="eric_sse.entities.MessageQueueListener"><span class="pre">MessageQueueListener</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.register_listener" title="Link to this definition">¶</a></dt>
+<dd><p>Adds a listener to channel</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.entities.Message">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">eric_sse.entities.</span></span><span class="sig-name descname"><span class="pre">Message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.Message" title="Link to this definition">¶</a></dt>
+<dd><p>Models a message</p>
+<p>It’s just a container of information identified by a type.
+For validation purposes you can override MessageQueueListener.on_message</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.entities.MessageQueueListener">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">eric_sse.entities.</span></span><span class="sig-name descname"><span class="pre">MessageQueueListener</span></span><a class="headerlink" href="#eric_sse.entities.MessageQueueListener" title="Link to this definition">¶</a></dt>
+<dd><p>Base class for listeners.</p>
+<p>Optionally you can override on_message method if you need to inject code at message delivery time.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.MessageQueueListener.on_message">
+<span class="sig-name descname"><span class="pre">on_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.Message" title="eric_sse.entities.Message"><span class="pre">Message</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#eric_sse.entities.MessageQueueListener.on_message" title="Link to this definition">¶</a></dt>
+<dd><p>Event handler. It executes when a message is delivered to client</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.entities.SignedMessage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">eric_sse.entities.</span></span><span class="sig-name descname"><span class="pre">SignedMessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg_payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.SignedMessage" title="Link to this definition">¶</a></dt>
+<dd><p>A wrapper that adds sender id</p>
+</dd></dl>
+
+</section>
+<section id="module-eric_sse.prefabs">
+<span id="prefab-channels-and-listeners"></span><h1>Prefab channels and listeners<a class="headerlink" href="#module-eric_sse.prefabs" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.prefabs.DataProcessingChannel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">eric_sse.prefabs.</span></span><span class="sig-name descname"><span class="pre">DataProcessingChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream_delay_seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.DataProcessingChannel" title="Link to this definition">¶</a></dt>
+<dd><p>[Still experimental, it was never tested on some real use case] Channel intended for concurrent processing of data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>max_workers</strong> – Num og workers to use</p></li>
+<li><p><strong>stream_delay_seconds</strong> – Can be used to limit response rate of streamings. Only applies to message_stream calls.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Relies on concurrent.futures.ThreadPoolExecutor.
+Just override <strong>adapt</strong> method to control output returned to clients</p>
+<p>MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.prefabs.DataProcessingChannel.adapt">
+<span class="sig-name descname"><span class="pre">adapt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.Message" title="eric_sse.entities.Message"><span class="pre">Message</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#eric_sse.prefabs.DataProcessingChannel.adapt" title="Link to this definition">¶</a></dt>
+<dd><p>Models output returned to clients</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.prefabs.DataProcessingChannel.process_queue">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.MessageQueueListener" title="eric_sse.entities.MessageQueueListener"><span class="pre">MessageQueueListener</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">AsyncIterable</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#eric_sse.prefabs.DataProcessingChannel.process_queue" title="Link to this definition">¶</a></dt>
+<dd><p>Launches the processing of the given listener’s queue</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.prefabs.SSEChannel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">eric_sse.prefabs.</span></span><span class="sig-name descname"><span class="pre">SSEChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream_delay_seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_timeout_milliseconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.SSEChannel" title="Link to this definition">¶</a></dt>
+<dd><p>SSE streaming channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>retry_timeout_milliseconds</strong></p>
+</dd>
+</dl>
+<p>See <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format">https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format</a></p>
+<p>Currently, ‘id’ field is not supported.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.prefabs.SimpleDistributedApplicationListener">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">eric_sse.prefabs.</span></span><span class="sig-name descname"><span class="pre">SimpleDistributedApplicationListener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><span class="pre">AbstractChannel</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationListener" title="Link to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.prefabs.SimpleDistributedApplicationListener.on_message">
+<span class="sig-name descname"><span class="pre">on_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.Message" title="eric_sse.entities.Message"><span class="pre">Message</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.on_message" title="Link to this definition">¶</a></dt>
+<dd><p>Event handler. It executes when a message is delivered to client</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-eric_sse.servers">
+<span id="prefab-servers"></span><h1>Prefab servers<a class="headerlink" href="#module-eric_sse.servers" title="Link to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.servers.SSEChannelContainer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">eric_sse.servers.</span></span><span class="sig-name descname"><span class="pre">SSEChannelContainer</span></span><a class="headerlink" href="#eric_sse.servers.SSEChannelContainer" title="Link to this definition">¶</a></dt>
+<dd><p>Helper class for management of multiple SSE channels cases of use.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.servers.SocketServer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">eric_sse.servers.</span></span><span class="sig-name descname"><span class="pre">SocketServer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_descriptor_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.SocketServer" title="Link to this definition">¶</a></dt>
+<dd><p>An implementation of a socket server that acts as a controller to interact with library</p>
+<p>A static shortcut for starting a basic server is provided. See examples.
+<strong>Accepted format</strong>: a plain (no nested) JSON with the following keys:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">&quot;c&quot;:</span> <span class="pre">&quot;channel</span> <span class="pre">id&quot;</span>
+<span class="pre">&quot;v&quot;:</span> <span class="pre">&quot;verb&quot;</span>
+<span class="pre">&quot;t&quot;:</span> <span class="pre">&quot;message</span> <span class="pre">type&quot;</span>
+<span class="pre">&quot;p&quot;:</span> <span class="pre">&quot;message</span> <span class="pre">payload&quot;</span>
+<span class="pre">`</span></code></p>
+<p>Possible values of verb identifies a supported action:</p>
+<p><code class="docutils literal notranslate"><span class="pre">`</span>
+<span class="pre">&quot;d&quot;</span> <span class="pre">dispatch</span>
+<span class="pre">&quot;b&quot;</span> <span class="pre">broadcast</span>
+<span class="pre">&quot;c&quot;</span> <span class="pre">add</span> <span class="pre">listener</span>
+<span class="pre">&quot;l&quot;</span> <span class="pre">listen</span> <span class="pre">(opens</span> <span class="pre">a</span> <span class="pre">stream)</span>
+<span class="pre">&quot;w&quot;</span> <span class="pre">watch</span> <span class="pre">(opens</span> <span class="pre">a</span> <span class="pre">stream)</span>
+<span class="pre">`</span></code></p>
+<p>See examples</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.servers.SocketServer.connect_callback">
+<em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connect_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">StreamReader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">writer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">StreamWriter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.SocketServer.connect_callback" title="Link to this definition">¶</a></dt>
+<dd><p>Integration with asyncio.</p>
+<p>See <a class="reference external" href="https://docs.python.org/3/library/asyncio-stream.html#asyncio.start_unix_server">https://docs.python.org/3/library/asyncio-stream.html#asyncio.start_unix_server</a>
+Handles low-lwvel communication and raw messages parsing</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.servers.SocketServer.shutdown">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shutdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.SocketServer.shutdown" title="Link to this definition">¶</a></dt>
+<dd><p>Graceful Shutdown</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.servers.SocketServer.start">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_descriptor_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.SocketServer.start" title="Link to this definition">¶</a></dt>
+<dd><p>Shortcut to start a server</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-eric_sse.exception">
+<span id="exceptions"></span><h1>Exceptions<a class="headerlink" href="#module-eric_sse.exception" title="Link to this heading">¶</a></h1>
+<dl class="py exception">
+<dt class="sig sig-object py" id="eric_sse.exception.InvalidChannelException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">eric_sse.exception.</span></span><span class="sig-name descname"><span class="pre">InvalidChannelException</span></span><a class="headerlink" href="#eric_sse.exception.InvalidChannelException" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="eric_sse.exception.InvalidListenerException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">eric_sse.exception.</span></span><span class="sig-name descname"><span class="pre">InvalidListenerException</span></span><a class="headerlink" href="#eric_sse.exception.InvalidListenerException" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="eric_sse.exception.InvalidMessageFormat">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">eric_sse.exception.</span></span><span class="sig-name descname"><span class="pre">InvalidMessageFormat</span></span><a class="headerlink" href="#eric_sse.exception.InvalidMessageFormat" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="eric_sse.exception.NoMessagesException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">eric_sse.exception.</span></span><span class="sig-name descname"><span class="pre">NoMessagesException</span></span><a class="headerlink" href="#eric_sse.exception.NoMessagesException" title="Link to this definition">¶</a></dt>
+<dd><p>Raised when trying to fetch from an empty queue</p>
+</dd></dl>
+
+</section>
+<section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">¶</a></h1>
+<p>0.6.0</p>
+<ul class="simple">
+<li><p>Added SimpleDistributedApplicationListener</p></li>
+<li><p>ChannelContainerChannelContainer renamed to SSEChannelContainer</p></li>
+<li><p>Added SignedMessage entity</p></li>
+</ul>
+<p>0.5.4.1</p>
+<ul class="simple">
+<li><p>Added SocketClient</p></li>
+</ul>
+<p>0.5.3</p>
+<ul class="simple">
+<li><p>Restored behaviour of AbstractChannel.message_stream. Multiple streaming calls with same listener are allowed</p></li>
+<li><p>Added locking to queue pop</p></li>
+</ul>
+<p>0.5.2</p>
+<p>Fixed close stream too early in AbstractChannel.message_stream</p>
+<p>0.5.1</p>
+<p>AbstractChannel.message_stream raises and InvalidListenerException
+if invoked more than one time with same listener</p>
+<p>0.5.0.2</p>
+<p>Fix: SSEChannel must accept stream_delay_seconds as constructor parameter</p>
+<p>0.5.0</p>
+<ul class="simple">
+<li><p>Removed Threaded listener class</p></li>
+<li><p>Added DataProcessingChannel.process_queue</p></li>
+</ul>
+<p>0.4.1.0</p>
+<ul class="simple">
+<li><p>Breaking: Changed DataProcessingChannel adapter to suit with SSE</p></li>
+</ul>
+<p>0.4.0</p>
+<p>Breaking changes:</p>
+<ul class="simple">
+<li><p>Rework of DataProcessingChannel, now extends AbstractChannel and its methods’ signatures have been updated</p></li>
+<li><p>AbstractChannel.retry_timeout_milliseconds have been moved to SSEChannel</p></li>
+</ul>
+<p>0.3.2</p>
+<ul class="simple">
+<li><p>Breaking change: now ThreadPoolListener callback only accepts Message as parameter</p></li>
+<li><p>Fixed a concurrency bug in ThreadPoolListener</p></li>
+</ul>
+</section>
+<section id="developers-section">
+<h1>Developers section<a class="headerlink" href="#developers-section" title="Link to this heading">¶</a></h1>
+<p>Update README.md script: update_docs.sh</p>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">eric_sse</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2024, Luca Stretti.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.1</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/docs.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
