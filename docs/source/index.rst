@@ -23,7 +23,8 @@ pip install eric-sse
 
 *Documentation*
 
-https://laxertu.github.io/eric/docs.html
+* https://laxertu.github.io/eric/docs.html
+* sources https://github.com/laxertu/eric
 
 *Trivia*
 
