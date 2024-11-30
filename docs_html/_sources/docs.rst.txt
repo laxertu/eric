@@ -8,6 +8,9 @@ Overview
 
 .. toctree::
    :maxdepth: 2
+    Entities
+    Exceptions
+    Changelog
 
 
 thanks a lot https://excalidraw.com/ !!
