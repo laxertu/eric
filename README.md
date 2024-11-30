@@ -27,16 +27,6 @@ pip install eric-sse
 
 # Documentation
 
-<a id="overview"></a>
-
-# Overview
-
-![alternate text](_static/overview.png)
-
-<a id="searchable-version"></a>
-
-# Searchable version
-
 [https://laxertu.github.io/eric/docs.html](https://laxertu.github.io/eric/docs.html)
 
 **Trivia**
