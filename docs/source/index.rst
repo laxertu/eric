@@ -21,7 +21,7 @@ Features
 
 Documentation
 =============
-https://laxertu.github.io/eric/
+https://laxertu.github.io/eric/docs.html
 
 **Trivia**
 
