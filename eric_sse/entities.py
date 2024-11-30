@@ -28,6 +28,7 @@ class Message:
 
 @dataclass
 class SignedMessage(Message):
+    """A wrapper that adds sender id"""
     def __init__(self, sender_id: str, msg_type: str, msg_payload: dict | list | str | int | float | None = None):
         self.sender_id = sender_id
         self.__msg_type = msg_type
