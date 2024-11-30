@@ -94,7 +94,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
 
     def set_action(self, name: str, action: Callable[[Message], list[Message]]):
         """
-        Hooks a callalble to a string key.
+        Hooks a callable to a string key.
 
         Callables are selected in on_message calls depending on message type
 
@@ -108,7 +108,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
 
     def on_message(self, msg: Message) -> None:
         """
-        Executes action correspondant to message type. Resultant mwssages are signed and sent to channell as response
+        Executes action correspondant to message type. Resultant messages are signed and sent to channel as response
 
         :param msg:
         :return:
