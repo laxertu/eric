@@ -20,24 +20,10 @@ Features
 * See https://github.com/laxertu/eric-api
 
 Documentation
-=============
+==============
 
-Overview
-========
-
-.. image:: _static/overview.png
-   :scale: 70 %
-   :alt: alternate text
-   :align: right
-
-Searchable version
-==================
 https://laxertu.github.io/eric/docs.html
 
 **Trivia**
 
 * Library name pretends to be a tribute to the following movie https://en.wikipedia.org/wiki/Looking_for_Eric
-
-.. toctree::
-    :maxdepth: 2
-    docs
