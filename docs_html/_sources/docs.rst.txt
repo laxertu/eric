@@ -6,16 +6,12 @@ Overview
    :alt: alternate text
    :align: right
 
-.. toctree::
-   :maxdepth: 2
-    Entities
-    Prefab channels and listeners
-    Prefab servers
-    Exceptions
-    Changelog
-
 
 thanks a lot https://excalidraw.com/ !!
+
+.. toctree::
+   :maxdepth: 2
+    docs
 
 Entities
 ========

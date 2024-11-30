@@ -14,6 +14,7 @@
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="The lightweight library for async messaging nobody expects." href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -327,11 +328,66 @@ if invoked more than one time with same listener</p>
     </div>
 </search>
 <script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#module-eric_sse.entities">Entities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.entities.AbstractChannel"><code class="docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#eric_sse.entities.AbstractChannel.add_listener"><code class="docutils literal notranslate"><span class="pre">AbstractChannel.add_listener()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#eric_sse.entities.AbstractChannel.broadcast"><code class="docutils literal notranslate"><span class="pre">AbstractChannel.broadcast()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#eric_sse.entities.AbstractChannel.deliver_next"><code class="docutils literal notranslate"><span class="pre">AbstractChannel.deliver_next()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#eric_sse.entities.AbstractChannel.dispatch"><code class="docutils literal notranslate"><span class="pre">AbstractChannel.dispatch()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#eric_sse.entities.AbstractChannel.message_stream"><code class="docutils literal notranslate"><span class="pre">AbstractChannel.message_stream()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#eric_sse.entities.AbstractChannel.notify_end"><code class="docutils literal notranslate"><span class="pre">AbstractChannel.notify_end()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#eric_sse.entities.AbstractChannel.register_listener"><code class="docutils literal notranslate"><span class="pre">AbstractChannel.register_listener()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.entities.Message"><code class="docutils literal notranslate"><span class="pre">Message</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.entities.MessageQueueListener"><code class="docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#eric_sse.entities.MessageQueueListener.on_message"><code class="docutils literal notranslate"><span class="pre">MessageQueueListener.on_message()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.entities.SignedMessage"><code class="docutils literal notranslate"><span class="pre">SignedMessage</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#module-eric_sse.prefabs">Prefab channels and listeners</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.prefabs.DataProcessingChannel"><code class="docutils literal notranslate"><span class="pre">DataProcessingChannel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#eric_sse.prefabs.DataProcessingChannel.adapt"><code class="docutils literal notranslate"><span class="pre">DataProcessingChannel.adapt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#eric_sse.prefabs.DataProcessingChannel.process_queue"><code class="docutils literal notranslate"><span class="pre">DataProcessingChannel.process_queue()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.prefabs.SSEChannel"><code class="docutils literal notranslate"><span class="pre">SSEChannel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.prefabs.SimpleDistributedApplicationListener"><code class="docutils literal notranslate"><span class="pre">SimpleDistributedApplicationListener</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"><code class="docutils literal notranslate"><span class="pre">SimpleDistributedApplicationListener.on_message()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#module-eric_sse.servers">Prefab servers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.servers.SSEChannelContainer"><code class="docutils literal notranslate"><span class="pre">SSEChannelContainer</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.servers.SocketServer"><code class="docutils literal notranslate"><span class="pre">SocketServer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#eric_sse.servers.SocketServer.connect_callback"><code class="docutils literal notranslate"><span class="pre">SocketServer.connect_callback()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#eric_sse.servers.SocketServer.shutdown"><code class="docutils literal notranslate"><span class="pre">SocketServer.shutdown()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#eric_sse.servers.SocketServer.start"><code class="docutils literal notranslate"><span class="pre">SocketServer.start()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#module-eric_sse.exception">Exceptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.exception.InvalidChannelException"><code class="docutils literal notranslate"><span class="pre">InvalidChannelException</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.exception.InvalidListenerException"><code class="docutils literal notranslate"><span class="pre">InvalidListenerException</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.exception.InvalidMessageFormat"><code class="docutils literal notranslate"><span class="pre">InvalidMessageFormat</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.exception.NoMessagesException"><code class="docutils literal notranslate"><span class="pre">NoMessagesException</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#changelog">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#developers-section">Developers section</a></li>
+</ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">The lightweight library for async messaging nobody expects.</a></li>
   </ul></li>
 </ul>
 </div>

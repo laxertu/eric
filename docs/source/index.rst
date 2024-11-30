@@ -38,3 +38,6 @@ https://laxertu.github.io/eric/docs.html
 
 * Library name pretends to be a tribute to the following movie https://en.wikipedia.org/wiki/Looking_for_Eric
 
+.. toctree::
+    :maxdepth: 2
+    docs
