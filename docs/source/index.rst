@@ -21,7 +21,13 @@ Features
 
 Documentation
 =============
-https://laxertu.github.io/eric/docs.html
+
+.. image:: _static/overview.png
+   :scale: 70 %
+   :alt: alternate text
+   :align: right
+
+https://laxertu.github.io/eric/
 
 **Trivia**
 
