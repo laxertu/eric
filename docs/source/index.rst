@@ -1,8 +1,6 @@
 The lightweight library for async messaging nobody expects.
 ===========================================================
 
-
-
 *Installation*
 
 pip install eric-sse
@@ -23,7 +21,11 @@ pip install eric-sse
 
 *Documentation*
 
-* https://laxertu.github.io/eric/docs.html
+.. toctree::
+   :maxdepth: 1
+
+   docs
+
 * sources https://github.com/laxertu/eric
 
 *Trivia*
