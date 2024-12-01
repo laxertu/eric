@@ -9,9 +9,11 @@ Prefab channels and listeners
     :members:
 
 
-Prefab servers
-==============
+Prefab servers and clients
+==========================
 .. automodule:: eric_sse.servers
+    :members:
+.. automodule:: eric_sse.clients
     :members:
 
 Exceptions

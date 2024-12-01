@@ -42,7 +42,6 @@ class SocketServer:
     """
     An implementation of a socket server that acts as a controller to interact with library
 
-    A static shortcut for starting a basic server is provided. See examples.
     **Accepted format**: a plain (no nested) JSON with the following keys:
 
     ```
@@ -53,7 +52,7 @@ class SocketServer:
     ```
 
 
-    Possible values of verb identifies a supported action:
+    Possible values of **verb** identifies a supported action:
 
     ```
     "d" dispatch

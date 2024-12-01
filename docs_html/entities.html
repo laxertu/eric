@@ -174,7 +174,7 @@ Use ‘stop’ as Message type to stop receiver listener.</p>
 
 </section>
 <section id="module-eric_sse.servers">
-<span id="prefab-servers"></span><h1>Prefab servers<a class="headerlink" href="#module-eric_sse.servers" title="Link to this heading">¶</a></h1>
+<span id="prefab-servers-and-clients"></span><h1>Prefab servers and clients<a class="headerlink" href="#module-eric_sse.servers" title="Link to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.servers.SSEChannelContainer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SSEChannelContainer</span></span><a class="headerlink" href="#eric_sse.servers.SSEChannelContainer" title="Link to this definition">¶</a></dt>
@@ -185,15 +185,14 @@ Use ‘stop’ as Message type to stop receiver listener.</p>
 <dt class="sig sig-object py" id="eric_sse.servers.SocketServer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SocketServer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_descriptor_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.SocketServer" title="Link to this definition">¶</a></dt>
 <dd><p>An implementation of a socket server that acts as a controller to interact with library</p>
-<p>A static shortcut for starting a basic server is provided. See examples.
-<strong>Accepted format</strong>: a plain (no nested) JSON with the following keys:</p>
+<p><strong>Accepted format</strong>: a plain (no nested) JSON with the following keys:</p>
 <p><code class="docutils literal notranslate"><span class="pre">`</span>
 <span class="pre">&quot;c&quot;:</span> <span class="pre">&quot;channel</span> <span class="pre">id&quot;</span>
 <span class="pre">&quot;v&quot;:</span> <span class="pre">&quot;verb&quot;</span>
 <span class="pre">&quot;t&quot;:</span> <span class="pre">&quot;message</span> <span class="pre">type&quot;</span>
 <span class="pre">&quot;p&quot;:</span> <span class="pre">&quot;message</span> <span class="pre">payload&quot;</span>
 <span class="pre">`</span></code></p>
-<p>Possible values of verb identifies a supported action:</p>
+<p>Possible values of <strong>verb</strong> identifies a supported action:</p>
 <p><code class="docutils literal notranslate"><span class="pre">`</span>
 <span class="pre">&quot;d&quot;</span> <span class="pre">dispatch</span>
 <span class="pre">&quot;b&quot;</span> <span class="pre">broadcast</span>
@@ -214,6 +213,12 @@ Use ‘stop’ as Message type to stop receiver listener.</p>
 <dd><p>Shortcut to start a server</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py class" id="module-eric_sse.clients">
+<dt class="sig sig-object py" id="eric_sse.clients.SocketClient">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SocketClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_descriptor_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.clients.SocketClient" title="Link to this definition">¶</a></dt>
+<dd><p>A little facade to interact with SocketServer</p>
 </dd></dl>
 
 </section>
@@ -284,13 +289,14 @@ Use ‘stop’ as Message type to stop receiver listener.</p>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-eric_sse.servers">Prefab servers</a><ul>
+<li><a class="reference internal" href="#module-eric_sse.servers">Prefab servers and clients</a><ul>
 <li><a class="reference internal" href="#eric_sse.servers.SSEChannelContainer"><code class="docutils literal notranslate"><span class="pre">SSEChannelContainer</span></code></a></li>
 <li><a class="reference internal" href="#eric_sse.servers.SocketServer"><code class="docutils literal notranslate"><span class="pre">SocketServer</span></code></a><ul>
 <li><a class="reference internal" href="#eric_sse.servers.SocketServer.shutdown"><code class="docutils literal notranslate"><span class="pre">SocketServer.shutdown()</span></code></a></li>
 <li><a class="reference internal" href="#eric_sse.servers.SocketServer.start"><code class="docutils literal notranslate"><span class="pre">SocketServer.start()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#eric_sse.clients.SocketClient"><code class="docutils literal notranslate"><span class="pre">SocketClient</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#module-eric_sse.exception">Exceptions</a><ul>

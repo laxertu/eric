@@ -145,9 +145,9 @@ Use ‘stop’ as Message type to stop receiver listener.
 
 <a id="module-eric_sse.servers"></a>
 
-<a id="prefab-servers"></a>
+<a id="prefab-servers-and-clients"></a>
 
-# Prefab servers
+# Prefab servers and clients
 
 <a id="eric_sse.servers.SSEChannelContainer"></a>
 
@@ -161,7 +161,6 @@ Helper class for management of multiple SSE channels cases of use.
 
 An implementation of a socket server that acts as a controller to interact with library
 
-A static shortcut for starting a basic server is provided. See examples.
 **Accepted format**: a plain (no nested) JSON with the following keys:
 
 ``
@@ -171,7 +170,7 @@ A static shortcut for starting a basic server is provided. See examples.
 "p": "message payload"
 ``
 
-Possible values of verb identifies a supported action:
+Possible values of **verb** identifies a supported action:
 
 ``
 "d" dispatch
@@ -194,6 +193,14 @@ Graceful Shutdown
 #### *static* start(file_descriptor_path: str)
 
 Shortcut to start a server
+
+<a id="module-eric_sse.clients"></a>
+
+<a id="eric_sse.clients.SocketClient"></a>
+
+### *class* SocketClient(file_descriptor_path: str)
+
+A little facade to interact with SocketServer
 
 <a id="module-eric_sse.exception"></a>
 
