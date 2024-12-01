@@ -39,9 +39,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="toctree-wrapper compound">
-</div>
-<section id="overview">
+  <section id="overview">
 <h1>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h1>
 <a class="reference internal image-reference" href="_images/overview.png"><img alt="_images/overview.png" src="_images/overview.png" style="width: 561.5px; height: 269.5px;" />
 </a>
@@ -242,14 +240,6 @@ Just override <strong>adapt</strong> method to control output returned to client
 <span class="pre">`</span></code></p>
 <p>See examples</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="eric_sse.servers.SocketServer.connect_callback">
-<em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connect_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">StreamReader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">writer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">StreamWriter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.SocketServer.connect_callback" title="Link to this definition">¶</a></dt>
-<dd><p>Integration with asyncio.</p>
-<p>See <a class="reference external" href="https://docs.python.org/3/library/asyncio-stream.html#asyncio.start_unix_server">https://docs.python.org/3/library/asyncio-stream.html#asyncio.start_unix_server</a>
-Handles low-lwvel communication and raw messages parsing</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.servers.SocketServer.shutdown">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shutdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.SocketServer.shutdown" title="Link to this definition">¶</a></dt>
 <dd><p>Graceful Shutdown</p>
@@ -385,7 +375,6 @@ if invoked more than one time with same listener</p>
 <li><a class="reference internal" href="#module-eric_sse.servers">Prefab servers</a><ul>
 <li><a class="reference internal" href="#eric_sse.servers.SSEChannelContainer"><code class="docutils literal notranslate"><span class="pre">SSEChannelContainer</span></code></a></li>
 <li><a class="reference internal" href="#eric_sse.servers.SocketServer"><code class="docutils literal notranslate"><span class="pre">SocketServer</span></code></a><ul>
-<li><a class="reference internal" href="#eric_sse.servers.SocketServer.connect_callback"><code class="docutils literal notranslate"><span class="pre">SocketServer.connect_callback()</span></code></a></li>
 <li><a class="reference internal" href="#eric_sse.servers.SocketServer.shutdown"><code class="docutils literal notranslate"><span class="pre">SocketServer.shutdown()</span></code></a></li>
 <li><a class="reference internal" href="#eric_sse.servers.SocketServer.start"><code class="docutils literal notranslate"><span class="pre">SocketServer.start()</span></code></a></li>
 </ul>

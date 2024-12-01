@@ -26,12 +26,11 @@ pip install eric-sse
 * Sources https://github.com/laxertu/eric
 * Examples https://github.com/laxertu/eric/tree/master/examples
 
+
 .. toctree::
    :maxdepth: 1
 
    docs
-
-
 
 *Trivia*
 
