@@ -92,7 +92,7 @@ class AbstractChannel(ABC):
         """
         :param stream_delay_seconds: Can be used to limit response rate of streamings. Only applies to message_stream calls.
         """
-        logger.info(f'Creating channel {AbstractChannel.NEXT_ID}')
+        logger.debug(f'Creating channel {AbstractChannel.NEXT_ID}')
         with Lock():
             self.id: str = str(AbstractChannel.NEXT_ID)
             AbstractChannel.NEXT_ID += 1
