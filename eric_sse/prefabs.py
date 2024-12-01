@@ -101,20 +101,13 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
 
         They should return a list of Messages corresponding to response to action requested.
         Use 'stop' as Message type to stop receiver listener.
-
-        :param name:
-        :param action:
-        :return:
         """
         if action in self.__internal_actions:
             raise KeyError(f'Trying to set an internal action {action}')
         self.__actions[name] = action
 
     def on_message(self, msg: Message) -> None:
-        """
-        Executes action correspondant to message's type
-        :param msg:
-        """
+        """Executes action correspondant to message's type"""
         try:
             try:
                 self.__internal_actions[msg.type]()
