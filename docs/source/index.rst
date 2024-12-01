@@ -1,3 +1,8 @@
+.. autosummary::
+   :toctree: DIRNAME
+
+
+
 The lightweight library for async messaging nobody expects.
 ===========================================================
 
@@ -25,7 +30,6 @@ pip install eric-sse
 
 * Sources https://github.com/laxertu/eric
 * Examples https://github.com/laxertu/eric/tree/master/examples
-
 
 .. toctree::
    :maxdepth: 1

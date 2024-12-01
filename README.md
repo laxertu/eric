@@ -26,12 +26,6 @@ pip install eric-sse
 * Examples [https://github.com/laxertu/eric/tree/master/examples](https://github.com/laxertu/eric/tree/master/examples)
 
 * [Overview](docs.md)
-* [Entities](docs.md#module-eric_sse.entities)
-* [Prefab channels and listeners](docs.md#module-eric_sse.prefabs)
-* [Prefab servers](docs.md#module-eric_sse.servers)
-* [Exceptions](docs.md#module-eric_sse.exception)
-* [Changelog](docs.md#changelog)
-* [Developers section](docs.md#developers-section)
 
 *Trivia*
 
