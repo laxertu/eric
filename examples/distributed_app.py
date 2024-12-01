@@ -10,7 +10,12 @@ logger.setLevel(logging.DEBUG)
 
 def hello_response(m: Message) -> list[Message]:
     return [
-        Message(type='hello', payload=f'{m.payload["payload"]}!'),
+        Message(type='hello_ack', payload=f'{m.payload["payload"]}!'),
+        Message(type='stop')
+    ]
+
+def hello_ack_response(m: Message) -> list[Message]:
+    return [
         Message(type='stop')
     ]
 
@@ -18,6 +23,7 @@ def hello_response(m: Message) -> list[Message]:
 def create_listener(ch: SSEChannel):
     l = SimpleDistributedApplicationListener(ch)
     l.set_action('hello', hello_response)
+    l.set_action('hello_ack', hello_ack_response)
     l.start_sync()
     return l
 
