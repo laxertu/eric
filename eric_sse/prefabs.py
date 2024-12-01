@@ -35,9 +35,6 @@ class DataProcessingChannel(AbstractChannel):
     """
     Channel intended for concurrent processing of data.
 
-    :param max_workers: Num og workers to use
-    :param stream_delay_seconds: Can be used to limit response rate of streamings. Only applies to message_stream calls.
-
     Relies on concurrent.futures.ThreadPoolExecutor.
     Just override **adapt** method to control output returned to clients
 
@@ -45,6 +42,10 @@ class DataProcessingChannel(AbstractChannel):
     """
 
     def __init__(self, max_workers: int, stream_delay_seconds: int = 0):
+        """
+        :param max_workers: Num of workers to use
+        :param stream_delay_seconds: Can be used to limit response rate of streamings. Only applies to message_stream calls.
+        """
         super().__init__(stream_delay_seconds=stream_delay_seconds)
         self.max_workers = max_workers
 
@@ -96,7 +97,10 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         """
         Hooks a callable to a string key.
 
-        Callables are selected when listener processes the message depending on it's type
+        Callables are selected when listener processes the message depending on its type.
+
+        They should return a list of Messages corresponding to response to action requested.
+        Use 'stop' as Message type to stop receiver listener.
 
         :param name:
         :param action:
@@ -107,6 +111,10 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         self.__actions[name] = action
 
     def on_message(self, msg: Message) -> None:
+        """
+        Executes action correspondant to message's type
+        :param msg:
+        """
         try:
             try:
                 self.__internal_actions[msg.type]()
