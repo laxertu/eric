@@ -10,15 +10,16 @@ logger = get_logger()
 class SSEChannel(AbstractChannel):
     """
     SSE streaming channel.
-
-    :param retry_timeout_milliseconds:
-
     See https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
 
     Currently, 'id' field is not supported.
     """
 
     def __init__(self, stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5):
+        """
+        :param stream_delay_seconds:
+        :param retry_timeout_milliseconds:
+        """
         super().__init__(stream_delay_seconds=stream_delay_seconds)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
 
@@ -73,7 +74,6 @@ class DataProcessingChannel(AbstractChannel):
         return msg
 
     def adapt(self, msg: Message) -> dict:
-        """Models output returned to clients"""
         return {
             "event": msg.type,
             "data": msg.payload
@@ -81,7 +81,7 @@ class DataProcessingChannel(AbstractChannel):
 
 
 class SimpleDistributedApplicationListener(MessageQueueListener):
-    """Listener for distrubuted appllications"""
+    """Listener for distrubuted applications"""
 
     def __init__(self, channel: AbstractChannel):
         super().__init__()
@@ -96,7 +96,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         """
         Hooks a callable to a string key.
 
-        Callables are selected in on_message calls depending on message type
+        Callables are selected when listener processes the message depending on it's type
 
         :param name:
         :param action:
@@ -107,12 +107,6 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         self.__actions[name] = action
 
     def on_message(self, msg: Message) -> None:
-        """
-        Executes action correspondant to message type. Resultant messages are signed and sent to channel as response
-
-        :param msg:
-        :return:
-        """
         try:
             try:
                 self.__internal_actions[msg.type]()

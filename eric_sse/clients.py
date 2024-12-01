@@ -4,7 +4,9 @@ from asyncio import open_unix_connection
 
 
 class SocketClient:
-
+    """
+    A little facade to interact with SocketServer
+    """
     def __init__(self, file_descriptor_path: str):
         self.__descriptor_path = Path(file_descriptor_path)
 
