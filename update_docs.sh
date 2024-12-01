@@ -10,4 +10,4 @@ rm -rf ../docs_html/
 rm -rf ../docs_markdown/
 
 cp -rf build/html/ ../docs_html/
-cp -rf build/html/ ../docs_markdown/
+cp -rf build/markdown/ ../docs_markdown/
