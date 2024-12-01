@@ -146,7 +146,7 @@ class AbstractChannel(ABC):
         """Adds a message to listener's queue"""
 
         self.__add_to_queue(listener_id, msg)
-        logger.info(f"Dispatched {msg} to {listener_id}")
+        logger.debug(f"Dispatched {msg} to {listener_id}")
 
     def __add_to_queue(self, listener_id: str, msg: Message):
         self.__get_queue(listener_id).append(msg)
@@ -184,7 +184,7 @@ class AbstractChannel(ABC):
             while True:
                 # If client closes connection, stop sending events
                 if not await listener.is_running():
-                    logger.info("Listener stopped. Exiting")
+                    logger.debug("Listener stopped. Exiting")
                     break
 
                 try:

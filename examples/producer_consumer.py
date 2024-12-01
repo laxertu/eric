@@ -1,12 +1,12 @@
-import asyncio
+import asyncio, logging
 from random import uniform
 from time import sleep
-
 from eric_sse import get_logger
 from eric_sse.entities import Message, MessageQueueListener
 from eric_sse.prefabs import DataProcessingChannel
 
 logger = get_logger()
+logger.setLevel(logging.DEBUG)
 
 
 class Producer:

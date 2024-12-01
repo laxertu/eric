@@ -1,8 +1,11 @@
-import asyncio
+import asyncio, logging
 from eric_sse.entities import Message
 from eric_sse.prefabs import SimpleDistributedApplicationListener, SSEChannel
-
 ssc = SSEChannel()
+
+import  eric_sse
+logger  = eric_sse.get_logger()
+logger.setLevel(logging.DEBUG)
 
 
 def hello_response(m: Message) -> list[Message]:
