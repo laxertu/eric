@@ -21,8 +21,9 @@ pip install eric-sse
 
 *Documentation*
 
-* Searchable version: [https://laxertu.github.io/eric/docs.html](https://laxertu.github.io/eric/docs.html)
+* **Project home**: [https://laxertu.github.io/eric](https://laxertu.github.io/eric)
 * Sources [https://github.com/laxertu/eric](https://github.com/laxertu/eric)
+* Examples [https://github.com/laxertu/eric/tree/master/examples](https://github.com/laxertu/eric/tree/master/examples)
 
 * [Overview](docs.md)
 * [Entities](docs.md#module-eric_sse.entities)

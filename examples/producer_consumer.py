@@ -6,7 +6,6 @@ from eric_sse.entities import Message, MessageQueueListener
 from eric_sse.prefabs import DataProcessingChannel
 
 logger = get_logger()
-logger.setLevel(logging.DEBUG)
 
 
 class Producer:

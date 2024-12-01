@@ -92,12 +92,6 @@ class SocketServer:
 
     @staticmethod
     async def connect_callback(reader: StreamReader, writer: StreamWriter):
-        """
-        Integration with asyncio.
-
-        See https://docs.python.org/3/library/asyncio-stream.html#asyncio.start_unix_server
-        Handles low-lwvel communication and raw messages parsing
-        """
         try:
             message_content = await reader.read()
             async for response in SocketServer.handle_command(message_content.decode()):
