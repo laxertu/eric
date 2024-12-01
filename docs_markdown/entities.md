@@ -6,7 +6,7 @@
 
 <a id="eric_sse.entities.AbstractChannel"></a>
 
-### *class* eric_sse.entities.AbstractChannel(stream_delay_seconds: int = 0)
+### *class* AbstractChannel(stream_delay_seconds: int = 0)
 
 Base class for channels.
 
@@ -61,7 +61,7 @@ Adds a listener to channel
 
 <a id="eric_sse.entities.Message"></a>
 
-### *class* eric_sse.entities.Message(type: str, payload: dict | list | str | int | float | None = None)
+### *class* Message(type: str, payload: dict | list | str | int | float | None = None)
 
 Models a message
 
@@ -70,7 +70,7 @@ For validation purposes you can override MessageQueueListener.on_message
 
 <a id="eric_sse.entities.MessageQueueListener"></a>
 
-### *class* eric_sse.entities.MessageQueueListener
+### *class* MessageQueueListener
 
 Base class for listeners.
 
@@ -84,7 +84,7 @@ Event handler. It executes when a message is delivered to client
 
 <a id="eric_sse.entities.SignedMessage"></a>
 
-### *class* eric_sse.entities.SignedMessage(sender_id: str, msg_type: str, msg_payload: dict | list | str | int | float | None = None)
+### *class* SignedMessage(sender_id: str, msg_type: str, msg_payload: dict | list | str | int | float | None = None)
 
 A wrapper that adds sender id
 
@@ -96,7 +96,7 @@ A wrapper that adds sender id
 
 <a id="eric_sse.prefabs.DataProcessingChannel"></a>
 
-### *class* eric_sse.prefabs.DataProcessingChannel(max_workers: int, stream_delay_seconds: int = 0)
+### *class* DataProcessingChannel(max_workers: int, stream_delay_seconds: int = 0)
 
 Channel intended for concurrent processing of data.
 
@@ -113,7 +113,7 @@ Launches the processing of the given listener’s queue
 
 <a id="eric_sse.prefabs.SSEChannel"></a>
 
-### *class* eric_sse.prefabs.SSEChannel(stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5)
+### *class* SSEChannel(stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5)
 
 SSE streaming channel.
 See [https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
@@ -122,7 +122,7 @@ Currently, ‘id’ field is not supported.
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener"></a>
 
-### *class* eric_sse.prefabs.SimpleDistributedApplicationListener(channel: [AbstractChannel](#eric_sse.entities.AbstractChannel))
+### *class* SimpleDistributedApplicationListener(channel: [AbstractChannel](#eric_sse.entities.AbstractChannel))
 
 Listener for distrubuted applications
 
@@ -151,13 +151,13 @@ Use ‘stop’ as Message type to stop receiver listener.
 
 <a id="eric_sse.servers.SSEChannelContainer"></a>
 
-### *class* eric_sse.servers.SSEChannelContainer
+### *class* SSEChannelContainer
 
 Helper class for management of multiple SSE channels cases of use.
 
 <a id="eric_sse.servers.SocketServer"></a>
 
-### *class* eric_sse.servers.SocketServer(file_descriptor_path: str)
+### *class* SocketServer(file_descriptor_path: str)
 
 An implementation of a socket server that acts as a controller to interact with library
 
@@ -203,18 +203,18 @@ Shortcut to start a server
 
 <a id="eric_sse.exception.InvalidChannelException"></a>
 
-### *exception* eric_sse.exception.InvalidChannelException
+### *exception* InvalidChannelException
 
 <a id="eric_sse.exception.InvalidListenerException"></a>
 
-### *exception* eric_sse.exception.InvalidListenerException
+### *exception* InvalidListenerException
 
 <a id="eric_sse.exception.InvalidMessageFormat"></a>
 
-### *exception* eric_sse.exception.InvalidMessageFormat
+### *exception* InvalidMessageFormat
 
 <a id="eric_sse.exception.NoMessagesException"></a>
 
-### *exception* eric_sse.exception.NoMessagesException
+### *exception* NoMessagesException
 
 Raised when trying to fetch from an empty queue
