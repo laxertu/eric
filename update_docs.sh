@@ -11,3 +11,6 @@ rm -rf ../docs_markdown/
 
 cp -rf build/html/ ../docs_html/
 cp -rf build/markdown/ ../docs_markdown/
+
+# patch
+cp -rf source/_static ../docs_markdown/_static
