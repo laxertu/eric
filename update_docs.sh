@@ -1,5 +1,6 @@
 #!/bin/bash
 cd docs
+rm -rf build/html/
 make markdown
 make html
 #cp build/markdown/index.md ../README.md

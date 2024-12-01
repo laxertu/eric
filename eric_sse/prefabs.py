@@ -32,7 +32,7 @@ class SSEChannel(AbstractChannel):
 
 class DataProcessingChannel(AbstractChannel):
     """
-    [Still experimental, it was never tested on some real use case] Channel intended for concurrent processing of data.
+    Channel intended for concurrent processing of data.
 
     :param max_workers: Num og workers to use
     :param stream_delay_seconds: Can be used to limit response rate of streamings. Only applies to message_stream calls.
