@@ -30,6 +30,13 @@ Exceptions
 
 Changelog
 =========
+
+0.6.0.2
+
+* Improved logging format
+* HTML documentation workflow
+
+
 0.6.0
 
 * Added SimpleDistributedApplicationListener
