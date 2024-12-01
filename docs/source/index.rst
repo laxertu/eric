@@ -21,12 +21,15 @@ pip install eric-sse
 
 *Documentation*
 
+* Searchable version: https://laxertu.github.io/eric/docs.html
+* Sources https://github.com/laxertu/eric
+
 .. toctree::
    :maxdepth: 1
 
    docs
 
-* sources https://github.com/laxertu/eric
+
 
 *Trivia*
 
