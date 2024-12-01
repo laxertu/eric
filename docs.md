@@ -211,15 +211,6 @@ Possible values of verb identifies a supported action:
 
 See examples
 
-<a id="eric_sse.servers.SocketServer.connect_callback"></a>
-
-#### *async static* connect_callback(reader: StreamReader, writer: StreamWriter)
-
-Integration with asyncio.
-
-See [https://docs.python.org/3/library/asyncio-stream.html#asyncio.start_unix_server](https://docs.python.org/3/library/asyncio-stream.html#asyncio.start_unix_server)
-Handles low-lwvel communication and raw messages parsing
-
 <a id="eric_sse.servers.SocketServer.shutdown"></a>
 
 #### *async* shutdown()
