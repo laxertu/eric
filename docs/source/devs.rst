@@ -7,5 +7,4 @@ Documentation:
 
 Testing:
 
-* Install with test and doctools optional dependencies.
-* run run_tests.sh script
+* run_tests.sh
