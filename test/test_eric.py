@@ -184,12 +184,6 @@ class DistributedListenerTestCase(IsolatedAsyncioTestCase):
     async def test_application(self):
         ssc = SSEChannel()
 
-        async def do_stuff(buddy: SimpleDistributedApplicationListener):
-            r = []
-            async for m in await ssc.message_stream(buddy):
-                r.append(m)
-            return r
-
         alice = DistributedListenerTestCase.create_listener(ssc)
         bob = DistributedListenerTestCase.create_listener(ssc)
 
