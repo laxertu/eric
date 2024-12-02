@@ -1,7 +1,8 @@
+import asyncio
 from unittest import TestCase, IsolatedAsyncioTestCase
 
 from eric_sse.entities import Message, MessageQueueListener, SignedMessage
-from eric_sse.prefabs import SSEChannel
+from eric_sse.prefabs import SSEChannel, SimpleDistributedApplicationListener
 
 
 class MessageQueueListenerMock(MessageQueueListener):
@@ -145,6 +146,21 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
             self.assertEqual('test', m['event'])
             await l.stop()
 
+def hello_response(m: Message) -> list[Message]:
+    return [
+        Message(type='hello_ack', payload=f'{m.payload["payload"]}!'),
+        Message(type='stop')
+    ]
+
+def hello_ack_response(m: Message) -> list[Message]:
+    return [
+        Message(type='stop')
+    ]
+
+def do_assertion(m: Message) -> list[Message]:
+    assert m.payload
+    return []
+
 
 class SignedMessageTestCase(TestCase):
 
@@ -152,3 +168,39 @@ class SignedMessageTestCase(TestCase):
         sut = SignedMessage(sender_id='1', msg_type='test', msg_payload='hi')
         self.assertEqual(sut.payload, {'sender_id': '1', 'payload': 'hi'})
         self.assertEqual(sut.sender_id, '1')
+
+
+class DistributedListenerTestCase(IsolatedAsyncioTestCase):
+
+    @staticmethod
+    def create_listener(ch: SSEChannel):
+        l = SimpleDistributedApplicationListener(ch)
+        l.set_action('hello', hello_response)
+        l.set_action('hello_ack', hello_ack_response)
+        l.start_sync()
+        return l
+
+
+    async def test_application(self):
+        from concurrent.futures import ThreadPoolExecutor
+
+        ssc = SSEChannel()
+
+        async def do_stuff(buddy: SimpleDistributedApplicationListener):
+            r = []
+            async for m in await ssc.message_stream(buddy):
+                r.append(m)
+            return r
+
+        alice = DistributedListenerTestCase.create_listener(ssc)
+        bob = DistributedListenerTestCase.create_listener(ssc)
+
+        # Bob says hello to Alice
+        ssc.dispatch(alice.id, Message(type='hello', payload={'sender_id': bob.id, 'payload': 'hello!'}))
+        ssc.dispatch(alice.id, Message(type='stop'))
+
+        types = [m['event'] async for m in await ssc.message_stream(alice)]
+        self.assertEqual(['hello', 'stop'], types)
+
+        types = [m['event'] async for m in await ssc.message_stream(bob)]
+        self.assertEqual(['hello_ack', 'stop'], types)

@@ -88,11 +88,11 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         super().__init__()
         self.__channel = channel
         self.__actions: dict[str, Callable[[Message], list[Message]]] = dict()
-        channel.register_listener(self)
         self.__internal_actions: dict[str, Callable[[], None]] = {
             'stop': self.stop_sync,
             'remove': self.remove_sync
         }
+        channel.register_listener(self)
 
     def remove_sync(self):
         self.stop_sync()
