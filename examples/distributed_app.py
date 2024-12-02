@@ -41,10 +41,8 @@ async def main():
     # Bob says hello to Alice
     ssc.dispatch(alice.id, Message(type='hello', payload={'sender_id': bob.id, 'payload': 'hello!'}))
 
-    f1 = asyncio.create_task(do_stuff(alice))
-    f2 = asyncio.create_task(do_stuff(bob))
+    asyncio.create_task(do_stuff(alice))
+    asyncio.create_task(do_stuff(bob))
 
-    await f1
-    await f2
 
 asyncio.get_event_loop().run_until_complete(main())
