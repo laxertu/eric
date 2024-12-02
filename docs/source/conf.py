@@ -70,3 +70,4 @@ html_theme_options = {
 add_module_names = False
 # python_display_short_literal_types = True
 modindex_common_prefix = ['eric_sse.']
+toc_object_entries_show_parents = 'hide'

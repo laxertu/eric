@@ -259,18 +259,18 @@ Use ‘stop’ as Message type to stop receiver listener.</p>
     <ul>
 <li><a class="reference internal" href="#">Entities</a><ul>
 <li><a class="reference internal" href="#eric_sse.entities.AbstractChannel"><code class="docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a><ul>
-<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.add_listener"><code class="docutils literal notranslate"><span class="pre">AbstractChannel.add_listener()</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.broadcast"><code class="docutils literal notranslate"><span class="pre">AbstractChannel.broadcast()</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.deliver_next"><code class="docutils literal notranslate"><span class="pre">AbstractChannel.deliver_next()</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.dispatch"><code class="docutils literal notranslate"><span class="pre">AbstractChannel.dispatch()</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.message_stream"><code class="docutils literal notranslate"><span class="pre">AbstractChannel.message_stream()</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.notify_end"><code class="docutils literal notranslate"><span class="pre">AbstractChannel.notify_end()</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.register_listener"><code class="docutils literal notranslate"><span class="pre">AbstractChannel.register_listener()</span></code></a></li>
+<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.add_listener"><code class="docutils literal notranslate"><span class="pre">add_listener()</span></code></a></li>
+<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.broadcast"><code class="docutils literal notranslate"><span class="pre">broadcast()</span></code></a></li>
+<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.deliver_next"><code class="docutils literal notranslate"><span class="pre">deliver_next()</span></code></a></li>
+<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.dispatch"><code class="docutils literal notranslate"><span class="pre">dispatch()</span></code></a></li>
+<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.message_stream"><code class="docutils literal notranslate"><span class="pre">message_stream()</span></code></a></li>
+<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.notify_end"><code class="docutils literal notranslate"><span class="pre">notify_end()</span></code></a></li>
+<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.register_listener"><code class="docutils literal notranslate"><span class="pre">register_listener()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#eric_sse.entities.Message"><code class="docutils literal notranslate"><span class="pre">Message</span></code></a></li>
 <li><a class="reference internal" href="#eric_sse.entities.MessageQueueListener"><code class="docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a><ul>
-<li><a class="reference internal" href="#eric_sse.entities.MessageQueueListener.on_message"><code class="docutils literal notranslate"><span class="pre">MessageQueueListener.on_message()</span></code></a></li>
+<li><a class="reference internal" href="#eric_sse.entities.MessageQueueListener.on_message"><code class="docutils literal notranslate"><span class="pre">on_message()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#eric_sse.entities.SignedMessage"><code class="docutils literal notranslate"><span class="pre">SignedMessage</span></code></a></li>
@@ -278,13 +278,13 @@ Use ‘stop’ as Message type to stop receiver listener.</p>
 </li>
 <li><a class="reference internal" href="#module-eric_sse.prefabs">Prefab channels and listeners</a><ul>
 <li><a class="reference internal" href="#eric_sse.prefabs.DataProcessingChannel"><code class="docutils literal notranslate"><span class="pre">DataProcessingChannel</span></code></a><ul>
-<li><a class="reference internal" href="#eric_sse.prefabs.DataProcessingChannel.process_queue"><code class="docutils literal notranslate"><span class="pre">DataProcessingChannel.process_queue()</span></code></a></li>
+<li><a class="reference internal" href="#eric_sse.prefabs.DataProcessingChannel.process_queue"><code class="docutils literal notranslate"><span class="pre">process_queue()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#eric_sse.prefabs.SSEChannel"><code class="docutils literal notranslate"><span class="pre">SSEChannel</span></code></a></li>
 <li><a class="reference internal" href="#eric_sse.prefabs.SimpleDistributedApplicationListener"><code class="docutils literal notranslate"><span class="pre">SimpleDistributedApplicationListener</span></code></a><ul>
-<li><a class="reference internal" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"><code class="docutils literal notranslate"><span class="pre">SimpleDistributedApplicationListener.on_message()</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.set_action"><code class="docutils literal notranslate"><span class="pre">SimpleDistributedApplicationListener.set_action()</span></code></a></li>
+<li><a class="reference internal" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"><code class="docutils literal notranslate"><span class="pre">on_message()</span></code></a></li>
+<li><a class="reference internal" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.set_action"><code class="docutils literal notranslate"><span class="pre">set_action()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -292,8 +292,8 @@ Use ‘stop’ as Message type to stop receiver listener.</p>
 <li><a class="reference internal" href="#module-eric_sse.servers">Prefab servers and clients</a><ul>
 <li><a class="reference internal" href="#eric_sse.servers.SSEChannelContainer"><code class="docutils literal notranslate"><span class="pre">SSEChannelContainer</span></code></a></li>
 <li><a class="reference internal" href="#eric_sse.servers.SocketServer"><code class="docutils literal notranslate"><span class="pre">SocketServer</span></code></a><ul>
-<li><a class="reference internal" href="#eric_sse.servers.SocketServer.shutdown"><code class="docutils literal notranslate"><span class="pre">SocketServer.shutdown()</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.servers.SocketServer.start"><code class="docutils literal notranslate"><span class="pre">SocketServer.start()</span></code></a></li>
+<li><a class="reference internal" href="#eric_sse.servers.SocketServer.shutdown"><code class="docutils literal notranslate"><span class="pre">shutdown()</span></code></a></li>
+<li><a class="reference internal" href="#eric_sse.servers.SocketServer.start"><code class="docutils literal notranslate"><span class="pre">start()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#eric_sse.clients.SocketClient"><code class="docutils literal notranslate"><span class="pre">SocketClient</span></code></a></li>
