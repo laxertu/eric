@@ -44,7 +44,6 @@ class SSEChannelTestCase(TestCase):
 
     def setUp(self):
         self.sut = SSEChannel()
-        SSEChannel.NEXT_ID = 1
         MessageQueueListener.NEXT_ID = 1
 
     def test_listeners_ids_generation(self):
