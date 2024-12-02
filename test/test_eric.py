@@ -2,7 +2,7 @@ import asyncio
 from unittest import TestCase, IsolatedAsyncioTestCase
 
 from eric_sse.entities import Message, MessageQueueListener, SignedMessage
-from eric_sse.prefabs import SSEChannel, SimpleDistributedApplicationListener
+from eric_sse.prefabs import SSEChannel, SimpleDistributedApplicationListener, DataProcessingChannel
 
 
 class MessageQueueListenerMock(MessageQueueListener):
@@ -197,3 +197,20 @@ class DistributedListenerTestCase(IsolatedAsyncioTestCase):
 
         types = [m['event'] async for m in await ssc.message_stream(bob)]
         self.assertEqual(['hello_ack', 'stop'], types)
+
+class DataProcessingChannelTestCase(IsolatedAsyncioTestCase):
+    async def test_channel(self):
+        channel = DataProcessingChannel(stream_delay_seconds=0, max_workers=2)
+        listener = MessageQueueListenerMock()
+        channel.register_listener(listener)
+
+        channel.dispatch(listener.id, Message(type='test1'))
+        channel.dispatch(listener.id, Message(type='test2'))
+        channel.dispatch(listener.id, Message(type='test3'))
+
+        await listener.start()
+        types = {m['event'] async for m in await channel.process_queue(listener)}
+        self.assertEqual({'test1', 'test2', 'test3'}, types)
+
+
+
