@@ -1,4 +1,3 @@
-import asyncio
 from unittest import TestCase, IsolatedAsyncioTestCase
 
 from eric_sse.entities import Message, MessageQueueListener, SignedMessage
