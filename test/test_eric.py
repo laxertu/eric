@@ -146,6 +146,17 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
             self.assertEqual('test', m['event'])
             await l.stop()
 
+
+
+class SignedMessageTestCase(TestCase):
+
+    def test_signed_message(self):
+        sut = SignedMessage(sender_id='1', msg_type='test', msg_payload='hi')
+        self.assertEqual(sut.payload, {'sender_id': '1', 'payload': 'hi'})
+        self.assertEqual(sut.sender_id, '1')
+
+
+
 def hello_response(m: Message) -> list[Message]:
     return [
         Message(type='hello_ack', payload=f'{m.payload["payload"]}!'),
@@ -156,18 +167,6 @@ def hello_ack_response(m: Message) -> list[Message]:
     return [
         Message(type='stop')
     ]
-
-def do_assertion(m: Message) -> list[Message]:
-    assert m.payload
-    return []
-
-
-class SignedMessageTestCase(TestCase):
-
-    def test_signed_message(self):
-        sut = SignedMessage(sender_id='1', msg_type='test', msg_payload='hi')
-        self.assertEqual(sut.payload, {'sender_id': '1', 'payload': 'hi'})
-        self.assertEqual(sut.sender_id, '1')
 
 
 class DistributedListenerTestCase(IsolatedAsyncioTestCase):
