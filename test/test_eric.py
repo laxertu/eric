@@ -182,8 +182,6 @@ class DistributedListenerTestCase(IsolatedAsyncioTestCase):
 
 
     async def test_application(self):
-        from concurrent.futures import ThreadPoolExecutor
-
         ssc = SSEChannel()
 
         async def do_stuff(buddy: SimpleDistributedApplicationListener):
