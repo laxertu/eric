@@ -90,8 +90,13 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         self.__actions: dict[str, Callable[[Message], list[Message]]] = dict()
         channel.register_listener(self)
         self.__internal_actions: dict[str, Callable[[], None]] = {
-            'stop': self.stop_sync
+            'stop': self.stop_sync,
+            'remove': self.remove_sync
         }
+
+    def remove_sync(self):
+        self.stop_sync()
+        self.__channel.remove_listener(self.id)
 
     def set_action(self, name: str, action: Callable[[Message], list[Message]]):
         """
