@@ -100,16 +100,17 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
 
     async def test_dispatch_ok(self):
         c = self.sut
-        listener = MessageQueueListenerMock(num_messages_before_disconnect=1)
+        listener = MessageQueueListenerMock(num_messages_before_disconnect=2)
         c.register_listener(listener)
         await listener.start()
+        c.dispatch(listener.id, Message(type='test', payload={'a': 1}))
         c.dispatch(listener.id, Message(type='test', payload={'a': 1}))
 
         async for msg in await c.message_stream(listener):
             self.assertDictEqual({'data': {'a': 1}, 'event': 'test', 'retry': c.retry_timeout_milliseconds}, msg)
 
         self.assertDictEqual({listener.id: []}, c.queues)
-        self.assertEqual(1, listener.num_received)
+        self.assertEqual(2, listener.num_received)
 
     async def test_listener_as_consumer(self):
         c = self.sut
