@@ -195,6 +195,8 @@ class DistributedListenerTestCase(IsolatedAsyncioTestCase):
 
         # Bob says hello to Alice
         ssc.dispatch(alice.id, Message(type='hello', payload={'sender_id': bob.id, 'payload': 'hello!'}))
+
+        # Alice will stop after having answered to Bob
         ssc.dispatch(alice.id, Message(type='stop'))
 
         types = [m['event'] async for m in await ssc.message_stream(alice)]
