@@ -1,4 +1,4 @@
-/docs/* linguist-vendored
-/docs_html/* linguist-vendored
-/docs_markdown/* linguist-vendored
-/_static/* linguist-vendored
+/docs/** linguist-vendored
+/docs_html/** linguist-vendored
+/docs_markdown/** linguist-vendored
+/_static/** linguist-vendored
