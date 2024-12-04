@@ -2,7 +2,7 @@ Overview
 ========
 
 .. image:: _static/overview.png
-   :scale: 50 %
+   :scale: 30 %
 
 thanks a lot https://excalidraw.com !!
 
