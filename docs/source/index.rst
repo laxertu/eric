@@ -1,8 +1,3 @@
-.. autosummary::
-   :toctree: DIRNAME
-
-
-
 The lightweight library for async messaging nobody expects.
 ===========================================================
 
