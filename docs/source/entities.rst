@@ -7,6 +7,7 @@ Prefab channels and listeners
 =============================
 .. automodule:: eric_sse.prefabs
     :members:
+    :show-inheritance:
 
 
 Prefab servers and clients

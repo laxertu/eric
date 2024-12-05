@@ -98,6 +98,8 @@ A wrapper that adds sender id
 
 ### *class* DataProcessingChannel(max_workers: int, stream_delay_seconds: int = 0)
 
+Bases: [`AbstractChannel`](#eric_sse.entities.AbstractChannel)
+
 Channel intended for concurrent processing of data.
 
 Relies on concurrent.futures.ThreadPoolExecutor.
@@ -115,6 +117,8 @@ Launches the processing of the given listener’s queue
 
 ### *class* SSEChannel(stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5)
 
+Bases: [`AbstractChannel`](#eric_sse.entities.AbstractChannel)
+
 SSE streaming channel.
 See [https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
 
@@ -123,6 +127,8 @@ Currently, ‘id’ field is not supported.
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener"></a>
 
 ### *class* SimpleDistributedApplicationListener(channel: [AbstractChannel](#eric_sse.entities.AbstractChannel))
+
+Bases: [`MessageQueueListener`](#eric_sse.entities.MessageQueueListener)
 
 Listener for distrubuted applications
 
