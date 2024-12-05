@@ -6,40 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Entities &#8212; eric_sse 0.0.2 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
-    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=e301b230" />
-    
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/agogo.css?v=e8978af6" />
     <script src="_static/documentation_options.js?v=e3a6060d"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Changelog" href="changelog.html" />
     <link rel="prev" title="Overview" href="docs.html" /> 
   </head><body>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="changelog.html" title="Changelog"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="index.html">eric_sse 0.0.2 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="Related">
           <a href="docs.html" title="Overview"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">eric_sse 0.0.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="docs.html" accesskey="U">Overview</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Entities</a></li> 
-      </ul>
-    </div>  
+             accesskey="P">previous</a> |
+          <a href="changelog.html" title="Changelog"
+             accesskey="N">next</a> |
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
 
-    <div class="document">
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
@@ -255,117 +252,57 @@ Use ‘stop’ as Message type to stop receiver listener.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">Entities</a><ul>
-<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel"><code class="docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a><ul>
-<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.add_listener"><code class="docutils literal notranslate"><span class="pre">add_listener()</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.broadcast"><code class="docutils literal notranslate"><span class="pre">broadcast()</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.deliver_next"><code class="docutils literal notranslate"><span class="pre">deliver_next()</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.dispatch"><code class="docutils literal notranslate"><span class="pre">dispatch()</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.message_stream"><code class="docutils literal notranslate"><span class="pre">message_stream()</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.notify_end"><code class="docutils literal notranslate"><span class="pre">notify_end()</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.entities.AbstractChannel.register_listener"><code class="docutils literal notranslate"><span class="pre">register_listener()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#eric_sse.entities.Message"><code class="docutils literal notranslate"><span class="pre">Message</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.entities.MessageQueueListener"><code class="docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a><ul>
-<li><a class="reference internal" href="#eric_sse.entities.MessageQueueListener.on_message"><code class="docutils literal notranslate"><span class="pre">on_message()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#eric_sse.entities.SignedMessage"><code class="docutils literal notranslate"><span class="pre">SignedMessage</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-eric_sse.prefabs">Prefab channels and listeners</a><ul>
-<li><a class="reference internal" href="#eric_sse.prefabs.DataProcessingChannel"><code class="docutils literal notranslate"><span class="pre">DataProcessingChannel</span></code></a><ul>
-<li><a class="reference internal" href="#eric_sse.prefabs.DataProcessingChannel.process_queue"><code class="docutils literal notranslate"><span class="pre">process_queue()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#eric_sse.prefabs.SSEChannel"><code class="docutils literal notranslate"><span class="pre">SSEChannel</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.prefabs.SimpleDistributedApplicationListener"><code class="docutils literal notranslate"><span class="pre">SimpleDistributedApplicationListener</span></code></a><ul>
-<li><a class="reference internal" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"><code class="docutils literal notranslate"><span class="pre">on_message()</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.set_action"><code class="docutils literal notranslate"><span class="pre">set_action()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-eric_sse.servers">Prefab servers and clients</a><ul>
-<li><a class="reference internal" href="#eric_sse.servers.SSEChannelContainer"><code class="docutils literal notranslate"><span class="pre">SSEChannelContainer</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.servers.SocketServer"><code class="docutils literal notranslate"><span class="pre">SocketServer</span></code></a><ul>
-<li><a class="reference internal" href="#eric_sse.servers.SocketServer.shutdown"><code class="docutils literal notranslate"><span class="pre">shutdown()</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.servers.SocketServer.start"><code class="docutils literal notranslate"><span class="pre">start()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#eric_sse.clients.SocketClient"><code class="docutils literal notranslate"><span class="pre">SocketClient</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-eric_sse.exception">Exceptions</a><ul>
-<li><a class="reference internal" href="#eric_sse.exception.InvalidChannelException"><code class="docutils literal notranslate"><span class="pre">InvalidChannelException</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.exception.InvalidListenerException"><code class="docutils literal notranslate"><span class="pre">InvalidListenerException</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.exception.InvalidMessageFormat"><code class="docutils literal notranslate"><span class="pre">InvalidMessageFormat</span></code></a></li>
-<li><a class="reference internal" href="#eric_sse.exception.NoMessagesException"><code class="docutils literal notranslate"><span class="pre">NoMessagesException</span></code></a></li>
-</ul>
-</li>
+        </div>
+        <div class="sidebar">
+          
+          <h3>Table of Contents</h3>
+          <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="docs.html">Overview</a></li>
 </ul>
 
-  </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="docs.html"
-                          title="previous chapter">Overview</a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="changelog.html"
-                          title="next chapter">Changelog</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/entities.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<search id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</search>
-<script>document.getElementById('searchbox').style.display = "block"</script>
+          <search role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+            </form>
+          </search>
+
         </div>
+        <div class="clearer"></div>
       </div>
-      <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="Related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="changelog.html" title="Changelog"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="docs.html" title="Overview"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">eric_sse 0.0.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="docs.html" >Overview</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Entities</a></li> 
-      </ul>
-    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="Related">
+            <a href="docs.html" title="Overview"
+              >previous</a> |
+            <a href="changelog.html" title="Changelog"
+              >next</a> |
+            <a href="py-modindex.html" title="Python Module Index"
+              >modules</a> |
+            <a href="genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+              <br/>
+              <a href="_sources/entities.rst.txt"
+                rel="nofollow">Show Source</a>
+          </div>
+        </div>
+
+        <div class="right">
+          
     <div class="footer" role="contentinfo">
     &#169; Copyright 2024, Luca Stretti.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.1.
     </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
   </body>
 </html>
