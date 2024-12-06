@@ -13,7 +13,7 @@ Entities
 .. automodule:: eric_sse.entities
     :members:
     :undoc-members:
-    :exclude-members: NEXT_ID
+    :exclude-members: NEXT_ID, type, payload
     :member-order: bysource
 
 Prefab channels and listeners

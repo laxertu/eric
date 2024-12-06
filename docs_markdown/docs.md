@@ -21,27 +21,11 @@ Models a message
 It’s just a container of information identified by a type.
 For validation purposes you can override MessageQueueListener.on_message
 
-<a id="eric_sse.entities.Message.type"></a>
-
-#### type *: str*
-
-<a id="eric_sse.entities.Message.payload"></a>
-
-#### payload *: dict | list | str | int | float | None* *= None*
-
 <a id="eric_sse.entities.SignedMessage"></a>
 
 ### *class* SignedMessage(sender_id: str, msg_type: str, msg_payload: dict | list | str | int | float | None = None)
 
 A wrapper that adds sender id
-
-<a id="eric_sse.entities.SignedMessage.type"></a>
-
-#### *property* type
-
-<a id="eric_sse.entities.SignedMessage.payload"></a>
-
-#### *property* payload *: dict | list | str | int | float | None*
 
 <a id="eric_sse.entities.MessageQueueListener"></a>
 
