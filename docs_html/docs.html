@@ -202,6 +202,15 @@ correspondant listener is stopped</p>
 <section id="module-eric_sse.prefabs">
 <span id="prefab-channels-and-listeners"></span><h1>Prefab channels and listeners<a class="headerlink" href="#module-eric_sse.prefabs" title="Link to this heading">¶</a></h1>
 <dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.prefabs.SSEChannel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SSEChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream_delay_seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_timeout_milliseconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.SSEChannel" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a></p>
+<p>SSE streaming channel.
+See <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format">https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format</a></p>
+<p>Currently, ‘id’ field is not supported.</p>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.prefabs.DataProcessingChannel">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DataProcessingChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream_delay_seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.DataProcessingChannel" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a></p>
@@ -218,25 +227,10 @@ Just override <strong>adapt</strong> method to control output returned to client
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="eric_sse.prefabs.SSEChannel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SSEChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream_delay_seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retry_timeout_milliseconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.SSEChannel" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a></p>
-<p>SSE streaming channel.
-See <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format">https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format</a></p>
-<p>Currently, ‘id’ field is not supported.</p>
-</dd></dl>
-
-<dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.prefabs.SimpleDistributedApplicationListener">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SimpleDistributedApplicationListener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><span class="pre">AbstractChannel</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationListener" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#eric_sse.entities.MessageQueueListener" title="eric_sse.entities.MessageQueueListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a></p>
 <p>Listener for distrubuted applications</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="eric_sse.prefabs.SimpleDistributedApplicationListener.on_message">
-<span class="sig-name descname"><span class="pre">on_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.Message" title="eric_sse.entities.Message"><span class="pre">Message</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.on_message" title="Link to this definition">¶</a></dt>
-<dd><p>Executes action correspondant to message’s type</p>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.prefabs.SimpleDistributedApplicationListener.set_action">
 <span class="sig-name descname"><span class="pre">set_action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#eric_sse.entities.Message" title="eric_sse.entities.Message"><span class="pre">Message</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#eric_sse.entities.Message" title="eric_sse.entities.Message"><span class="pre">Message</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.set_action" title="Link to this definition">¶</a></dt>
@@ -244,6 +238,12 @@ See <a class="reference external" href="https://developer.mozilla.org/en-US/docs
 <p>Callables are selected when listener processes the message depending on its type.</p>
 <p>They should return a list of Messages corresponding to response to action requested.
 Use ‘stop’ as Message type to stop receiver listener.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.prefabs.SimpleDistributedApplicationListener.on_message">
+<span class="sig-name descname"><span class="pre">on_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.Message" title="eric_sse.entities.Message"><span class="pre">Message</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.on_message" title="Link to this definition">¶</a></dt>
+<dd><p>Executes action correspondant to message’s type</p>
 </dd></dl>
 
 </dd></dl>
@@ -342,8 +342,8 @@ Use ‘stop’ as Message type to stop receiver listener.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#module-eric_sse.prefabs">Prefab channels and listeners</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#eric_sse.prefabs.DataProcessingChannel"><code class="docutils literal notranslate"><span class="pre">DataProcessingChannel</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#eric_sse.prefabs.SSEChannel"><code class="docutils literal notranslate"><span class="pre">SSEChannel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.prefabs.DataProcessingChannel"><code class="docutils literal notranslate"><span class="pre">DataProcessingChannel</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#eric_sse.prefabs.SimpleDistributedApplicationListener"><code class="docutils literal notranslate"><span class="pre">SimpleDistributedApplicationListener</span></code></a></li>
 </ul>
 </li>

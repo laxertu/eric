@@ -21,6 +21,7 @@ Prefab channels and listeners
 .. automodule:: eric_sse.prefabs
     :members:
     :show-inheritance:
+    :member-order: bysource
 
 
 Prefab servers and clients
@@ -29,6 +30,7 @@ Prefab servers and clients
     :members:
 .. automodule:: eric_sse.clients
     :members:
+    :member-order: bysource
 
 Exceptions
 ==========

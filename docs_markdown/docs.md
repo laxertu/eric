@@ -158,6 +158,17 @@ Broadcasts a MESSAGE_TYPE_CLOSED Message
 
 # Prefab channels and listeners
 
+<a id="eric_sse.prefabs.SSEChannel"></a>
+
+### *class* SSEChannel(stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5)
+
+Bases: [`AbstractChannel`](#eric_sse.entities.AbstractChannel)
+
+SSE streaming channel.
+See [https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
+
+Currently, ‘id’ field is not supported.
+
 <a id="eric_sse.prefabs.DataProcessingChannel"></a>
 
 ### *class* DataProcessingChannel(max_workers: int, stream_delay_seconds: int = 0)
@@ -177,17 +188,6 @@ MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered a
 
 Launches the processing of the given listener’s queue
 
-<a id="eric_sse.prefabs.SSEChannel"></a>
-
-### *class* SSEChannel(stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5)
-
-Bases: [`AbstractChannel`](#eric_sse.entities.AbstractChannel)
-
-SSE streaming channel.
-See [https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
-
-Currently, ‘id’ field is not supported.
-
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener"></a>
 
 ### *class* SimpleDistributedApplicationListener(channel: [AbstractChannel](#eric_sse.entities.AbstractChannel))
@@ -195,12 +195,6 @@ Currently, ‘id’ field is not supported.
 Bases: [`MessageQueueListener`](#eric_sse.entities.MessageQueueListener)
 
 Listener for distrubuted applications
-
-<a id="eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"></a>
-
-#### on_message(msg: [Message](#eric_sse.entities.Message)) → None
-
-Executes action correspondant to message’s type
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.set_action"></a>
 
@@ -212,6 +206,12 @@ Callables are selected when listener processes the message depending on its type
 
 They should return a list of Messages corresponding to response to action requested.
 Use ‘stop’ as Message type to stop receiver listener.
+
+<a id="eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"></a>
+
+#### on_message(msg: [Message](#eric_sse.entities.Message)) → None
+
+Executes action correspondant to message’s type
 
 <a id="module-eric_sse.servers"></a>
 
