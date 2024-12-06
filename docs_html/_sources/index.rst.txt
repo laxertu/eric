@@ -1,9 +1,19 @@
+.. toctree::
+   :maxdepth: 2
+   :hidden:
+
+   docs
+   devs
+   changelog
+
 The lightweight library for async messaging nobody expects.
 ===========================================================
 
+
 *Installation*
 
-pip install eric-sse
+* pip install eric-sse
+
 
 *Features*
 
@@ -19,14 +29,9 @@ pip install eric-sse
 * Message queue processing (logging, etc)
 * See https://github.com/laxertu/eric-api
 
-*Documentation*
+*Sources*
 
-.. toctree::
-   :maxdepth: 1
-
-   docs
-
-* Sources https://github.com/laxertu/eric
+* Home https://github.com/laxertu/eric
 * Examples https://github.com/laxertu/eric/tree/master/examples
 
 

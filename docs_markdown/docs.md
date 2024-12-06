@@ -239,6 +239,3 @@ A little facade to interact with SocketServer
 ### *exception* NoMessagesException
 
 Raised when trying to fetch from an empty queue
-
-* [Changelog](changelog.md)
-* [Developers section](devs.md)

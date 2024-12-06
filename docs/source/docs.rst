@@ -2,9 +2,11 @@ Overview
 ========
 
 .. image:: _static/overview.png
-   :scale: 30 %
+   :scale: 50 %
 
 thanks a lot https://excalidraw.com !!
+
+
 
 Entities
 ========
@@ -29,13 +31,4 @@ Exceptions
 ==========
 .. automodule:: eric_sse.exception
     :members:
-
-.. toctree::
-   :maxdepth: 1
-
-   changelog
-   devs
-
-
-
 

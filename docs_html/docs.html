@@ -13,7 +13,7 @@
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="next" title="Developers section" href="devs.html" />
     <link rel="prev" title="The lightweight library for async messaging nobody expects." href="index.html" /> 
   </head><body>
     <div class="header-wrapper" role="banner">
@@ -23,7 +23,7 @@
         <div class="rel" role="navigation" aria-label="Related">
           <a href="index.html" title="The lightweight library for async messaging nobody expects."
              accesskey="P">previous</a> |
-          <a href="changelog.html" title="Changelog"
+          <a href="devs.html" title="Developers section"
              accesskey="N">next</a> |
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |
@@ -43,7 +43,7 @@
             
   <section id="overview">
 <h1>Overview<a class="headerlink" href="#overview" title="Link to this heading">¶</a></h1>
-<a class="reference internal image-reference" href="_images/overview.png"><img alt="_images/overview.png" src="_images/overview.png" style="width: 336.9px; height: 161.7px;" />
+<a class="reference internal image-reference" href="_images/overview.png"><img alt="_images/overview.png" src="_images/overview.png" style="width: 561.5px; height: 269.5px;" />
 </a>
 <p>thanks a lot <a class="reference external" href="https://excalidraw.com">https://excalidraw.com</a> !!</p>
 </section>
@@ -251,12 +251,6 @@ Use ‘stop’ as Message type to stop receiver listener.</p>
 <dd><p>Raised when trying to fetch from an empty queue</p>
 </dd></dl>
 
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
-<li class="toctree-l1"><a class="reference internal" href="devs.html">Developers section</a></li>
-</ul>
-</div>
 </section>
 
 
@@ -270,10 +264,34 @@ Use ‘stop’ as Message type to stop receiver listener.</p>
           <h3>Table of Contents</h3>
           <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#module-eric_sse.entities">Entities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#module-eric_sse.prefabs">Prefab channels and listeners</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#module-eric_sse.servers">Prefab servers and clients</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#module-eric_sse.exception">Exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#module-eric_sse.entities">Entities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.entities.AbstractChannel"><code class="docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.entities.Message"><code class="docutils literal notranslate"><span class="pre">Message</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.entities.MessageQueueListener"><code class="docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.entities.SignedMessage"><code class="docutils literal notranslate"><span class="pre">SignedMessage</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#module-eric_sse.prefabs">Prefab channels and listeners</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.prefabs.DataProcessingChannel"><code class="docutils literal notranslate"><span class="pre">DataProcessingChannel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.prefabs.SSEChannel"><code class="docutils literal notranslate"><span class="pre">SSEChannel</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.prefabs.SimpleDistributedApplicationListener"><code class="docutils literal notranslate"><span class="pre">SimpleDistributedApplicationListener</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#module-eric_sse.servers">Prefab servers and clients</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.servers.SSEChannelContainer"><code class="docutils literal notranslate"><span class="pre">SSEChannelContainer</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.servers.SocketServer"><code class="docutils literal notranslate"><span class="pre">SocketServer</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.clients.SocketClient"><code class="docutils literal notranslate"><span class="pre">SocketClient</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#module-eric_sse.exception">Exceptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.exception.InvalidChannelException"><code class="docutils literal notranslate"><span class="pre">InvalidChannelException</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.exception.InvalidListenerException"><code class="docutils literal notranslate"><span class="pre">InvalidListenerException</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.exception.InvalidMessageFormat"><code class="docutils literal notranslate"><span class="pre">InvalidMessageFormat</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.exception.NoMessagesException"><code class="docutils literal notranslate"><span class="pre">NoMessagesException</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="devs.html">Developers section</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
 
           <search role="search">
@@ -295,7 +313,7 @@ Use ‘stop’ as Message type to stop receiver listener.</p>
           <div role="navigation" aria-label="Related">
             <a href="index.html" title="The lightweight library for async messaging nobody expects."
               >previous</a> |
-            <a href="changelog.html" title="Changelog"
+            <a href="devs.html" title="Developers section"
               >next</a> |
             <a href="py-modindex.html" title="Python Module Index"
               >modules</a> |
