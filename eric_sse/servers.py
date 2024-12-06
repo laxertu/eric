@@ -42,25 +42,23 @@ class SocketServer:
     """
     An implementation of a socket server that acts as a controller to interact with library
 
-    **Accepted format**: a plain (no nested) JSON with the following keys:
+    **Accepted format**: a plain (no nested) JSON with the following keys::
 
-    ```
-    "c": "channel id"
-    "v": "verb"
-    "t": "message type"
-    "p": "message payload"
-    ```
+        {        
+            "c": "channel id" 
+            "v": "verb" 
+            "t": "message type" 
+            "p": "message payload" 
+        }
 
 
-    Possible values of **verb** identifies a supported action:
+    Possible values of **verb** identifies a supported action::
 
-    ```
-    "d" dispatch
-    "b" broadcast
-    "c" add listener
-    "l" listen (opens a stream)
-    "w" watch (opens a stream)
-    ```
+        "d" dispatch
+        "b" broadcast
+        "c" add listener
+        "l" listen (opens a stream)
+        "w" watch (opens a stream)
 
     See examples
     """

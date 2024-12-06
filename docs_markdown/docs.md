@@ -217,22 +217,24 @@ An implementation of a socket server that acts as a controller to interact with 
 
 **Accepted format**: a plain (no nested) JSON with the following keys:
 
-``
-"c": "channel id"
-"v": "verb"
-"t": "message type"
-"p": "message payload"
-``
+```default
+{        
+    "c": "channel id" 
+    "v": "verb" 
+    "t": "message type" 
+    "p": "message payload" 
+}
+```
 
 Possible values of **verb** identifies a supported action:
 
-``
+```default
 "d" dispatch
 "b" broadcast
 "c" add listener
 "l" listen (opens a stream)
 "w" watch (opens a stream)
-``
+```
 
 See examples
 
