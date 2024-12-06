@@ -42,6 +42,7 @@
  | <a href="#B"><strong>B</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
+ | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
@@ -49,6 +50,8 @@
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#W"><strong>W</strong></a>
  
 </div>
 <h2 id="A">A</h2>
@@ -58,6 +61,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.entities.AbstractChannel.adapt">adapt() (AbstractChannel method)</a>
+</li>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.add_listener">add_listener() (AbstractChannel method)</a>
 </li>
   </ul></td>
@@ -128,16 +133,28 @@
   </ul></td>
 </tr></table>
 
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.entities.AbstractChannel.get_listener">get_listener() (AbstractChannel method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.exception.InvalidChannelException">InvalidChannelException</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.exception.InvalidListenerException">InvalidListenerException</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.exception.InvalidMessageFormat">InvalidMessageFormat</a>
+</li>
+      <li><a href="docs.html#eric_sse.entities.MessageQueueListener.is_running">is_running() (MessageQueueListener method)</a>
+</li>
+      <li><a href="docs.html#eric_sse.entities.MessageQueueListener.is_running_sync">is_running_sync() (MessageQueueListener method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -196,6 +213,14 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.entities.Message.payload">payload (Message attribute)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.entities.SignedMessage.payload">(SignedMessage property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.prefabs.DataProcessingChannel.process_queue">process_queue() (DataProcessingChannel method)</a>
 </li>
   </ul></td>
@@ -205,6 +230,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.register_listener">register_listener() (AbstractChannel method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.entities.AbstractChannel.remove_listener">remove_listener() (AbstractChannel method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -220,17 +249,47 @@
 </li>
       <li><a href="docs.html#eric_sse.prefabs.SimpleDistributedApplicationListener">SimpleDistributedApplicationListener (class in eric_sse.prefabs)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.clients.SocketClient">SocketClient (class in eric_sse.clients)</a>
 </li>
       <li><a href="docs.html#eric_sse.servers.SocketServer">SocketServer (class in eric_sse.servers)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.prefabs.SSEChannel">SSEChannel (class in eric_sse.prefabs)</a>
 </li>
       <li><a href="docs.html#eric_sse.servers.SSEChannelContainer">SSEChannelContainer (class in eric_sse.servers)</a>
 </li>
-      <li><a href="docs.html#eric_sse.servers.SocketServer.start">start() (SocketServer static method)</a>
+      <li><a href="docs.html#eric_sse.entities.MessageQueueListener.start">start() (MessageQueueListener method)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.servers.SocketServer.start">(SocketServer static method)</a>
+</li>
+      </ul></li>
+      <li><a href="docs.html#eric_sse.entities.MessageQueueListener.start_sync">start_sync() (MessageQueueListener method)</a>
+</li>
+      <li><a href="docs.html#eric_sse.entities.MessageQueueListener.stop">stop() (MessageQueueListener method)</a>
+</li>
+      <li><a href="docs.html#eric_sse.entities.MessageQueueListener.stop_sync">stop_sync() (MessageQueueListener method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.entities.Message.type">type (Message attribute)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.entities.SignedMessage.type">(SignedMessage property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.entities.AbstractChannel.watch">watch() (AbstractChannel method)</a>
 </li>
   </ul></td>
 </tr></table>

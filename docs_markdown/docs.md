@@ -12,6 +12,75 @@ thanks a lot [https://excalidraw.com](https://excalidraw.com) !!
 
 # Entities
 
+<a id="eric_sse.entities.Message"></a>
+
+### *class* Message(type: str, payload: dict | list | str | int | float | None = None)
+
+Models a message
+
+It’s just a container of information identified by a type.
+For validation purposes you can override MessageQueueListener.on_message
+
+<a id="eric_sse.entities.Message.type"></a>
+
+#### type *: str*
+
+<a id="eric_sse.entities.Message.payload"></a>
+
+#### payload *: dict | list | str | int | float | None* *= None*
+
+<a id="eric_sse.entities.SignedMessage"></a>
+
+### *class* SignedMessage(sender_id: str, msg_type: str, msg_payload: dict | list | str | int | float | None = None)
+
+A wrapper that adds sender id
+
+<a id="eric_sse.entities.SignedMessage.type"></a>
+
+#### *property* type
+
+<a id="eric_sse.entities.SignedMessage.payload"></a>
+
+#### *property* payload *: dict | list | str | int | float | None*
+
+<a id="eric_sse.entities.MessageQueueListener"></a>
+
+### *class* MessageQueueListener
+
+Base class for listeners.
+
+Optionally you can override on_message method if you need to inject code at message delivery time.
+
+<a id="eric_sse.entities.MessageQueueListener.start"></a>
+
+#### *async* start() → None
+
+<a id="eric_sse.entities.MessageQueueListener.start_sync"></a>
+
+#### start_sync() → None
+
+<a id="eric_sse.entities.MessageQueueListener.is_running"></a>
+
+#### *async* is_running() → bool
+
+<a id="eric_sse.entities.MessageQueueListener.is_running_sync"></a>
+
+#### is_running_sync() → bool
+
+<a id="eric_sse.entities.MessageQueueListener.stop"></a>
+
+#### *async* stop() → None
+
+<a id="eric_sse.entities.MessageQueueListener.stop_sync"></a>
+
+#### stop_sync() → None
+
+<a id="eric_sse.entities.MessageQueueListener.on_message"></a>
+
+#### on_message(msg: [Message](#eric_sse.entities.Message)) → None
+
+Event handler. It executes when a message is delivered to client
+
 <a id="eric_sse.entities.AbstractChannel"></a>
 
 ### *class* AbstractChannel(stream_delay_seconds: int = 0)
@@ -26,11 +95,15 @@ Provides functionalities for listeners and message delivery management. SSEChann
 
 Add the default listener
 
-<a id="eric_sse.entities.AbstractChannel.broadcast"></a>
+<a id="eric_sse.entities.AbstractChannel.register_listener"></a>
 
-#### broadcast(msg: [Message](#eric_sse.entities.Message))
+#### register_listener(l: [MessageQueueListener](#eric_sse.entities.MessageQueueListener))
 
-Enqueue a message to all listeners
+Adds a listener to channel
+
+<a id="eric_sse.entities.AbstractChannel.remove_listener"></a>
+
+#### remove_listener(l_id: str)
 
 <a id="eric_sse.entities.AbstractChannel.deliver_next"></a>
 
@@ -46,6 +119,20 @@ Raises a NoMessagesException if queue is empty
 
 Adds a message to listener’s queue
 
+<a id="eric_sse.entities.AbstractChannel.broadcast"></a>
+
+#### broadcast(msg: [Message](#eric_sse.entities.Message))
+
+Enqueue a message to all listeners
+
+<a id="eric_sse.entities.AbstractChannel.get_listener"></a>
+
+#### get_listener(listener_id: str) → [MessageQueueListener](#eric_sse.entities.MessageQueueListener)
+
+<a id="eric_sse.entities.AbstractChannel.adapt"></a>
+
+#### *abstract* adapt(msg: [Message](#eric_sse.entities.Message)) → Any
+
 <a id="eric_sse.entities.AbstractChannel.message_stream"></a>
 
 #### *async* message_stream(listener: [MessageQueueListener](#eric_sse.entities.MessageQueueListener)) → AsyncIterable[Any]
@@ -55,46 +142,15 @@ Entry point for message streaming
 In case of failure at channel resolution time, a special message with type=MESSAGE_TYPE_CLOSED is sent, and
 correspondant listener is stopped
 
+<a id="eric_sse.entities.AbstractChannel.watch"></a>
+
+#### *async* watch() → AsyncIterable[Any]
+
 <a id="eric_sse.entities.AbstractChannel.notify_end"></a>
 
 #### notify_end()
 
 Broadcasts a MESSAGE_TYPE_CLOSED Message
-
-<a id="eric_sse.entities.AbstractChannel.register_listener"></a>
-
-#### register_listener(l: [MessageQueueListener](#eric_sse.entities.MessageQueueListener))
-
-Adds a listener to channel
-
-<a id="eric_sse.entities.Message"></a>
-
-### *class* Message(type: str, payload: dict | list | str | int | float | None = None)
-
-Models a message
-
-It’s just a container of information identified by a type.
-For validation purposes you can override MessageQueueListener.on_message
-
-<a id="eric_sse.entities.MessageQueueListener"></a>
-
-### *class* MessageQueueListener
-
-Base class for listeners.
-
-Optionally you can override on_message method if you need to inject code at message delivery time.
-
-<a id="eric_sse.entities.MessageQueueListener.on_message"></a>
-
-#### on_message(msg: [Message](#eric_sse.entities.Message)) → None
-
-Event handler. It executes when a message is delivered to client
-
-<a id="eric_sse.entities.SignedMessage"></a>
-
-### *class* SignedMessage(sender_id: str, msg_type: str, msg_payload: dict | list | str | int | float | None = None)
-
-A wrapper that adds sender id
 
 <a id="module-eric_sse.prefabs"></a>
 

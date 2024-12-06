@@ -50,6 +50,83 @@
 <section id="module-eric_sse.entities">
 <span id="entities"></span><h1>Entities<a class="headerlink" href="#module-eric_sse.entities" title="Link to this heading">¶</a></h1>
 <dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.entities.Message">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.Message" title="Link to this definition">¶</a></dt>
+<dd><p>Models a message</p>
+<p>It’s just a container of information identified by a type.
+For validation purposes you can override MessageQueueListener.on_message</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="eric_sse.entities.Message.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.entities.Message.type" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="eric_sse.entities.Message.payload">
+<span class="sig-name descname"><span class="pre">payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#eric_sse.entities.Message.payload" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.entities.SignedMessage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SignedMessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg_payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.SignedMessage" title="Link to this definition">¶</a></dt>
+<dd><p>A wrapper that adds sender id</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.entities.SignedMessage.type">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#eric_sse.entities.SignedMessage.type" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.entities.SignedMessage.payload">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#eric_sse.entities.SignedMessage.payload" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.entities.MessageQueueListener">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MessageQueueListener</span></span><a class="headerlink" href="#eric_sse.entities.MessageQueueListener" title="Link to this definition">¶</a></dt>
+<dd><p>Base class for listeners.</p>
+<p>Optionally you can override on_message method if you need to inject code at message delivery time.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.MessageQueueListener.start">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#eric_sse.entities.MessageQueueListener.start" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.MessageQueueListener.start_sync">
+<span class="sig-name descname"><span class="pre">start_sync</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#eric_sse.entities.MessageQueueListener.start_sync" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.MessageQueueListener.is_running">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_running</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#eric_sse.entities.MessageQueueListener.is_running" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.MessageQueueListener.is_running_sync">
+<span class="sig-name descname"><span class="pre">is_running_sync</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#eric_sse.entities.MessageQueueListener.is_running_sync" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.MessageQueueListener.stop">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#eric_sse.entities.MessageQueueListener.stop" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.MessageQueueListener.stop_sync">
+<span class="sig-name descname"><span class="pre">stop_sync</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#eric_sse.entities.MessageQueueListener.stop_sync" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.MessageQueueListener.on_message">
+<span class="sig-name descname"><span class="pre">on_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.Message" title="eric_sse.entities.Message"><span class="pre">Message</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#eric_sse.entities.MessageQueueListener.on_message" title="Link to this definition">¶</a></dt>
+<dd><p>Event handler. It executes when a message is delivered to client</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AbstractChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream_delay_seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel" title="Link to this definition">¶</a></dt>
 <dd><p>Base class for channels.</p>
@@ -61,10 +138,15 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.broadcast">
-<span class="sig-name descname"><span class="pre">broadcast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.Message" title="eric_sse.entities.Message"><span class="pre">Message</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.broadcast" title="Link to this definition">¶</a></dt>
-<dd><p>Enqueue a message to all listeners</p>
+<dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.register_listener">
+<span class="sig-name descname"><span class="pre">register_listener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.MessageQueueListener" title="eric_sse.entities.MessageQueueListener"><span class="pre">MessageQueueListener</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.register_listener" title="Link to this definition">¶</a></dt>
+<dd><p>Adds a listener to channel</p>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.remove_listener">
+<span class="sig-name descname"><span class="pre">remove_listener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.remove_listener" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.deliver_next">
@@ -80,6 +162,22 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.broadcast">
+<span class="sig-name descname"><span class="pre">broadcast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.Message" title="eric_sse.entities.Message"><span class="pre">Message</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.broadcast" title="Link to this definition">¶</a></dt>
+<dd><p>Enqueue a message to all listeners</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.get_listener">
+<span class="sig-name descname"><span class="pre">get_listener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#eric_sse.entities.MessageQueueListener" title="eric_sse.entities.MessageQueueListener"><span class="pre">MessageQueueListener</span></a></span></span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.get_listener" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.adapt">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">adapt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.Message" title="eric_sse.entities.Message"><span class="pre">Message</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.adapt" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.message_stream">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">message_stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.MessageQueueListener" title="eric_sse.entities.MessageQueueListener"><span class="pre">MessageQueueListener</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">AsyncIterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.message_stream" title="Link to this definition">¶</a></dt>
 <dd><p>Entry point for message streaming</p>
@@ -88,44 +186,16 @@ correspondant listener is stopped</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.watch">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">watch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">AsyncIterable</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.watch" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.notify_end">
 <span class="sig-name descname"><span class="pre">notify_end</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.notify_end" title="Link to this definition">¶</a></dt>
 <dd><p>Broadcasts a MESSAGE_TYPE_CLOSED Message</p>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.register_listener">
-<span class="sig-name descname"><span class="pre">register_listener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.MessageQueueListener" title="eric_sse.entities.MessageQueueListener"><span class="pre">MessageQueueListener</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.register_listener" title="Link to this definition">¶</a></dt>
-<dd><p>Adds a listener to channel</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="eric_sse.entities.Message">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.Message" title="Link to this definition">¶</a></dt>
-<dd><p>Models a message</p>
-<p>It’s just a container of information identified by a type.
-For validation purposes you can override MessageQueueListener.on_message</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="eric_sse.entities.MessageQueueListener">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MessageQueueListener</span></span><a class="headerlink" href="#eric_sse.entities.MessageQueueListener" title="Link to this definition">¶</a></dt>
-<dd><p>Base class for listeners.</p>
-<p>Optionally you can override on_message method if you need to inject code at message delivery time.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="eric_sse.entities.MessageQueueListener.on_message">
-<span class="sig-name descname"><span class="pre">on_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.entities.Message" title="eric_sse.entities.Message"><span class="pre">Message</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#eric_sse.entities.MessageQueueListener.on_message" title="Link to this definition">¶</a></dt>
-<dd><p>Event handler. It executes when a message is delivered to client</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="eric_sse.entities.SignedMessage">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SignedMessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg_payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.SignedMessage" title="Link to this definition">¶</a></dt>
-<dd><p>A wrapper that adds sender id</p>
 </dd></dl>
 
 </section>
@@ -265,10 +335,10 @@ Use ‘stop’ as Message type to stop receiver listener.</p>
           <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="#module-eric_sse.entities">Entities</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#eric_sse.entities.AbstractChannel"><code class="docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#eric_sse.entities.Message"><code class="docutils literal notranslate"><span class="pre">Message</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#eric_sse.entities.MessageQueueListener"><code class="docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#eric_sse.entities.SignedMessage"><code class="docutils literal notranslate"><span class="pre">SignedMessage</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.entities.MessageQueueListener"><code class="docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#eric_sse.entities.AbstractChannel"><code class="docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#module-eric_sse.prefabs">Prefab channels and listeners</a><ul>
