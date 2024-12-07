@@ -1,5 +1,7 @@
 Changelog
 =========
+0.6.0.4
+* Added more functionalities to SocketServer and SocketClient
 
 0.6.0.2
 

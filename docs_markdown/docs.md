@@ -223,6 +223,7 @@ An implementation of a socket server that acts as a controller to interact with 
     "v": "verb" 
     "t": "message type" 
     "p": "message payload" 
+    "r": "receiver (listener id when verb is 'rl')"
 }
 ```
 
@@ -235,6 +236,8 @@ Possible values of **verb** identifies a supported action:
 "r" add listener
 "l" listen (opens a stream)
 "w" watch (opens a stream)
+"rl" remove a listener
+"rc" remove a channel
 ```
 
 See examples

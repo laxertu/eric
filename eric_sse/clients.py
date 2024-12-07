@@ -21,7 +21,7 @@ class SocketClient:
         await w.wait_closed()
         return response.decode()
 
-    async def create_channel(self):
+    async def create_channel(self) -> str:
         return await self.send_payload({
             'v': 'c',
         })
@@ -39,3 +39,28 @@ class SocketClient:
             't': message_type,
             'p': payload
         })
+
+    async def dispatch(self, channel_id: str, receiver_id: str, message_type: str, payload: str | dict | int | float):
+        return await self.send_payload({
+            'v': 'd',
+            'c': channel_id,
+            'r': receiver_id,
+            't': message_type,
+            'p': payload
+        })
+
+
+    async def remove_listener(self, channel_id: str, listener_id: str):
+        return await self.send_payload({
+                'v': 'rl',
+                'c': channel_id,
+                'r': listener_id
+            }
+        )
+
+    async def remove_channel(self, channel_id: str):
+        return await self.send_payload({
+                'v': 'rc',
+                'c': channel_id
+            }
+        )

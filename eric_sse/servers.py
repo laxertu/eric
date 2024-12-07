@@ -49,6 +49,7 @@ class SocketServer:
             "v": "verb" 
             "t": "message type" 
             "p": "message payload" 
+            "r": "receiver (listener id when verb is 'rl')"
         }
 
 
@@ -60,6 +61,8 @@ class SocketServer:
         "r" add listener
         "l" listen (opens a stream)
         "w" watch (opens a stream)
+        "rl" remove a listener
+        "rc" remove a channel
 
     See examples
     """
@@ -78,7 +81,7 @@ class SocketServer:
 
             channel_id = parsed.get('c')
             message = None
-            if verb not in ['w', 'c', 'l', 'r']:
+            if verb not in ['w', 'c', 'l', 'r', 'rl', 'rc']:
                 message = Message(type=parsed['t'], payload=parsed.get('p'))
 
             receiver_id: str = parsed.get('r')
@@ -124,6 +127,14 @@ class SocketServer:
         elif verb == 'r':
             l = SocketServer.cc.get(channel_id).add_listener()
             yield l.id
+
+        elif verb == 'rl':
+            SocketServer.cc.get(channel_id).remove_listener(l_id=receiver_id)
+            yield SocketServer.ACK
+
+        elif verb == 'rc':
+            SocketServer.cc.rm(channel_id)
+            yield SocketServer.ACK
 
         elif verb == 'l':
             logger.info(f"Client listening on {receiver_id}")
