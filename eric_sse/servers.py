@@ -56,7 +56,8 @@ class SocketServer:
 
         "d" dispatch
         "b" broadcast
-        "c" add listener
+        "c" create channel
+        "r" add listener
         "l" listen (opens a stream)
         "w" watch (opens a stream)
 

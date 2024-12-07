@@ -231,7 +231,8 @@ Possible values of **verb** identifies a supported action:
 ```default
 "d" dispatch
 "b" broadcast
-"c" add listener
+"c" create channel
+"r" add listener
 "l" listen (opens a stream)
 "w" watch (opens a stream)
 ```
