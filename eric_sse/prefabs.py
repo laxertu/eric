@@ -22,12 +22,15 @@ class SSEChannel(AbstractChannel):
         """
         super().__init__(stream_delay_seconds=stream_delay_seconds)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
+        self.payload_adatper: (
+            Callable)[[dict | list | str | int | float | None], dict | list | str | int | float | None] = lambda x: x
+
 
     def adapt(self, msg: Message) -> dict:
         return {
             "event": msg.type,
             "retry": self.retry_timeout_milliseconds,
-            "data": msg.payload
+            "data": self.payload_adatper(msg.payload)
         }
 
 
@@ -110,6 +113,10 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         if action in self.__internal_actions:
             raise KeyError(f'Trying to set an internal action {action}')
         self.__actions[name] = action
+
+    def dispatch_to(self, receiver: MessageQueueListener, msg: Message):
+        signed_message = SignedMessage(sender_id=self.id, msg_type=msg.type, msg_payload=msg.payload)
+        self.__channel.dispatch(receiver.id, signed_message)
 
     def on_message(self, msg: Message) -> None:
         """Executes action correspondant to message's type"""

@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 from asyncio import open_unix_connection
+from typing import AsyncIterable
 
 
 class SocketClient:
@@ -31,6 +32,23 @@ class SocketClient:
             'v': 'r',
             'c': channel_id,
         })
+
+    async def stream(self, channel_id, listener_id) -> AsyncIterable[str]:
+        r, w = await open_unix_connection(self.__descriptor_path)
+        payload = {
+            'c': channel_id,
+            'r': listener_id,
+            'v': 'l',
+        }
+        w.write(json.dumps(payload).encode())
+        w.write_eof()
+        await w.drain()
+
+        while not r.at_eof():
+            m = await r.readline()
+            yield m.decode()
+
+
 
     async def broadcast_message(self, channel_id: str, message_type: str, payload: str | dict | int | float):
         return await self.send_payload({

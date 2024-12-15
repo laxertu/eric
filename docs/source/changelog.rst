@@ -1,6 +1,14 @@
 Changelog
 =========
+0.6.1
+
+* Added watch support to SocketClient
+* Added payload_adapter to SSEChannel
+* Added dispatch_to to SimpleDistributedApplicationListener
+
+
 0.6.0.4
+
 * Added more functionalities to SocketServer and SocketClient
 
 0.6.0.2

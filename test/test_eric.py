@@ -1,3 +1,4 @@
+import json
 from unittest import TestCase, IsolatedAsyncioTestCase
 
 from eric_sse.entities import Message, MessageQueueListener, SignedMessage
@@ -96,6 +97,18 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
             m_2.id: [msg_to_send]
         }
         self.assertEqual(expected, c.queues)
+
+    async def test_payload_adapter_json(self):
+        self.sut.payload_adatper = json.dumps
+        listener = MessageQueueListenerMock()
+        self.sut.register_listener(listener)
+        listener.start_sync()
+        self.sut.dispatch(listener.id, Message(type="test", payload={'a': 1}))
+
+        async for m in await self.sut.message_stream(listener):
+            self.assertEqual(m['data'], json.dumps({'a': 1}))
+
+        self.assertEqual(1, listener.num_received)
 
     async def test_dispatch_ok(self):
         c = self.sut
