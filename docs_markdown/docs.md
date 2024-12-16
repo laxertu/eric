@@ -178,7 +178,7 @@ Launches the processing of the given listener’s queue
 
 Bases: [`MessageQueueListener`](#eric_sse.entities.MessageQueueListener)
 
-Listener for distrubuted applications
+Listener for distributed applications
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.set_action"></a>
 
