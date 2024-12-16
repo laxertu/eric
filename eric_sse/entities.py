@@ -10,7 +10,7 @@ from eric_sse.exception import InvalidListenerException, NoMessagesException
 logger = eric_sse.get_logger()
 
 MESSAGE_TYPE_CLOSED = '_eric_channel_closed'
-MESSAGE_TYPE_END_OF_STREAM = '_eric_channel_closed'
+MESSAGE_TYPE_END_OF_STREAM = '_eric_channel_eof'
 MESSAGE_TYPE_INTERNAL_ERROR = '_eric_error'
 
 
