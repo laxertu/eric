@@ -118,7 +118,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         signed_message = SignedMessage(sender_id=self.id, msg_type=msg.type, msg_payload=msg.payload)
         self.__channel.dispatch(receiver.id, signed_message)
 
-    def on_message(self, msg: Message) -> None:
+    def on_message(self, msg: SignedMessage) -> None:
         """Executes action correspondant to message's type"""
         try:
             try:
@@ -130,6 +130,6 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
             msgs = self.__actions[msg.type](msg)
             for response in msgs:
                 signed_response = SignedMessage(sender_id=self.id, msg_type=response.type, msg_payload=response.payload)
-                self.__channel.dispatch(msg.payload['sender_id'], signed_response)
+                self.__channel.dispatch(msg.sender_id, signed_response)
         except KeyError:
             logger.error(f'Unknown action {msg.type}')
