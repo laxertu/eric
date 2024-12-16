@@ -47,7 +47,7 @@ class DataProcessingChannel(AbstractChannel):
     def __init__(self, max_workers: int, stream_delay_seconds: int = 0):
         """
         :param max_workers: Num of workers to use
-        :param stream_delay_seconds: Can be used to limit response rate of streamings. Only applies to message_stream calls.
+        :param stream_delay_seconds: Can be used to limit response rate of streaming. Only applies to message_stream calls.
         """
         super().__init__(stream_delay_seconds=stream_delay_seconds)
         self.max_workers = max_workers
@@ -85,7 +85,7 @@ class DataProcessingChannel(AbstractChannel):
 
 
 class SimpleDistributedApplicationListener(MessageQueueListener):
-    """Listener for distrubuted applications"""
+    """Listener for distributed applications"""
 
     def __init__(self, channel: AbstractChannel):
         super().__init__()
