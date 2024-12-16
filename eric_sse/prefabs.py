@@ -63,14 +63,14 @@ class DataProcessingChannel(AbstractChannel):
 
     def __prepare_executor(self, listener: MessageQueueListener) -> Iterator[Future]:
         with ThreadPoolExecutor(self.max_workers) as e:
-            there_are_peding_messages = True
-            while there_are_peding_messages:
+            there_are_pending_messages = True
+            while there_are_pending_messages:
                 try:
                     msg = self.queues[listener.id].pop(0)
                     yield e.submit(self.__invoke_callback_and_return, listener.on_message, msg)
 
                 except IndexError:
-                    there_are_peding_messages = False
+                    there_are_pending_messages = False
 
     @staticmethod
     def __invoke_callback_and_return(callback: Callable[[Message], None], msg: Message):

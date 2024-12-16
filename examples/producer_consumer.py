@@ -1,4 +1,4 @@
-import asyncio, logging
+import asyncio
 from random import uniform
 from time import sleep
 from eric_sse import get_logger
