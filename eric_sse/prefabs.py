@@ -22,7 +22,7 @@ class SSEChannel(AbstractChannel):
         """
         super().__init__(stream_delay_seconds=stream_delay_seconds)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
-        self.payload_adatper: (
+        self.payload_adapter: (
             Callable)[[dict | list | str | int | float | None], dict | list | str | int | float | None] = lambda x: x
 
 
@@ -30,7 +30,7 @@ class SSEChannel(AbstractChannel):
         return {
             "event": msg.type,
             "retry": self.retry_timeout_milliseconds,
-            "data": self.payload_adatper(msg.payload)
+            "data": self.payload_adapter(msg.payload)
         }
 
 

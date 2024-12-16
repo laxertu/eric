@@ -99,7 +99,7 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
         self.assertEqual(expected, c.queues)
 
     async def test_payload_adapter_json(self):
-        self.sut.payload_adatper = json.dumps
+        self.sut.payload_adapter = json.dumps
         listener = MessageQueueListenerMock()
         self.sut.register_listener(listener)
         listener.start_sync()
