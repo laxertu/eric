@@ -1,4 +1,6 @@
 import asyncio, logging
+import json
+
 from eric_sse.entities import Message
 from eric_sse.prefabs import SimpleDistributedApplicationListener, SSEChannel
 
