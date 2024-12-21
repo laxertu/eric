@@ -19,14 +19,6 @@
 * Message queue processing (logging, etc)
 * See [https://github.com/laxertu/eric-api](https://github.com/laxertu/eric-api)
 
-*Table of contents*
-
-* [Overview](docs.md)
-* [Entities](docs.md#module-eric_sse.entities)
-* [Prefab channels and listeners](docs.md#module-eric_sse.prefabs)
-* [Prefab servers and clients](docs.md#module-eric_sse.servers)
-* [Exceptions](docs.md#module-eric_sse.exception)
-
 *Sources*
 
 * Home [https://github.com/laxertu/eric](https://github.com/laxertu/eric)
