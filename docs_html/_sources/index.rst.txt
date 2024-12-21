@@ -29,6 +29,14 @@ The lightweight library for async messaging nobody expects.
 * Message queue processing (logging, etc)
 * See https://github.com/laxertu/eric-api
 
+*Table of contents*
+
+.. toctree::
+   :maxdepth: 1
+
+   docs
+
+
 *Sources*
 
 * Home https://github.com/laxertu/eric

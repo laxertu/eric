@@ -193,7 +193,7 @@ Use ‘stop’ as Message type to stop receiver listener.
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"></a>
 
-#### on_message(msg: [Message](#eric_sse.entities.Message)) → None
+#### on_message(msg: [SignedMessage](#eric_sse.entities.SignedMessage)) → None
 
 Executes action correspondant to message’s type
 
