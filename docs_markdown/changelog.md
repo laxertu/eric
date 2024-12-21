@@ -2,6 +2,14 @@
 
 # Changelog
 
+0.6.2
+
+Breaking:
+
+* Fixed property typo payload_adapter of SSEChannel
+* Changed MESSAGE_TYPE_END_OF_STREAM value
+* SimpleDistributedApplicationListener.on_message now requires a SignedMessage
+
 0.6.1
 
 * Added watch support to SocketClient

@@ -99,7 +99,7 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
         self.assertEqual(expected, c.queues)
 
     async def test_payload_adapter_json(self):
-        self.sut.payload_adatper = json.dumps
+        self.sut.payload_adapter = json.dumps
         listener = MessageQueueListenerMock()
         self.sut.register_listener(listener)
         listener.start_sync()
@@ -198,10 +198,10 @@ class DistributedListenerTestCase(IsolatedAsyncioTestCase):
         bob = DistributedListenerTestCase.create_listener(ssc)
 
         # Bob says hello to Alice
-        ssc.dispatch(alice.id, Message(type='hello', payload={'sender_id': bob.id, 'payload': 'hello!'}))
+        bob.dispatch_to(alice, Message(type='hello', payload='hello!'))
 
         # Alice will stop after having answered to Bob
-        ssc.dispatch(alice.id, Message(type='stop'))
+        bob.dispatch_to(alice, Message(type='stop'))
 
         types = [m['event'] async for m in await ssc.message_stream(alice)]
         self.assertEqual(['hello', 'stop'], types)

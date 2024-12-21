@@ -178,7 +178,7 @@ Launches the processing of the given listener’s queue
 
 Bases: [`MessageQueueListener`](#eric_sse.entities.MessageQueueListener)
 
-Listener for distrubuted applications
+Listener for distributed applications
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.set_action"></a>
 
@@ -193,7 +193,7 @@ Use ‘stop’ as Message type to stop receiver listener.
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"></a>
 
-#### on_message(msg: [Message](#eric_sse.entities.Message)) → None
+#### on_message(msg: [SignedMessage](#eric_sse.entities.SignedMessage)) → None
 
 Executes action correspondant to message’s type
 

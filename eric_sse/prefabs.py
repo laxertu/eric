@@ -22,7 +22,7 @@ class SSEChannel(AbstractChannel):
         """
         super().__init__(stream_delay_seconds=stream_delay_seconds)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
-        self.payload_adatper: (
+        self.payload_adapter: (
             Callable)[[dict | list | str | int | float | None], dict | list | str | int | float | None] = lambda x: x
 
 
@@ -30,7 +30,7 @@ class SSEChannel(AbstractChannel):
         return {
             "event": msg.type,
             "retry": self.retry_timeout_milliseconds,
-            "data": self.payload_adatper(msg.payload)
+            "data": self.payload_adapter(msg.payload)
         }
 
 
@@ -47,7 +47,7 @@ class DataProcessingChannel(AbstractChannel):
     def __init__(self, max_workers: int, stream_delay_seconds: int = 0):
         """
         :param max_workers: Num of workers to use
-        :param stream_delay_seconds: Can be used to limit response rate of streamings. Only applies to message_stream calls.
+        :param stream_delay_seconds: Can be used to limit response rate of streaming. Only applies to message_stream calls.
         """
         super().__init__(stream_delay_seconds=stream_delay_seconds)
         self.max_workers = max_workers
@@ -63,14 +63,14 @@ class DataProcessingChannel(AbstractChannel):
 
     def __prepare_executor(self, listener: MessageQueueListener) -> Iterator[Future]:
         with ThreadPoolExecutor(self.max_workers) as e:
-            there_are_peding_messages = True
-            while there_are_peding_messages:
+            there_are_pending_messages = True
+            while there_are_pending_messages:
                 try:
                     msg = self.queues[listener.id].pop(0)
                     yield e.submit(self.__invoke_callback_and_return, listener.on_message, msg)
 
                 except IndexError:
-                    there_are_peding_messages = False
+                    there_are_pending_messages = False
 
     @staticmethod
     def __invoke_callback_and_return(callback: Callable[[Message], None], msg: Message):
@@ -85,7 +85,7 @@ class DataProcessingChannel(AbstractChannel):
 
 
 class SimpleDistributedApplicationListener(MessageQueueListener):
-    """Listener for distrubuted applications"""
+    """Listener for distributed applications"""
 
     def __init__(self, channel: AbstractChannel):
         super().__init__()
@@ -118,7 +118,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         signed_message = SignedMessage(sender_id=self.id, msg_type=msg.type, msg_payload=msg.payload)
         self.__channel.dispatch(receiver.id, signed_message)
 
-    def on_message(self, msg: Message) -> None:
+    def on_message(self, msg: SignedMessage) -> None:
         """Executes action correspondant to message's type"""
         try:
             try:
@@ -130,6 +130,6 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
             msgs = self.__actions[msg.type](msg)
             for response in msgs:
                 signed_response = SignedMessage(sender_id=self.id, msg_type=response.type, msg_payload=response.payload)
-                self.__channel.dispatch(msg.payload['sender_id'], signed_response)
+                self.__channel.dispatch(msg.sender_id, signed_response)
         except KeyError:
             logger.error(f'Unknown action {msg.type}')
