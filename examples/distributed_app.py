@@ -19,7 +19,7 @@ def hello_response(m: Message) -> list[Message]:
 def hello_ack_response(m: Message) -> list[Message]:
     print(m)
     try:
-        next_message = input('Say something: ')
+        next_message = input('Say something [CTRL-C to quit]: ')
     except KeyboardInterrupt:
         print("")
         print("Shutting down")
@@ -55,16 +55,10 @@ async def main():
     # Bob says hello to Alice
     bob.dispatch_to(alice, Message(type='hello', payload='hello!'))
 
-    try:
-        f2 = asyncio.create_task(do_stuff(alice))
-        f1 = asyncio.create_task(do_stuff(bob))
+    f2 = asyncio.create_task(do_stuff(alice))
+    f1 = asyncio.create_task(do_stuff(bob))
 
-        await f1
-        await f2
-    except KeyboardInterrupt:
-        print("Exiting...")
-        alice.stop_sync()
-        bob.stop_sync()
-
+    await f1
+    await f2
 
 asyncio.get_event_loop().run_until_complete(main())
