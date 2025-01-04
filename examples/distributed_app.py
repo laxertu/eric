@@ -41,7 +41,7 @@ async def main():
     bob = create_listener(ssc)
 
     # Bob says hello to Alice
-    bob.dispatch_to(alice, Message(type='hello', payload={'sender_id': bob.id, 'payload': 'hello!'}))
+    bob.dispatch_to(alice, Message(type='hello', payload='hello!'))
 
     f2 = asyncio.create_task(do_stuff(alice))
     f1 = asyncio.create_task(do_stuff(bob))
