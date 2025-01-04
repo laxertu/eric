@@ -16,9 +16,9 @@
 
 import sys
 from pathlib import Path
-eric_root_dir = Path(__file__).parent.parent.parent
-eric_modules_path = f'{eric_root_dir.absolute()}'
-sys.path.append(eric_modules_path)
+__eric_root_dir = Path(__file__).parent.parent.parent
+__eric_modules_path = f'{__eric_root_dir.absolute()}'
+sys.path.append(__eric_modules_path)
 
 
 # -- Project information -----------------------------------------------------
