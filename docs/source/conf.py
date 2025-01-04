@@ -14,15 +14,20 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
+import sys
+from pathlib import Path
+eric_root_dir = Path(__file__).parent.parent.parent
+eric_modules_path = f'{eric_root_dir.absolute()}'
+sys.path.append(eric_modules_path)
+
 
 # -- Project information -----------------------------------------------------
-
 project = 'eric_sse'
 copyright = '2024, Luca Stretti'
 author = 'Luca Stretti'
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.2'
+# release = '1.0.0'
 
 
 # -- General configuration ---------------------------------------------------
