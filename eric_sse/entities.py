@@ -1,4 +1,5 @@
 import asyncio
+import traceback
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from threading import Lock
@@ -170,9 +171,6 @@ class AbstractChannel(ABC):
     async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
         """
         Entry point for message streaming
-
-        In case of failure at channel resolution time, a special message with type=MESSAGE_TYPE_CLOSED is sent, and
-        correspondant listener is stopped
         """
 
         def new_messages():
@@ -195,11 +193,9 @@ class AbstractChannel(ABC):
 
                     await asyncio.sleep(self.stream_delay_seconds)
 
-                except InvalidListenerException as e:
-                    logger.info(f"Stopping listener {listener.id}")
-                    logger.debug(e)
-                    await listener.stop()
-                    yield self.adapt(Message(type=MESSAGE_TYPE_END_OF_STREAM))
+                except Exception as e:
+                    logger.debug(traceback.format_exc())
+                    logger.error(e)
 
         return event_generator()
 
