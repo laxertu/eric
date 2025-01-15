@@ -90,7 +90,7 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
             self.assertDictEqual(
                 {'data': {}, 'event': 'test', 'retry': c.retry_timeout_milliseconds}, msg_received
             )
-
+        self.assertEqual(1, m_1.num_received)
         # queue is ok
         expected = {
             m_1.id: [],
