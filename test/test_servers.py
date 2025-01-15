@@ -8,9 +8,8 @@ from eric_sse.servers import SocketServer, SSEChannelContainer
 SOCKET_FILE_DESCRIPTOR_PATH = 'socketserver_e2e_test.sock'
 
 
-class SocketServerTestCase(IsolatedAsyncioTestCase):
-
-    def setUp(self):
+class TestSocketServer(IsolatedAsyncioTestCase):
+    async def asyncSetUp(self):
         channel_container_mock = MagicMock(SSEChannelContainer)
         channel_mock = MagicMock(SSEChannel)
         channel_container_mock.get = MagicMock(return_value=channel_mock)
@@ -19,17 +18,19 @@ class SocketServerTestCase(IsolatedAsyncioTestCase):
         self.sut = SocketServer(SOCKET_FILE_DESCRIPTOR_PATH)
         self.channel_mock = channel_mock
 
-    def tearDown(self):
+        asyncio.get_running_loop().create_task(self.sut.main())
+        await asyncio.sleep(0)
+
+    async def asyncTearDown(self):
+        await self.sut.shutdown()
         SocketServer.cc = SSEChannelContainer()
+
+class SocketServerTestCase(TestSocketServer):
+
 
     async def test_server(self):
 
         client = SocketClient(SOCKET_FILE_DESCRIPTOR_PATH)
-        server = SocketServer(SOCKET_FILE_DESCRIPTOR_PATH)
-        asyncio.get_running_loop().create_task(server.main())
-        await asyncio.sleep(0)
-
-
         server_response = await client.send_payload({
             'v': 'b',
             'c': '1',
@@ -38,21 +39,9 @@ class SocketServerTestCase(IsolatedAsyncioTestCase):
         })
 
         self.assertEqual(server_response, SocketServer.ACK)
-        await server.shutdown()
 
-class SocketServerIntgrationTestCase(IsolatedAsyncioTestCase):
+class SocketServerIntegrationTestCase(TestSocketServer):
 
-    def setUp(self):
-        channel_container_mock = MagicMock(SSEChannelContainer)
-        channel_mock = MagicMock(SSEChannel)
-        channel_container_mock.get = MagicMock(return_value=channel_mock)
-        SocketServer.cc = channel_container_mock
-
-        self.sut = SocketServer(SOCKET_FILE_DESCRIPTOR_PATH)
-        self.channel_mock = channel_mock
-
-    def tearDown(self):
-        SocketServer.cc = SSEChannelContainer()
 
     async def test_send(self):
         payload = json.dumps({
@@ -69,14 +58,17 @@ class SocketServerIntgrationTestCase(IsolatedAsyncioTestCase):
 
 
 class ClientIntegrationTestCase(IsolatedAsyncioTestCase):
-    def setUp(self):
-        self.sut = SocketClient(SOCKET_FILE_DESCRIPTOR_PATH)
-
-    async def test_integration(self):
-
+    async def asyncSetUp(self):
         server = SocketServer(SOCKET_FILE_DESCRIPTOR_PATH)
         asyncio.get_running_loop().create_task(server.main())
         await asyncio.sleep(0)
+        self.sut = SocketClient(SOCKET_FILE_DESCRIPTOR_PATH)
+        self.server = server
+
+    async def asyncTearDown(self):
+        await self.server.shutdown()
+
+    async def test_integration(self):
 
         channel_id = await self.sut.create_channel()
         self.assertTrue(int(channel_id) > 0)
