@@ -25,7 +25,6 @@ class SSEChannel(AbstractChannel):
         self.payload_adapter: (
             Callable)[[dict | list | str | int | float | None], dict | list | str | int | float | None] = lambda x: x
 
-
     def adapt(self, msg: Message) -> dict:
         return {
             "event": msg.type,

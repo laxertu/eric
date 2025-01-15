@@ -8,6 +8,7 @@ class SocketClient:
     """
     A little facade to interact with SocketServer
     """
+
     def __init__(self, file_descriptor_path: str):
         self.__descriptor_path = Path(file_descriptor_path)
 
@@ -48,8 +49,6 @@ class SocketClient:
             m = await r.readline()
             yield m.decode()
 
-
-
     async def broadcast_message(self, channel_id: str, message_type: str, payload: str | dict | int | float):
         return await self.send_payload({
             'v': 'b',
@@ -67,18 +66,17 @@ class SocketClient:
             'p': payload
         })
 
-
     async def remove_listener(self, channel_id: str, listener_id: str):
         return await self.send_payload({
-                'v': 'rl',
-                'c': channel_id,
-                'r': listener_id
-            }
+            'v': 'rl',
+            'c': channel_id,
+            'r': listener_id
+        }
         )
 
     async def remove_channel(self, channel_id: str):
         return await self.send_payload({
-                'v': 'rc',
-                'c': channel_id
-            }
+            'v': 'rc',
+            'c': channel_id
+        }
         )

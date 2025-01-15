@@ -29,6 +29,7 @@ class Message:
 @dataclass
 class SignedMessage(Message):
     """A wrapper that adds sender id"""
+
     def __init__(self, sender_id: str, msg_type: str, msg_payload: dict | list | str | int | float | None = None):
         self.sender_id = sender_id
         self.__msg_type = msg_type
@@ -173,6 +174,7 @@ class AbstractChannel(ABC):
         In case of failure at channel resolution time, a special message with type=MESSAGE_TYPE_CLOSED is sent, and
         correspondant listener is stopped
         """
+
         def new_messages():
             try:
                 yield self.deliver_next(listener.id)

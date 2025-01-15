@@ -222,6 +222,3 @@ class DataProcessingChannelTestCase(IsolatedAsyncioTestCase):
         await listener.start()
         types = {m['event'] async for m in await channel.process_queue(listener)}
         self.assertEqual({'test1', 'test2', 'test3'}, types)
-
-
-
