@@ -99,10 +99,15 @@ class AbstractChannel(ABC):
             self.id: str = str(AbstractChannel.NEXT_ID)
             AbstractChannel.NEXT_ID += 1
 
-        self.listeners: dict[str: MessageQueueListener] = {}
-        self.queues: dict[str: list[Message]] = {}
         self.stream_delay_seconds = stream_delay_seconds
+
+        self.__listeners: dict[str: MessageQueueListener] = {}
+        self.__queues: dict[str: list[Message]] = {}
         self.__streaming_listeners: set[str] = set()
+
+    @property
+    def queues(self) -> dict[str: list[Message]]:
+        return self.__queues
 
     def add_listener(self) -> MessageQueueListener:
         """Add the default listener"""
@@ -114,12 +119,12 @@ class AbstractChannel(ABC):
         """
         Adds a listener to channel
         """
-        self.listeners[l.id] = l
-        self.queues[l.id] = []
+        self.__listeners[l.id] = l
+        self.__queues[l.id] = []
 
     def remove_listener(self, l_id: str):
-        del self.queues[l_id]
-        del self.listeners[l_id]
+        del self.__queues[l_id]
+        del self.__listeners[l_id]
 
     def deliver_next(self, listener_id: str) -> Message:
         """
@@ -131,16 +136,16 @@ class AbstractChannel(ABC):
         if listener.is_running_sync():
             try:
                 with Lock():
-                    msg = self.__get_queue(listener_id).pop(0)
+                    msg = self._get_queue(listener_id).pop(0)
                     listener.on_message(msg)
                     return msg
             except IndexError:
                 raise NoMessagesException
         raise NoMessagesException
 
-    def __get_queue(self, listener_id: str) -> list[Message]:
+    def _get_queue(self, listener_id: str) -> list[Message]:
         try:
-            return self.queues[listener_id]
+            return self.__queues[listener_id]
         except KeyError:
             raise InvalidListenerException(f"Invalid listener {listener_id}")
 
@@ -151,16 +156,16 @@ class AbstractChannel(ABC):
         logger.debug(f"Dispatched {msg} to {listener_id}")
 
     def __add_to_queue(self, listener_id: str, msg: Message):
-        self.__get_queue(listener_id).append(msg)
+        self._get_queue(listener_id).append(msg)
 
     def broadcast(self, msg: Message):
         """Enqueue a message to all listeners"""
-        for listener_id in self.listeners.keys():
+        for listener_id in self.__listeners.keys():
             self.dispatch(listener_id, msg=msg)
 
     def get_listener(self, listener_id: str) -> MessageQueueListener:
         try:
-            return self.listeners[listener_id]
+            return self.__listeners[listener_id]
         except KeyError:
             raise InvalidListenerException
 

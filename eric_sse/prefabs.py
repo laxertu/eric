@@ -65,7 +65,7 @@ class DataProcessingChannel(AbstractChannel):
             there_are_pending_messages = True
             while there_are_pending_messages:
                 try:
-                    msg = self.queues[listener.id].pop(0)
+                    msg = self._get_queue(listener.id).pop(0)
                     yield e.submit(self.__invoke_callback_and_return, listener.on_message, msg)
 
                 except IndexError:
