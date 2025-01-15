@@ -131,4 +131,4 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
                 signed_response = SignedMessage(sender_id=self.id, msg_type=response.type, msg_payload=response.payload)
                 self.__channel.dispatch(msg.sender_id, signed_response)
         except KeyError:
-            logger.error(f'Unknown action {msg.type}')
+            logger.debug(f'Unknown action {msg.type}')
