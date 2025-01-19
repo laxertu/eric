@@ -14,3 +14,8 @@ class Repository(ABC):
     @abstractmethod
     def rm(self, key: str):
         ...
+
+class RepositoryError(Exception):
+    ...
+
+# TODO persistence decorator
