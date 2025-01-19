@@ -123,7 +123,7 @@ class AbstractChannel(ABC):
         logger.debug(f"Dispatched {msg} to {listener_id}")
 
     def __add_to_queue(self, listener_id: str, msg: Message):
-        self._get_queue(listener_id).add(msg)
+        self._get_queue(listener_id).push(msg)
 
     def broadcast(self, msg: Message):
         """Enqueue a message to all listeners"""

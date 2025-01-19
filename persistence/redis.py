@@ -4,17 +4,20 @@ from json import JSONDecodeError
 import redis
 
 from uuid import uuid4
-from eric_sse.message import Message, UniqueMessage
-from eric_sse.queue import Queue
+from eric_sse.message import Message
+from eric_sse.queue import Queue, AbstractMessageQueueFactory
 from persistence import RepositoryError
 
 class RedisQueue(Queue):
 
-    def __init__(self, host: str, port: int, db: int, password: str = None):
+    def __init__(self, **kwargs):
+        """
+        :param kwargs: Arguments accepted by redis.Redis constructor
+        """
         self.id = str(uuid4())
-        self.__client = redis.Redis(host=host, port=port, db=db, password=password)
+        self.__client = redis.Redis(kwargs)
 
-    def pop(self) -> UniqueMessage:
+    def pop(self) -> Message:
         try:
             value = json.loads(self.__client.lpop(self.id))
         except redis.exceptions.ResponseError as e:
@@ -23,11 +26,16 @@ class RedisQueue(Queue):
             raise RepositoryError(e)
 
         msg = Message(type=value['type'], payload=value['payload'])
-        return UniqueMessage(message_id=value['id'], sender_id=value['sender_id'], message=msg)
+        return msg
 
-    def add(self, msg: UniqueMessage) -> None:
-        value = json.dumps({'id': msg.id, 'sender_id': msg.sender_id, 'type': msg.type, 'payload': msg.payload})
+    def push(self, msg: Message) -> None:
+        value = json.dumps({'type': msg.type, 'payload': msg.payload})
         try:
             self.__client.rpush(value)
         except redis.exceptions.ResponseError as e:
             raise RepositoryError(e)
+
+
+class RedisQueueFactory(AbstractMessageQueueFactory):
+    def create(self) -> Queue:
+        return RedisQueue()

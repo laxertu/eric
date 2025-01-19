@@ -11,7 +11,7 @@ class Queue(ABC):
         ...
 
     @abstractmethod
-    def add(self, message: Message) -> None:
+    def push(self, message: Message) -> None:
         ...
 
 
@@ -26,7 +26,7 @@ class InMemoryQueue(Queue):
         except IndexError:
             raise NoMessagesException
 
-    def add(self, message: Message) -> None:
+    def push(self, message: Message) -> None:
         self.__messages.append(message)
 
 
