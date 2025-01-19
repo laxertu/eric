@@ -2,6 +2,7 @@ import json
 from unittest import TestCase, IsolatedAsyncioTestCase
 
 from eric_sse.entities import Message, MessageQueueListener, SignedMessage
+from eric_sse.exception import NoMessagesException
 from eric_sse.prefabs import SSEChannel, SimpleDistributedApplicationListener, DataProcessingChannel
 
 
@@ -79,11 +80,6 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
         # 1 broadcast
         msg_to_send = Message(type='test', payload={})
         c.broadcast(msg=msg_to_send)
-        expected = {
-            m_1.id: [msg_to_send],
-            m_2.id: [msg_to_send]
-        }
-        self.assertEqual(expected, c.queues)
 
         # message is received correctly
         async for msg_received in await self.sut.message_stream(listener=m_1):
@@ -91,12 +87,14 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
                 {'data': {}, 'event': 'test', 'retry': c.retry_timeout_milliseconds}, msg_received
             )
         self.assertEqual(1, m_1.num_received)
-        # queue is ok
-        expected = {
-            m_1.id: [],
-            m_2.id: [msg_to_send]
-        }
-        self.assertEqual(expected, c.queues)
+
+        with self.assertRaises(NoMessagesException):
+            self.sut.deliver_next(m_1.id)
+
+        self.assertTrue(msg_to_send, self.sut.deliver_next(m_2.id))
+
+        with self.assertRaises(NoMessagesException):
+            self.sut.deliver_next(m_2.id)
 
     async def test_payload_adapter_json(self):
         self.sut.payload_adapter = json.dumps
@@ -121,7 +119,9 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
         async for msg in await c.message_stream(listener):
             self.assertDictEqual({'data': {'a': 1}, 'event': 'test', 'retry': c.retry_timeout_milliseconds}, msg)
 
-        self.assertDictEqual({listener.id: []}, c.queues)
+        with self.assertRaises(NoMessagesException):
+            self.sut.deliver_next(listener.id)
+
         self.assertEqual(2, listener.num_received)
 
     async def test_listener_as_consumer(self):

@@ -3,6 +3,7 @@ from typing import Callable, AsyncIterable, Iterator
 
 from eric_sse import get_logger
 from eric_sse.entities import AbstractChannel, Message, MessageQueueListener, SignedMessage
+from eric_sse.exception import NoMessagesException
 
 logger = get_logger()
 
@@ -65,10 +66,10 @@ class DataProcessingChannel(AbstractChannel):
             there_are_pending_messages = True
             while there_are_pending_messages:
                 try:
-                    msg = self._get_queue(listener.id).pop(0)
+                    msg = self._get_queue(listener.id).pop()
                     yield e.submit(self.__invoke_callback_and_return, listener.on_message, msg)
 
-                except IndexError:
+                except NoMessagesException:
                     there_are_pending_messages = False
 
     @staticmethod

@@ -1,5 +1,6 @@
 import asyncio
 import traceback
+from uuid import uuid1
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from threading import Lock
@@ -25,6 +26,41 @@ class Message:
     """
     type: str
     payload: dict | list | str | int | float | None = None
+
+
+class Queue(ABC):
+    @abstractmethod
+    def pop(self) -> Message:
+        ...
+
+    @abstractmethod
+    def add(self, message: Message) -> None:
+        ...
+
+class InMemoryQueue(Queue):
+    def __init__(self):
+        self.__messages: list[Message] = []
+
+    def pop(self) -> Message:
+        try:
+            with Lock():
+                return self.__messages.pop(0)
+        except IndexError:
+            raise NoMessagesException
+
+    def add(self, message: Message) -> None:
+        self.__messages.append(message)
+
+
+@dataclass
+class UniqueMessage:
+    __message: Message
+    __sender_id: str | None = None
+
+    def __init__(self, message: Message, sender_id: str = None) -> None:
+        self.__id = uuid1()
+        self.__message = message
+        self.__sender_id = sender_id
 
 
 @dataclass
@@ -102,11 +138,11 @@ class AbstractChannel(ABC):
         self.stream_delay_seconds = stream_delay_seconds
 
         self.__listeners: dict[str: MessageQueueListener] = {}
-        self.__queues: dict[str: list[Message]] = {}
+        self.__queues: dict[str: Queue] = {}
         self.__streaming_listeners: set[str] = set()
 
     @property
-    def queues(self) -> dict[str: list[Message]]:
+    def queues(self) -> dict[str: Queue]:
         return self.__queues
 
     def add_listener(self) -> MessageQueueListener:
@@ -120,7 +156,7 @@ class AbstractChannel(ABC):
         Adds a listener to channel
         """
         self.__listeners[l.id] = l
-        self.__queues[l.id] = []
+        self.__queues[l.id] = InMemoryQueue()
 
     def remove_listener(self, l_id: str):
         del self.__queues[l_id]
@@ -134,16 +170,12 @@ class AbstractChannel(ABC):
         """
         listener = self.get_listener(listener_id)
         if listener.is_running_sync():
-            try:
-                with Lock():
-                    msg = self._get_queue(listener_id).pop(0)
-                    listener.on_message(msg)
-                    return msg
-            except IndexError:
-                raise NoMessagesException
+            msg = self._get_queue(listener_id).pop()
+            listener.on_message(msg)
+            return msg
         raise NoMessagesException
 
-    def _get_queue(self, listener_id: str) -> list[Message]:
+    def _get_queue(self, listener_id: str) -> Queue:
         try:
             return self.__queues[listener_id]
         except KeyError:
@@ -156,7 +188,7 @@ class AbstractChannel(ABC):
         logger.debug(f"Dispatched {msg} to {listener_id}")
 
     def __add_to_queue(self, listener_id: str, msg: Message):
-        self._get_queue(listener_id).append(msg)
+        self._get_queue(listener_id).add(msg)
 
     def broadcast(self, msg: Message):
         """Enqueue a message to all listeners"""
