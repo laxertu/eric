@@ -5,7 +5,7 @@ import redis
 
 from uuid import uuid4
 from eric_sse.entities import Message, UniqueMessage, Queue
-from eric_sse.persistence import RepositoryError
+from persistence import RepositoryError
 
 class RedisQueue(Queue):
 

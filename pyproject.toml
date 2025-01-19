@@ -30,6 +30,6 @@ pytest-cov = "^5.0.0"
 sphinx = "^8.1.1"
 sphinx-markdown-builder = "^0.6.7"
 
-[tool.poetry.group.redis]
-[tool.poetry.group.redis.dependencies]
+[tool.poetry.group.persistence]
+[tool.poetry.group.persistence.dependencies]
 redis = {version = "^5.2.1", optional = true}
