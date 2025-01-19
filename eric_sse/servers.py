@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import AsyncIterable
 
 from eric_sse import get_logger
-from eric_sse.entities import Message
+from eric_sse.message import Message
 from eric_sse.exception import InvalidChannelException, InvalidListenerException, InvalidMessageFormat
 from eric_sse.prefabs import SSEChannel
 

@@ -1,109 +1,19 @@
 import asyncio
 import traceback
-from uuid import uuid1
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 from threading import Lock
 from typing import AsyncIterable, Any
 
 import eric_sse
 from eric_sse.exception import InvalidListenerException, NoMessagesException
+from eric_sse.message import Message
+from eric_sse.queue import Queue, AbstractMessageQueueFactory, InMemoryMessageQueueFactory
 
 logger = eric_sse.get_logger()
 
 MESSAGE_TYPE_CLOSED = '_eric_channel_closed'
 MESSAGE_TYPE_END_OF_STREAM = '_eric_channel_eof'
 MESSAGE_TYPE_INTERNAL_ERROR = '_eric_error'
-
-
-@dataclass
-class Message:
-    """
-    Models a message
-
-    It's just a container of information identified by a type.
-    For validation purposes you can override MessageQueueListener.on_message
-    """
-    type: str
-    payload: dict | list | str | int | float | None = None
-
-
-class Queue(ABC):
-    @abstractmethod
-    def pop(self) -> Message:
-        ...
-
-    @abstractmethod
-    def add(self, message: Message) -> None:
-        ...
-
-class InMemoryQueue(Queue):
-    def __init__(self):
-        self.__messages: list[Message] = []
-
-    def pop(self) -> Message:
-        try:
-            with Lock():
-                return self.__messages.pop(0)
-        except IndexError:
-            raise NoMessagesException
-
-    def add(self, message: Message) -> None:
-        self.__messages.append(message)
-
-
-class AbstractMessageQueueFactory(ABC):
-    @abstractmethod
-    def create(self) -> Queue:
-        ...
-
-class InMemoryMessageQueueFactory(AbstractMessageQueueFactory):
-    def create(self) -> Queue:
-        return InMemoryQueue()
-
-@dataclass
-class UniqueMessage:
-    __message: Message
-    __sender_id: str | None = None
-
-    def __init__(self, message_id: str, message: Message, sender_id: str = None) -> None:
-        self.__id = message_id
-        self.__message = message
-        self.__sender_id = sender_id
-
-    @property
-    def id(self) -> str:
-        return str(self.__id)
-
-    @property
-    def type(self) -> str:
-        return  self.__message.type
-
-    @property
-    def sender_id(self) -> str:
-        return self.__sender_id
-
-    @property
-    def payload(self) -> dict | list | str | int | float | None:
-        return self.__message.payload
-
-
-@dataclass
-class SignedMessage(Message):
-    """A wrapper that adds sender id"""
-
-    def __init__(self, sender_id: str, msg_type: str, msg_payload: dict | list | str | int | float | None = None):
-        self.sender_id = sender_id
-        self.__msg_type = msg_type
-        self.__msg_payload = msg_payload
-
-    @property
-    def type(self):
-        return self.__msg_type
-
-    @property
-    def payload(self) -> dict | list | str | int | float | None:
-        return {'sender_id': self.sender_id, 'payload': self.__msg_payload}
 
 
 class MessageQueueListener(ABC):

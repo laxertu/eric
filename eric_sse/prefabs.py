@@ -2,7 +2,8 @@ from concurrent.futures import ThreadPoolExecutor, Future, as_completed
 from typing import Callable, AsyncIterable, Iterator
 
 from eric_sse import get_logger
-from eric_sse.entities import AbstractChannel, Message, MessageQueueListener, SignedMessage
+from eric_sse.entities import AbstractChannel, MessageQueueListener
+from eric_sse.message import Message, SignedMessage
 from eric_sse.exception import NoMessagesException
 
 logger = get_logger()

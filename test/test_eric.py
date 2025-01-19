@@ -1,7 +1,8 @@
 import json
 from unittest import TestCase, IsolatedAsyncioTestCase
 
-from eric_sse.entities import Message, MessageQueueListener, SignedMessage
+from eric_sse.entities import MessageQueueListener
+from eric_sse.message import Message, SignedMessage
 from eric_sse.exception import NoMessagesException
 from eric_sse.prefabs import SSEChannel, SimpleDistributedApplicationListener, DataProcessingChannel
 

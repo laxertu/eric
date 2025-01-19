@@ -4,7 +4,8 @@ from json import JSONDecodeError
 import redis
 
 from uuid import uuid4
-from eric_sse.entities import Message, UniqueMessage, Queue
+from eric_sse.message import Message, UniqueMessage
+from eric_sse.queue import Queue
 from persistence import RepositoryError
 
 class RedisQueue(Queue):
