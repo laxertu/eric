@@ -52,15 +52,40 @@ class InMemoryQueue(Queue):
         self.__messages.append(message)
 
 
+class AbstractMessageQueueFactory(ABC):
+    @abstractmethod
+    def create(self) -> Queue:
+        ...
+
+class InMemoryMessageQueueFactory(AbstractMessageQueueFactory):
+    def create(self) -> Queue:
+        return InMemoryQueue()
+
 @dataclass
 class UniqueMessage:
     __message: Message
     __sender_id: str | None = None
 
-    def __init__(self, message: Message, sender_id: str = None) -> None:
-        self.__id = uuid1()
+    def __init__(self, message_id: str, message: Message, sender_id: str = None) -> None:
+        self.__id = message_id
         self.__message = message
         self.__sender_id = sender_id
+
+    @property
+    def id(self) -> str:
+        return str(self.__id)
+
+    @property
+    def type(self) -> str:
+        return  self.__message.type
+
+    @property
+    def sender_id(self) -> str:
+        return self.__sender_id
+
+    @property
+    def payload(self) -> dict | list | str | int | float | None:
+        return self.__message.payload
 
 
 @dataclass
@@ -126,7 +151,10 @@ class AbstractChannel(ABC):
     """
     NEXT_ID = 1
 
-    def __init__(self, stream_delay_seconds: int = 0):
+    def __init__(
+            self,stream_delay_seconds: int = 0,
+            queues_factory: AbstractMessageQueueFactory = InMemoryMessageQueueFactory()
+    ):
         """
         :param stream_delay_seconds: Can be used to limit response rate of streaming. Only applies to message_stream calls.
         """
@@ -139,6 +167,7 @@ class AbstractChannel(ABC):
 
         self.__listeners: dict[str: MessageQueueListener] = {}
         self.__queues: dict[str: Queue] = {}
+        self.__queues_factory = queues_factory
         self.__streaming_listeners: set[str] = set()
 
     @property
@@ -156,7 +185,7 @@ class AbstractChannel(ABC):
         Adds a listener to channel
         """
         self.__listeners[l.id] = l
-        self.__queues[l.id] = InMemoryQueue()
+        self.__queues[l.id] = self.__queues_factory.create()
 
     def remove_listener(self, l_id: str):
         del self.__queues[l_id]
