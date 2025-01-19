@@ -1,26 +1,39 @@
 import json
+from json import JSONDecodeError
 
 import redis
 
-from eric_sse.entities import Message, UniqueMessage
-from eric_sse.persistence import Repository, RepositoryError
+from uuid import uuid4
+from eric_sse.entities import Message, UniqueMessage, Queue
+from eric_sse.persistence import RepositoryError
 
-class RedisRepository(Repository):
+class RedisQueue(Queue):
 
     def __init__(self, host: str, port: int, db: int, password: str = None):
+        self.id = str(uuid4())
         self.__client = redis.Redis(host=host, port=port, db=db, password=password)
 
-    def set(self, msg: UniqueMessage):
-        value = json.dumps({'id': msg.id, 'sender_id': msg.sender_id, 'type': msg.type, 'payload': msg.payload})
-        self.__client.set(name=msg.id, value=value)
+    def pop(self) -> UniqueMessage:
+        try:
+            value = json.loads(self.__client.lpop(self.id))
+        except redis.exceptions.ResponseError as e:
+            raise RepositoryError(e)
+        except JSONDecodeError as e:
+            raise RepositoryError(e)
 
-    def get(self, key: str) -> UniqueMessage:
-        value = json.loads(self.__client.get(name=key))
         msg = Message(type=value['type'], payload=value['payload'])
         return UniqueMessage(message_id=value['id'], sender_id=value['sender_id'], message=msg)
 
-    def rm(self, key: str):
+    def add(self, msg: UniqueMessage) -> None:
+        value = json.dumps({'id': msg.id, 'sender_id': msg.sender_id, 'type': msg.type, 'payload': msg.payload})
         try:
-            self.__client.delete(key)
+            self.__client.rpush(value)
+        except redis.exceptions.ResponseError as e:
+            raise RepositoryError(e)
+
+    def set(self, msg: UniqueMessage):
+        value = json.dumps({'id': msg.id, 'sender_id': msg.sender_id, 'type': msg.type, 'payload': msg.payload})
+        try:
+            self.__client.set(name=msg.id, value=value)
         except redis.exceptions.ResponseError as e:
             raise RepositoryError(e)
