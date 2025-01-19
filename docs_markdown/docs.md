@@ -6,13 +6,13 @@
 
 thanks a lot [https://excalidraw.com](https://excalidraw.com) !!
 
-<a id="module-eric_sse.entities"></a>
+<a id="module-eric_sse.message"></a>
 
 <a id="entities"></a>
 
 # Entities
 
-<a id="eric_sse.entities.Message"></a>
+<a id="eric_sse.message.Message"></a>
 
 ### *class* Message(type: str, payload: dict | list | str | int | float | None = None)
 
@@ -21,11 +21,53 @@ Models a message
 It’s just a container of information identified by a type.
 For validation purposes you can override MessageQueueListener.on_message
 
-<a id="eric_sse.entities.SignedMessage"></a>
+<a id="eric_sse.message.Message.type"></a>
+
+#### type *: str*
+
+<a id="eric_sse.message.Message.payload"></a>
+
+#### payload *: dict | list | str | int | float | None* *= None*
+
+<a id="eric_sse.message.UniqueMessage"></a>
+
+### *class* UniqueMessage(message_id: str, message: [eric_sse.message.Message](#eric_sse.message.Message), sender_id: str = None)
+
+<a id="eric_sse.message.UniqueMessage.id"></a>
+
+#### *property* id *: str*
+
+<a id="eric_sse.message.UniqueMessage.type"></a>
+
+#### *property* type *: str*
+
+<a id="eric_sse.message.UniqueMessage.sender_id"></a>
+
+#### *property* sender_id *: str*
+
+<a id="eric_sse.message.UniqueMessage.payload"></a>
+
+#### *property* payload *: dict | list | str | int | float | None*
+
+<a id="eric_sse.message.SignedMessage"></a>
 
 ### *class* SignedMessage(sender_id: str, msg_type: str, msg_payload: dict | list | str | int | float | None = None)
 
 A wrapper that adds sender id
+
+<a id="eric_sse.message.SignedMessage.sender_id"></a>
+
+#### *property* sender_id *: str*
+
+<a id="eric_sse.message.SignedMessage.type"></a>
+
+#### *property* type
+
+<a id="eric_sse.message.SignedMessage.payload"></a>
+
+#### *property* payload *: dict | list | str | int | float | None*
+
+<a id="module-eric_sse.entities"></a>
 
 <a id="eric_sse.entities.MessageQueueListener"></a>
 
@@ -61,13 +103,13 @@ Optionally you can override on_message method if you need to inject code at mess
 
 <a id="eric_sse.entities.MessageQueueListener.on_message"></a>
 
-#### on_message(msg: [Message](#eric_sse.entities.Message)) → None
+#### on_message(msg: [Message](#eric_sse.message.Message)) → None
 
 Event handler. It executes when a message is delivered to client
 
 <a id="eric_sse.entities.AbstractChannel"></a>
 
-### *class* AbstractChannel(stream_delay_seconds: int = 0)
+### *class* AbstractChannel(stream_delay_seconds: int = 0, queues_factory: [AbstractMessageQueueFactory](#eric_sse.queue.AbstractMessageQueueFactory) | None = None)
 
 Base class for channels.
 
@@ -91,7 +133,7 @@ Adds a listener to channel
 
 <a id="eric_sse.entities.AbstractChannel.deliver_next"></a>
 
-#### deliver_next(listener_id: str) → [Message](#eric_sse.entities.Message)
+#### deliver_next(listener_id: str) → [Message](#eric_sse.message.Message)
 
 Returns next message for given listener id.
 
@@ -99,13 +141,13 @@ Raises a NoMessagesException if queue is empty
 
 <a id="eric_sse.entities.AbstractChannel.dispatch"></a>
 
-#### dispatch(listener_id: str, msg: [Message](#eric_sse.entities.Message))
+#### dispatch(listener_id: str, msg: [Message](#eric_sse.message.Message))
 
 Adds a message to listener’s queue
 
 <a id="eric_sse.entities.AbstractChannel.broadcast"></a>
 
-#### broadcast(msg: [Message](#eric_sse.entities.Message))
+#### broadcast(msg: [Message](#eric_sse.message.Message))
 
 Enqueue a message to all listeners
 
@@ -115,16 +157,13 @@ Enqueue a message to all listeners
 
 <a id="eric_sse.entities.AbstractChannel.adapt"></a>
 
-#### *abstract* adapt(msg: [Message](#eric_sse.entities.Message)) → Any
+#### *abstract* adapt(msg: [Message](#eric_sse.message.Message)) → Any
 
 <a id="eric_sse.entities.AbstractChannel.message_stream"></a>
 
 #### *async* message_stream(listener: [MessageQueueListener](#eric_sse.entities.MessageQueueListener)) → AsyncIterable[Any]
 
 Entry point for message streaming
-
-In case of failure at channel resolution time, a special message with type=MESSAGE_TYPE_CLOSED is sent, and
-correspondant listener is stopped
 
 <a id="eric_sse.entities.AbstractChannel.watch"></a>
 
@@ -182,7 +221,7 @@ Listener for distributed applications
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.set_action"></a>
 
-#### set_action(name: str, action: Callable[[[Message](#eric_sse.entities.Message)], list[[Message](#eric_sse.entities.Message)]])
+#### set_action(name: str, action: Callable[[[Message](#eric_sse.message.Message)], list[[Message](#eric_sse.message.Message)]])
 
 Hooks a callable to a string key.
 
@@ -193,7 +232,7 @@ Use ‘stop’ as Message type to stop receiver listener.
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"></a>
 
-#### on_message(msg: [SignedMessage](#eric_sse.entities.SignedMessage)) → None
+#### on_message(msg: [SignedMessage](#eric_sse.message.SignedMessage)) → None
 
 Executes action correspondant to message’s type
 
@@ -261,6 +300,48 @@ Shortcut to start a server
 ### *class* SocketClient(file_descriptor_path: str)
 
 A little facade to interact with SocketServer
+
+<a id="module-eric_sse.queue"></a>
+
+<a id="queues"></a>
+
+# Queues
+
+<a id="eric_sse.queue.Queue"></a>
+
+### *class* Queue
+
+<a id="eric_sse.queue.InMemoryQueue"></a>
+
+### *class* InMemoryQueue
+
+<a id="eric_sse.queue.AbstractMessageQueueFactory"></a>
+
+### *class* AbstractMessageQueueFactory
+
+<a id="eric_sse.queue.InMemoryMessageQueueFactory"></a>
+
+### *class* InMemoryMessageQueueFactory
+
+<a id="module-persistence.redis"></a>
+
+<a id="persistence"></a>
+
+# Persistence
+
+<a id="persistence.redis.RedisQueue"></a>
+
+### *class* RedisQueue(\*\*kwargs)
+
+Bases: [`Queue`](#eric_sse.queue.Queue)
+
+<a id="persistence.redis.RedisQueueFactory"></a>
+
+### *class* RedisQueueFactory
+
+Bases: [`AbstractMessageQueueFactory`](#eric_sse.queue.AbstractMessageQueueFactory)
+
+Inject this class to Channels to enable Messages persistence on a Redis database
 
 <a id="module-eric_sse.exception"></a>
 

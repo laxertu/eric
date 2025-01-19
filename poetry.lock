@@ -15,7 +15,7 @@ files = [
 name = "async-timeout"
 version = "5.0.1"
 description = "Timeout context manager for asyncio programs"
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "async_timeout-5.0.1-py3-none-any.whl", hash = "sha256:39e3809566ff85354557ec2398b55e096c8364bacac9405a7a1fa429e77fe76c"},
@@ -261,6 +261,25 @@ files = [
 ]
 
 [[package]]
+name = "eric-redis-queues"
+version = "0.0.0"
+description = ""
+optional = true
+python-versions = "*"
+files = []
+develop = false
+
+[package.dependencies]
+redis = ">=5.2.1,<6.0.0"
+
+[package.source]
+type = "git"
+url = "https://github.com/laxertu/eric.git"
+reference = "dev"
+resolved_reference = "d896e5c2ed6d3db36278003e6082f4e02ebf03f8"
+subdirectory = "eric_redis_queues"
+
+[[package]]
 name = "exceptiongroup"
 version = "1.2.2"
 description = "Backport of PEP 654 (exception groups)"
@@ -481,7 +500,7 @@ testing = ["fields", "hunter", "process-tests", "pytest-xdist", "virtualenv"]
 name = "redis"
 version = "5.2.1"
 description = "Python client for Redis database and key-value store"
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "redis-5.2.1-py3-none-any.whl", hash = "sha256:ee7e1056b9aea0f04c6c2ed59452947f34c4940ee025f5dd83e6a6418b6989e4"},
@@ -747,7 +766,10 @@ h2 = ["h2 (>=4,<5)"]
 socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
+[extras]
+redis-queues = ["eric-redis-queues", "redis"]
+
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.10"
-content-hash = "cd37b6ce20e36c071dbca9f077597588c3fd450fcedada0a86aef90a5289d8d7"
+content-hash = "67d06d874c07467711925ab44160176979b118ba4f4f4280fb97010e1c627e1a"
