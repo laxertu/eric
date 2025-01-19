@@ -80,10 +80,6 @@ class AbstractChannel(ABC):
         self.__queues_factory = queues_factory
         self.__streaming_listeners: set[str] = set()
 
-    @property
-    def queues(self) -> dict[str: Queue]:
-        return self.__queues
-
     def add_listener(self) -> MessageQueueListener:
         """Add the default listener"""
         l = MessageQueueListener()
