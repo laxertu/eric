@@ -1,4 +1,6 @@
 import asyncio
+import traceback
+from uuid import uuid1
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from threading import Lock
@@ -24,6 +26,66 @@ class Message:
     """
     type: str
     payload: dict | list | str | int | float | None = None
+
+
+class Queue(ABC):
+    @abstractmethod
+    def pop(self) -> Message:
+        ...
+
+    @abstractmethod
+    def add(self, message: Message) -> None:
+        ...
+
+class InMemoryQueue(Queue):
+    def __init__(self):
+        self.__messages: list[Message] = []
+
+    def pop(self) -> Message:
+        try:
+            with Lock():
+                return self.__messages.pop(0)
+        except IndexError:
+            raise NoMessagesException
+
+    def add(self, message: Message) -> None:
+        self.__messages.append(message)
+
+
+class AbstractMessageQueueFactory(ABC):
+    @abstractmethod
+    def create(self) -> Queue:
+        ...
+
+class InMemoryMessageQueueFactory(AbstractMessageQueueFactory):
+    def create(self) -> Queue:
+        return InMemoryQueue()
+
+@dataclass
+class UniqueMessage:
+    __message: Message
+    __sender_id: str | None = None
+
+    def __init__(self, message_id: str, message: Message, sender_id: str = None) -> None:
+        self.__id = message_id
+        self.__message = message
+        self.__sender_id = sender_id
+
+    @property
+    def id(self) -> str:
+        return str(self.__id)
+
+    @property
+    def type(self) -> str:
+        return  self.__message.type
+
+    @property
+    def sender_id(self) -> str:
+        return self.__sender_id
+
+    @property
+    def payload(self) -> dict | list | str | int | float | None:
+        return self.__message.payload
 
 
 @dataclass
@@ -89,7 +151,10 @@ class AbstractChannel(ABC):
     """
     NEXT_ID = 1
 
-    def __init__(self, stream_delay_seconds: int = 0):
+    def __init__(
+            self,stream_delay_seconds: int = 0,
+            queues_factory: AbstractMessageQueueFactory = InMemoryMessageQueueFactory()
+    ):
         """
         :param stream_delay_seconds: Can be used to limit response rate of streaming. Only applies to message_stream calls.
         """
@@ -98,10 +163,16 @@ class AbstractChannel(ABC):
             self.id: str = str(AbstractChannel.NEXT_ID)
             AbstractChannel.NEXT_ID += 1
 
-        self.listeners: dict[str: MessageQueueListener] = {}
-        self.queues: dict[str: list[Message]] = {}
         self.stream_delay_seconds = stream_delay_seconds
+
+        self.__listeners: dict[str: MessageQueueListener] = {}
+        self.__queues: dict[str: Queue] = {}
+        self.__queues_factory = queues_factory
         self.__streaming_listeners: set[str] = set()
+
+    @property
+    def queues(self) -> dict[str: Queue]:
+        return self.__queues
 
     def add_listener(self) -> MessageQueueListener:
         """Add the default listener"""
@@ -113,12 +184,12 @@ class AbstractChannel(ABC):
         """
         Adds a listener to channel
         """
-        self.listeners[l.id] = l
-        self.queues[l.id] = []
+        self.__listeners[l.id] = l
+        self.__queues[l.id] = self.__queues_factory.create()
 
     def remove_listener(self, l_id: str):
-        del self.queues[l_id]
-        del self.listeners[l_id]
+        del self.__queues[l_id]
+        del self.__listeners[l_id]
 
     def deliver_next(self, listener_id: str) -> Message:
         """
@@ -128,18 +199,14 @@ class AbstractChannel(ABC):
         """
         listener = self.get_listener(listener_id)
         if listener.is_running_sync():
-            try:
-                with Lock():
-                    msg = self.__get_queue(listener_id).pop(0)
-                    listener.on_message(msg)
-                    return msg
-            except IndexError:
-                raise NoMessagesException
+            msg = self._get_queue(listener_id).pop()
+            listener.on_message(msg)
+            return msg
         raise NoMessagesException
 
-    def __get_queue(self, listener_id: str) -> list[Message]:
+    def _get_queue(self, listener_id: str) -> Queue:
         try:
-            return self.queues[listener_id]
+            return self.__queues[listener_id]
         except KeyError:
             raise InvalidListenerException(f"Invalid listener {listener_id}")
 
@@ -150,16 +217,16 @@ class AbstractChannel(ABC):
         logger.debug(f"Dispatched {msg} to {listener_id}")
 
     def __add_to_queue(self, listener_id: str, msg: Message):
-        self.__get_queue(listener_id).append(msg)
+        self._get_queue(listener_id).add(msg)
 
     def broadcast(self, msg: Message):
         """Enqueue a message to all listeners"""
-        for listener_id in self.listeners.keys():
+        for listener_id in self.__listeners.keys():
             self.dispatch(listener_id, msg=msg)
 
     def get_listener(self, listener_id: str) -> MessageQueueListener:
         try:
-            return self.listeners[listener_id]
+            return self.__listeners[listener_id]
         except KeyError:
             raise InvalidListenerException
 
@@ -170,9 +237,6 @@ class AbstractChannel(ABC):
     async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
         """
         Entry point for message streaming
-
-        In case of failure at channel resolution time, a special message with type=MESSAGE_TYPE_CLOSED is sent, and
-        correspondant listener is stopped
         """
 
         def new_messages():
@@ -195,11 +259,9 @@ class AbstractChannel(ABC):
 
                     await asyncio.sleep(self.stream_delay_seconds)
 
-                except InvalidListenerException as e:
-                    logger.info(f"Stopping listener {listener.id}")
-                    logger.debug(e)
-                    await listener.stop()
-                    yield self.adapt(Message(type=MESSAGE_TYPE_END_OF_STREAM))
+                except Exception as e:
+                    logger.debug(traceback.format_exc())
+                    logger.error(e)
 
         return event_generator()
 
