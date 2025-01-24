@@ -6,6 +6,9 @@
 
 pip install eric-sse
 
+*With Redis support*
+pip install 'eric-sse[redis-queues] @ git+https://github.com/laxertu/eric.git'
+
 *Features*
 
 * Send to one listener and broadcast
