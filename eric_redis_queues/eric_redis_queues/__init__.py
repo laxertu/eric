@@ -13,12 +13,8 @@ from eric_sse.queue import Queue, AbstractMessageQueueFactory
 class RepositoryError(Exception):
     ...
 
-
 class RedisQueue(Queue):
     def __init__(self, host='127.0.0.1', port=6379, db=0):
-        """
-        :param kwargs: Arguments accepted by eric_redis_queues.Redis constructor
-        """
         self.id = str(uuid4())
         self.__client = Redis(host=host, port=port, db=db)
 
