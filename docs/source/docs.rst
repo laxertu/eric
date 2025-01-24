@@ -39,9 +39,10 @@ Prefab servers and clients
 
 
 Queues
-==========================
+======
 .. automodule:: eric_sse.queue
     :members:
+    :member-order: bysource
 
 
 Exceptions
