@@ -6,8 +6,11 @@ authors = ["Luca Stretti <laxertu@gmail.com>"]
 keywords = ["sse", "queue", "concurrency"]
 license = "MIT"
 readme = "README.md"
-documentation = "https://laxertu.github.io/eric/docs.html"
+
+[project.urls]
 homepage = "https://laxertu.github.io/eric"
+documentation = "https://laxertu.github.io/eric/docs.html"
+repository = "https://github.com/laxertu/eric"
 "Bug Tracker" = "https://github.com/laxertu/eric/issues"
 
 [tool.poetry.dependencies]
