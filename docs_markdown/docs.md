@@ -311,6 +311,14 @@ A little facade to interact with SocketServer
 
 # Queues
 
+<a id="eric_sse.queue.Queue"></a>
+
+### *class* Queue
+
+<a id="eric_sse.queue.InMemoryQueue"></a>
+
+### *class* InMemoryQueue
+
 <a id="eric_sse.queue.AbstractMessageQueueFactory"></a>
 
 ### *class* AbstractMessageQueueFactory
@@ -318,14 +326,6 @@ A little facade to interact with SocketServer
 <a id="eric_sse.queue.InMemoryMessageQueueFactory"></a>
 
 ### *class* InMemoryMessageQueueFactory
-
-<a id="eric_sse.queue.InMemoryQueue"></a>
-
-### *class* InMemoryQueue
-
-<a id="eric_sse.queue.Queue"></a>
-
-### *class* Queue
 
 <a id="module-eric_sse.exception"></a>
 

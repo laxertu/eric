@@ -261,25 +261,6 @@ files = [
 ]
 
 [[package]]
-name = "eric-redis-queues"
-version = "0.0.0"
-description = ""
-optional = true
-python-versions = "*"
-files = []
-develop = false
-
-[package.dependencies]
-redis = ">=5.2.1,<6.0.0"
-
-[package.source]
-type = "git"
-url = "https://github.com/laxertu/eric.git"
-reference = "dev"
-resolved_reference = "e86d5bf053bb1168b88247cf72df71536d29b4e6"
-subdirectory = "eric_redis_queues"
-
-[[package]]
 name = "exceptiongroup"
 version = "1.2.2"
 description = "Backport of PEP 654 (exception groups)"
@@ -767,9 +748,9 @@ socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
 [extras]
-redis-queues = ["eric-redis-queues", "redis"]
+redis-queues = ["redis"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.10"
-content-hash = "67d06d874c07467711925ab44160176979b118ba4f4f4280fb97010e1c627e1a"
+content-hash = "5b1439b2648b868eee29682854ad81099bb4b1ec1a9cc9bfae15e6e9dfba4dae"
