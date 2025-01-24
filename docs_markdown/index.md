@@ -6,6 +6,10 @@
 
 * pip install eric-sse
 
+With redis support
+
+* pip install eric-sse[redis-queues]
+
 *Features*
 
 * Send to one listener and broadcast
