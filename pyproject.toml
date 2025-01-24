@@ -8,6 +8,7 @@ license = "MIT"
 readme = "README.md"
 documentation = "https://laxertu.github.io/eric/docs.html"
 homepage = "https://laxertu.github.io/eric"
+"Bug Tracker" = "https://github.com/laxertu/eric/issues"
 
 [tool.poetry.dependencies]
 python = ">= 3.10"
