@@ -48,8 +48,11 @@
  | <a href="#N"><strong>N</strong></a>
  | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
  | <a href="#W"><strong>W</strong></a>
  
 </div>
@@ -57,6 +60,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel">AbstractChannel (class in eric_sse.entities)</a>
+</li>
+      <li><a href="docs.html#eric_sse.queue.AbstractMessageQueueFactory">AbstractMessageQueueFactory (class in eric_sse.queue)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -113,6 +118,13 @@
         <li><a href="docs.html#module-eric_sse.exception">module</a>
 </li>
       </ul></li>
+      <li>
+    eric_sse.message
+
+      <ul>
+        <li><a href="docs.html#module-eric_sse.message">module</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li>
@@ -120,6 +132,13 @@
 
       <ul>
         <li><a href="docs.html#module-eric_sse.prefabs">module</a>
+</li>
+      </ul></li>
+      <li>
+    eric_sse.queue
+
+      <ul>
+        <li><a href="docs.html#module-eric_sse.queue">module</a>
 </li>
       </ul></li>
       <li>
@@ -143,12 +162,18 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.exception.InvalidChannelException">InvalidChannelException</a>
+      <li><a href="docs.html#eric_sse.message.UniqueMessage.id">id (UniqueMessage property)</a>
 </li>
-      <li><a href="docs.html#eric_sse.exception.InvalidListenerException">InvalidListenerException</a>
+      <li><a href="docs.html#eric_sse.queue.InMemoryMessageQueueFactory">InMemoryMessageQueueFactory (class in eric_sse.queue)</a>
+</li>
+      <li><a href="docs.html#eric_sse.queue.InMemoryQueue">InMemoryQueue (class in eric_sse.queue)</a>
+</li>
+      <li><a href="docs.html#eric_sse.exception.InvalidChannelException">InvalidChannelException</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.exception.InvalidListenerException">InvalidListenerException</a>
+</li>
       <li><a href="docs.html#eric_sse.exception.InvalidMessageFormat">InvalidMessageFormat</a>
 </li>
       <li><a href="docs.html#eric_sse.entities.MessageQueueListener.is_running">is_running() (MessageQueueListener method)</a>
@@ -161,7 +186,7 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.entities.Message">Message (class in eric_sse.entities)</a>
+      <li><a href="docs.html#eric_sse.message.Message">Message (class in eric_sse.message)</a>
 </li>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.message_stream">message_stream() (AbstractChannel method)</a>
 </li>
@@ -177,9 +202,15 @@
 </li>
         <li><a href="docs.html#module-eric_sse.exception">eric_sse.exception</a>
 </li>
+        <li><a href="docs.html#module-eric_sse.message">eric_sse.message</a>
+</li>
         <li><a href="docs.html#module-eric_sse.prefabs">eric_sse.prefabs</a>
 </li>
+        <li><a href="docs.html#module-eric_sse.queue">eric_sse.queue</a>
+</li>
         <li><a href="docs.html#module-eric_sse.servers">eric_sse.servers</a>
+</li>
+        <li><a href="docs.html#module-persistence.redis">persistence.redis</a>
 </li>
       </ul></li>
   </ul></td>
@@ -212,7 +243,32 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.message.Message.payload">payload (Message attribute)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.message.SignedMessage.payload">(SignedMessage property)</a>
+</li>
+        <li><a href="docs.html#eric_sse.message.UniqueMessage.payload">(UniqueMessage property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    persistence.redis
+
+      <ul>
+        <li><a href="docs.html#module-persistence.redis">module</a>
+</li>
+      </ul></li>
       <li><a href="docs.html#eric_sse.prefabs.DataProcessingChannel.process_queue">process_queue() (DataProcessingChannel method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.queue.Queue">Queue (class in eric_sse.queue)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -220,10 +276,14 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.entities.AbstractChannel.register_listener">register_listener() (AbstractChannel method)</a>
+      <li><a href="docs.html#persistence.redis.RedisQueue">RedisQueue (class in persistence.redis)</a>
+</li>
+      <li><a href="docs.html#persistence.redis.RedisQueueFactory">RedisQueueFactory (class in persistence.redis)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.entities.AbstractChannel.register_listener">register_listener() (AbstractChannel method)</a>
+</li>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.remove_listener">remove_listener() (AbstractChannel method)</a>
 </li>
   </ul></td>
@@ -232,20 +292,26 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.message.SignedMessage.sender_id">sender_id (SignedMessage property)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.message.UniqueMessage.sender_id">(UniqueMessage property)</a>
+</li>
+      </ul></li>
       <li><a href="docs.html#eric_sse.prefabs.SimpleDistributedApplicationListener.set_action">set_action() (SimpleDistributedApplicationListener method)</a>
 </li>
       <li><a href="docs.html#eric_sse.servers.SocketServer.shutdown">shutdown() (SocketServer method)</a>
 </li>
-      <li><a href="docs.html#eric_sse.entities.SignedMessage">SignedMessage (class in eric_sse.entities)</a>
+      <li><a href="docs.html#eric_sse.message.SignedMessage">SignedMessage (class in eric_sse.message)</a>
 </li>
       <li><a href="docs.html#eric_sse.prefabs.SimpleDistributedApplicationListener">SimpleDistributedApplicationListener (class in eric_sse.prefabs)</a>
 </li>
       <li><a href="docs.html#eric_sse.clients.SocketClient">SocketClient (class in eric_sse.clients)</a>
 </li>
-      <li><a href="docs.html#eric_sse.servers.SocketServer">SocketServer (class in eric_sse.servers)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.servers.SocketServer">SocketServer (class in eric_sse.servers)</a>
+</li>
       <li><a href="docs.html#eric_sse.prefabs.SSEChannel">SSEChannel (class in eric_sse.prefabs)</a>
 </li>
       <li><a href="docs.html#eric_sse.servers.SSEChannelContainer">SSEChannelContainer (class in eric_sse.servers)</a>
@@ -261,6 +327,28 @@
       <li><a href="docs.html#eric_sse.entities.MessageQueueListener.stop">stop() (MessageQueueListener method)</a>
 </li>
       <li><a href="docs.html#eric_sse.entities.MessageQueueListener.stop_sync">stop_sync() (MessageQueueListener method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.message.Message.type">type (Message attribute)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.message.SignedMessage.type">(SignedMessage property)</a>
+</li>
+        <li><a href="docs.html#eric_sse.message.UniqueMessage.type">(UniqueMessage property)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.message.UniqueMessage">UniqueMessage (class in eric_sse.message)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -285,9 +373,11 @@
           <h3>Table of Contents</h3>
           <ul>
 <li class="toctree-l1"><a class="reference internal" href="docs.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docs.html#module-eric_sse.entities">Entities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs.html#module-eric_sse.message">Entities</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs.html#module-eric_sse.prefabs">Prefab channels and listeners</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs.html#module-eric_sse.servers">Prefab servers and clients</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs.html#module-eric_sse.queue">Queues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs.html#module-persistence.redis">Persistence</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docs.html#module-eric_sse.exception">Exceptions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="devs.html">Developers section</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>

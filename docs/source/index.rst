@@ -21,6 +21,7 @@ The lightweight library for async messaging nobody expects.
 * SSE format was adopted by design, making the library suitable for such kind of model
 * Callbacks and threading support
 * Sockets server prefab for offline inter process communication
+* Optional persistence layer with Redis as default engine
 
 
 *Possible applications*

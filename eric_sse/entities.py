@@ -1,47 +1,19 @@
 import asyncio
+import traceback
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 from threading import Lock
 from typing import AsyncIterable, Any
 
 import eric_sse
 from eric_sse.exception import InvalidListenerException, NoMessagesException
+from eric_sse.message import Message
+from eric_sse.queue import Queue, AbstractMessageQueueFactory, InMemoryMessageQueueFactory
 
 logger = eric_sse.get_logger()
 
 MESSAGE_TYPE_CLOSED = '_eric_channel_closed'
 MESSAGE_TYPE_END_OF_STREAM = '_eric_channel_eof'
 MESSAGE_TYPE_INTERNAL_ERROR = '_eric_error'
-
-
-@dataclass
-class Message:
-    """
-    Models a message
-
-    It's just a container of information identified by a type.
-    For validation purposes you can override MessageQueueListener.on_message
-    """
-    type: str
-    payload: dict | list | str | int | float | None = None
-
-
-@dataclass
-class SignedMessage(Message):
-    """A wrapper that adds sender id"""
-
-    def __init__(self, sender_id: str, msg_type: str, msg_payload: dict | list | str | int | float | None = None):
-        self.sender_id = sender_id
-        self.__msg_type = msg_type
-        self.__msg_payload = msg_payload
-
-    @property
-    def type(self):
-        return self.__msg_type
-
-    @property
-    def payload(self) -> dict | list | str | int | float | None:
-        return {'sender_id': self.sender_id, 'payload': self.__msg_payload}
 
 
 class MessageQueueListener(ABC):
@@ -89,19 +61,27 @@ class AbstractChannel(ABC):
     """
     NEXT_ID = 1
 
-    def __init__(self, stream_delay_seconds: int = 0):
+    def __init__(self, stream_delay_seconds: int = 0, queues_factory: AbstractMessageQueueFactory = None):
         """
         :param stream_delay_seconds: Can be used to limit response rate of streaming. Only applies to message_stream calls.
+        :param queues_factory: AbstractMessageQueueFactory
         """
         logger.debug(f'Creating channel {AbstractChannel.NEXT_ID}')
+        if queues_factory is None:
+            queues_factory = InMemoryMessageQueueFactory()
         with Lock():
             self.id: str = str(AbstractChannel.NEXT_ID)
             AbstractChannel.NEXT_ID += 1
 
-        self.listeners: dict[str: MessageQueueListener] = {}
-        self.queues: dict[str: list[Message]] = {}
         self.stream_delay_seconds = stream_delay_seconds
+
+        self.__listeners: dict[str: MessageQueueListener] = {}
+        self.__queues: dict[str: Queue] = {}
+        self.__queues_factory = queues_factory
         self.__streaming_listeners: set[str] = set()
+
+    def set_queues_factory(self, queues_factory: AbstractMessageQueueFactory) -> None:
+        self.__queues_factory = queues_factory
 
     def add_listener(self) -> MessageQueueListener:
         """Add the default listener"""
@@ -113,12 +93,12 @@ class AbstractChannel(ABC):
         """
         Adds a listener to channel
         """
-        self.listeners[l.id] = l
-        self.queues[l.id] = []
+        self.__listeners[l.id] = l
+        self.__queues[l.id] = self.__queues_factory.create()
 
     def remove_listener(self, l_id: str):
-        del self.queues[l_id]
-        del self.listeners[l_id]
+        del self.__queues[l_id]
+        del self.__listeners[l_id]
 
     def deliver_next(self, listener_id: str) -> Message:
         """
@@ -128,18 +108,14 @@ class AbstractChannel(ABC):
         """
         listener = self.get_listener(listener_id)
         if listener.is_running_sync():
-            try:
-                with Lock():
-                    msg = self.__get_queue(listener_id).pop(0)
-                    listener.on_message(msg)
-                    return msg
-            except IndexError:
-                raise NoMessagesException
+            msg = self._get_queue(listener_id).pop()
+            listener.on_message(msg)
+            return msg
         raise NoMessagesException
 
-    def __get_queue(self, listener_id: str) -> list[Message]:
+    def _get_queue(self, listener_id: str) -> Queue:
         try:
-            return self.queues[listener_id]
+            return self.__queues[listener_id]
         except KeyError:
             raise InvalidListenerException(f"Invalid listener {listener_id}")
 
@@ -150,16 +126,16 @@ class AbstractChannel(ABC):
         logger.debug(f"Dispatched {msg} to {listener_id}")
 
     def __add_to_queue(self, listener_id: str, msg: Message):
-        self.__get_queue(listener_id).append(msg)
+        self._get_queue(listener_id).push(msg)
 
     def broadcast(self, msg: Message):
         """Enqueue a message to all listeners"""
-        for listener_id in self.listeners.keys():
+        for listener_id in self.__listeners.keys():
             self.dispatch(listener_id, msg=msg)
 
     def get_listener(self, listener_id: str) -> MessageQueueListener:
         try:
-            return self.listeners[listener_id]
+            return self.__listeners[listener_id]
         except KeyError:
             raise InvalidListenerException
 
@@ -170,9 +146,6 @@ class AbstractChannel(ABC):
     async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
         """
         Entry point for message streaming
-
-        In case of failure at channel resolution time, a special message with type=MESSAGE_TYPE_CLOSED is sent, and
-        correspondant listener is stopped
         """
 
         def new_messages():
@@ -195,11 +168,9 @@ class AbstractChannel(ABC):
 
                     await asyncio.sleep(self.stream_delay_seconds)
 
-                except InvalidListenerException as e:
-                    logger.info(f"Stopping listener {listener.id}")
-                    logger.debug(e)
-                    await listener.stop()
-                    yield self.adapt(Message(type=MESSAGE_TYPE_END_OF_STREAM))
+                except Exception as e:
+                    logger.debug(traceback.format_exc())
+                    logger.error(e)
 
         return event_generator()
 

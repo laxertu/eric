@@ -2,7 +2,9 @@ from concurrent.futures import ThreadPoolExecutor, Future, as_completed
 from typing import Callable, AsyncIterable, Iterator
 
 from eric_sse import get_logger
-from eric_sse.entities import AbstractChannel, Message, MessageQueueListener, SignedMessage
+from eric_sse.entities import AbstractChannel, MessageQueueListener
+from eric_sse.message import Message, SignedMessage
+from eric_sse.exception import NoMessagesException
 
 logger = get_logger()
 
@@ -65,10 +67,10 @@ class DataProcessingChannel(AbstractChannel):
             there_are_pending_messages = True
             while there_are_pending_messages:
                 try:
-                    msg = self.queues[listener.id].pop(0)
+                    msg = self._get_queue(listener.id).pop()
                     yield e.submit(self.__invoke_callback_and_return, listener.on_message, msg)
 
-                except IndexError:
+                except NoMessagesException:
                     there_are_pending_messages = False
 
     @staticmethod
@@ -131,4 +133,4 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
                 signed_response = SignedMessage(sender_id=self.id, msg_type=response.type, msg_payload=response.payload)
                 self.__channel.dispatch(msg.sender_id, signed_response)
         except KeyError:
-            logger.error(f'Unknown action {msg.type}')
+            logger.debug(f'Unknown action {msg.type}')

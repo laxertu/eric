@@ -10,6 +10,11 @@ thanks a lot https://excalidraw.com !!
 
 Entities
 ========
+.. automodule:: eric_sse.message
+    :members:
+    :undoc-members:
+    :member-order: bysource
+
 .. automodule:: eric_sse.entities
     :members:
     :undoc-members:
@@ -30,6 +35,19 @@ Prefab servers and clients
     :members:
 .. automodule:: eric_sse.clients
     :members:
+    :member-order: bysource
+
+Queues
+=====================
+.. automodule:: eric_sse.queue
+    :members:
+    :member-order: bysource
+
+Persistence
+===========
+.. automodule:: persistence.redis
+    :members:
+    :show-inheritance:
     :member-order: bysource
 
 Exceptions

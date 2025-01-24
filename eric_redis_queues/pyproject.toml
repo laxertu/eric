@@ -1,0 +1,12 @@
+[tool.poetry]
+name = "eric-redis-queues"
+version = "0.0.0"
+authors = ["Luca Stretti <laxertu@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+redis = "^5.2.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
