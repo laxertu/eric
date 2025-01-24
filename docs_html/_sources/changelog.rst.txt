@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.6.3
+
+Breaking:
+
+* General rework of model, if you are migrating to this version just update your namespaces accordingly
+* Redis support added as extra
+
+
 0.6.2
 
 Breaking:

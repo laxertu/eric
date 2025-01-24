@@ -37,18 +37,6 @@ Prefab servers and clients
     :members:
     :member-order: bysource
 
-Queues
-=====================
-.. automodule:: eric_sse.queue
-    :members:
-    :member-order: bysource
-
-Persistence
-===========
-.. automodule:: persistence.redis
-    :members:
-    :show-inheritance:
-    :member-order: bysource
 
 Exceptions
 ==========

@@ -109,11 +109,15 @@ Event handler. It executes when a message is delivered to client
 
 <a id="eric_sse.entities.AbstractChannel"></a>
 
-### *class* AbstractChannel(stream_delay_seconds: int = 0, queues_factory: [AbstractMessageQueueFactory](#eric_sse.queue.AbstractMessageQueueFactory) | None = None)
+### *class* AbstractChannel(stream_delay_seconds: int = 0, queues_factory: AbstractMessageQueueFactory | None = None)
 
 Base class for channels.
 
 Provides functionalities for listeners and message delivery management. SSEChannel is the default implementation
+
+<a id="eric_sse.entities.AbstractChannel.set_queues_factory"></a>
+
+#### set_queues_factory(queues_factory: AbstractMessageQueueFactory) → None
 
 <a id="eric_sse.entities.AbstractChannel.add_listener"></a>
 
@@ -300,48 +304,6 @@ Shortcut to start a server
 ### *class* SocketClient(file_descriptor_path: str)
 
 A little facade to interact with SocketServer
-
-<a id="module-eric_sse.queue"></a>
-
-<a id="queues"></a>
-
-# Queues
-
-<a id="eric_sse.queue.Queue"></a>
-
-### *class* Queue
-
-<a id="eric_sse.queue.InMemoryQueue"></a>
-
-### *class* InMemoryQueue
-
-<a id="eric_sse.queue.AbstractMessageQueueFactory"></a>
-
-### *class* AbstractMessageQueueFactory
-
-<a id="eric_sse.queue.InMemoryMessageQueueFactory"></a>
-
-### *class* InMemoryMessageQueueFactory
-
-<a id="module-persistence.redis"></a>
-
-<a id="persistence"></a>
-
-# Persistence
-
-<a id="persistence.redis.RedisQueue"></a>
-
-### *class* RedisQueue(\*\*kwargs)
-
-Bases: [`Queue`](#eric_sse.queue.Queue)
-
-<a id="persistence.redis.RedisQueueFactory"></a>
-
-### *class* RedisQueueFactory
-
-Bases: [`AbstractMessageQueueFactory`](#eric_sse.queue.AbstractMessageQueueFactory)
-
-Inject this class to Channels to enable Messages persistence on a Redis database
 
 <a id="module-eric_sse.exception"></a>
 

@@ -158,9 +158,14 @@ For validation purposes you can override MessageQueueListener.on_message</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AbstractChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream_delay_seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queues_factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.queue.AbstractMessageQueueFactory" title="eric_sse.queue.AbstractMessageQueueFactory"><span class="pre">AbstractMessageQueueFactory</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AbstractChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream_delay_seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queues_factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AbstractMessageQueueFactory</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel" title="Link to this definition">¶</a></dt>
 <dd><p>Base class for channels.</p>
 <p>Provides functionalities for listeners and message delivery management. SSEChannel is the default implementation</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.set_queues_factory">
+<span class="sig-name descname"><span class="pre">set_queues_factory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queues_factory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AbstractMessageQueueFactory</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.set_queues_factory" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.add_listener">
 <span class="sig-name descname"><span class="pre">add_listener</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#eric_sse.entities.MessageQueueListener" title="eric_sse.entities.MessageQueueListener"><span class="pre">MessageQueueListener</span></a></span></span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.add_listener" title="Link to this definition">¶</a></dt>
@@ -332,45 +337,6 @@ Use ‘stop’ as Message type to stop receiver listener.</p>
 </dd></dl>
 
 </section>
-<section id="module-eric_sse.queue">
-<span id="queues"></span><h1>Queues<a class="headerlink" href="#module-eric_sse.queue" title="Link to this heading">¶</a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="eric_sse.queue.Queue">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Queue</span></span><a class="headerlink" href="#eric_sse.queue.Queue" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="eric_sse.queue.InMemoryQueue">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">InMemoryQueue</span></span><a class="headerlink" href="#eric_sse.queue.InMemoryQueue" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="eric_sse.queue.AbstractMessageQueueFactory">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AbstractMessageQueueFactory</span></span><a class="headerlink" href="#eric_sse.queue.AbstractMessageQueueFactory" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="eric_sse.queue.InMemoryMessageQueueFactory">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">InMemoryMessageQueueFactory</span></span><a class="headerlink" href="#eric_sse.queue.InMemoryMessageQueueFactory" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</section>
-<section id="module-persistence.redis">
-<span id="persistence"></span><h1>Persistence<a class="headerlink" href="#module-persistence.redis" title="Link to this heading">¶</a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="persistence.redis.RedisQueue">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RedisQueue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#persistence.redis.RedisQueue" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#eric_sse.queue.Queue" title="eric_sse.queue.Queue"><code class="xref py py-class docutils literal notranslate"><span class="pre">Queue</span></code></a></p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="persistence.redis.RedisQueueFactory">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RedisQueueFactory</span></span><a class="headerlink" href="#persistence.redis.RedisQueueFactory" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#eric_sse.queue.AbstractMessageQueueFactory" title="eric_sse.queue.AbstractMessageQueueFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractMessageQueueFactory</span></code></a></p>
-<p>Inject this class to Channels to enable Messages persistence on a Redis database</p>
-</dd></dl>
-
-</section>
 <section id="module-eric_sse.exception">
 <span id="exceptions"></span><h1>Exceptions<a class="headerlink" href="#module-eric_sse.exception" title="Link to this heading">¶</a></h1>
 <dl class="py exception">
@@ -425,18 +391,6 @@ Use ‘stop’ as Message type to stop receiver listener.</p>
 <li class="toctree-l2"><a class="reference internal" href="#eric_sse.servers.SSEChannelContainer"><code class="docutils literal notranslate"><span class="pre">SSEChannelContainer</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#eric_sse.servers.SocketServer"><code class="docutils literal notranslate"><span class="pre">SocketServer</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#eric_sse.clients.SocketClient"><code class="docutils literal notranslate"><span class="pre">SocketClient</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="#module-eric_sse.queue">Queues</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#eric_sse.queue.Queue"><code class="docutils literal notranslate"><span class="pre">Queue</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#eric_sse.queue.InMemoryQueue"><code class="docutils literal notranslate"><span class="pre">InMemoryQueue</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#eric_sse.queue.AbstractMessageQueueFactory"><code class="docutils literal notranslate"><span class="pre">AbstractMessageQueueFactory</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#eric_sse.queue.InMemoryMessageQueueFactory"><code class="docutils literal notranslate"><span class="pre">InMemoryMessageQueueFactory</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="#module-persistence.redis">Persistence</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#persistence.redis.RedisQueue"><code class="docutils literal notranslate"><span class="pre">RedisQueue</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#persistence.redis.RedisQueueFactory"><code class="docutils literal notranslate"><span class="pre">RedisQueueFactory</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="#module-eric_sse.exception">Exceptions</a><ul>

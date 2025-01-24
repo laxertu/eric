@@ -276,7 +276,7 @@ redis = ">=5.2.1,<6.0.0"
 type = "git"
 url = "https://github.com/laxertu/eric.git"
 reference = "dev"
-resolved_reference = "d896e5c2ed6d3db36278003e6082f4e02ebf03f8"
+resolved_reference = "e86d5bf053bb1168b88247cf72df71536d29b4e6"
 subdirectory = "eric_redis_queues"
 
 [[package]]
