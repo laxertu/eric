@@ -37,6 +37,9 @@ class RedisQueue(Queue):
         except ResponseError as e:
             raise RepositoryError(e)
 
+    def delete(self) -> None:
+        self.__client.delete(self.id)
+
 
 class RedisQueueFactory(AbstractMessageQueueFactory):
     """

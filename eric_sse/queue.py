@@ -14,6 +14,9 @@ class Queue(ABC):
     def push(self, message: Message) -> None:
         ...
 
+    @abstractmethod
+    def delete(self) -> None:
+        ...
 
 class InMemoryQueue(Queue):
     def __init__(self):
@@ -29,6 +32,8 @@ class InMemoryQueue(Queue):
     def push(self, message: Message) -> None:
         self.__messages.append(message)
 
+    def delete(self) -> None:
+        self.__messages = []
 
 class AbstractMessageQueueFactory(ABC):
     @abstractmethod

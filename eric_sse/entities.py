@@ -97,6 +97,7 @@ class AbstractChannel(ABC):
         self.__queues[l.id] = self.__queues_factory.create()
 
     def remove_listener(self, l_id: str):
+        self._get_queue(listener_id=l_id).delete()
         del self.__queues[l_id]
         del self.__listeners[l_id]
 
