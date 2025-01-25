@@ -262,20 +262,18 @@ files = [
 
 [[package]]
 name = "eric-redis-queues"
-version = "0.0.2"
+version = "0.0.4"
 description = "Redis support for eric-sse"
 optional = true
-python-versions = ">= 3.10"
-files = []
-develop = false
+python-versions = ">=3.10"
+files = [
+    {file = "eric_redis_queues-0.0.4-py3-none-any.whl", hash = "sha256:599dd3e44d0946cb027feae680f1f9568b319902c5cc6dd9b92b4c31122fda0a"},
+    {file = "eric_redis_queues-0.0.4.tar.gz", hash = "sha256:f4e3f546ce847cb2fde974965545149e3ae32953a96f6c87d6d0eb278263ce29"},
+]
 
 [package.dependencies]
-eric-sse = "^0.6.3"
-redis = "^5.2.1"
-
-[package.source]
-type = "directory"
-url = "eric_redis_queues"
+eric-sse = ">=0.6.3,<0.7.0"
+redis = ">=5.2.1,<6.0.0"
 
 [[package]]
 name = "exceptiongroup"
@@ -770,4 +768,4 @@ redis-queues = ["eric-redis-queues"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.10"
-content-hash = "09f09615424b41256e699a990f6dc48f30081d5c983dc52930947f6d2193439d"
+content-hash = "0fe00a270c46513ca44ffd627011c614e305f7204f153dc2da74404ece03d037"

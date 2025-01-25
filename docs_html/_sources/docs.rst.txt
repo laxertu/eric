@@ -41,7 +41,11 @@ Prefab servers and clients
 Queues
 ======
 .. automodule:: eric_sse.queue
-    :members:
+    :members: AbstractMessageQueueFactory
+    :member-order: bysource
+.. automodule:: eric_redis_queues
+    :members: RedisQueueFactory
+    :show-inheritance:
     :member-order: bysource
 
 

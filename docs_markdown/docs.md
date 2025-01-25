@@ -311,21 +311,19 @@ A little facade to interact with SocketServer
 
 # Queues
 
-<a id="eric_sse.queue.Queue"></a>
-
-### *class* Queue
-
-<a id="eric_sse.queue.InMemoryQueue"></a>
-
-### *class* InMemoryQueue
-
 <a id="eric_sse.queue.AbstractMessageQueueFactory"></a>
 
 ### *class* AbstractMessageQueueFactory
 
-<a id="eric_sse.queue.InMemoryMessageQueueFactory"></a>
+<a id="module-eric_redis_queues"></a>
 
-### *class* InMemoryMessageQueueFactory
+<a id="eric_redis_queues.RedisQueueFactory"></a>
+
+### *class* RedisQueueFactory(host='127.0.0.1', port=6379, db=0)
+
+Bases: [`AbstractMessageQueueFactory`](#eric_sse.queue.AbstractMessageQueueFactory)
+
+Inject this class to Channels to enable Messages eric_redis_queues on a Redis database
 
 <a id="module-eric_sse.exception"></a>
 
