@@ -16,7 +16,7 @@ The lightweight library for async messaging nobody expects.
 
 With redis support
 
-*  pip install 'eric-sse[redis-queues] @ git+https://github.com/laxertu/eric.git'
+*  eric-sse[redis-queues]
 
 
 *Features*

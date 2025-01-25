@@ -8,7 +8,7 @@
 
 With redis support
 
-* pip install ‘eric-sse[redis-queues] @ git+https://github.com/laxertu/eric.git’
+* eric-sse[redis-queues]
 
 *Features*
 
