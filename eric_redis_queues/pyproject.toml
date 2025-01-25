@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "eric-redis-queues"
-description = "Resis support for eric-sse"
+description = "Redis support for eric-sse"
 version = "0.0.2"
 authors = ["Luca Stretti <laxertu@gmail.com>"]
 license = "MIT"
