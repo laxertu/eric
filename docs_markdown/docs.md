@@ -323,7 +323,7 @@ A little facade to interact with SocketServer
 
 Bases: [`AbstractMessageQueueFactory`](#eric_sse.queue.AbstractMessageQueueFactory)
 
-Inject this class to Channels to enable Messages eric_redis_queues on a Redis database
+Inject this class to Channels to enable persistence on Redis 
 
 <a id="module-eric_sse.exception"></a>
 

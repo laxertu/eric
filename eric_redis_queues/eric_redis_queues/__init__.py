@@ -42,9 +42,6 @@ class RedisQueue(Queue):
 
 
 class RedisQueueFactory(AbstractMessageQueueFactory):
-    """
-    Inject this class to Channels to enable Messages eric_redis_queues on a Redis database
-    """
     def __init__(self, host='127.0.0.1', port=6379, db=0):
         self.__host: str = host
         self.__port: int = port
