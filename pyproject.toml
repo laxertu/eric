@@ -13,7 +13,7 @@ homepage = "https://laxertu.github.io/eric"
 python = ">= 3.10"
 asyncio = ">= 3.4.3"
 
-redis = {version = "^5.2.1", optional = true}
+eric-redis-queues = {path = "eric_redis_queues", optional = true}
 
 [build-system]
 requires = ["poetry-core"]
@@ -30,4 +30,4 @@ sphinx = "^8.1.1"
 sphinx-markdown-builder = "^0.6.7"
 
 [tool.poetry.extras]
-redis-queues = ["redis", "eric-redis-queues"]
+redis-queues = ["eric-redis-queues"]
