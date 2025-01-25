@@ -14,7 +14,7 @@ repository = "https://github.com/laxertu/eric"
 "Bug Tracker" = "https://github.com/laxertu/eric/issues"
 
 [project.optional-dependencies]
-redis-queues = ["eric-redis-queues"]
+redis-queues = [{path = "eric_redis_queues"}]
 
 [tool.poetry.dependencies]
 python = ">= 3.10"
@@ -33,9 +33,3 @@ pytest-cov = "^5.0.0"
 [tool.poetry.group.doctools.dependencies]
 sphinx = "^8.1.1"
 sphinx-markdown-builder = "^0.6.7"
-
-[tool.poetry.group.redis-queues]
-optional = true
-[tool.poetry.group.redis-queues.dependencies]
-eric-redis-queues = {path = "eric_redis_queues"}
-
