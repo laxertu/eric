@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "eric-sse"
 description = "A lightweight message dispatcher based on SSE protocol data transfer objects format"
-version = "0.6.3.6"
+version = "0.6.3.8"
 authors = ["Luca Stretti <laxertu@gmail.com>"]
 keywords = ["sse", "queue", "concurrency"]
 license = "MIT"
@@ -17,7 +17,7 @@ repository = "https://github.com/laxertu/eric"
 [tool.poetry.dependencies]
 python = ">= 3.10"
 asyncio = ">= 3.4.3"
-eric-redis-queues = {version = "0.0.2", optional = true}
+eric-redis-queues = {version = "0.0.4", optional = true}
 
 [build-system]
 requires = ["poetry-core"]
