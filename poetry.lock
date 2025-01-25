@@ -273,8 +273,11 @@ develop = false
 redis = ">=5.2.1,<6.0.0"
 
 [package.source]
-type = "directory"
-url = "eric_redis_queues"
+type = "git"
+url = "https://github.com/laxertu/eric.git"
+reference = "HEAD"
+resolved_reference = "8d78ace7aac7fd880cdce059e8492283b8e901b4"
+subdirectory = "eric_redis_queues"
 
 [[package]]
 name = "exceptiongroup"
@@ -764,9 +767,9 @@ socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
 [extras]
-redis-queues = ["eric-redis-queues"]
+redis-queues = ["eric-redis-queues", "redis"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.10"
-content-hash = "09f09615424b41256e699a990f6dc48f30081d5c983dc52930947f6d2193439d"
+content-hash = "c6a29f15c8e4966f89cd42a183887ee3a8770b663197ca9ead92c3a42e2779e6"
