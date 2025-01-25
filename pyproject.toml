@@ -17,7 +17,7 @@ repository = "https://github.com/laxertu/eric"
 python = ">= 3.10"
 asyncio = ">= 3.4.3"
 
-eric-redis-queues = {git = "https://github.com/laxertu/eric.git", subdirectory = "eric_redis_queues", optional = true}
+eric-redis-queues = {version = "0.0.0", optional = true}
 redis = {version = "^5.2.1", optional = true}
 
 [build-system]
@@ -35,4 +35,4 @@ sphinx = "^8.1.1"
 sphinx-markdown-builder = "^0.6.7"
 
 [tool.poetry.extras]
-redis-queues = ["redis", "eric-redis-queues"]
+redis-queues = ["eric-redis-queues"]
