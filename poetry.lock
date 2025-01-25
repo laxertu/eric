@@ -262,15 +262,16 @@ files = [
 
 [[package]]
 name = "eric-redis-queues"
-version = "0.0.1"
-description = ""
+version = "0.0.2"
+description = "Redis support for eric-sse"
 optional = true
-python-versions = "*"
+python-versions = ">= 3.10"
 files = []
 develop = false
 
 [package.dependencies]
-redis = ">=5.2.1,<6.0.0"
+eric-sse = "^0.6.3"
+redis = "^5.2.1"
 
 [package.source]
 type = "directory"
