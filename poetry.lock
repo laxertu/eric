@@ -15,7 +15,7 @@ files = [
 name = "async-timeout"
 version = "5.0.1"
 description = "Timeout context manager for asyncio programs"
-optional = true
+optional = false
 python-versions = ">=3.8"
 files = [
     {file = "async_timeout-5.0.1-py3-none-any.whl", hash = "sha256:39e3809566ff85354557ec2398b55e096c8364bacac9405a7a1fa429e77fe76c"},
@@ -264,7 +264,7 @@ files = [
 name = "eric-redis-queues"
 version = "0.0.0"
 description = ""
-optional = true
+optional = false
 python-versions = "*"
 files = []
 develop = false
@@ -497,7 +497,7 @@ testing = ["fields", "hunter", "process-tests", "pytest-xdist", "virtualenv"]
 name = "redis"
 version = "5.2.1"
 description = "Python client for Redis database and key-value store"
-optional = true
+optional = false
 python-versions = ">=3.8"
 files = [
     {file = "redis-5.2.1-py3-none-any.whl", hash = "sha256:ee7e1056b9aea0f04c6c2ed59452947f34c4940ee025f5dd83e6a6418b6989e4"},
@@ -763,10 +763,7 @@ h2 = ["h2 (>=4,<5)"]
 socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
-[extras]
-redis-queues = ["eric-redis-queues"]
-
 [metadata]
 lock-version = "2.0"
 python-versions = ">= 3.10"
-content-hash = "09f09615424b41256e699a990f6dc48f30081d5c983dc52930947f6d2193439d"
+content-hash = "a896200d862306c81fe1b31bbe2faa7bf3fd1ebb8432849ed20b7dc894d0a169"
