@@ -4,6 +4,8 @@ from threading import Lock
 from eric_sse.message import Message
 from eric_sse.exception import NoMessagesException
 
+class RepositoryError(Exception):
+    ...
 
 class Queue(ABC):
     @abstractmethod

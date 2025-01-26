@@ -5,6 +5,7 @@ from eric_sse import get_logger
 from eric_sse.entities import AbstractChannel, MessageQueueListener
 from eric_sse.message import Message, SignedMessage
 from eric_sse.exception import NoMessagesException
+from eric_sse.queue import AbstractMessageQueueFactory, InMemoryMessageQueueFactory
 
 logger = get_logger()
 
@@ -17,12 +18,17 @@ class SSEChannel(AbstractChannel):
     Currently, 'id' field is not supported.
     """
 
-    def __init__(self, stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5):
+    def __init__(
+            self,
+            stream_delay_seconds: int = 0,
+            retry_timeout_milliseconds: int = 5,
+            queues_factory: AbstractMessageQueueFactory = InMemoryMessageQueueFactory()
+    ):
         """
         :param stream_delay_seconds:
         :param retry_timeout_milliseconds:
         """
-        super().__init__(stream_delay_seconds=stream_delay_seconds)
+        super().__init__(stream_delay_seconds=stream_delay_seconds, queues_factory=queues_factory)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
         self.payload_adapter: (
             Callable)[[dict | list | str | int | float | None], dict | list | str | int | float | None] = lambda x: x

@@ -109,7 +109,7 @@ Event handler. It executes when a message is delivered to client
 
 <a id="eric_sse.entities.AbstractChannel"></a>
 
-### *class* AbstractChannel(stream_delay_seconds: int = 0, queues_factory: [AbstractMessageQueueFactory](#eric_sse.queue.AbstractMessageQueueFactory) | None = None)
+### *class* AbstractChannel(stream_delay_seconds: int = 0, queues_factory: ~eric_sse.queue.AbstractMessageQueueFactory = <eric_sse.queue.InMemoryMessageQueueFactory object>)
 
 Base class for channels.
 
