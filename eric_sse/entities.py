@@ -61,14 +61,12 @@ class AbstractChannel(ABC):
     """
     NEXT_ID = 1
 
-    def __init__(self, stream_delay_seconds: int = 0, queues_factory: AbstractMessageQueueFactory = None):
-        """
-        :param stream_delay_seconds: Can be used to limit response rate of streaming. Only applies to message_stream calls.
-        :param queues_factory: AbstractMessageQueueFactory
-        """
+    def __init__(
+            self,
+            stream_delay_seconds: int = 0,
+            queues_factory: AbstractMessageQueueFactory = InMemoryMessageQueueFactory()
+    ):
         logger.debug(f'Creating channel {AbstractChannel.NEXT_ID}')
-        if queues_factory is None:
-            queues_factory = InMemoryMessageQueueFactory()
         with Lock():
             self.id: str = str(AbstractChannel.NEXT_ID)
             AbstractChannel.NEXT_ID += 1
@@ -79,9 +77,6 @@ class AbstractChannel(ABC):
         self.__queues: dict[str: Queue] = {}
         self.__queues_factory = queues_factory
         self.__streaming_listeners: set[str] = set()
-
-    def set_queues_factory(self, queues_factory: AbstractMessageQueueFactory) -> None:
-        self.__queues_factory = queues_factory
 
     def add_listener(self) -> MessageQueueListener:
         """Add the default listener"""
