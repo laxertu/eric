@@ -1,1 +1,0 @@
-Redis support for eric-sse
