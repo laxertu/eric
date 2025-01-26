@@ -115,10 +115,6 @@ Base class for channels.
 
 Provides functionalities for listeners and message delivery management. SSEChannel is the default implementation
 
-<a id="eric_sse.entities.AbstractChannel.set_queues_factory"></a>
-
-#### set_queues_factory(queues_factory: [AbstractMessageQueueFactory](#eric_sse.queue.AbstractMessageQueueFactory)) → None
-
 <a id="eric_sse.entities.AbstractChannel.add_listener"></a>
 
 #### add_listener() → [MessageQueueListener](#eric_sse.entities.MessageQueueListener)
@@ -187,7 +183,7 @@ Broadcasts a MESSAGE_TYPE_CLOSED Message
 
 <a id="eric_sse.prefabs.SSEChannel"></a>
 
-### *class* SSEChannel(stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5)
+### *class* SSEChannel(stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5, queues_factory: ~eric_sse.queue.AbstractMessageQueueFactory = <eric_sse.queue.InMemoryMessageQueueFactory object>)
 
 Bases: [`AbstractChannel`](#eric_sse.entities.AbstractChannel)
 

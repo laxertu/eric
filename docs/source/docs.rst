@@ -21,6 +21,7 @@ Entities
     :exclude-members: NEXT_ID, type, payload
     :member-order: bysource
 
+
 Prefab channels and listeners
 =============================
 .. automodule:: eric_sse.prefabs

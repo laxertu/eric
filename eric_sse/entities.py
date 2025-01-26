@@ -66,10 +66,6 @@ class AbstractChannel(ABC):
             stream_delay_seconds: int = 0,
             queues_factory: AbstractMessageQueueFactory = InMemoryMessageQueueFactory()
     ):
-        """
-        :param stream_delay_seconds:
-        :param queues_factory: :class:`eric_sse.queues.AbstractMessageQueueFactory`
-        """
         logger.debug(f'Creating channel {AbstractChannel.NEXT_ID}')
         with Lock():
             self.id: str = str(AbstractChannel.NEXT_ID)
