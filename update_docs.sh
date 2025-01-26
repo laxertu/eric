@@ -2,6 +2,7 @@
 cd docs
 rm -rf build/html/
 rm -rf build/markdown/
+rm -rf build/doctrees/
 
 make markdown
 make html

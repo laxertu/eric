@@ -36,11 +36,19 @@ class InMemoryQueue(Queue):
         self.__messages = []
 
 class AbstractMessageQueueFactory(ABC):
+    """
+    Abstraction for queues creation
+
+    see :class:`eric_sse.entities.AbstractChannel`
+    """
     @abstractmethod
     def create(self) -> Queue:
         ...
 
 
 class InMemoryMessageQueueFactory(AbstractMessageQueueFactory):
+    """
+    Default implementation used by :class:`eric_sse.entities.AbstractChannel`
+    """
     def create(self) -> Queue:
         return InMemoryQueue()

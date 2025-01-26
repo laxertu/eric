@@ -315,15 +315,19 @@ A little facade to interact with SocketServer
 
 ### *class* AbstractMessageQueueFactory
 
-<a id="module-eric_redis_queues"></a>
+Bases: `ABC`
 
-<a id="eric_redis_queues.RedisQueueFactory"></a>
+Abstraction for queues creation
 
-### *class* RedisQueueFactory(host='127.0.0.1', port=6379, db=0)
+see [`eric_sse.entities.AbstractChannel`](#eric_sse.entities.AbstractChannel)
+
+<a id="eric_sse.queue.InMemoryMessageQueueFactory"></a>
+
+### *class* InMemoryMessageQueueFactory
 
 Bases: [`AbstractMessageQueueFactory`](#eric_sse.queue.AbstractMessageQueueFactory)
 
-Inject this class to Channels to enable persistence on Redis 
+Default implementation used by [`eric_sse.entities.AbstractChannel`](#eric_sse.entities.AbstractChannel)
 
 <a id="module-eric_sse.exception"></a>
 
