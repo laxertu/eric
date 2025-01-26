@@ -16,6 +16,10 @@ class SSEChannel(AbstractChannel):
     See https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
 
     Currently, 'id' field is not supported.
+
+    :param int stream_delay_seconds:
+    :param int retry_timeout_milliseconds:
+    :param eric_sse.queue.AbstractMessageQueueFactory queues_factory:
     """
 
     def __init__(
@@ -24,10 +28,6 @@ class SSEChannel(AbstractChannel):
             retry_timeout_milliseconds: int = 5,
             queues_factory: AbstractMessageQueueFactory = InMemoryMessageQueueFactory()
     ):
-        """
-        :param stream_delay_seconds:
-        :param retry_timeout_milliseconds:
-        """
         super().__init__(stream_delay_seconds=stream_delay_seconds, queues_factory=queues_factory)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
         self.payload_adapter: (

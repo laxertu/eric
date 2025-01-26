@@ -115,6 +115,10 @@ Base class for channels.
 
 Provides functionalities for listeners and message delivery management. SSEChannel is the default implementation
 
+* **Parameters:**
+  * **stream_delay_seconds** (*int*) – Wait time in seconds between message delivery.
+  * **queues_factory** ([*eric_sse.queue.AbstractMessageQueueFactory*](#eric_sse.queue.AbstractMessageQueueFactory))
+
 <a id="eric_sse.entities.AbstractChannel.add_listener"></a>
 
 #### add_listener() → [MessageQueueListener](#eric_sse.entities.MessageQueueListener)
@@ -191,6 +195,11 @@ SSE streaming channel.
 See [https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
 
 Currently, ‘id’ field is not supported.
+
+* **Parameters:**
+  * **stream_delay_seconds** (*int*)
+  * **retry_timeout_milliseconds** (*int*)
+  * **queues_factory** ([*eric_sse.queue.AbstractMessageQueueFactory*](#eric_sse.queue.AbstractMessageQueueFactory))
 
 <a id="eric_sse.prefabs.DataProcessingChannel"></a>
 

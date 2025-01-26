@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Overview &#8212; eric_sse  documentation</title>
+    <title>Overview &#8212; eric-sse  documentation</title>
   
   
   
@@ -125,7 +125,7 @@
   
   
   
-    <p class="title logo__title">eric_sse  documentation</p>
+    <p class="title logo__title">eric-sse  documentation</p>
   
 </a></div>
         <div class="sidebar-primary-item">
@@ -504,6 +504,14 @@ For validation purposes you can override MessageQueueListener.on_message</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AbstractChannel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream_delay_seconds:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queues_factory:</span> <span class="pre">~eric_sse.queue.AbstractMessageQueueFactory</span> <span class="pre">=</span> <span class="pre">&lt;eric_sse.queue.InMemoryMessageQueueFactory</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel" title="Link to this definition">#</a></dt>
 <dd><p>Base class for channels.</p>
 <p>Provides functionalities for listeners and message delivery management. SSEChannel is the default implementation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stream_delay_seconds</strong> (<em>int</em>) – Wait time in seconds between message delivery.</p></li>
+<li><p><strong>queues_factory</strong> (<a class="reference internal" href="#eric_sse.queue.AbstractMessageQueueFactory" title="eric_sse.queue.AbstractMessageQueueFactory"><em>eric_sse.queue.AbstractMessageQueueFactory</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.add_listener">
 <span class="sig-name descname"><span class="pre">add_listener</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#eric_sse.entities.MessageQueueListener" title="eric_sse.entities.MessageQueueListener"><span class="pre">MessageQueueListener</span></a></span></span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.add_listener" title="Link to this definition">#</a></dt>
@@ -579,6 +587,15 @@ For validation purposes you can override MessageQueueListener.on_message</p>
 <p>SSE streaming channel.
 See <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format">https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format</a></p>
 <p>Currently, ‘id’ field is not supported.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stream_delay_seconds</strong> (<em>int</em>)</p></li>
+<li><p><strong>retry_timeout_milliseconds</strong> (<em>int</em>)</p></li>
+<li><p><strong>queues_factory</strong> (<a class="reference internal" href="#eric_sse.queue.AbstractMessageQueueFactory" title="eric_sse.queue.AbstractMessageQueueFactory"><em>eric_sse.queue.AbstractMessageQueueFactory</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">

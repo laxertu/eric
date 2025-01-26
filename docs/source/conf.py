@@ -22,7 +22,7 @@ sys.path.append(__eric_modules_path)
 
 
 # -- Project information -----------------------------------------------------
-project = 'eric_sse'
+project = 'eric-sse'
 copyright = '2024, Luca Stretti'
 author = 'Luca Stretti'
 

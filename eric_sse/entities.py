@@ -58,6 +58,9 @@ class AbstractChannel(ABC):
     Base class for channels.
 
     Provides functionalities for listeners and message delivery management. SSEChannel is the default implementation
+
+    :param int stream_delay_seconds: Wait time in seconds between message delivery.
+    :param eric_sse.queue.AbstractMessageQueueFactory queues_factory:
     """
     NEXT_ID = 1
 
