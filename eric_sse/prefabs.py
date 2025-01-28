@@ -99,6 +99,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         self.__channel = channel
         self.__actions: dict[str, Callable[[Message], list[Message]]] = dict()
         self.__internal_actions: dict[str, Callable[[], None]] = {
+            'start': self.start_sync,
             'stop': self.stop_sync,
             'remove': self.remove_sync
         }
