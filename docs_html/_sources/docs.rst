@@ -25,6 +25,7 @@ Entities
 Prefab channels and listeners
 =============================
 .. automodule:: eric_sse.prefabs
+    :undoc-members:
     :members:
     :show-inheritance:
     :member-order: bysource
@@ -33,8 +34,10 @@ Prefab channels and listeners
 Prefab servers and clients
 ==========================
 .. automodule:: eric_sse.servers
+    :exclude-members: NEXT_ID
     :members:
 .. automodule:: eric_sse.clients
+    :undoc-members:
     :members:
     :member-order: bysource
 
@@ -43,6 +46,7 @@ Queues
 ======
 .. automodule:: eric_sse.queue
     :members: AbstractMessageQueueFactory, InMemoryMessageQueueFactory
+    :undoc-members:
     :member-order: bysource
     :show-inheritance:
 
