@@ -42,7 +42,7 @@ class SocketServer:
     """
     An implementation of a socket server that acts as a controller to interact with library
 
-    **Accepted format**: a plain (no nested) JSON with the following keys::
+    **Accepted format**: a plain JSON with the following keys::
 
         {        
             "c": "channel id" 

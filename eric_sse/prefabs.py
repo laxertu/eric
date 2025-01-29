@@ -45,7 +45,7 @@ class DataProcessingChannel(AbstractChannel):
     """
     Channel intended for concurrent processing of data.
 
-    Relies on concurrent.futures.ThreadPoolExecutor.
+    Relies on `concurrent.futures.ThreadPoolExecutor <https://docs.python.org/3/library/concurrent.futures.html#threadpoolexecutor>`_.
     Just override **adapt** method to control output returned to clients
 
     MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.  
@@ -99,14 +99,11 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         self.__channel = channel
         self.__actions: dict[str, Callable[[Message], list[Message]]] = dict()
         self.__internal_actions: dict[str, Callable[[], None]] = {
+            'start': self.start_sync,
             'stop': self.stop_sync,
             'remove': self.remove_sync
         }
         channel.register_listener(self)
-
-    def remove_sync(self):
-        self.stop_sync()
-        self.__channel.remove_listener(self.id)
 
     def set_action(self, name: str, action: Callable[[Message], list[Message]]):
         """
@@ -115,7 +112,10 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         Callables are selected when listener processes the message depending on its type.
 
         They should return a list of Messages corresponding to response to action requested.
-        Use 'stop' as Message type to stop receiver listener.
+
+        Reserved actions are 'start', 'stop', 'remove'.
+        Receiving a message with one of these types will fire correspondant action.
+
         """
         if action in self.__internal_actions:
             raise KeyError(f'Trying to set an internal action {action}')
@@ -140,3 +140,8 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
                 self.__channel.dispatch(msg.sender_id, signed_response)
         except KeyError:
             logger.debug(f'Unknown action {msg.type}')
+
+    def remove_sync(self):
+        """Stop and unregister"""
+        self.stop_sync()
+        self.__channel.remove_listener(self.id)

@@ -3,7 +3,6 @@ from pathlib import Path
 from asyncio import open_unix_connection
 from typing import AsyncIterable
 
-
 class SocketClient:
     """
     A little facade to interact with SocketServer
@@ -13,6 +12,11 @@ class SocketClient:
         self.__descriptor_path = Path(file_descriptor_path)
 
     async def send_payload(self, payload: dict):
+        """
+        Send an arbitrary payload to a socket
+
+        see :class:`eric_sse.servers.SocketServer`
+        """
         r, w = await open_unix_connection(self.__descriptor_path)
         w.write(json.dumps(payload).encode())
         w.write_eof()

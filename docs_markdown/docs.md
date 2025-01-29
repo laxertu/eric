@@ -201,6 +201,10 @@ Currently, ‘id’ field is not supported.
   * **retry_timeout_milliseconds** (*int*)
   * **queues_factory** ([*eric_sse.queue.AbstractMessageQueueFactory*](#eric_sse.queue.AbstractMessageQueueFactory))
 
+<a id="eric_sse.prefabs.SSEChannel.adapt"></a>
+
+#### adapt(msg: [Message](#eric_sse.message.Message)) → dict
+
 <a id="eric_sse.prefabs.DataProcessingChannel"></a>
 
 ### *class* DataProcessingChannel(max_workers: int, stream_delay_seconds: int = 0)
@@ -209,7 +213,7 @@ Bases: [`AbstractChannel`](#eric_sse.entities.AbstractChannel)
 
 Channel intended for concurrent processing of data.
 
-Relies on concurrent.futures.ThreadPoolExecutor.
+Relies on [concurrent.futures.ThreadPoolExecutor](https://docs.python.org/3/library/concurrent.futures.html#threadpoolexecutor).
 Just override **adapt** method to control output returned to clients
 
 MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.
@@ -219,6 +223,10 @@ MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered a
 #### *async* process_queue(l: [MessageQueueListener](#eric_sse.entities.MessageQueueListener)) → AsyncIterable[dict]
 
 Launches the processing of the given listener’s queue
+
+<a id="eric_sse.prefabs.DataProcessingChannel.adapt"></a>
+
+#### adapt(msg: [Message](#eric_sse.message.Message)) → dict
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener"></a>
 
@@ -237,13 +245,25 @@ Hooks a callable to a string key.
 Callables are selected when listener processes the message depending on its type.
 
 They should return a list of Messages corresponding to response to action requested.
-Use ‘stop’ as Message type to stop receiver listener.
+
+Reserved actions are ‘start’, ‘stop’, ‘remove’.
+Receiving a message with one of these types will fire correspondant action.
+
+<a id="eric_sse.prefabs.SimpleDistributedApplicationListener.dispatch_to"></a>
+
+#### dispatch_to(receiver: [MessageQueueListener](#eric_sse.entities.MessageQueueListener), msg: [Message](#eric_sse.message.Message))
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"></a>
 
 #### on_message(msg: [SignedMessage](#eric_sse.message.SignedMessage)) → None
 
 Executes action correspondant to message’s type
+
+<a id="eric_sse.prefabs.SimpleDistributedApplicationListener.remove_sync"></a>
+
+#### remove_sync()
+
+Stop and unregister
 
 <a id="module-eric_sse.servers"></a>
 
@@ -263,7 +283,7 @@ Helper class for management of multiple SSE channels cases of use.
 
 An implementation of a socket server that acts as a controller to interact with library
 
-**Accepted format**: a plain (no nested) JSON with the following keys:
+**Accepted format**: a plain JSON with the following keys:
 
 ```default
 {        
@@ -310,6 +330,42 @@ Shortcut to start a server
 
 A little facade to interact with SocketServer
 
+<a id="eric_sse.clients.SocketClient.send_payload"></a>
+
+#### *async* send_payload(payload: dict)
+
+Send an arbitrary payload to a socket
+
+see [`eric_sse.servers.SocketServer`](#eric_sse.servers.SocketServer)
+
+<a id="eric_sse.clients.SocketClient.create_channel"></a>
+
+#### *async* create_channel() → str
+
+<a id="eric_sse.clients.SocketClient.register"></a>
+
+#### *async* register(channel_id: str)
+
+<a id="eric_sse.clients.SocketClient.stream"></a>
+
+#### *async* stream(channel_id, listener_id) → AsyncIterable[str]
+
+<a id="eric_sse.clients.SocketClient.broadcast_message"></a>
+
+#### *async* broadcast_message(channel_id: str, message_type: str, payload: str | dict | int | float)
+
+<a id="eric_sse.clients.SocketClient.dispatch"></a>
+
+#### *async* dispatch(channel_id: str, receiver_id: str, message_type: str, payload: str | dict | int | float)
+
+<a id="eric_sse.clients.SocketClient.remove_listener"></a>
+
+#### *async* remove_listener(channel_id: str, listener_id: str)
+
+<a id="eric_sse.clients.SocketClient.remove_channel"></a>
+
+#### *async* remove_channel(channel_id: str)
+
 <a id="module-eric_sse.queue"></a>
 
 <a id="queues"></a>
@@ -326,6 +382,10 @@ Abstraction for queues creation
 
 see [`eric_sse.entities.AbstractChannel`](#eric_sse.entities.AbstractChannel)
 
+<a id="eric_sse.queue.AbstractMessageQueueFactory.create"></a>
+
+#### *abstract* create() → Queue
+
 <a id="eric_sse.queue.InMemoryMessageQueueFactory"></a>
 
 ### *class* InMemoryMessageQueueFactory
@@ -333,6 +393,10 @@ see [`eric_sse.entities.AbstractChannel`](#eric_sse.entities.AbstractChannel)
 Bases: [`AbstractMessageQueueFactory`](#eric_sse.queue.AbstractMessageQueueFactory)
 
 Default implementation used by [`eric_sse.entities.AbstractChannel`](#eric_sse.entities.AbstractChannel)
+
+<a id="eric_sse.queue.InMemoryMessageQueueFactory.create"></a>
+
+#### create() → Queue
 
 <a id="module-eric_sse.exception"></a>
 
