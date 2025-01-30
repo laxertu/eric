@@ -301,13 +301,13 @@ files = [
 
 [[package]]
 name = "eric-redis-queues"
-version = "0.0.4.5"
+version = "0.0.4.7"
 description = "Redis support for eric-sse"
 optional = true
 python-versions = ">=3.10"
 files = [
-    {file = "eric_redis_queues-0.0.4.5-py3-none-any.whl", hash = "sha256:800c833684a06a2e5b3bdcab182e40134eb3b3ae521e36d55845c5f48540b087"},
-    {file = "eric_redis_queues-0.0.4.5.tar.gz", hash = "sha256:62307e92495d9d5e738d02decf6dd91bfc09917725741c31ee94265f672d5400"},
+    {file = "eric_redis_queues-0.0.4.7-py3-none-any.whl", hash = "sha256:885e27c93ae3cb2b3608c2064e58638151456e06db020128eb75db1c7a0bd2e5"},
+    {file = "eric_redis_queues-0.0.4.7.tar.gz", hash = "sha256:0742fb5b78f3fd4706504761d7094956c440904a0bcad4a0b575f28c64610b9d"},
 ]
 
 [package.dependencies]
