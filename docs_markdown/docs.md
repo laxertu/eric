@@ -402,11 +402,15 @@ see [`eric_sse.servers.SocketServer`](#eric_sse.servers.SocketServer)
 
 Bases: `ABC`
 
-Abstract base class for queues.
+Abstract base class for queues (FIFO)
 
 <a id="eric_sse.queue.Queue.pop"></a>
 
 #### *abstract* pop() → [Message](#eric_sse.message.Message)
+
+Next message from the queue.
+
+Raises a [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessagesException) if the queue is empty.
 
 <a id="eric_sse.queue.Queue.push"></a>
 

@@ -6,9 +6,14 @@ from eric_sse.exception import NoMessagesException
 
 
 class Queue(ABC):
-    """Abstract base class for queues."""
+    """Abstract base class for queues (FIFO)"""
     @abstractmethod
     def pop(self) -> Message:
+        """
+        Next message from the queue.
+
+        Raises a :class:`eric_sse.exception.NoMessagesException` if the queue is empty.
+        """
         ...
 
     @abstractmethod
@@ -25,6 +30,8 @@ class InMemoryQueue(Queue):
         self.__messages: list[Message] = []
 
     def pop(self) -> Message:
+        """
+        """
         try:
             with Lock():
                 return self.__messages.pop(0)
