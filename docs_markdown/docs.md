@@ -112,6 +112,10 @@ Returns a dictionary like:
 
 <a id="module-eric_sse.entities"></a>
 
+<a id="channels-and-listeners"></a>
+
+# Channels and listeners
+
 <a id="eric_sse.entities.MessageQueueListener"></a>
 
 ### *class* MessageQueueListener

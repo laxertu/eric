@@ -16,6 +16,10 @@ Entities
     :show-inheritance:
     :member-order: bysource
 
+
+
+Channels and listeners
+=============================
 .. automodule:: eric_sse.entities
     :members:
     :undoc-members:
