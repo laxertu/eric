@@ -233,7 +233,7 @@ Broadcasts a MESSAGE_TYPE_CLOSED Message
 
 <a id="eric_sse.prefabs.SSEChannel"></a>
 
-### *class* SSEChannel(stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5, queues_factory: ~eric_sse.queue.AbstractMessageQueueFactory = <eric_sse.queue.InMemoryMessageQueueFactory object>)
+### *class* SSEChannel(stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5, queues_factory: [AbstractMessageQueueFactory](#eric_sse.queue.AbstractMessageQueueFactory) | None = None)
 
 Bases: [`AbstractChannel`](#eric_sse.entities.AbstractChannel)
 

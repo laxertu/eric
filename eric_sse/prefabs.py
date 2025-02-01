@@ -26,7 +26,7 @@ class SSEChannel(AbstractChannel):
             self,
             stream_delay_seconds: int = 0,
             retry_timeout_milliseconds: int = 5,
-            queues_factory: AbstractMessageQueueFactory = InMemoryMessageQueueFactory()
+            queues_factory: AbstractMessageQueueFactory = None
     ):
         super().__init__(stream_delay_seconds=stream_delay_seconds, queues_factory=queues_factory)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
