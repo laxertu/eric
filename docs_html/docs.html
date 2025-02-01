@@ -376,6 +376,7 @@
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.queue">Queues</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue.RepositoryError"><code class="docutils literal notranslate"><span class="pre">RepositoryError</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue.AbstractMessageQueueFactory"><code class="docutils literal notranslate"><span class="pre">AbstractMessageQueueFactory</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue.AbstractMessageQueueFactory.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
 </ul>
@@ -779,6 +780,13 @@ Receiving a message with one of these types will fire correspondant action.</p>
 </section>
 <section id="module-eric_sse.queue">
 <span id="queues"></span><h1>Queues<a class="headerlink" href="#module-eric_sse.queue" title="Link to this heading">#</a></h1>
+<dl class="py exception">
+<dt class="sig sig-object py" id="eric_sse.queue.RepositoryError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RepositoryError</span></span><a class="headerlink" href="#eric_sse.queue.RepositoryError" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Concrete implementations of <code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.queue.Queue</span></code> should wrap here the unexpected exceptions they catch before raising.</p>
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.queue.AbstractMessageQueueFactory">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AbstractMessageQueueFactory</span></span><a class="headerlink" href="#eric_sse.queue.AbstractMessageQueueFactory" title="Link to this definition">#</a></dt>
@@ -962,6 +970,7 @@ Receiving a message with one of these types will fire correspondant action.</p>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.queue">Queues</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue.RepositoryError"><code class="docutils literal notranslate"><span class="pre">RepositoryError</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue.AbstractMessageQueueFactory"><code class="docutils literal notranslate"><span class="pre">AbstractMessageQueueFactory</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue.AbstractMessageQueueFactory.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
 </ul>

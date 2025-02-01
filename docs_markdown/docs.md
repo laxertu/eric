@@ -372,6 +372,14 @@ see [`eric_sse.servers.SocketServer`](#eric_sse.servers.SocketServer)
 
 # Queues
 
+<a id="eric_sse.queue.RepositoryError"></a>
+
+### *exception* RepositoryError
+
+Bases: `Exception`
+
+Concrete implementations of `eric_sse.queue.Queue` should wrap here the unexpected exceptions they catch before raising.
+
 <a id="eric_sse.queue.AbstractMessageQueueFactory"></a>
 
 ### *class* AbstractMessageQueueFactory

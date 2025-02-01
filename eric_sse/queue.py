@@ -5,6 +5,7 @@ from eric_sse.message import Message
 from eric_sse.exception import NoMessagesException
 
 class RepositoryError(Exception):
+    """Concrete implementations of :class:`eric_sse.queue.Queue` should wrap here the unexpected exceptions they catch before raising."""
     ...
 
 class Queue(ABC):
