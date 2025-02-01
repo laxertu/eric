@@ -20,7 +20,7 @@ Bases: `ABC`
 
 Contract class for messages
 
-A message just a container of information identified by a type.
+A message is just a container of information identified by a type.
 For validation purposes you can override [`eric_sse.entities.MessageQueueListener.on_message`](#eric_sse.entities.MessageQueueListener.on_message)
 
 <a id="eric_sse.message.MessageContract.type"></a>
