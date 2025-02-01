@@ -1,5 +1,9 @@
 Changelog
 =========
+0.6.4.1
+
+* Changed method's signature from Message to MessageContract
+
 0.6.4
 
 Breaking:

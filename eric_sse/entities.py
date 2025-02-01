@@ -6,7 +6,7 @@ from typing import AsyncIterable, Any
 
 import eric_sse
 from eric_sse.exception import InvalidListenerException, NoMessagesException
-from eric_sse.message import Message
+from eric_sse.message import MessageContract, Message
 from eric_sse.queue import Queue, AbstractMessageQueueFactory, InMemoryMessageQueueFactory
 
 logger = eric_sse.get_logger()
@@ -48,7 +48,7 @@ class MessageQueueListener(ABC):
     def stop_sync(self) -> None:
         self.__is_running = False
 
-    def on_message(self, msg: Message) -> None:
+    def on_message(self, msg: MessageContract) -> None:
         """Event handler. It executes when a message is delivered to client"""
         pass
 
@@ -105,7 +105,7 @@ class AbstractChannel(ABC):
         del self.__queues[l_id]
         del self.__listeners[l_id]
 
-    def deliver_next(self, listener_id: str) -> Message:
+    def deliver_next(self, listener_id: str) -> MessageContract:
         """
         Returns next message for given listener id.
 
@@ -124,16 +124,16 @@ class AbstractChannel(ABC):
         except KeyError:
             raise InvalidListenerException(f"Invalid listener {listener_id}")
 
-    def dispatch(self, listener_id: str, msg: Message):
+    def dispatch(self, listener_id: str, msg: MessageContract):
         """Adds a message to listener's queue"""
 
         self.__add_to_queue(listener_id, msg)
         logger.debug(f"Dispatched {msg} to {listener_id}")
 
-    def __add_to_queue(self, listener_id: str, msg: Message):
+    def __add_to_queue(self, listener_id: str, msg: MessageContract):
         self._get_queue(listener_id).push(msg)
 
-    def broadcast(self, msg: Message):
+    def broadcast(self, msg: MessageContract):
         """Enqueue a message to all listeners"""
         for listener_id in self.__listeners.keys():
             self.dispatch(listener_id, msg=msg)
@@ -145,7 +145,7 @@ class AbstractChannel(ABC):
             raise InvalidListenerException
 
     @abstractmethod
-    def adapt(self, msg: Message) -> Any:
+    def adapt(self, msg: MessageContract) -> Any:
         ...
 
     async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
