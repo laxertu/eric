@@ -152,11 +152,14 @@ Event handler. It executes when a message is delivered to client
 
 <a id="eric_sse.entities.AbstractChannel"></a>
 
-### *class* AbstractChannel(stream_delay_seconds: int = 0, queues_factory: ~eric_sse.queue.AbstractMessageQueueFactory = <eric_sse.queue.InMemoryMessageQueueFactory object>)
+### *class* AbstractChannel(stream_delay_seconds: int = 0, queues_factory: [AbstractMessageQueueFactory](#eric_sse.queue.AbstractMessageQueueFactory) | None = None)
 
 Base class for channels.
 
-Provides functionalities for listeners and message delivery management. SSEChannel is the default implementation
+Provides functionalities for listeners and message delivery management.
+
+[`eric_sse.queue.InMemoryMessageQueueFactory`](#eric_sse.queue.InMemoryMessageQueueFactory) is the default implementation used for queues_factory
+see [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel)
 
 * **Parameters:**
   * **stream_delay_seconds** (*int*) – Wait time in seconds between message delivery.

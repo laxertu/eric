@@ -57,9 +57,13 @@ class AbstractChannel(ABC):
     """
     Base class for channels.
 
-    Provides functionalities for listeners and message delivery management. SSEChannel is the default implementation
+    Provides functionalities for listeners and message delivery management.
+
+    :class:`eric_sse.queue.InMemoryMessageQueueFactory` is the default implementation used for queues_factory
+    see :class:`eric_sse.prefabs.SSEChannel`
 
     :param int stream_delay_seconds: Wait time in seconds between message delivery.
+
     :param eric_sse.queue.AbstractMessageQueueFactory queues_factory:
     """
     NEXT_ID = 1
@@ -67,7 +71,7 @@ class AbstractChannel(ABC):
     def __init__(
             self,
             stream_delay_seconds: int = 0,
-            queues_factory: AbstractMessageQueueFactory = InMemoryMessageQueueFactory()
+            queues_factory: AbstractMessageQueueFactory | None = None
     ):
         logger.debug(f'Creating channel {AbstractChannel.NEXT_ID}')
         with Lock():
@@ -78,7 +82,7 @@ class AbstractChannel(ABC):
 
         self.__listeners: dict[str: MessageQueueListener] = {}
         self.__queues: dict[str: Queue] = {}
-        self.__queues_factory = queues_factory
+        self.__queues_factory = queues_factory if queues_factory else InMemoryMessageQueueFactory()
 
     def _set_queues_factory(self, queues_factory: AbstractMessageQueueFactory):
         self.__queues_factory = queues_factory
