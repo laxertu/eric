@@ -6,6 +6,7 @@ from eric_sse.exception import NoMessagesException
 
 
 class Queue(ABC):
+    """Abstract base class for queues."""
     @abstractmethod
     def pop(self) -> Message:
         ...
@@ -16,6 +17,7 @@ class Queue(ABC):
 
     @abstractmethod
     def delete(self) -> None:
+        """Removes all messages from the queue."""
         ...
 
 class InMemoryQueue(Queue):
