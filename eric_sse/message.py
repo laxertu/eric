@@ -2,29 +2,28 @@ from abc import ABC, abstractmethod
 
 class MessageContract(ABC):
     """
-    Models a message
+    Contract class for messages
 
-    It's just a container of information identified by a type.
-    For validation purposes you can override MessageQueueListener.on_message
+    A message is just a container of information identified by a type.
+    For validation purposes you can override :class:`eric_sse.entities.MessageQueueListener.on_message`
+
     """
-
     @property
     @abstractmethod
     def type(self) -> str:
+        """Message type"""
         ...
 
     @property
     @abstractmethod
     def payload(self) -> dict | list | str | int | float | None:
+        """Message payload"""
         ...
 
 
 class Message(MessageContract):
     """
-    Models a message
-
-    It's just a container of information identified by a type.
-    For validation purposes you can override MessageQueueListener.on_message
+    Models a simple message
     """
     def __init__(self, msg_type: str, msg_payload: dict | list | str | int | float | None = None) -> None:
         self._type = msg_type
@@ -40,6 +39,7 @@ class Message(MessageContract):
 
 
 class UniqueMessage(MessageContract):
+    """Messages plus an unique identifier"""
     __message: Message
     __sender_id: str | None = None
 
@@ -66,7 +66,11 @@ class UniqueMessage(MessageContract):
 
 
 class SignedMessage(Message):
-    """A wrapper that adds sender id"""
+    """
+    Message plus sender id
+
+    A sender id identifies another listener
+    """
 
     def __init__(self, sender_id: str, msg_type: str, msg_payload: dict | list | str | int | float | None = None):
         super().__init__(msg_type, msg_payload)

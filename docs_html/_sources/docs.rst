@@ -13,7 +13,7 @@ Entities
 ========
 .. automodule:: eric_sse.message
     :members:
-    :undoc-members:
+    :show-inheritance:
     :member-order: bysource
 
 .. automodule:: eric_sse.entities

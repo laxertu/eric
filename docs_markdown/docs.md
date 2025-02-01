@@ -16,69 +16,80 @@ thanks a lot [https://excalidraw.com](https://excalidraw.com) !!
 
 ### *class* MessageContract
 
-Models a message
+Bases: `ABC`
 
-It’s just a container of information identified by a type.
-For validation purposes you can override MessageQueueListener.on_message
+Contract class for messages
+
+A message just a container of information identified by a type.
+For validation purposes you can override [`eric_sse.entities.MessageQueueListener.on_message`](#eric_sse.entities.MessageQueueListener.on_message)
 
 <a id="eric_sse.message.MessageContract.type"></a>
 
 #### *abstract property* type *: str*
 
+Message type
+
 <a id="eric_sse.message.MessageContract.payload"></a>
 
 #### *abstract property* payload *: dict | list | str | int | float | None*
+
+Message payload
 
 <a id="eric_sse.message.Message"></a>
 
 ### *class* Message(msg_type: str, msg_payload: dict | list | str | int | float | None = None)
 
-Models a message
+Bases: [`MessageContract`](#eric_sse.message.MessageContract)
 
-It’s just a container of information identified by a type.
-For validation purposes you can override MessageQueueListener.on_message
+Models a simple message
 
 <a id="eric_sse.message.Message.type"></a>
 
 #### *property* type *: str*
 
+Message type
+
 <a id="eric_sse.message.Message.payload"></a>
 
 #### *property* payload *: dict | list | str | int | float | None*
+
+Message payload
 
 <a id="eric_sse.message.UniqueMessage"></a>
 
 ### *class* UniqueMessage(message_id: str, message: [Message](#eric_sse.message.Message), sender_id: str | None = None)
 
-<a id="eric_sse.message.UniqueMessage.id"></a>
+Bases: [`MessageContract`](#eric_sse.message.MessageContract)
 
-#### *property* id *: str*
+Messages plus an unique identifier
 
 <a id="eric_sse.message.UniqueMessage.type"></a>
 
 #### *property* type *: str*
 
-<a id="eric_sse.message.UniqueMessage.sender_id"></a>
-
-#### *property* sender_id *: str*
+Message type
 
 <a id="eric_sse.message.UniqueMessage.payload"></a>
 
 #### *property* payload *: dict | list | str | int | float | None*
 
+Message payload
+
 <a id="eric_sse.message.SignedMessage"></a>
 
 ### *class* SignedMessage(sender_id: str, msg_type: str, msg_payload: dict | list | str | int | float | None = None)
 
-A wrapper that adds sender id
+Bases: [`Message`](#eric_sse.message.Message)
 
-<a id="eric_sse.message.SignedMessage.sender_id"></a>
+Message plus sender id
 
-#### *property* sender_id *: str*
+A sender id identifies another listener
 
 <a id="eric_sse.message.SignedMessage.payload"></a>
 
 #### *property* payload *: dict | list | str | int | float | None*
+
+Message payload
 
 <a id="module-eric_sse.entities"></a>
 

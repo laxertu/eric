@@ -303,14 +303,11 @@
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.UniqueMessage"><code class="docutils literal notranslate"><span class="pre">UniqueMessage</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.UniqueMessage.id"><code class="docutils literal notranslate"><span class="pre">id</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.UniqueMessage.type"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.UniqueMessage.sender_id"><code class="docutils literal notranslate"><span class="pre">sender_id</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.UniqueMessage.payload"><code class="docutils literal notranslate"><span class="pre">payload</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.SignedMessage"><code class="docutils literal notranslate"><span class="pre">SignedMessage</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.SignedMessage.sender_id"><code class="docutils literal notranslate"><span class="pre">sender_id</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.SignedMessage.payload"><code class="docutils literal notranslate"><span class="pre">payload</span></code></a></li>
 </ul>
 </li>
@@ -427,77 +424,73 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.message.MessageContract">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MessageContract</span></span><a class="headerlink" href="#eric_sse.message.MessageContract" title="Link to this definition">#</a></dt>
-<dd><p>Models a message</p>
-<p>It’s just a container of information identified by a type.
-For validation purposes you can override MessageQueueListener.on_message</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Contract class for messages</p>
+<p>A message just a container of information identified by a type.
+For validation purposes you can override <a class="reference internal" href="#eric_sse.entities.MessageQueueListener.on_message" title="eric_sse.entities.MessageQueueListener.on_message"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.entities.MessageQueueListener.on_message</span></code></a></p>
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.message.MessageContract.type">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.message.MessageContract.type" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Message type</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.message.MessageContract.payload">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#eric_sse.message.MessageContract.payload" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Message payload</p>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.message.Message">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg_payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.message.Message" title="Link to this definition">#</a></dt>
-<dd><p>Models a message</p>
-<p>It’s just a container of information identified by a type.
-For validation purposes you can override MessageQueueListener.on_message</p>
+<dd><p>Bases: <a class="reference internal" href="#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageContract</span></code></a></p>
+<p>Models a simple message</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.message.Message.type">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.message.Message.type" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Message type</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.message.Message.payload">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#eric_sse.message.Message.payload" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Message payload</p>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.message.UniqueMessage">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UniqueMessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.message.Message" title="eric_sse.message.Message"><span class="pre">Message</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sender_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.message.UniqueMessage" title="Link to this definition">#</a></dt>
-<dd><dl class="py property">
-<dt class="sig sig-object py" id="eric_sse.message.UniqueMessage.id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.message.UniqueMessage.id" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
+<dd><p>Bases: <a class="reference internal" href="#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageContract</span></code></a></p>
+<p>Messages plus an unique identifier</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.message.UniqueMessage.type">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.message.UniqueMessage.type" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="eric_sse.message.UniqueMessage.sender_id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sender_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.message.UniqueMessage.sender_id" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Message type</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.message.UniqueMessage.payload">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#eric_sse.message.UniqueMessage.payload" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Message payload</p>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.message.SignedMessage">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SignedMessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg_payload</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.message.SignedMessage" title="Link to this definition">#</a></dt>
-<dd><p>A wrapper that adds sender id</p>
-<dl class="py property">
-<dt class="sig sig-object py" id="eric_sse.message.SignedMessage.sender_id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sender_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.message.SignedMessage.sender_id" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
+<dd><p>Bases: <a class="reference internal" href="#eric_sse.message.Message" title="eric_sse.message.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code></a></p>
+<p>Message plus sender id</p>
+<p>A sender id identifies another listener</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.message.SignedMessage.payload">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#eric_sse.message.SignedMessage.payload" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Message payload</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -945,14 +938,11 @@ an <a class="reference internal" href="#eric_sse.exception.NoMessagesException" 
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.UniqueMessage"><code class="docutils literal notranslate"><span class="pre">UniqueMessage</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.UniqueMessage.id"><code class="docutils literal notranslate"><span class="pre">id</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.UniqueMessage.type"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.UniqueMessage.sender_id"><code class="docutils literal notranslate"><span class="pre">sender_id</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.UniqueMessage.payload"><code class="docutils literal notranslate"><span class="pre">payload</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.SignedMessage"><code class="docutils literal notranslate"><span class="pre">SignedMessage</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.SignedMessage.sender_id"><code class="docutils literal notranslate"><span class="pre">sender_id</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.SignedMessage.payload"><code class="docutils literal notranslate"><span class="pre">payload</span></code></a></li>
 </ul>
 </li>
