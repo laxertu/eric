@@ -9,15 +9,17 @@ logger.setLevel(logging.ERROR)
 
 ssc = SSEChannel()
 
+def output(m:Message):
+    print(m.type, m.payload)
 
 def hello_response(m: Message) -> list[Message]:
-    print(m)
+    output(m)
     return [
-        Message(type='hello_ack', payload=f'{m.payload["payload"]}!')
+        Message(msg_type='hello_ack', msg_payload=f'{m.payload["payload"]}!')
     ]
 
 def hello_ack_response(m: Message) -> list[Message]:
-    print(m)
+    output(m)
     try:
         next_message = input('Say something [CTRL-C to quit]: ')
     except KeyboardInterrupt:
@@ -25,13 +27,13 @@ def hello_ack_response(m: Message) -> list[Message]:
         print("Shutting down")
         return close_connection_response()
 
-    return [Message(type='hello', payload=next_message)]
+    return [Message(msg_type='hello', msg_payload=next_message)]
 
 def close_connection_response() -> list[Message]:
-    return [Message(type='bye'), Message(type='stop')]
+    return [Message(msg_type='bye'), Message(msg_type='stop')]
 
 def bye_handler(m: Message) -> list[Message]:
-    print(m)
+    output(m)
     return close_connection_response()
 
 def create_listener(ch: SSEChannel):
@@ -53,7 +55,7 @@ async def main():
     bob = create_listener(ssc)
 
     # Bob says hello to Alice
-    bob.dispatch_to(alice, Message(type='hello', payload='hello!'))
+    bob.dispatch_to(alice, Message(msg_type='hello', msg_payload='hello!'))
 
     f2 = asyncio.create_task(do_stuff(alice))
     f1 = asyncio.create_task(do_stuff(bob))

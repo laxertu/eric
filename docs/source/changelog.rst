@@ -1,5 +1,10 @@
 Changelog
 =========
+0.6.4
+
+Breaking:
+
+* Updated Message constructor signature
 
 0.6.3
 

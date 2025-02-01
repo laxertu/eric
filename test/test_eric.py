@@ -2,7 +2,7 @@ import json
 from unittest import TestCase, IsolatedAsyncioTestCase
 
 from eric_sse.entities import MessageQueueListener
-from eric_sse.message import Message, SignedMessage
+from eric_sse.message import Message, SignedMessage, UniqueMessage
 from eric_sse.exception import NoMessagesException
 from eric_sse.prefabs import SSEChannel, SimpleDistributedApplicationListener, DataProcessingChannel
 
@@ -24,6 +24,33 @@ class MessageQueueListenerMock(MessageQueueListener):
 
         if self.num_received >= self.disconnect_after:
             self.stop_sync()
+
+
+class MessageTestCase(TestCase):
+
+    def test_model(self):
+
+        m = Message(msg_type='test')
+        self.assertEqual('test', m.type)
+        self.assertIsNone(m.payload)
+
+        m = Message(msg_type='test', msg_payload={'a': 1})
+        self.assertEqual('test', m.type)
+        self.assertEqual({'a': 1}, m.payload)
+
+        m = SignedMessage(msg_type='test', sender_id='sender_id')
+        self.assertEqual('test', m.type)
+        self.assertEqual('sender_id', m.sender_id)
+
+        m = SignedMessage(msg_type='test', msg_payload={'a': 1}, sender_id='sender_id')
+        self.assertEqual('test', m.type)
+        self.assertEqual('sender_id', m.sender_id)
+        self.assertEqual({'sender_id': 'sender_id', 'payload': {'a': 1}}, m.payload)
+
+        m = UniqueMessage(message_id='message_id', message=Message(msg_type='test', msg_payload={'a': 1}))
+        self.assertEqual('message_id', m.id)
+        self.assertEqual('test', m.type)
+        self.assertEqual({'a': 1}, m.payload)
 
 
 class ListenerTestCase(IsolatedAsyncioTestCase):
@@ -79,7 +106,7 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
         m_2.start_sync()
 
         # 1 broadcast
-        msg_to_send = Message(type='test', payload={})
+        msg_to_send = Message(msg_type='test', msg_payload={})
         c.broadcast(msg=msg_to_send)
 
         # message is received correctly
@@ -102,7 +129,7 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
         listener = MessageQueueListenerMock()
         self.sut.register_listener(listener)
         listener.start_sync()
-        self.sut.dispatch(listener.id, Message(type="test", payload={'a': 1}))
+        self.sut.dispatch(listener.id, Message(msg_type="test", msg_payload={'a': 1}))
 
         async for m in await self.sut.message_stream(listener):
             self.assertEqual(m['data'], json.dumps({'a': 1}))
@@ -114,8 +141,8 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
         listener = MessageQueueListenerMock(num_messages_before_disconnect=2)
         c.register_listener(listener)
         await listener.start()
-        c.dispatch(listener.id, Message(type='test', payload={'a': 1}))
-        c.dispatch(listener.id, Message(type='test', payload={'a': 1}))
+        c.dispatch(listener.id, Message(msg_type='test', msg_payload={'a': 1}))
+        c.dispatch(listener.id, Message(msg_type='test', msg_payload={'a': 1}))
 
         async for msg in await c.message_stream(listener):
             self.assertDictEqual({'data': {'a': 1}, 'event': 'test', 'retry': c.retry_timeout_milliseconds}, msg)
@@ -145,8 +172,8 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
 
     async def test_listener_start_stop(self):
         l = self.sut.add_listener()
-        self.sut.dispatch(l.id, Message(type='test'))
-        self.sut.dispatch(l.id, Message(type='test'))
+        self.sut.dispatch(l.id, Message(msg_type='test'))
+        self.sut.dispatch(l.id, Message(msg_type='test'))
 
         await l.start()
         async for m in await self.sut.message_stream(listener=l):
@@ -157,27 +184,17 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
         async for m in await self.sut.message_stream(listener=l):
             self.assertEqual('test', m['event'])
             await l.stop()
-
-
-
-class SignedMessageTestCase(TestCase):
-
-    def test_signed_message(self):
-        sut = SignedMessage(sender_id='1', msg_type='test', msg_payload='hi')
-        self.assertEqual(sut.payload, {'sender_id': '1', 'payload': 'hi'})
-        self.assertEqual(sut.sender_id, '1')
-
 
 
 def hello_response(m: Message) -> list[Message]:
     return [
-        Message(type='hello_ack', payload=f'{m.payload["payload"]}!'),
-        Message(type='stop')
+        Message(msg_type='hello_ack', msg_payload=f'{m.payload["payload"]}!'),
+        Message(msg_type='stop')
     ]
 
 def hello_ack_response(m: Message) -> list[Message]:
     return [
-        Message(type='stop')
+        Message(msg_type='stop')
     ]
 
 
@@ -199,10 +216,10 @@ class DistributedListenerTestCase(IsolatedAsyncioTestCase):
         bob = DistributedListenerTestCase.create_listener(ssc)
 
         # Bob says hello to Alice
-        bob.dispatch_to(alice, Message(type='hello', payload='hello!'))
+        bob.dispatch_to(alice, Message(msg_type='hello', msg_payload='hello!'))
 
         # Alice will stop after having answered to Bob
-        bob.dispatch_to(alice, Message(type='stop'))
+        bob.dispatch_to(alice, Message(msg_type='stop'))
 
         types = [m['event'] async for m in await ssc.message_stream(alice)]
         self.assertEqual(['hello', 'stop'], types)
@@ -216,9 +233,9 @@ class DataProcessingChannelTestCase(IsolatedAsyncioTestCase):
         listener = MessageQueueListenerMock()
         channel.register_listener(listener)
 
-        channel.dispatch(listener.id, Message(type='test1'))
-        channel.dispatch(listener.id, Message(type='test2'))
-        channel.dispatch(listener.id, Message(type='test3'))
+        channel.dispatch(listener.id, Message(msg_type='test1'))
+        channel.dispatch(listener.id, Message(msg_type='test2'))
+        channel.dispatch(listener.id, Message(msg_type='test3'))
 
         await listener.start()
         types = {m['event'] async for m in await channel.process_queue(listener)}

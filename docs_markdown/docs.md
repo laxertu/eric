@@ -12,9 +12,26 @@ thanks a lot [https://excalidraw.com](https://excalidraw.com) !!
 
 # Entities
 
+<a id="eric_sse.message.MessageContract"></a>
+
+### *class* MessageContract
+
+Models a message
+
+It’s just a container of information identified by a type.
+For validation purposes you can override MessageQueueListener.on_message
+
+<a id="eric_sse.message.MessageContract.type"></a>
+
+#### *abstract property* type *: str*
+
+<a id="eric_sse.message.MessageContract.payload"></a>
+
+#### *abstract property* payload *: dict | list | str | int | float | None*
+
 <a id="eric_sse.message.Message"></a>
 
-### *class* Message(type: str, payload: dict | list | str | int | float | None = None)
+### *class* Message(msg_type: str, msg_payload: dict | list | str | int | float | None = None)
 
 Models a message
 
@@ -23,15 +40,15 @@ For validation purposes you can override MessageQueueListener.on_message
 
 <a id="eric_sse.message.Message.type"></a>
 
-#### type *: str*
+#### *property* type *: str*
 
 <a id="eric_sse.message.Message.payload"></a>
 
-#### payload *: dict | list | str | int | float | None* *= None*
+#### *property* payload *: dict | list | str | int | float | None*
 
 <a id="eric_sse.message.UniqueMessage"></a>
 
-### *class* UniqueMessage(message_id: str, message: [eric_sse.message.Message](#eric_sse.message.Message), sender_id: str = None)
+### *class* UniqueMessage(message_id: str, message: [Message](#eric_sse.message.Message), sender_id: str | None = None)
 
 <a id="eric_sse.message.UniqueMessage.id"></a>
 
@@ -58,10 +75,6 @@ A wrapper that adds sender id
 <a id="eric_sse.message.SignedMessage.sender_id"></a>
 
 #### *property* sender_id *: str*
-
-<a id="eric_sse.message.SignedMessage.type"></a>
-
-#### *property* type
 
 <a id="eric_sse.message.SignedMessage.payload"></a>
 

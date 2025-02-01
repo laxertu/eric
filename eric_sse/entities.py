@@ -182,4 +182,4 @@ class AbstractChannel(ABC):
 
     def notify_end(self):
         """Broadcasts a MESSAGE_TYPE_CLOSED Message"""
-        self.broadcast(Message(type=MESSAGE_TYPE_CLOSED))
+        self.broadcast(Message(msg_type=MESSAGE_TYPE_CLOSED))
