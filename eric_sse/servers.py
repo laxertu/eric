@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import AsyncIterable
 
 from eric_sse import get_logger
-from eric_sse.message import Message
+from eric_sse.message import MessageContract, Message
 from eric_sse.exception import InvalidChannelException, InvalidListenerException, InvalidMessageFormat
 from eric_sse.prefabs import SSEChannel
 
@@ -74,7 +74,7 @@ class SocketServer:
         self.__unix_server: asyncio.Server | None = None
 
     @staticmethod
-    def __parse(json_raw: str) -> (str, str, Message | None, str):
+    def __parse(json_raw: str) -> (str, str, MessageContract | None, str):
         try:
             parsed = json.loads(json_raw)
             verb = parsed['v']

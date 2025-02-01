@@ -3,7 +3,7 @@ from typing import Callable, AsyncIterable, Iterator
 
 from eric_sse import get_logger
 from eric_sse.entities import AbstractChannel, MessageQueueListener
-from eric_sse.message import Message, SignedMessage
+from eric_sse.message import Message, SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
 from eric_sse.queue import AbstractMessageQueueFactory, InMemoryMessageQueueFactory
 
@@ -33,7 +33,7 @@ class SSEChannel(AbstractChannel):
         self.payload_adapter: (
             Callable)[[dict | list | str | int | float | None], dict | list | str | int | float | None] = lambda x: x
 
-    def adapt(self, msg: Message) -> dict:
+    def adapt(self, msg: MessageContract) -> dict:
         return {
             "event": msg.type,
             "retry": self.retry_timeout_milliseconds,
@@ -80,7 +80,7 @@ class DataProcessingChannel(AbstractChannel):
                     there_are_pending_messages = False
 
     @staticmethod
-    def __invoke_callback_and_return(callback: Callable[[Message], None], msg: Message):
+    def __invoke_callback_and_return(callback: Callable[[MessageContract], None], msg: MessageContract):
         callback(msg)
         return msg
 
@@ -97,7 +97,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
     def __init__(self, channel: AbstractChannel):
         super().__init__()
         self.__channel = channel
-        self.__actions: dict[str, Callable[[Message], list[Message]]] = dict()
+        self.__actions: dict[str, Callable[[MessageContract], list[MessageContract]]] = dict()
         self.__internal_actions: dict[str, Callable[[], None]] = {
             'start': self.start_sync,
             'stop': self.stop_sync,
@@ -105,7 +105,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         }
         channel.register_listener(self)
 
-    def set_action(self, name: str, action: Callable[[Message], list[Message]]):
+    def set_action(self, name: str, action: Callable[[MessageContract], list[MessageContract]]):
         """
         Hooks a callable to a string key.
 
@@ -121,7 +121,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
             raise KeyError(f'Trying to set an internal action {action}')
         self.__actions[name] = action
 
-    def dispatch_to(self, receiver: MessageQueueListener, msg: Message):
+    def dispatch_to(self, receiver: MessageQueueListener, msg: MessageContract):
         signed_message = SignedMessage(sender_id=self.id, msg_type=msg.type, msg_payload=msg.payload)
         self.__channel.dispatch(receiver.id, signed_message)
 

@@ -146,7 +146,7 @@ Optionally you can override on_message method if you need to inject code at mess
 
 <a id="eric_sse.entities.MessageQueueListener.on_message"></a>
 
-#### on_message(msg: [Message](#eric_sse.message.Message)) → None
+#### on_message(msg: [MessageContract](#eric_sse.message.MessageContract)) → None
 
 Event handler. It executes when a message is delivered to client
 
@@ -183,7 +183,7 @@ Adds a listener to channel
 
 <a id="eric_sse.entities.AbstractChannel.deliver_next"></a>
 
-#### deliver_next(listener_id: str) → [Message](#eric_sse.message.Message)
+#### deliver_next(listener_id: str) → [MessageContract](#eric_sse.message.MessageContract)
 
 Returns next message for given listener id.
 
@@ -191,13 +191,13 @@ Raises a NoMessagesException if queue is empty
 
 <a id="eric_sse.entities.AbstractChannel.dispatch"></a>
 
-#### dispatch(listener_id: str, msg: [Message](#eric_sse.message.Message))
+#### dispatch(listener_id: str, msg: [MessageContract](#eric_sse.message.MessageContract))
 
 Adds a message to listener’s queue
 
 <a id="eric_sse.entities.AbstractChannel.broadcast"></a>
 
-#### broadcast(msg: [Message](#eric_sse.message.Message))
+#### broadcast(msg: [MessageContract](#eric_sse.message.MessageContract))
 
 Enqueue a message to all listeners
 
@@ -207,7 +207,7 @@ Enqueue a message to all listeners
 
 <a id="eric_sse.entities.AbstractChannel.adapt"></a>
 
-#### *abstract* adapt(msg: [Message](#eric_sse.message.Message)) → Any
+#### *abstract* adapt(msg: [MessageContract](#eric_sse.message.MessageContract)) → Any
 
 <a id="eric_sse.entities.AbstractChannel.message_stream"></a>
 
@@ -249,7 +249,7 @@ Currently, ‘id’ field is not supported.
 
 <a id="eric_sse.prefabs.SSEChannel.adapt"></a>
 
-#### adapt(msg: [Message](#eric_sse.message.Message)) → dict
+#### adapt(msg: [MessageContract](#eric_sse.message.MessageContract)) → dict
 
 <a id="eric_sse.prefabs.DataProcessingChannel"></a>
 
@@ -284,7 +284,7 @@ Listener for distributed applications
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.set_action"></a>
 
-#### set_action(name: str, action: Callable[[[Message](#eric_sse.message.Message)], list[[Message](#eric_sse.message.Message)]])
+#### set_action(name: str, action: Callable[[[MessageContract](#eric_sse.message.MessageContract)], list[[MessageContract](#eric_sse.message.MessageContract)]])
 
 Hooks a callable to a string key.
 
@@ -297,7 +297,7 @@ Receiving a message with one of these types will fire correspondant action.
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.dispatch_to"></a>
 
-#### dispatch_to(receiver: [MessageQueueListener](#eric_sse.entities.MessageQueueListener), msg: [Message](#eric_sse.message.Message))
+#### dispatch_to(receiver: [MessageQueueListener](#eric_sse.entities.MessageQueueListener), msg: [MessageContract](#eric_sse.message.MessageContract))
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"></a>
 
@@ -428,7 +428,7 @@ Abstract base class for queues (FIFO)
 
 <a id="eric_sse.queue.Queue.pop"></a>
 
-#### *abstract* pop() → [Message](#eric_sse.message.Message)
+#### *abstract* pop() → [MessageContract](#eric_sse.message.MessageContract)
 
 Next message from the queue.
 
@@ -436,7 +436,7 @@ Raises a [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessag
 
 <a id="eric_sse.queue.Queue.push"></a>
 
-#### *abstract* push(message: [Message](#eric_sse.message.Message)) → None
+#### *abstract* push(message: [MessageContract](#eric_sse.message.MessageContract)) → None
 
 <a id="eric_sse.queue.Queue.delete"></a>
 
