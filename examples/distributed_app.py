@@ -9,15 +9,17 @@ logger.setLevel(logging.ERROR)
 
 ssc = SSEChannel()
 
+def output(m:Message):
+    print(m.type, m.payload)
 
 def hello_response(m: Message) -> list[Message]:
-    print(m)
+    output(m)
     return [
         Message(msg_type='hello_ack', msg_payload=f'{m.payload["payload"]}!')
     ]
 
 def hello_ack_response(m: Message) -> list[Message]:
-    print(m)
+    output(m)
     try:
         next_message = input('Say something [CTRL-C to quit]: ')
     except KeyboardInterrupt:
@@ -31,7 +33,7 @@ def close_connection_response() -> list[Message]:
     return [Message(msg_type='bye'), Message(msg_type='stop')]
 
 def bye_handler(m: Message) -> list[Message]:
-    print(m)
+    output(m)
     return close_connection_response()
 
 def create_listener(ch: SSEChannel):

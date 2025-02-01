@@ -2,7 +2,7 @@ import json
 from unittest import TestCase, IsolatedAsyncioTestCase
 
 from eric_sse.entities import MessageQueueListener
-from eric_sse.message import Message, SignedMessage
+from eric_sse.message import Message, SignedMessage, UniqueMessage
 from eric_sse.exception import NoMessagesException
 from eric_sse.prefabs import SSEChannel, SimpleDistributedApplicationListener, DataProcessingChannel
 
@@ -24,6 +24,33 @@ class MessageQueueListenerMock(MessageQueueListener):
 
         if self.num_received >= self.disconnect_after:
             self.stop_sync()
+
+
+class MessageTestCase(TestCase):
+
+    def test_model(self):
+
+        m = Message(msg_type='test')
+        self.assertEqual('test', m.type)
+        self.assertIsNone(m.payload)
+
+        m = Message(msg_type='test', msg_payload={'a': 1})
+        self.assertEqual('test', m.type)
+        self.assertEqual({'a': 1}, m.payload)
+
+        m = SignedMessage(msg_type='test', sender_id='sender_id')
+        self.assertEqual('test', m.type)
+        self.assertEqual('sender_id', m.sender_id)
+
+        m = SignedMessage(msg_type='test', msg_payload={'a': 1}, sender_id='sender_id')
+        self.assertEqual('test', m.type)
+        self.assertEqual('sender_id', m.sender_id)
+        self.assertEqual({'sender_id': 'sender_id', 'payload': {'a': 1}}, m.payload)
+
+        m = UniqueMessage(message_id='message_id', message=Message(msg_type='test', msg_payload={'a': 1}))
+        self.assertEqual('message_id', m.id)
+        self.assertEqual('test', m.type)
+        self.assertEqual({'a': 1}, m.payload)
 
 
 class ListenerTestCase(IsolatedAsyncioTestCase):
@@ -157,16 +184,6 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
         async for m in await self.sut.message_stream(listener=l):
             self.assertEqual('test', m['event'])
             await l.stop()
-
-
-
-class SignedMessageTestCase(TestCase):
-
-    def test_signed_message(self):
-        sut = SignedMessage(sender_id='1', msg_type='test', msg_payload='hi')
-        self.assertEqual(sut.payload, {'sender_id': '1', 'payload': 'hi'})
-        self.assertEqual(sut.sender_id, '1')
-
 
 
 def hello_response(m: Message) -> list[Message]:
