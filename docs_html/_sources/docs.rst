@@ -46,7 +46,7 @@ Prefab servers and clients
 Queues
 ======
 .. automodule:: eric_sse.queue
-    :members: AbstractMessageQueueFactory, InMemoryMessageQueueFactory, RepositoryError
+    :members: AbstractMessageQueueFactory, InMemoryMessageQueueFactory, RepositoryError, Queue
     :undoc-members:
     :member-order: bysource
     :show-inheritance:

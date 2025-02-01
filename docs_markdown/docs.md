@@ -372,13 +372,23 @@ see [`eric_sse.servers.SocketServer`](#eric_sse.servers.SocketServer)
 
 # Queues
 
-<a id="eric_sse.queue.RepositoryError"></a>
+<a id="eric_sse.queue.Queue"></a>
 
-### *exception* RepositoryError
+### *class* Queue
 
-Bases: `Exception`
+Bases: `ABC`
 
-Concrete implementations of `eric_sse.queue.Queue` should wrap here the unexpected exceptions they catch before raising.
+<a id="eric_sse.queue.Queue.pop"></a>
+
+#### *abstract* pop() → [Message](#eric_sse.message.Message)
+
+<a id="eric_sse.queue.Queue.push"></a>
+
+#### *abstract* push(message: [Message](#eric_sse.message.Message)) → None
+
+<a id="eric_sse.queue.Queue.delete"></a>
+
+#### *abstract* delete() → None
 
 <a id="eric_sse.queue.AbstractMessageQueueFactory"></a>
 
@@ -392,7 +402,7 @@ see [`eric_sse.entities.AbstractChannel`](#eric_sse.entities.AbstractChannel)
 
 <a id="eric_sse.queue.AbstractMessageQueueFactory.create"></a>
 
-#### *abstract* create() → Queue
+#### *abstract* create() → [Queue](#eric_sse.queue.Queue)
 
 <a id="eric_sse.queue.InMemoryMessageQueueFactory"></a>
 
@@ -404,7 +414,18 @@ Default implementation used by [`eric_sse.entities.AbstractChannel`](#eric_sse.e
 
 <a id="eric_sse.queue.InMemoryMessageQueueFactory.create"></a>
 
-#### create() → Queue
+#### create() → [Queue](#eric_sse.queue.Queue)
+
+<a id="eric_sse.queue.RepositoryError"></a>
+
+### *exception* RepositoryError
+
+Bases: `Exception`
+
+Raised when an unexpected error occurs while trying to fetch messages from a queue.
+
+Concrete implementations of [`Queue`](#eric_sse.queue.Queue) should wrap here the unexpected exceptions they catch before raising, and
+an [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessagesException) when a pop is requested on an empty queue.
 
 <a id="module-eric_sse.exception"></a>
 

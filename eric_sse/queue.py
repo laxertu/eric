@@ -4,9 +4,6 @@ from threading import Lock
 from eric_sse.message import Message
 from eric_sse.exception import NoMessagesException
 
-class RepositoryError(Exception):
-    """Concrete implementations of :class:`eric_sse.queue.Queue` should wrap here the unexpected exceptions they catch before raising."""
-    ...
 
 class Queue(ABC):
     @abstractmethod
@@ -55,3 +52,13 @@ class InMemoryMessageQueueFactory(AbstractMessageQueueFactory):
     """
     def create(self) -> Queue:
         return InMemoryQueue()
+
+
+class RepositoryError(Exception):
+    """
+    Raised when an unexpected error occurs while trying to fetch messages from a queue.
+
+    Concrete implementations of :class:`Queue` should wrap here the unexpected exceptions they catch before raising, and
+    an :class:`eric_sse.exception.NoMessagesException` when a pop is requested on an empty queue.
+    """
+    ...
