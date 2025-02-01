@@ -378,6 +378,8 @@ see [`eric_sse.servers.SocketServer`](#eric_sse.servers.SocketServer)
 
 Bases: `ABC`
 
+Abstract base class for queues.
+
 <a id="eric_sse.queue.Queue.pop"></a>
 
 #### *abstract* pop() → [Message](#eric_sse.message.Message)
@@ -389,6 +391,8 @@ Bases: `ABC`
 <a id="eric_sse.queue.Queue.delete"></a>
 
 #### *abstract* delete() → None
+
+Removes all messages from the queue.
 
 <a id="eric_sse.queue.AbstractMessageQueueFactory"></a>
 

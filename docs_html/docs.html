@@ -790,6 +790,7 @@ Receiving a message with one of these types will fire correspondant action.</p>
 <dt class="sig sig-object py" id="eric_sse.queue.Queue">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Queue</span></span><a class="headerlink" href="#eric_sse.queue.Queue" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Abstract base class for queues.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.queue.Queue.pop">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#eric_sse.message.Message" title="eric_sse.message.Message"><span class="pre">Message</span></a></span></span><a class="headerlink" href="#eric_sse.queue.Queue.pop" title="Link to this definition">#</a></dt>
@@ -803,7 +804,8 @@ Receiving a message with one of these types will fire correspondant action.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.queue.Queue.delete">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#eric_sse.queue.Queue.delete" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Removes all messages from the queue.</p>
+</dd></dl>
 
 </dd></dl>
 
