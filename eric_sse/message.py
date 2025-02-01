@@ -50,6 +50,7 @@ class UniqueMessage(MessageContract):
 
     @property
     def id(self) -> str:
+        """Unique message identifier"""
         return str(self.__id)
 
     @property
@@ -58,6 +59,7 @@ class UniqueMessage(MessageContract):
 
     @property
     def sender_id(self) -> str:
+        """Returns the id of the listener that sent the message"""
         return self.__sender_id
 
     @property
@@ -66,11 +68,7 @@ class UniqueMessage(MessageContract):
 
 
 class SignedMessage(Message):
-    """
-    Message plus sender id
-
-    A sender id identifies another listener
-    """
+    """Message plus sender id"""
 
     def __init__(self, sender_id: str, msg_type: str, msg_payload: dict | list | str | int | float | None = None):
         super().__init__(msg_type, msg_payload)
@@ -78,9 +76,16 @@ class SignedMessage(Message):
 
     @property
     def sender_id(self) -> str:
+        """Returns the id of the listener that sent the message"""
         return self.__sender_id
 
     @property
-    def payload(self) -> dict | list | str | int | float | None:
+    def payload(self) -> dict:
+        """
+        Message payload
+
+        Returns a dictionary like:
+            {'sender_id': sender id, 'payload': original payload}
+        """
         return {'sender_id': self.__sender_id, 'payload': self._payload}
 

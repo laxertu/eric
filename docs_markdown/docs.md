@@ -63,11 +63,23 @@ Bases: [`MessageContract`](#eric_sse.message.MessageContract)
 
 Messages plus an unique identifier
 
+<a id="eric_sse.message.UniqueMessage.id"></a>
+
+#### *property* id *: str*
+
+Unique message identifier
+
 <a id="eric_sse.message.UniqueMessage.type"></a>
 
 #### *property* type *: str*
 
 Message type
+
+<a id="eric_sse.message.UniqueMessage.sender_id"></a>
+
+#### *property* sender_id *: str*
+
+Returns the id of the listener that sent the message
 
 <a id="eric_sse.message.UniqueMessage.payload"></a>
 
@@ -83,13 +95,20 @@ Bases: [`Message`](#eric_sse.message.Message)
 
 Message plus sender id
 
-A sender id identifies another listener
+<a id="eric_sse.message.SignedMessage.sender_id"></a>
+
+#### *property* sender_id *: str*
+
+Returns the id of the listener that sent the message
 
 <a id="eric_sse.message.SignedMessage.payload"></a>
 
-#### *property* payload *: dict | list | str | int | float | None*
+#### *property* payload *: dict*
 
 Message payload
+
+Returns a dictionary like:
+: {‘sender_id’: sender id, ‘payload’: original payload}
 
 <a id="module-eric_sse.entities"></a>
 
