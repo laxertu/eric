@@ -14,7 +14,7 @@ class Producer:
     @staticmethod
     def produce_num(c: DataProcessingChannel, l: MessageQueueListener, num: int):
         for i in range(0, num):
-            c.dispatch(l.id, Message(type='counter', payload=i))
+            c.dispatch(l.id, Message(msg_type='counter', msg_payload=i))
         c.notify_end()
 
 

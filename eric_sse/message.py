@@ -1,20 +1,45 @@
-from dataclasses import dataclass
+from abc import ABC, abstractmethod
 
-
-@dataclass
-class Message:
+class MessageContract(ABC):
     """
     Models a message
 
     It's just a container of information identified by a type.
     For validation purposes you can override MessageQueueListener.on_message
     """
-    type: str
-    payload: dict | list | str | int | float | None = None
+
+    @property
+    @abstractmethod
+    def type(self) -> str:
+        ...
+
+    @property
+    @abstractmethod
+    def payload(self) -> dict | list | str | int | float | None:
+        ...
 
 
-@dataclass
-class UniqueMessage:
+class Message(MessageContract):
+    """
+    Models a message
+
+    It's just a container of information identified by a type.
+    For validation purposes you can override MessageQueueListener.on_message
+    """
+    def __init__(self, msg_type: str, msg_payload: dict | list | str | int | float | None = None) -> None:
+        self.__type = msg_type
+        self.__payload = msg_payload
+
+    @property
+    def type(self) -> str:
+        return self.__type
+
+    @property
+    def payload(self) -> dict | list | str | int | float | None:
+        return self.__payload
+
+
+class UniqueMessage(MessageContract):
     __message: Message
     __sender_id: str | None = None
 
@@ -40,7 +65,6 @@ class UniqueMessage:
         return self.__message.payload
 
 
-@dataclass
 class SignedMessage(Message):
     """A wrapper that adds sender id"""
 

@@ -82,7 +82,7 @@ class SocketServer:
             channel_id = parsed.get('c')
             message = None
             if verb not in ['w', 'c', 'l', 'r', 'rl', 'rc']:
-                message = Message(type=parsed['t'], payload=parsed.get('p'))
+                message = Message(msg_type=parsed['t'], msg_payload=parsed.get('p'))
 
             receiver_id: str = parsed.get('r')
             return channel_id, verb, message, receiver_id
