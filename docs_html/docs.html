@@ -470,7 +470,7 @@ For validation purposes you can override <a class="reference internal" href="#er
 
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.message.UniqueMessage">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UniqueMessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.message.Message" title="eric_sse.message.Message"><span class="pre">Message</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sender_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.message.UniqueMessage" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UniqueMessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><span class="pre">MessageContract</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">sender_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.message.UniqueMessage" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageContract</span></code></a></p>
 <p>Messages plus an unique identifier</p>
 <dl class="py property">
@@ -493,8 +493,12 @@ For validation purposes you can override <a class="reference internal" href="#er
 
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.message.UniqueMessage.payload">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#eric_sse.message.UniqueMessage.payload" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#eric_sse.message.UniqueMessage.payload" title="Link to this definition">#</a></dt>
 <dd><p>Message payload</p>
+<dl class="simple">
+<dt>Returns a dictionary like::</dt><dd><p>{‘sender_id’: sender id, ‘payload’: original payload}</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -515,7 +519,7 @@ For validation purposes you can override <a class="reference internal" href="#er
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#eric_sse.message.SignedMessage.payload" title="Link to this definition">#</a></dt>
 <dd><p>Message payload</p>
 <dl class="simple">
-<dt>Returns a dictionary like:</dt><dd><p>{‘sender_id’: sender id, ‘payload’: original payload}</p>
+<dt>Returns a dictionary like::</dt><dd><p>{‘id’: message id, ‘sender_id’: sender id, ‘payload’: original payload}</p>
 </dd>
 </dl>
 </dd></dl>
