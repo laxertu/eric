@@ -68,7 +68,13 @@ class UniqueMessage(MessageContract):
         Message payload
 
         Returns a dictionary like::
-            {'sender_id': sender id, 'payload': original payload}
+
+            {
+                "id": "message id",
+                "sender_id": "sender id",
+                "type": "sender id",
+                "payload": "original payload"
+            }
         """
         return {
             'id': self.id,
@@ -94,9 +100,12 @@ class SignedMessage(Message):
     def payload(self) -> dict:
         """
         Message payload
-
         Returns a dictionary like::
-            {'id': message id, 'sender_id': sender id, 'payload': original payload}
+
+            {
+                "sender_id": "sender id",
+                "payload": "original payload"
+            }
         """
         return {'sender_id': self.__sender_id, 'payload': self._payload}
 

@@ -87,8 +87,16 @@ Returns the id of the listener that sent the message
 
 Message payload
 
-Returns a dictionary like::
-: {‘sender_id’: sender id, ‘payload’: original payload}
+Returns a dictionary like:
+
+```default
+{
+    "id": "message id",
+    "sender_id": "sender id",
+    "type": "sender id",
+    "payload": "original payload"
+}
+```
 
 <a id="eric_sse.message.SignedMessage"></a>
 
@@ -109,9 +117,14 @@ Returns the id of the listener that sent the message
 #### *property* payload *: dict*
 
 Message payload
+Returns a dictionary like:
 
-Returns a dictionary like::
-: {‘id’: message id, ‘sender_id’: sender id, ‘payload’: original payload}
+```default
+{
+    "sender_id": "sender id",
+    "payload": "original payload"
+}
+```
 
 <a id="module-eric_sse.entities"></a>
 
