@@ -107,5 +107,5 @@ class SignedMessage(Message):
                 "payload": "original payload"
             }
         """
-        return {'sender_id': self.__sender_id, 'payload': self._payload}
+        return {'sender_id': self.__sender_id, 'type': self.type, 'payload': self._payload}
 
