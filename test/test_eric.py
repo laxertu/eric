@@ -45,7 +45,7 @@ class MessageTestCase(TestCase):
         m = SignedMessage(msg_type='test', msg_payload={'a': 1}, sender_id='sender_id')
         self.assertEqual('test', m.type)
         self.assertEqual('sender_id', m.sender_id)
-        self.assertEqual({'sender_id': 'sender_id', 'payload': {'a': 1}}, m.payload)
+        self.assertEqual({'sender_id': 'sender_id', 'type': 'test', 'payload': {'a': 1}}, m.payload)
 
         m = UniqueMessage(message_id='message_id', message=Message(msg_type='test', msg_payload={'a': 1}))
         self.assertEqual('message_id', m.id)
