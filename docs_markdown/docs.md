@@ -268,9 +268,28 @@ Currently, ‘id’ field is not supported.
   * **retry_timeout_milliseconds** (*int*)
   * **queues_factory** ([*eric_sse.queue.AbstractMessageQueueFactory*](#eric_sse.queue.AbstractMessageQueueFactory))
 
+<a id="eric_sse.prefabs.SSEChannel.payload_adapter"></a>
+
+#### payload_adapter *: Callable[[dict | list | str | int | float | None], dict | list | str | int | float | None]*
+
+Message payload adapter, defaults to identity (leave as is). It can be used, for example, when working in a 
+context where receiver is responsible for payload deserialization, e.g. Sockets
+
 <a id="eric_sse.prefabs.SSEChannel.adapt"></a>
 
 #### adapt(msg: [MessageContract](#eric_sse.message.MessageContract)) → dict
+
+SSE adapter.
+
+Returns:
+
+```default
+{
+    "event": "message type",
+    "retry": "channel time out",
+    "data": "original payload (by default)"
+}
+```
 
 <a id="eric_sse.prefabs.DataProcessingChannel"></a>
 

@@ -30,10 +30,24 @@ class SSEChannel(AbstractChannel):
     ):
         super().__init__(stream_delay_seconds=stream_delay_seconds, queues_factory=queues_factory)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
+
         self.payload_adapter: (
             Callable)[[dict | list | str | int | float | None], dict | list | str | int | float | None] = lambda x: x
+        """Message payload adapter, defaults to identity (leave as is). It can be used, for example, when working in a 
+        context where receiver is responsible for payload deserialization, e.g. Sockets"""
 
     def adapt(self, msg: MessageContract) -> dict:
+        """
+        SSE adapter.
+
+        Returns::
+
+            {
+                "event": "message type",
+                "retry": "channel time out",
+                "data": "original payload (by default)"
+            }
+        """
         return {
             "event": msg.type,
             "retry": self.retry_timeout_milliseconds,
