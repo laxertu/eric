@@ -57,7 +57,7 @@ Message payload
 
 <a id="eric_sse.message.UniqueMessage"></a>
 
-### *class* UniqueMessage(message_id: str, message: [Message](#eric_sse.message.Message), sender_id: str | None = None)
+### *class* UniqueMessage(message_id: str, message: [MessageContract](#eric_sse.message.MessageContract), sender_id: str | None = None)
 
 Bases: [`MessageContract`](#eric_sse.message.MessageContract)
 
@@ -83,9 +83,12 @@ Returns the id of the listener that sent the message
 
 <a id="eric_sse.message.UniqueMessage.payload"></a>
 
-#### *property* payload *: dict | list | str | int | float | None*
+#### *property* payload *: dict*
 
 Message payload
+
+Returns a dictionary like::
+: {‘sender_id’: sender id, ‘payload’: original payload}
 
 <a id="eric_sse.message.SignedMessage"></a>
 
@@ -107,8 +110,8 @@ Returns the id of the listener that sent the message
 
 Message payload
 
-Returns a dictionary like:
-: {‘sender_id’: sender id, ‘payload’: original payload}
+Returns a dictionary like::
+: {‘id’: message id, ‘sender_id’: sender id, ‘payload’: original payload}
 
 <a id="module-eric_sse.entities"></a>
 

@@ -50,7 +50,12 @@ class MessageTestCase(TestCase):
         m = UniqueMessage(message_id='message_id', message=Message(msg_type='test', msg_payload={'a': 1}))
         self.assertEqual('message_id', m.id)
         self.assertEqual('test', m.type)
-        self.assertEqual({'a': 1}, m.payload)
+        self.assertEqual({'id': 'message_id', 'type': 'test', 'sender_id': None, 'payload': {'a': 1}}, m.payload)
+
+        m = UniqueMessage(message_id='message_id', message=Message(msg_type='test', msg_payload={'a': 1}), sender_id='sender_id')
+        self.assertEqual('message_id', m.id)
+        self.assertEqual('test', m.type)
+        self.assertEqual({'id': 'message_id', 'type': 'test', 'payload': {'a': 1}, 'sender_id': 'sender_id'}, m.payload)
 
 
 class ListenerTestCase(IsolatedAsyncioTestCase):

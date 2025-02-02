@@ -1,5 +1,10 @@
 Changelog
 =========
+0.6.5
+
+* Fixed UniqueMessage payload property, now behaviour is similar to SignedMessage
+
+
 0.6.4.1
 
 * Changed method's signature from Message to MessageContract
