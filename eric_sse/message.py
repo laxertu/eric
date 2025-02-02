@@ -72,7 +72,7 @@ class UniqueMessage(MessageContract):
             {
                 "id": "message id",
                 "sender_id": "sender id",
-                "type": "sender id",
+                "type": "message type",
                 "payload": "original payload"
             }
         """
@@ -104,6 +104,7 @@ class SignedMessage(Message):
 
             {
                 "sender_id": "sender id",
+                "type": "message type",
                 "payload": "original payload"
             }
         """

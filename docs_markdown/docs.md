@@ -93,7 +93,7 @@ Returns a dictionary like:
 {
     "id": "message id",
     "sender_id": "sender id",
-    "type": "sender id",
+    "type": "message type",
     "payload": "original payload"
 }
 ```
@@ -122,6 +122,7 @@ Returns a dictionary like:
 ```default
 {
     "sender_id": "sender id",
+    "type": "message type",
     "payload": "original payload"
 }
 ```
