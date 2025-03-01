@@ -63,25 +63,8 @@ class UniqueMessage(MessageContract):
         return self.__sender_id
 
     @property
-    def payload(self) -> dict:
-        """
-        Message payload
-
-        Returns a dictionary like::
-
-            {
-                "id": "message id",
-                "sender_id": "sender id",
-                "type": "message type",
-                "payload": "original payload"
-            }
-        """
-        return {
-            'id': self.id,
-            'sender_id': self.__sender_id,
-            'type': self.__message.type,
-            'payload': self.__message.payload
-        }
+    def payload(self) -> dict | list | str | int | float | None:
+        return self.__message.payload
 
 
 class SignedMessage(Message):
@@ -97,16 +80,6 @@ class SignedMessage(Message):
         return self.__sender_id
 
     @property
-    def payload(self) -> dict:
-        """
-        Message payload
-        Returns a dictionary like::
-
-            {
-                "sender_id": "sender id",
-                "type": "message type",
-                "payload": "original payload"
-            }
-        """
-        return {'sender_id': self.__sender_id, 'type': self.type, 'payload': self._payload}
+    def payload(self) ->  dict | list | str | int | float | None:
+        return self._payload
 

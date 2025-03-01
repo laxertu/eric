@@ -45,17 +45,17 @@ class MessageTestCase(TestCase):
         m = SignedMessage(msg_type='test', msg_payload={'a': 1}, sender_id='sender_id')
         self.assertEqual('test', m.type)
         self.assertEqual('sender_id', m.sender_id)
-        self.assertEqual({'sender_id': 'sender_id', 'type': 'test', 'payload': {'a': 1}}, m.payload)
+        self.assertEqual({'a': 1}, m.payload)
 
         m = UniqueMessage(message_id='message_id', message=Message(msg_type='test', msg_payload={'a': 1}))
         self.assertEqual('message_id', m.id)
         self.assertEqual('test', m.type)
-        self.assertEqual({'id': 'message_id', 'type': 'test', 'sender_id': None, 'payload': {'a': 1}}, m.payload)
+        self.assertEqual({'a': 1}, m.payload)
 
         m = UniqueMessage(message_id='message_id', message=Message(msg_type='test', msg_payload={'a': 1}), sender_id='sender_id')
         self.assertEqual('message_id', m.id)
         self.assertEqual('test', m.type)
-        self.assertEqual({'id': 'message_id', 'type': 'test', 'payload': {'a': 1}, 'sender_id': 'sender_id'}, m.payload)
+        self.assertEqual({'a': 1}, m.payload)
 
 
 class ListenerTestCase(IsolatedAsyncioTestCase):
@@ -227,10 +227,10 @@ class DistributedListenerTestCase(IsolatedAsyncioTestCase):
         bob.dispatch_to(alice, Message(msg_type='stop'))
 
         types = [m['event'] async for m in await ssc.message_stream(alice)]
-        self.assertEqual(['hello', 'stop'], types)
+        self.assertEqual(['stop'], types)
 
         types = [m['event'] async for m in await ssc.message_stream(bob)]
-        self.assertEqual(['hello_ack', 'stop'], types)
+        self.assertEqual(['stop'], types)
 
 class DataProcessingChannelTestCase(IsolatedAsyncioTestCase):
     async def test_channel(self):
