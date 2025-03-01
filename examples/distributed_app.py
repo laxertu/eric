@@ -1,25 +1,24 @@
 import asyncio, logging
 
-from eric_sse.message import Message, MessageContract
+from eric_sse.message import Message
 from eric_sse.prefabs import SimpleDistributedApplicationListener, SSEChannel
-from eric_redis_queues import RedisChannel
 
 import  eric_sse
 logger  = eric_sse.get_logger()
 logger.setLevel(logging.ERROR)
 
-ssc = RedisChannel()
+ssc = SSEChannel()
 
-def output(m:MessageContract):
+def output(m:Message):
     print(m.type, m.payload)
 
-def hello_response(m: MessageContract) -> list[Message]:
+def hello_response(m: Message) -> list[Message]:
     output(m)
     return [
-        Message(msg_type='hello_ack', msg_payload=f'{m.payload}!')
+        Message(msg_type='hello_ack', msg_payload=f'{m.payload["payload"]}!')
     ]
 
-def hello_ack_response(m: MessageContract) -> list[Message]:
+def hello_ack_response(m: Message) -> list[Message]:
     output(m)
     try:
         next_message = input('Say something [CTRL-C to quit]: ')
@@ -33,11 +32,11 @@ def hello_ack_response(m: MessageContract) -> list[Message]:
 def close_connection_response() -> list[Message]:
     return [Message(msg_type='bye'), Message(msg_type='stop')]
 
-def bye_handler(m: MessageContract) -> list[Message]:
+def bye_handler(m: Message) -> list[Message]:
     output(m)
     return close_connection_response()
 
-def create_listener(ch: RedisChannel):
+def create_listener(ch: SSEChannel):
     l = SimpleDistributedApplicationListener(ch)
     l.set_action('hello', hello_response)
     l.set_action('hello_ack', hello_ack_response)
