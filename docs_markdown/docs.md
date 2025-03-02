@@ -83,20 +83,9 @@ Returns the id of the listener that sent the message
 
 <a id="eric_sse.message.UniqueMessage.payload"></a>
 
-#### *property* payload *: dict*
+#### *property* payload *: dict | list | str | int | float | None*
 
 Message payload
-
-Returns a dictionary like:
-
-```default
-{
-    "id": "message id",
-    "sender_id": "sender id",
-    "type": "message type",
-    "payload": "original payload"
-}
-```
 
 <a id="eric_sse.message.SignedMessage"></a>
 
@@ -111,21 +100,6 @@ Message plus sender id
 #### *property* sender_id *: str*
 
 Returns the id of the listener that sent the message
-
-<a id="eric_sse.message.SignedMessage.payload"></a>
-
-#### *property* payload *: dict*
-
-Message payload
-Returns a dictionary like:
-
-```default
-{
-    "sender_id": "sender id",
-    "type": "message type",
-    "payload": "original payload"
-}
-```
 
 <a id="module-eric_sse.entities"></a>
 

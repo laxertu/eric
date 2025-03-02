@@ -312,7 +312,6 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.SignedMessage"><code class="docutils literal notranslate"><span class="pre">SignedMessage</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.SignedMessage.sender_id"><code class="docutils literal notranslate"><span class="pre">sender_id</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.SignedMessage.payload"><code class="docutils literal notranslate"><span class="pre">payload</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -494,17 +493,8 @@ For validation purposes you can override <a class="reference internal" href="#er
 
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.message.UniqueMessage.payload">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#eric_sse.message.UniqueMessage.payload" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#eric_sse.message.UniqueMessage.payload" title="Link to this definition">#</a></dt>
 <dd><p>Message payload</p>
-<p>Returns a dictionary like:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;message id&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;sender_id&quot;</span><span class="p">:</span> <span class="s2">&quot;sender id&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;message type&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;payload&quot;</span><span class="p">:</span> <span class="s2">&quot;original payload&quot;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
 </dd></dl>
 
 </dd></dl>
@@ -518,20 +508,6 @@ For validation purposes you can override <a class="reference internal" href="#er
 <dt class="sig sig-object py" id="eric_sse.message.SignedMessage.sender_id">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sender_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.message.SignedMessage.sender_id" title="Link to this definition">#</a></dt>
 <dd><p>Returns the id of the listener that sent the message</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="eric_sse.message.SignedMessage.payload">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#eric_sse.message.SignedMessage.payload" title="Link to this definition">#</a></dt>
-<dd><p>Message payload
-Returns a dictionary like:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;sender_id&quot;</span><span class="p">:</span> <span class="s2">&quot;sender id&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;message type&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;payload&quot;</span><span class="p">:</span> <span class="s2">&quot;original payload&quot;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
 </dd></dl>
 
 </dd></dl>
@@ -1011,7 +987,6 @@ an <a class="reference internal" href="#eric_sse.exception.NoMessagesException" 
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.SignedMessage"><code class="docutils literal notranslate"><span class="pre">SignedMessage</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.SignedMessage.sender_id"><code class="docutils literal notranslate"><span class="pre">sender_id</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.message.SignedMessage.payload"><code class="docutils literal notranslate"><span class="pre">payload</span></code></a></li>
 </ul>
 </li>
 </ul>
