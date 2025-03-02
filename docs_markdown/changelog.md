@@ -2,6 +2,10 @@
 
 # Changelog
 
+0.7.0
+
+* BREAKING: now Message’s subclasses payload properties contains original payload
+
 0.6.5
 
 * Fixed UniqueMessage payload property, now behaviour is similar to SignedMessage
