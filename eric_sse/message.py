@@ -79,7 +79,4 @@ class SignedMessage(Message):
         """Returns the id of the listener that sent the message"""
         return self.__sender_id
 
-    @property
-    def payload(self) ->  dict | list | str | int | float | None:
-        return self._payload
 

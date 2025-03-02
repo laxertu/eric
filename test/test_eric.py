@@ -2,7 +2,7 @@ import json
 from unittest import TestCase, IsolatedAsyncioTestCase
 
 from eric_sse.entities import MessageQueueListener
-from eric_sse.message import Message, SignedMessage, UniqueMessage
+from eric_sse.message import MessageContract, Message, SignedMessage, UniqueMessage
 from eric_sse.exception import NoMessagesException
 from eric_sse.prefabs import SSEChannel, SimpleDistributedApplicationListener, DataProcessingChannel
 
@@ -191,13 +191,13 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
             await l.stop()
 
 
-def hello_response(m: Message) -> list[Message]:
+def hello_response(m: MessageContract) -> list[Message]:
     return [
-        Message(msg_type='hello_ack', msg_payload=f'{m.payload["payload"]}!'),
+        Message(msg_type='hello_ack', msg_payload=f'{m.payload}!'),
         Message(msg_type='stop')
     ]
 
-def hello_ack_response(m: Message) -> list[Message]:
+def hello_ack_response(m: MessageContract) -> list[Message]:
     return [
         Message(msg_type='stop')
     ]
@@ -227,10 +227,10 @@ class DistributedListenerTestCase(IsolatedAsyncioTestCase):
         bob.dispatch_to(alice, Message(msg_type='stop'))
 
         types = [m['event'] async for m in await ssc.message_stream(alice)]
-        self.assertEqual(['stop'], types)
+        self.assertEqual(['hello', 'stop'], types)
 
         types = [m['event'] async for m in await ssc.message_stream(bob)]
-        self.assertEqual(['stop'], types)
+        self.assertEqual(['hello_ack', 'stop'], types)
 
 class DataProcessingChannelTestCase(IsolatedAsyncioTestCase):
     async def test_channel(self):

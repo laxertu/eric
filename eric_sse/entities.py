@@ -174,7 +174,7 @@ class AbstractChannel(ABC):
                     await asyncio.sleep(self.stream_delay_seconds)
 
                 except Exception as e:
-                    logger.debug(traceback.format_exc())
+                    logger.error(traceback.format_exc())
                     logger.error(e)
 
         return event_generator()
