@@ -1,6 +1,6 @@
 import asyncio, logging
 
-from eric_sse.message import Message
+from eric_sse.message import Message, MessageContract
 from eric_sse.prefabs import SimpleDistributedApplicationListener, SSEChannel
 
 import  eric_sse
@@ -9,16 +9,16 @@ logger.setLevel(logging.ERROR)
 
 ssc = SSEChannel()
 
-def output(m:Message):
-    print(m.type, m.payload)
+def output(m:MessageContract):
+    print(m.payload)
 
-def hello_response(m: Message) -> list[Message]:
+def hello_response(m: MessageContract) -> list[Message]:
     output(m)
     return [
-        Message(msg_type='hello_ack', msg_payload=f'{m.payload["payload"]}!')
+        Message(msg_type='hello_ack', msg_payload=f'{m.payload}!')
     ]
 
-def hello_ack_response(m: Message) -> list[Message]:
+def hello_ack_response(m: MessageContract) -> list[Message]:
     output(m)
     try:
         next_message = input('Say something [CTRL-C to quit]: ')
@@ -32,7 +32,7 @@ def hello_ack_response(m: Message) -> list[Message]:
 def close_connection_response() -> list[Message]:
     return [Message(msg_type='bye'), Message(msg_type='stop')]
 
-def bye_handler(m: Message) -> list[Message]:
+def bye_handler(m: MessageContract) -> list[Message]:
     output(m)
     return close_connection_response()
 
