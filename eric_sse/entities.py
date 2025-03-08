@@ -124,6 +124,9 @@ class AbstractChannel(ABC):
         except KeyError:
             raise InvalidListenerException(f"Invalid listener {listener_id}")
 
+    def _set_queue(self, listener_id: str, queue: Queue):
+        self.__queues[listener_id] = queue
+
     def dispatch(self, listener_id: str, msg: MessageContract):
         """Adds a message to listener's queue"""
 
