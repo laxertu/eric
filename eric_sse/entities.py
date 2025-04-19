@@ -154,6 +154,8 @@ class AbstractChannel(ABC):
     async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
         """
         Entry point for message streaming
+
+        A message with type = 'error' is yeld on invalid listener or channel
         """
 
         def new_messages():

@@ -210,6 +210,8 @@ Enqueue a message to all listeners
 
 Entry point for message streaming
 
+A message with type = ‘error’ is yeld on invalid listener or channel
+
 <a id="eric_sse.entities.AbstractChannel.watch"></a>
 
 #### *async* watch() → AsyncIterable[Any]

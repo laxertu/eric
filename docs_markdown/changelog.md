@@ -2,6 +2,9 @@
 
 # Changelog
 
+0.7.2
+\* Invalid Channel or Listener Exception now yields an error message to client (no logs anymore)
+
 0.7.0
 
 * BREAKING: now Message’s subclasses payload properties contains original payload
