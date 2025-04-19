@@ -5,7 +5,7 @@ from threading import Lock
 from typing import AsyncIterable, Any
 
 import eric_sse
-from eric_sse.exception import InvalidListenerException, NoMessagesException
+from eric_sse.exception import InvalidListenerException, NoMessagesException, InvalidChannelException
 from eric_sse.message import MessageContract, Message
 from eric_sse.queue import Queue, AbstractMessageQueueFactory, InMemoryMessageQueueFactory
 
@@ -154,6 +154,8 @@ class AbstractChannel(ABC):
     async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
         """
         Entry point for message streaming
+
+        A message with type = 'error' is yeld on invalid listener or channel
         """
 
         def new_messages():
@@ -175,7 +177,8 @@ class AbstractChannel(ABC):
                         yield self.adapt(message)
 
                     await asyncio.sleep(self.stream_delay_seconds)
-
+                except (InvalidListenerException, InvalidChannelException) as e:
+                    yield self.adapt(Message(msg_type='error', msg_payload=e))
                 except Exception as e:
                     logger.debug(traceback.format_exc())
                     logger.error(e)
