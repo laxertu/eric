@@ -1,6 +1,11 @@
 Changelog
 =========
+0.7.3
+
+* Fixed SSEChannelContainer.add and rm wrong exception thrown on no existent channel
+
 0.7.2
+
 * Invalid Channel or Listener Exception now yields an error message to client (no logs anymore)
 
 0.7.0

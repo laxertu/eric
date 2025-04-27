@@ -24,7 +24,7 @@ class SSEChannelContainer:
     def add(self) -> SSEChannel:
         channel = SSEChannel()
         if channel.id in self.__channels:
-            raise InvalidListenerException(f'Channel with id {channel.id} already exists')
+            raise InvalidChannelException(f'Channel with id {channel.id} already exists')
         self.__channels[channel.id] = channel
         return channel
 
@@ -35,7 +35,10 @@ class SSEChannelContainer:
             raise InvalidChannelException(f'No channel with id {channel_id}')
 
     def rm(self, channel_id: str):
-        del self.__channels[channel_id]
+        try:
+            del self.__channels[channel_id]
+        except KeyError:
+            raise InvalidChannelException(f'No channel with id {channel_id}')
 
 
 class SocketServer:

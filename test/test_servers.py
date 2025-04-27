@@ -1,12 +1,23 @@
 import json, asyncio
-from unittest import IsolatedAsyncioTestCase
+from unittest import IsolatedAsyncioTestCase, TestCase
 from unittest.mock import MagicMock
 
 from eric_sse.clients import SocketClient
+from eric_sse.exception import InvalidChannelException
 from eric_sse.prefabs import SSEChannel
 from eric_sse.servers import SocketServer, SSEChannelContainer
 SOCKET_FILE_DESCRIPTOR_PATH = 'socketserver_e2e_test.sock'
 
+
+class TestChannelContainer(TestCase):
+    def test_exceptions(self):
+        sut = SSEChannelContainer()
+
+        with self.assertRaises(InvalidChannelException):
+            sut.rm('fake_channel_id')
+
+        with self.assertRaises(InvalidChannelException):
+            sut.get('fake_channel_id')
 
 class TestSocketServer(IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
