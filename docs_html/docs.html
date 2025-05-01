@@ -805,6 +805,7 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 <dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.message_stream">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">message_stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.message_stream" title="Link to this definition">#</a></dt>
 <dd><p>Entry point for message streaming</p>
+<p>A message with type = ‘error’ is yeld on invalid listener or channel</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>listener</strong> (<a class="reference internal" href="#eric_sse.entities.MessageQueueListener" title="eric_sse.entities.MessageQueueListener"><em>MessageQueueListener</em></a>)</p>

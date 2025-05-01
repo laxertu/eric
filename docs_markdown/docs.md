@@ -306,6 +306,8 @@ Enqueue a message to all listeners
 
 Entry point for message streaming
 
+A message with type = ‘error’ is yield on invalid listener or channel
+
 * **Parameters:**
   **listener** ([*MessageQueueListener*](#eric_sse.entities.MessageQueueListener))
 * **Return type:**
