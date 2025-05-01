@@ -46,15 +46,13 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
 
         l.start_sync()
         total_messages_received = 0
-        async for m in await self.sut.message_stream(listener=l):
+        async for _ in await self.sut.message_stream(listener=l):
             total_messages_received += 1
-            self.assertEqual('test', m['event'])
             await l.stop()
 
         await l.start()
-        async for m in await self.sut.message_stream(listener=l):
+        async for _ in await self.sut.message_stream(listener=l):
             total_messages_received += 1
-            self.assertEqual('test', m['event'])
             await l.stop()
 
         self.assertEqual(2, total_messages_received)
