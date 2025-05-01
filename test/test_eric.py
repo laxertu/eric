@@ -1,9 +1,6 @@
-import json
-from unittest import TestCase, IsolatedAsyncioTestCase
+from unittest import IsolatedAsyncioTestCase
 
-from eric_sse.entities import MessageQueueListener
-from eric_sse.message import MessageContract, Message, SignedMessage, UniqueMessage
-from eric_sse.exception import NoMessagesException
+from eric_sse.message import MessageContract, Message
 from eric_sse.prefabs import SSEChannel, SimpleDistributedApplicationListener, DataProcessingChannel
 
 from test.mock.listener import MessageQueueListenerMock
