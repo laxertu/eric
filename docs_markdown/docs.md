@@ -37,11 +37,21 @@ Message payload
 
 <a id="eric_sse.message.Message"></a>
 
-### *class* Message(msg_type: str, msg_payload: dict | list | str | int | float | None = None)
+### *class* Message
 
 Bases: [`MessageContract`](#eric_sse.message.MessageContract)
 
 Models a simple message
+
+<a id="eric_sse.message.Message.__init__"></a>
+
+#### \_\_init_\_(msg_type, msg_payload=None)
+
+* **Parameters:**
+  * **msg_type** (*str*)
+  * **msg_payload** (*dict* *|* *list* *|* *str* *|* *int* *|* *float* *|* *None*)
+* **Return type:**
+  None
 
 <a id="eric_sse.message.Message.type"></a>
 
@@ -57,11 +67,22 @@ Message payload
 
 <a id="eric_sse.message.UniqueMessage"></a>
 
-### *class* UniqueMessage(message_id: str, message: [MessageContract](#eric_sse.message.MessageContract), sender_id: str | None = None)
+### *class* UniqueMessage
 
 Bases: [`MessageContract`](#eric_sse.message.MessageContract)
 
 Messages plus an unique identifier
+
+<a id="eric_sse.message.UniqueMessage.__init__"></a>
+
+#### \_\_init_\_(message_id, message, sender_id=None)
+
+* **Parameters:**
+  * **message_id** (*str*)
+  * **message** ([*MessageContract*](#eric_sse.message.MessageContract))
+  * **sender_id** (*str* *|* *None*)
+* **Return type:**
+  None
 
 <a id="eric_sse.message.UniqueMessage.id"></a>
 
@@ -89,11 +110,20 @@ Message payload
 
 <a id="eric_sse.message.SignedMessage"></a>
 
-### *class* SignedMessage(sender_id: str, msg_type: str, msg_payload: dict | list | str | int | float | None = None)
+### *class* SignedMessage
 
 Bases: [`Message`](#eric_sse.message.Message)
 
 Message plus sender id
+
+<a id="eric_sse.message.SignedMessage.__init__"></a>
+
+#### \_\_init_\_(sender_id, msg_type, msg_payload=None)
+
+* **Parameters:**
+  * **sender_id** (*str*)
+  * **msg_type** (*str*)
+  * **msg_payload** (*dict* *|* *list* *|* *str* *|* *int* *|* *float* *|* *None*)
 
 <a id="eric_sse.message.SignedMessage.sender_id"></a>
 
@@ -115,39 +145,66 @@ Base class for listeners.
 
 Optionally you can override on_message method if you need to inject code at message delivery time.
 
+<a id="eric_sse.entities.MessageQueueListener.__init__"></a>
+
+#### \_\_init_\_()
+
 <a id="eric_sse.entities.MessageQueueListener.start"></a>
 
-#### *async* start() → None
+#### *async* start()
+
+* **Return type:**
+  None
 
 <a id="eric_sse.entities.MessageQueueListener.start_sync"></a>
 
-#### start_sync() → None
+#### start_sync()
+
+* **Return type:**
+  None
 
 <a id="eric_sse.entities.MessageQueueListener.is_running"></a>
 
-#### *async* is_running() → bool
+#### *async* is_running()
+
+* **Return type:**
+  bool
 
 <a id="eric_sse.entities.MessageQueueListener.is_running_sync"></a>
 
-#### is_running_sync() → bool
+#### is_running_sync()
+
+* **Return type:**
+  bool
 
 <a id="eric_sse.entities.MessageQueueListener.stop"></a>
 
-#### *async* stop() → None
+#### *async* stop()
+
+* **Return type:**
+  None
 
 <a id="eric_sse.entities.MessageQueueListener.stop_sync"></a>
 
-#### stop_sync() → None
+#### stop_sync()
+
+* **Return type:**
+  None
 
 <a id="eric_sse.entities.MessageQueueListener.on_message"></a>
 
-#### on_message(msg: [MessageContract](#eric_sse.message.MessageContract)) → None
+#### on_message(msg)
 
 Event handler. It executes when a message is delivered to client
 
+* **Parameters:**
+  **msg** ([*MessageContract*](#eric_sse.message.MessageContract))
+* **Return type:**
+  None
+
 <a id="eric_sse.entities.AbstractChannel"></a>
 
-### *class* AbstractChannel(stream_delay_seconds: int = 0, queues_factory: [AbstractMessageQueueFactory](#eric_sse.queue.AbstractMessageQueueFactory) | None = None)
+### *class* AbstractChannel
 
 Base class for channels.
 
@@ -160,59 +217,106 @@ see [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel)
   * **stream_delay_seconds** (*int*) – Wait time in seconds between message delivery.
   * **queues_factory** ([*eric_sse.queue.AbstractMessageQueueFactory*](#eric_sse.queue.AbstractMessageQueueFactory))
 
+<a id="eric_sse.entities.AbstractChannel.__init__"></a>
+
+#### \_\_init_\_(stream_delay_seconds=0, queues_factory=None)
+
+* **Parameters:**
+  * **stream_delay_seconds** (*int*)
+  * **queues_factory** ([*AbstractMessageQueueFactory*](#eric_sse.queue.AbstractMessageQueueFactory) *|* *None*)
+
 <a id="eric_sse.entities.AbstractChannel.add_listener"></a>
 
-#### add_listener() → [MessageQueueListener](#eric_sse.entities.MessageQueueListener)
+#### add_listener()
 
 Add the default listener
 
+* **Return type:**
+  [*MessageQueueListener*](#eric_sse.entities.MessageQueueListener)
+
 <a id="eric_sse.entities.AbstractChannel.register_listener"></a>
 
-#### register_listener(l: [MessageQueueListener](#eric_sse.entities.MessageQueueListener))
+#### register_listener(l)
 
 Adds a listener to channel
 
+* **Parameters:**
+  **l** ([*MessageQueueListener*](#eric_sse.entities.MessageQueueListener))
+
 <a id="eric_sse.entities.AbstractChannel.remove_listener"></a>
 
-#### remove_listener(l_id: str)
+#### remove_listener(l_id)
+
+* **Parameters:**
+  **l_id** (*str*)
 
 <a id="eric_sse.entities.AbstractChannel.deliver_next"></a>
 
-#### deliver_next(listener_id: str) → [MessageContract](#eric_sse.message.MessageContract)
+#### deliver_next(listener_id)
 
 Returns next message for given listener id.
 
 Raises a NoMessagesException if queue is empty
 
+* **Parameters:**
+  **listener_id** (*str*)
+* **Return type:**
+  [*MessageContract*](#eric_sse.message.MessageContract)
+
 <a id="eric_sse.entities.AbstractChannel.dispatch"></a>
 
-#### dispatch(listener_id: str, msg: [MessageContract](#eric_sse.message.MessageContract))
+#### dispatch(listener_id, msg)
 
 Adds a message to listener’s queue
 
+* **Parameters:**
+  * **listener_id** (*str*)
+  * **msg** ([*MessageContract*](#eric_sse.message.MessageContract))
+
 <a id="eric_sse.entities.AbstractChannel.broadcast"></a>
 
-#### broadcast(msg: [MessageContract](#eric_sse.message.MessageContract))
+#### broadcast(msg)
 
 Enqueue a message to all listeners
 
+* **Parameters:**
+  **msg** ([*MessageContract*](#eric_sse.message.MessageContract))
+
 <a id="eric_sse.entities.AbstractChannel.get_listener"></a>
 
-#### get_listener(listener_id: str) → [MessageQueueListener](#eric_sse.entities.MessageQueueListener)
+#### get_listener(listener_id)
+
+* **Parameters:**
+  **listener_id** (*str*)
+* **Return type:**
+  [*MessageQueueListener*](#eric_sse.entities.MessageQueueListener)
 
 <a id="eric_sse.entities.AbstractChannel.adapt"></a>
 
-#### *abstract* adapt(msg: [MessageContract](#eric_sse.message.MessageContract)) → Any
+#### *abstract* adapt(msg)
+
+* **Parameters:**
+  **msg** ([*MessageContract*](#eric_sse.message.MessageContract))
+* **Return type:**
+  *Any*
 
 <a id="eric_sse.entities.AbstractChannel.message_stream"></a>
 
-#### *async* message_stream(listener: [MessageQueueListener](#eric_sse.entities.MessageQueueListener)) → AsyncIterable[Any]
+#### *async* message_stream(listener)
 
 Entry point for message streaming
 
+* **Parameters:**
+  **listener** ([*MessageQueueListener*](#eric_sse.entities.MessageQueueListener))
+* **Return type:**
+  *AsyncIterable*[*Any*]
+
 <a id="eric_sse.entities.AbstractChannel.watch"></a>
 
-#### *async* watch() → AsyncIterable[Any]
+#### *async* watch()
+
+* **Return type:**
+  *AsyncIterable*[*Any*]
 
 <a id="eric_sse.entities.AbstractChannel.notify_end"></a>
 
@@ -228,7 +332,7 @@ Broadcasts a MESSAGE_TYPE_CLOSED Message
 
 <a id="eric_sse.prefabs.SSEChannel"></a>
 
-### *class* SSEChannel(stream_delay_seconds: int = 0, retry_timeout_milliseconds: int = 5, queues_factory: [AbstractMessageQueueFactory](#eric_sse.queue.AbstractMessageQueueFactory) | None = None)
+### *class* SSEChannel
 
 Bases: [`AbstractChannel`](#eric_sse.entities.AbstractChannel)
 
@@ -242,6 +346,15 @@ Currently, ‘id’ field is not supported.
   * **retry_timeout_milliseconds** (*int*)
   * **queues_factory** ([*eric_sse.queue.AbstractMessageQueueFactory*](#eric_sse.queue.AbstractMessageQueueFactory))
 
+<a id="eric_sse.prefabs.SSEChannel.__init__"></a>
+
+#### \_\_init_\_(stream_delay_seconds=0, retry_timeout_milliseconds=5, queues_factory=None)
+
+* **Parameters:**
+  * **stream_delay_seconds** (*int*)
+  * **retry_timeout_milliseconds** (*int*)
+  * **queues_factory** ([*AbstractMessageQueueFactory*](#eric_sse.queue.AbstractMessageQueueFactory) *|* *None*)
+
 <a id="eric_sse.prefabs.SSEChannel.payload_adapter"></a>
 
 #### payload_adapter *: Callable[[dict | list | str | int | float | None], dict | list | str | int | float | None]*
@@ -251,7 +364,7 @@ context where receiver is responsible for payload deserialization, e.g. Sockets
 
 <a id="eric_sse.prefabs.SSEChannel.adapt"></a>
 
-#### adapt(msg: [MessageContract](#eric_sse.message.MessageContract)) → dict
+#### adapt(msg)
 
 SSE adapter.
 
@@ -265,9 +378,14 @@ Returns:
 }
 ```
 
+* **Parameters:**
+  **msg** ([*MessageContract*](#eric_sse.message.MessageContract))
+* **Return type:**
+  dict
+
 <a id="eric_sse.prefabs.DataProcessingChannel"></a>
 
-### *class* DataProcessingChannel(max_workers: int, stream_delay_seconds: int = 0)
+### *class* DataProcessingChannel
 
 Bases: [`AbstractChannel`](#eric_sse.entities.AbstractChannel)
 
@@ -278,27 +396,52 @@ Just override **adapt** method to control output returned to clients
 
 MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.
 
+<a id="eric_sse.prefabs.DataProcessingChannel.__init__"></a>
+
+#### \_\_init_\_(max_workers, stream_delay_seconds=0)
+
+* **Parameters:**
+  * **max_workers** (*int*) – Num of workers to use
+  * **stream_delay_seconds** (*int*) – Can be used to limit response rate of streaming. Only applies to message_stream calls.
+
 <a id="eric_sse.prefabs.DataProcessingChannel.process_queue"></a>
 
-#### *async* process_queue(l: [MessageQueueListener](#eric_sse.entities.MessageQueueListener)) → AsyncIterable[dict]
+#### *async* process_queue(l)
 
 Launches the processing of the given listener’s queue
 
+* **Parameters:**
+  **l** ([*MessageQueueListener*](#eric_sse.entities.MessageQueueListener))
+* **Return type:**
+  *AsyncIterable*[dict]
+
 <a id="eric_sse.prefabs.DataProcessingChannel.adapt"></a>
 
-#### adapt(msg: [Message](#eric_sse.message.Message)) → dict
+#### adapt(msg)
+
+* **Parameters:**
+  **msg** ([*Message*](#eric_sse.message.Message))
+* **Return type:**
+  dict
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener"></a>
 
-### *class* SimpleDistributedApplicationListener(channel: [AbstractChannel](#eric_sse.entities.AbstractChannel))
+### *class* SimpleDistributedApplicationListener
 
 Bases: [`MessageQueueListener`](#eric_sse.entities.MessageQueueListener)
 
 Listener for distributed applications
 
+<a id="eric_sse.prefabs.SimpleDistributedApplicationListener.__init__"></a>
+
+#### \_\_init_\_(channel)
+
+* **Parameters:**
+  **channel** ([*AbstractChannel*](#eric_sse.entities.AbstractChannel))
+
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.set_action"></a>
 
-#### set_action(name: str, action: Callable[[[MessageContract](#eric_sse.message.MessageContract)], list[[MessageContract](#eric_sse.message.MessageContract)]])
+#### set_action(name, action)
 
 Hooks a callable to a string key.
 
@@ -309,15 +452,28 @@ They should return a list of Messages corresponding to response to action reques
 Reserved actions are ‘start’, ‘stop’, ‘remove’.
 Receiving a message with one of these types will fire correspondant action.
 
+* **Parameters:**
+  * **name** (*str*)
+  * **action** (*Callable* *[* *[*[*MessageContract*](#eric_sse.message.MessageContract) *]* *,* *list* *[*[*MessageContract*](#eric_sse.message.MessageContract) *]* *]*)
+
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.dispatch_to"></a>
 
-#### dispatch_to(receiver: [MessageQueueListener](#eric_sse.entities.MessageQueueListener), msg: [MessageContract](#eric_sse.message.MessageContract))
+#### dispatch_to(receiver, msg)
+
+* **Parameters:**
+  * **receiver** ([*MessageQueueListener*](#eric_sse.entities.MessageQueueListener))
+  * **msg** ([*MessageContract*](#eric_sse.message.MessageContract))
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"></a>
 
-#### on_message(msg: [SignedMessage](#eric_sse.message.SignedMessage)) → None
+#### on_message(msg)
 
 Executes action correspondant to message’s type
+
+* **Parameters:**
+  **msg** ([*SignedMessage*](#eric_sse.message.SignedMessage))
+* **Return type:**
+  None
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.remove_sync"></a>
 
@@ -337,9 +493,13 @@ Stop and unregister
 
 Helper class for management of multiple SSE channels cases of use.
 
+<a id="eric_sse.servers.SSEChannelContainer.__init__"></a>
+
+#### \_\_init_\_()
+
 <a id="eric_sse.servers.SocketServer"></a>
 
-### *class* SocketServer(file_descriptor_path: str)
+### *class* SocketServer
 
 An implementation of a socket server that acts as a controller to interact with library
 
@@ -370,6 +530,13 @@ Possible values of **verb** identifies a supported action:
 
 See examples
 
+<a id="eric_sse.servers.SocketServer.__init__"></a>
+
+#### \_\_init_\_(file_descriptor_path)
+
+* **Parameters:**
+  **file_descriptor_path** (*str*)
+
 <a id="eric_sse.servers.SocketServer.shutdown"></a>
 
 #### *async* shutdown()
@@ -378,53 +545,93 @@ Graceful Shutdown
 
 <a id="eric_sse.servers.SocketServer.start"></a>
 
-#### *static* start(file_descriptor_path: str)
+#### *static* start(file_descriptor_path)
 
 Shortcut to start a server
+
+* **Parameters:**
+  **file_descriptor_path** (*str*)
 
 <a id="module-eric_sse.clients"></a>
 
 <a id="eric_sse.clients.SocketClient"></a>
 
-### *class* SocketClient(file_descriptor_path: str)
+### *class* SocketClient
 
 A little facade to interact with SocketServer
 
+<a id="eric_sse.clients.SocketClient.__init__"></a>
+
+#### \_\_init_\_(file_descriptor_path)
+
+* **Parameters:**
+  **file_descriptor_path** (*str*)
+
 <a id="eric_sse.clients.SocketClient.send_payload"></a>
 
-#### *async* send_payload(payload: dict)
+#### *async* send_payload(payload)
 
 Send an arbitrary payload to a socket
 
 see [`eric_sse.servers.SocketServer`](#eric_sse.servers.SocketServer)
 
+* **Parameters:**
+  **payload** (*dict*)
+
 <a id="eric_sse.clients.SocketClient.create_channel"></a>
 
-#### *async* create_channel() → str
+#### *async* create_channel()
+
+* **Return type:**
+  str
 
 <a id="eric_sse.clients.SocketClient.register"></a>
 
-#### *async* register(channel_id: str)
+#### *async* register(channel_id)
+
+* **Parameters:**
+  **channel_id** (*str*)
 
 <a id="eric_sse.clients.SocketClient.stream"></a>
 
-#### *async* stream(channel_id, listener_id) → AsyncIterable[str]
+#### *async* stream(channel_id, listener_id)
+
+* **Return type:**
+  *AsyncIterable*[str]
 
 <a id="eric_sse.clients.SocketClient.broadcast_message"></a>
 
-#### *async* broadcast_message(channel_id: str, message_type: str, payload: str | dict | int | float)
+#### *async* broadcast_message(channel_id, message_type, payload)
+
+* **Parameters:**
+  * **channel_id** (*str*)
+  * **message_type** (*str*)
+  * **payload** (*str* *|* *dict* *|* *int* *|* *float*)
 
 <a id="eric_sse.clients.SocketClient.dispatch"></a>
 
-#### *async* dispatch(channel_id: str, receiver_id: str, message_type: str, payload: str | dict | int | float)
+#### *async* dispatch(channel_id, receiver_id, message_type, payload)
+
+* **Parameters:**
+  * **channel_id** (*str*)
+  * **receiver_id** (*str*)
+  * **message_type** (*str*)
+  * **payload** (*str* *|* *dict* *|* *int* *|* *float*)
 
 <a id="eric_sse.clients.SocketClient.remove_listener"></a>
 
-#### *async* remove_listener(channel_id: str, listener_id: str)
+#### *async* remove_listener(channel_id, listener_id)
+
+* **Parameters:**
+  * **channel_id** (*str*)
+  * **listener_id** (*str*)
 
 <a id="eric_sse.clients.SocketClient.remove_channel"></a>
 
-#### *async* remove_channel(channel_id: str)
+#### *async* remove_channel(channel_id)
+
+* **Parameters:**
+  **channel_id** (*str*)
 
 <a id="module-eric_sse.queue"></a>
 
@@ -442,21 +649,32 @@ Abstract base class for queues (FIFO)
 
 <a id="eric_sse.queue.Queue.pop"></a>
 
-#### *abstract* pop() → [MessageContract](#eric_sse.message.MessageContract)
+#### *abstract* pop()
 
 Next message from the queue.
 
 Raises a [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessagesException) if the queue is empty.
 
+* **Return type:**
+  [*MessageContract*](#eric_sse.message.MessageContract)
+
 <a id="eric_sse.queue.Queue.push"></a>
 
-#### *abstract* push(message: [MessageContract](#eric_sse.message.MessageContract)) → None
+#### *abstract* push(message)
+
+* **Parameters:**
+  **message** ([*MessageContract*](#eric_sse.message.MessageContract))
+* **Return type:**
+  None
 
 <a id="eric_sse.queue.Queue.delete"></a>
 
-#### *abstract* delete() → None
+#### *abstract* delete()
 
 Removes all messages from the queue.
+
+* **Return type:**
+  None
 
 <a id="eric_sse.queue.AbstractMessageQueueFactory"></a>
 
@@ -470,7 +688,10 @@ see [`eric_sse.entities.AbstractChannel`](#eric_sse.entities.AbstractChannel)
 
 <a id="eric_sse.queue.AbstractMessageQueueFactory.create"></a>
 
-#### *abstract* create() → [Queue](#eric_sse.queue.Queue)
+#### *abstract* create()
+
+* **Return type:**
+  [*Queue*](#eric_sse.queue.Queue)
 
 <a id="eric_sse.queue.InMemoryMessageQueueFactory"></a>
 
@@ -482,7 +703,10 @@ Default implementation used by [`eric_sse.entities.AbstractChannel`](#eric_sse.e
 
 <a id="eric_sse.queue.InMemoryMessageQueueFactory.create"></a>
 
-#### create() → [Queue](#eric_sse.queue.Queue)
+#### create()
+
+* **Return type:**
+  [*Queue*](#eric_sse.queue.Queue)
 
 <a id="eric_sse.queue.RepositoryError"></a>
 
