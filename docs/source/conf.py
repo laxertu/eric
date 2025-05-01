@@ -23,7 +23,6 @@ sys.path.append(__eric_modules_path)
 
 # -- Project information -----------------------------------------------------
 project = 'eric-sse'
-copyright = '2024, Luca Stretti'
 author = 'Luca Stretti'
 
 # The full version, including alpha/beta/rc tags
@@ -88,3 +87,13 @@ add_module_names = False
 # python_display_short_literal_types = True
 modindex_common_prefix = ['eric_sse.']
 toc_object_entries_show_parents = 'hide'
+
+# -- Options for autodoc ----------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#configuration
+
+# Automatically extract typehints when specified and place them in
+# descriptions of the relevant function/method.
+autodoc_typehints = "description"
+
+# Don't show class signature with the class' name.
+autodoc_class_signature = "separated"
