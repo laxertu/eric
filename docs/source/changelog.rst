@@ -1,5 +1,9 @@
 Changelog
 =========
+0.7.4
+
+* Added AbstractQueuesFactory injection support to SSEChannelContainer.add
+
 0.7.3
 
 * Fixed SSEChannelContainer.add and rm wrong exception thrown on no existent channel

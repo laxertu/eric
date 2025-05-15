@@ -39,13 +39,15 @@ Prefab channels and listeners
 Prefab servers and clients
 ==========================
 .. automodule:: eric_sse.servers
-    :exclude-members: NEXT_ID
     :members:
+    :undoc-members:
+    :exclude-members: cc, ACK
+    :member-order: bysource
+
 .. automodule:: eric_sse.clients
     :undoc-members:
     :members:
     :member-order: bysource
-
 
 Queues
 ======

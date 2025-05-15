@@ -306,7 +306,7 @@ Enqueue a message to all listeners
 
 Entry point for message streaming
 
-A message with type = ‘error’ is yield on invalid listener or channel
+A message with type = ‘error’ is yeld on invalid listener or channel
 
 * **Parameters:**
   **listener** ([*MessageQueueListener*](#eric_sse.entities.MessageQueueListener))
@@ -499,6 +499,31 @@ Helper class for management of multiple SSE channels cases of use.
 
 #### \_\_init_\_()
 
+<a id="eric_sse.servers.SSEChannelContainer.add"></a>
+
+#### add(queues_factory=None)
+
+* **Parameters:**
+  **queues_factory** ([*AbstractMessageQueueFactory*](#eric_sse.queue.AbstractMessageQueueFactory) *|* *None*)
+* **Return type:**
+  [*SSEChannel*](#eric_sse.prefabs.SSEChannel)
+
+<a id="eric_sse.servers.SSEChannelContainer.get"></a>
+
+#### get(channel_id)
+
+* **Parameters:**
+  **channel_id** (*str*)
+* **Return type:**
+  [*SSEChannel*](#eric_sse.prefabs.SSEChannel)
+
+<a id="eric_sse.servers.SSEChannelContainer.rm"></a>
+
+#### rm(channel_id)
+
+* **Parameters:**
+  **channel_id** (*str*)
+
 <a id="eric_sse.servers.SocketServer"></a>
 
 ### *class* SocketServer
@@ -539,11 +564,32 @@ See examples
 * **Parameters:**
   **file_descriptor_path** (*str*)
 
+<a id="eric_sse.servers.SocketServer.connect_callback"></a>
+
+#### *async static* connect_callback(reader, writer)
+
+* **Parameters:**
+  * **reader** (*StreamReader*)
+  * **writer** (*StreamWriter*)
+
+<a id="eric_sse.servers.SocketServer.handle_command"></a>
+
+#### *static* handle_command(raw_command)
+
+* **Parameters:**
+  **raw_command** (*str*)
+* **Return type:**
+  *AsyncIterable*[str]
+
 <a id="eric_sse.servers.SocketServer.shutdown"></a>
 
 #### *async* shutdown()
 
 Graceful Shutdown
+
+<a id="eric_sse.servers.SocketServer.main"></a>
+
+#### *async* main()
 
 <a id="eric_sse.servers.SocketServer.start"></a>
 
