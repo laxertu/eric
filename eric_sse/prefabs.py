@@ -5,7 +5,7 @@ from eric_sse import get_logger
 from eric_sse.entities import AbstractChannel, MessageQueueListener
 from eric_sse.message import Message, SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
-from eric_sse.queue import AbstractMessageQueueFactory, InMemoryMessageQueueFactory
+from eric_sse.queue import AbstractMessageQueueFactory
 
 logger = get_logger()
 
