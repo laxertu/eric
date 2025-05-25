@@ -5,7 +5,7 @@ from asyncio import StreamReader, StreamWriter, start_unix_server
 from asyncio.exceptions import CancelledError
 from os import linesep
 from pathlib import Path
-from typing import AsyncIterable
+from typing import AsyncIterable, Iterable
 
 from eric_sse import get_logger
 from eric_sse.message import MessageContract, Message
@@ -40,6 +40,9 @@ class SSEChannelContainer:
             del self.__channels[channel_id]
         except KeyError:
             raise InvalidChannelException(f'No channel with id {channel_id}')
+
+    def get_all_ids(self) -> Iterable[str]:
+        return self.__channels.keys()
 
 
 class SocketServer:

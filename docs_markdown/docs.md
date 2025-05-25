@@ -524,6 +524,13 @@ Helper class for management of multiple SSE channels cases of use.
 * **Parameters:**
   **channel_id** (*str*)
 
+<a id="eric_sse.servers.SSEChannelContainer.get_all_ids"></a>
+
+#### get_all_ids()
+
+* **Return type:**
+  *Iterable*[str]
+
 <a id="eric_sse.servers.SocketServer"></a>
 
 ### *class* SocketServer
