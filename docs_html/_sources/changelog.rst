@@ -1,5 +1,9 @@
 Changelog
 =========
+0.7.5
+
+* Removed eric redis queues references
+
 0.7.4
 
 * Added AbstractQueuesFactory injection support to SSEChannelContainer.add
