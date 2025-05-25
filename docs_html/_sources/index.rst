@@ -14,11 +14,6 @@ The lightweight library for async messaging nobody expects.
 
 * pip install eric-sse
 
-With redis support
-
-*  eric-sse[redis-queues]
-
-
 *Features*
 
 * Send to one listener and broadcast
