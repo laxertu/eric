@@ -6,7 +6,9 @@
 
 pip install eric-sse
 
-*With Redis support*
+*Related packages*
+
+* https://pypi.org/project/eric-redis-queues/
 
 pip install eric-sse[redis-queues]
 
