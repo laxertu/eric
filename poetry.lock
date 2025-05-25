@@ -32,19 +32,6 @@ files = [
 ]
 
 [[package]]
-name = "async-timeout"
-version = "5.0.1"
-description = "Timeout context manager for asyncio programs"
-optional = true
-python-versions = ">=3.8"
-groups = ["main"]
-markers = "extra == \"redis-queues\" and python_full_version < \"3.11.3\""
-files = [
-    {file = "async_timeout-5.0.1-py3-none-any.whl", hash = "sha256:39e3809566ff85354557ec2398b55e096c8364bacac9405a7a1fa429e77fe76c"},
-    {file = "async_timeout-5.0.1.tar.gz", hash = "sha256:d9321a7a3d5a6a5e187e824d2fa0793ce379a202935782d555d6e9d2735677d3"},
-]
-
-[[package]]
 name = "asyncio"
 version = "3.4.3"
 description = "reference implementation of PEP 3156"
@@ -313,23 +300,6 @@ files = [
 ]
 
 [[package]]
-name = "eric-redis-queues"
-version = "0.0.4.12"
-description = "Redis support for eric-sse"
-optional = true
-python-versions = "<3.12,>=3.10"
-groups = ["main"]
-markers = "extra == \"redis-queues\""
-files = [
-    {file = "eric_redis_queues-0.0.4.12-py3-none-any.whl", hash = "sha256:fca04c28eca533b5d2cba19d807280f5611cb6cbc6fc7dce7ff17fe89a836c65"},
-    {file = "eric_redis_queues-0.0.4.12.tar.gz", hash = "sha256:1d4aaf5bebcb2cc8f11f825b11eb2b3c2ce772b7de13bfb2deefe810dca3b864"},
-]
-
-[package.dependencies]
-eric-sse = ">=0.7.1,<0.8.0"
-redis = ">=5.2.1,<6.0.0"
-
-[[package]]
 name = "exceptiongroup"
 version = "1.2.2"
 description = "Backport of PEP 654 (exception groups)"
@@ -585,26 +555,6 @@ pytest = ">=4.6"
 
 [package.extras]
 testing = ["fields", "hunter", "process-tests", "pytest-xdist", "virtualenv"]
-
-[[package]]
-name = "redis"
-version = "5.2.1"
-description = "Python client for Redis database and key-value store"
-optional = true
-python-versions = ">=3.8"
-groups = ["main"]
-markers = "extra == \"redis-queues\""
-files = [
-    {file = "redis-5.2.1-py3-none-any.whl", hash = "sha256:ee7e1056b9aea0f04c6c2ed59452947f34c4940ee025f5dd83e6a6418b6989e4"},
-    {file = "redis-5.2.1.tar.gz", hash = "sha256:16f2e22dff21d5125e8481515e386711a34cbec50f0e44413dd7d9c060a54e0f"},
-]
-
-[package.dependencies]
-async-timeout = {version = ">=4.0.3", markers = "python_full_version < \"3.11.3\""}
-
-[package.extras]
-hiredis = ["hiredis (>=3.0.0)"]
-ocsp = ["cryptography (>=36.0.1)", "pyopenssl (==23.2.1)", "requests (>=2.31.0)"]
 
 [[package]]
 name = "requests"
@@ -917,10 +867,7 @@ h2 = ["h2 (>=4,<5)"]
 socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
-[extras]
-redis-queues = ["eric-redis-queues"]
-
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10, <3.12"
-content-hash = "84e6f878aa5ecdf9feec7be06449b3b7e62b7270b935d2ffeb24e2bdc169694d"
+content-hash = "c93e38d51e922739ca04a11fc476bfbd1a9093ac138b0aeb4ba0569979d659b5"

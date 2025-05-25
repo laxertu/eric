@@ -1,5 +1,9 @@
 Changelog
 =========
+0.7.6
+
+Added a get all channels' ids to sse container
+
 0.7.5
 
 * Removed eric redis queues references
