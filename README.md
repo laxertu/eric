@@ -10,8 +10,6 @@ pip install eric-sse
 
 * https://pypi.org/project/eric-redis-queues/
 
-pip install eric-sse[redis-queues]
-
 *Features*
 
 * Send to one listener and broadcast
