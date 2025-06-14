@@ -21,6 +21,6 @@ if __name__ == '__main__':
         print(f'Usage: {sys.argv[0]} <channel_id>')
     except KeyboardInterrupt:
         print('bye')
-        exit(0)
+        sys.exit(0)
 
 

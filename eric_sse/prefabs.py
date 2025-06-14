@@ -128,7 +128,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         They should return a list of Messages corresponding to response to action requested.
 
         Reserved actions are 'start', 'stop', 'remove'.
-        Receiving a message with one of these types will fire correspondant action.
+        Receiving a message with one of these types will fire corresponding action.
 
         """
         if action in self.__internal_actions:
@@ -140,7 +140,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         self.__channel.dispatch(receiver.id, signed_message)
 
     def on_message(self, msg: SignedMessage) -> None:
-        """Executes action correspondant to message's type"""
+        """Executes action corresponding to message's type"""
         try:
             try:
                 self.__internal_actions[msg.type]()

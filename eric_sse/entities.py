@@ -3,7 +3,6 @@ import traceback
 from abc import ABC, abstractmethod
 from threading import Lock
 from typing import AsyncIterable, Any
-from logging import DEBUG, INFO, WARNING, ERROR, CRITICAL
 
 import eric_sse
 from eric_sse.exception import InvalidListenerException, NoMessagesException, InvalidChannelException
@@ -11,7 +10,6 @@ from eric_sse.message import MessageContract, Message
 from eric_sse.queue import Queue, AbstractMessageQueueFactory, InMemoryMessageQueueFactory
 
 logger = eric_sse.get_logger()
-logger.setLevel(DEBUG)
 
 MESSAGE_TYPE_CLOSED = '_eric_channel_closed'
 MESSAGE_TYPE_END_OF_STREAM = '_eric_channel_eof'
@@ -37,7 +35,7 @@ class MessageQueueListener(ABC):
         self.start_sync()
 
     def start_sync(self) -> None:
-        logger.debug(f"Starting {self.id}")
+        logger.debug(f"Starting listener {self.id}")
         self.__is_running = True
 
     async def is_running(self) -> bool:
@@ -50,7 +48,7 @@ class MessageQueueListener(ABC):
         self.stop_sync()
 
     def stop_sync(self) -> None:
-        logger.debug(f"Stopping {self.id}")
+        logger.debug(f"Stopping listener {self.id}")
         self.__is_running = False
 
     def on_message(self, msg: MessageContract) -> None:

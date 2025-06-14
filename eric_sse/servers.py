@@ -144,7 +144,7 @@ class SocketServer:
             yield SocketServer.ACK
 
         elif verb == 'l':
-            logger.info(f"Client listening on {channel_id} {receiver_id}")
+            logger.info(f"Started listener {receiver_id} on {channel_id}")
             channel = SocketServer.cc.get(channel_id)
             listener = channel.get_listener(receiver_id)
             await listener.start()
