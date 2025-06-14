@@ -15,6 +15,7 @@ MESSAGE_TYPE_CLOSED = '_eric_channel_closed'
 MESSAGE_TYPE_END_OF_STREAM = '_eric_channel_eof'
 MESSAGE_TYPE_INTERNAL_ERROR = '_eric_error'
 
+_LISTENERS_NEXT_ID_LOCK = Lock()
 
 class MessageQueueListener(ABC):
     """
@@ -26,7 +27,7 @@ class MessageQueueListener(ABC):
 
     def __init__(self):
         self.id: str | None = None
-        with Lock():
+        with _LISTENERS_NEXT_ID_LOCK:
             self.id: str = str(MessageQueueListener.NEXT_ID)
             MessageQueueListener.NEXT_ID += 1
         self.__is_running: bool = False
