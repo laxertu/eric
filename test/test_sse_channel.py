@@ -21,7 +21,7 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
         msg_to_send = Message(msg_type='test', msg_payload={})
         channel.dispatch(listener_id=listener.id, msg=msg_to_send)
 
-        async for msg_received in await self.sut.message_stream(listener=listener):
+        async for msg_received in self.sut.message_stream(listener=listener):
             self.assertDictEqual(
                 {'data': {}, 'event': 'test', 'retry': channel.retry_timeout_milliseconds}, msg_received
             )
@@ -35,7 +35,7 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
         listener.start_sync()
         self.sut.dispatch(listener.id, Message(msg_type="test", msg_payload={'a': 1}))
 
-        async for m in await self.sut.message_stream(listener):
+        async for m in self.sut.message_stream(listener):
             self.assertEqual(m['data'], json.dumps({'a': 1}))
 
 
@@ -46,12 +46,12 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
 
         l.start_sync()
         total_messages_received = 0
-        async for _ in await self.sut.message_stream(listener=l):
+        async for _ in self.sut.message_stream(listener=l):
             total_messages_received += 1
             await l.stop()
 
         await l.start()
-        async for _ in await self.sut.message_stream(listener=l):
+        async for _ in self.sut.message_stream(listener=l):
             total_messages_received += 1
             await l.stop()
 

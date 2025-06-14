@@ -144,9 +144,11 @@ class SocketServer:
             yield SocketServer.ACK
 
         elif verb == 'l':
-            logger.info(f"Client listening on {receiver_id}")
+            logger.info(f"Started listener {receiver_id} on {channel_id}")
             channel = SocketServer.cc.get(channel_id)
-            async for m in await channel.message_stream(channel.get_listener(receiver_id)):
+            listener = channel.get_listener(receiver_id)
+            await listener.start()
+            async for m in await channel.message_stream(listener):
                 yield f'{json.dumps(m)}{linesep}'
 
         elif verb == 'w':

@@ -41,10 +41,10 @@ class DistributedListenerTestCase(IsolatedAsyncioTestCase):
         # Alice will stop after having answered to Bob
         bob.dispatch_to(alice, Message(msg_type='stop'))
 
-        types = [m['event'] async for m in await ssc.message_stream(alice)]
+        types = [m['event'] async for m in ssc.message_stream(alice)]
         self.assertEqual(['hello', 'stop'], types)
 
-        types = [m['event'] async for m in await ssc.message_stream(bob)]
+        types = [m['event'] async for m in ssc.message_stream(bob)]
         self.assertEqual(['hello_ack', 'stop'], types)
 
 class DataProcessingChannelTestCase(IsolatedAsyncioTestCase):
@@ -58,5 +58,5 @@ class DataProcessingChannelTestCase(IsolatedAsyncioTestCase):
         channel.dispatch(listener.id, Message(msg_type='test3'))
 
         await listener.start()
-        types = {m['event'] async for m in await channel.process_queue(listener)}
+        types = {m['event'] async for m in channel.process_queue(listener)}
         self.assertEqual({'test1', 'test2', 'test3'}, types)

@@ -452,7 +452,7 @@ Callables are selected when listener processes the message depending on its type
 They should return a list of Messages corresponding to response to action requested.
 
 Reserved actions are ‘start’, ‘stop’, ‘remove’.
-Receiving a message with one of these types will fire correspondant action.
+Receiving a message with one of these types will fire corresponding action.
 
 * **Parameters:**
   * **name** (*str*)
@@ -470,7 +470,7 @@ Receiving a message with one of these types will fire correspondant action.
 
 #### on_message(msg)
 
-Executes action correspondant to message’s type
+Executes action corresponding to message’s type
 
 * **Parameters:**
   **msg** ([*SignedMessage*](#eric_sse.message.SignedMessage))
