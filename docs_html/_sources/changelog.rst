@@ -1,5 +1,10 @@
 Changelog
 =========
+0.7.7
+
+Now SocketServer starts correspondant listener on 'l' command
+
+
 0.7.6
 
 Added a get all channels' ids to sse container

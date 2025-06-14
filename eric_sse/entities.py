@@ -3,6 +3,7 @@ import traceback
 from abc import ABC, abstractmethod
 from threading import Lock
 from typing import AsyncIterable, Any
+from logging import DEBUG, INFO, WARNING, ERROR, CRITICAL
 
 import eric_sse
 from eric_sse.exception import InvalidListenerException, NoMessagesException, InvalidChannelException
@@ -10,6 +11,7 @@ from eric_sse.message import MessageContract, Message
 from eric_sse.queue import Queue, AbstractMessageQueueFactory, InMemoryMessageQueueFactory
 
 logger = eric_sse.get_logger()
+logger.setLevel(DEBUG)
 
 MESSAGE_TYPE_CLOSED = '_eric_channel_closed'
 MESSAGE_TYPE_END_OF_STREAM = '_eric_channel_eof'
@@ -25,27 +27,30 @@ class MessageQueueListener(ABC):
     NEXT_ID = 1
 
     def __init__(self):
+        self.id: str | None = None
         with Lock():
             self.id: str = str(MessageQueueListener.NEXT_ID)
             MessageQueueListener.NEXT_ID += 1
         self.__is_running: bool = False
 
     async def start(self) -> None:
-        self.__is_running = True
+        self.start_sync()
 
     def start_sync(self) -> None:
+        logger.debug(f"Starting {self.id}")
         self.__is_running = True
 
     async def is_running(self) -> bool:
-        return self.__is_running
+        return self.is_running_sync()
 
     def is_running_sync(self) -> bool:
         return self.__is_running
 
     async def stop(self) -> None:
-        self.__is_running = False
+        self.stop_sync()
 
     def stop_sync(self) -> None:
+        logger.debug(f"Stopping {self.id}")
         self.__is_running = False
 
     def on_message(self, msg: MessageContract) -> None:
