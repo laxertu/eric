@@ -16,17 +16,8 @@ class ExampleServerListener(MessageQueueListener):
 async def main():
     server = SocketServer(SOCKET_FILE_DESCRIPTOR_PATH)
     channel = server.cc.add()
-    listener = ExampleServerListener()
-    channel.register_listener(listener)
-
-    listener2 = ExampleServerListener()
-    channel.register_listener(listener2)
 
     print(f"Test an example delivery on an hello world with 'python sender.py {channel.id}'")
-    print(f"Test SSE streaming with 'python watcher.py {channel.id} {listener.id}'")
-    print(f"Test SSE streaming with 'python watcher.py {channel.id} {listener2.id}'")
-    await listener.start()
-    await listener2.start()
     await server.main()
 
 
