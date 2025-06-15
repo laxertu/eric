@@ -187,7 +187,8 @@ class AbstractChannel(ABC):
                     logger.debug(traceback.format_exc())
                     logger.error(e)
 
-        return event_generator()
+        async for x in event_generator():
+            yield x
 
     async def watch(self) -> AsyncIterable[Any]:
         listener = self.add_listener()
