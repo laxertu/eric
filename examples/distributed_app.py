@@ -63,4 +63,4 @@ async def main():
     await f1
     await f2
 
-asyncio.get_event_loop().run_until_complete(main())
+asyncio.run(main())
