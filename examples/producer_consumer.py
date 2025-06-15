@@ -3,7 +3,7 @@ from random import uniform
 from time import sleep
 from eric_sse import get_logger
 from eric_sse.entities import MessageQueueListener, MESSAGE_TYPE_CLOSED
-from eric_sse.message import Message, SignedMessage
+from eric_sse.message import SignedMessage
 from eric_sse.prefabs import DataProcessingChannel
 from eric_redis_queues import RedisQueueFactory
 
