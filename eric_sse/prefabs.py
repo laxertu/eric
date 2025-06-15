@@ -77,12 +77,13 @@ class DataProcessingChannel(AbstractChannel):
         """Launches the processing of the given listener's queue"""
 
         async def event_generator(listener: MessageQueueListener) -> AsyncIterable[dict]:
-            for f in as_completed(self.__prepare_executor(listener)):
-                yield self.adapt(f.result())
+            for task_result in as_completed(self.__schedule_tasks(listener)):
+                yield self.adapt(task_result.result())
 
-        return event_generator(listener=l)
+        async for event in event_generator(listener=l):
+            yield event
 
-    def __prepare_executor(self, listener: MessageQueueListener) -> Iterator[Future]:
+    def __schedule_tasks(self, listener: MessageQueueListener) -> Iterator[Future]:
         with ThreadPoolExecutor(self.max_workers) as e:
             there_are_pending_messages = True
             while there_are_pending_messages:
@@ -128,7 +129,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         They should return a list of Messages corresponding to response to action requested.
 
         Reserved actions are 'start', 'stop', 'remove'.
-        Receiving a message with one of these types will fire correspondant action.
+        Receiving a message with one of these types will fire corresponding action.
 
         """
         if action in self.__internal_actions:
@@ -140,7 +141,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         self.__channel.dispatch(receiver.id, signed_message)
 
     def on_message(self, msg: SignedMessage) -> None:
-        """Executes action correspondant to message's type"""
+        """Executes action corresponding to message's type"""
         try:
             try:
                 self.__internal_actions[msg.type]()

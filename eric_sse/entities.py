@@ -15,6 +15,7 @@ MESSAGE_TYPE_CLOSED = '_eric_channel_closed'
 MESSAGE_TYPE_END_OF_STREAM = '_eric_channel_eof'
 MESSAGE_TYPE_INTERNAL_ERROR = '_eric_error'
 
+_LISTENERS_NEXT_ID_LOCK = Lock()
 
 class MessageQueueListener(ABC):
     """
@@ -25,27 +26,30 @@ class MessageQueueListener(ABC):
     NEXT_ID = 1
 
     def __init__(self):
-        with Lock():
+        self.id: str | None = None
+        with _LISTENERS_NEXT_ID_LOCK:
             self.id: str = str(MessageQueueListener.NEXT_ID)
             MessageQueueListener.NEXT_ID += 1
         self.__is_running: bool = False
 
     async def start(self) -> None:
-        self.__is_running = True
+        self.start_sync()
 
     def start_sync(self) -> None:
+        logger.debug(f"Starting listener {self.id}")
         self.__is_running = True
 
     async def is_running(self) -> bool:
-        return self.__is_running
+        return self.is_running_sync()
 
     def is_running_sync(self) -> bool:
         return self.__is_running
 
     async def stop(self) -> None:
-        self.__is_running = False
+        self.stop_sync()
 
     def stop_sync(self) -> None:
+        logger.debug(f"Stopping listener {self.id}")
         self.__is_running = False
 
     def on_message(self, msg: MessageContract) -> None:
@@ -183,12 +187,14 @@ class AbstractChannel(ABC):
                     logger.debug(traceback.format_exc())
                     logger.error(e)
 
-        return event_generator()
+        async for event in event_generator():
+            yield event
 
     async def watch(self) -> AsyncIterable[Any]:
+        # TODO tests
         listener = self.add_listener()
         listener.start_sync()
-        return await self.message_stream(listener)
+        return self.message_stream(listener)
 
     def notify_end(self):
         """Broadcasts a MESSAGE_TYPE_CLOSED Message"""
