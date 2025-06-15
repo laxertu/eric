@@ -77,12 +77,12 @@ class DataProcessingChannel(AbstractChannel):
         """Launches the processing of the given listener's queue"""
 
         async def event_generator(listener: MessageQueueListener) -> AsyncIterable[dict]:
-            for f in as_completed(self.__prepare_executor(listener)):
-                yield self.adapt(f.result())
+            for task_result in as_completed(self.__schedule_tasks(listener)):
+                yield self.adapt(task_result.result())
 
         return event_generator(listener=l)
 
-    def __prepare_executor(self, listener: MessageQueueListener) -> Iterator[Future]:
+    def __schedule_tasks(self, listener: MessageQueueListener) -> Iterator[Future]:
         with ThreadPoolExecutor(self.max_workers) as e:
             there_are_pending_messages = True
             while there_are_pending_messages:
