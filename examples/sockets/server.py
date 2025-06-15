@@ -14,6 +14,9 @@ class ExampleServerListener(MessageQueueListener):
 
 
 async def main():
+    """
+    Initializes the socket server, creates a channel, prints test instructions, and starts the server's main loop.
+    """
     server = SocketServer(SOCKET_FILE_DESCRIPTOR_PATH)
     channel = server.cc.add()
 

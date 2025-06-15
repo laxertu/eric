@@ -115,6 +115,11 @@ class SocketServer:
 
     @staticmethod
     async def handle_command(raw_command: str) -> AsyncIterable[str]:
+        """
+        Processes a raw command string and yields responses for SSE channel and listener operations.
+        
+        Depending on the command verb, this function creates channels, dispatches or broadcasts messages, manages listeners, or streams messages to clients. Responses are yielded as strings, which may include acknowledgments, IDs, or JSON-encoded messages.
+        """
         channel_id, verb, message, receiver_id = SocketServer.__parse(raw_command)
 
         logger.info(f'received command {verb}')
