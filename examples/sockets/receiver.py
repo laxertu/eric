@@ -7,6 +7,12 @@ from examples.sockets import SOCKET_FILE_DESCRIPTOR_PATH
 
 
 async def main(channel_id):
+    """
+    Listens for and prints messages from a specified channel using a socket client.
+    
+    Args:
+        channel_id: The identifier of the channel to listen to.
+    """
     client = SocketClient(SOCKET_FILE_DESCRIPTOR_PATH)
 
     listener_id = await client.register(channel_id)

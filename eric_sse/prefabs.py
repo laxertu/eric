@@ -74,15 +74,34 @@ class DataProcessingChannel(AbstractChannel):
         self.max_workers = max_workers
 
     async def process_queue(self, l: MessageQueueListener) -> AsyncIterable[dict]:
-        """Launches the processing of the given listener's queue"""
+        """
+        Asynchronously processes messages from a listener's queue and yields adapted results.
+        
+        Args:
+            l: The message queue listener whose messages will be processed.
+        
+        Yields:
+            Dictionaries representing processed messages, adapted for downstream consumption.
+        """
 
         async def event_generator(listener: MessageQueueListener) -> AsyncIterable[dict]:
+            """
+            Asynchronously yields adapted results for each processed message from a listener's queue.
+            
+            Iterates over completed message processing tasks and yields each result as a dictionary
+            adapted for downstream consumption.
+            """
             for task_result in as_completed(self.__schedule_tasks(listener)):
                 yield self.adapt(task_result.result())
 
         return event_generator(listener=l)
 
     def __schedule_tasks(self, listener: MessageQueueListener) -> Iterator[Future]:
+        """
+        Submits message processing tasks from a listener's queue to a thread pool executor.
+        
+        Yields a Future for each submitted task, which processes a message using the listener's callback. Stops when the queue is empty.
+        """
         with ThreadPoolExecutor(self.max_workers) as e:
             there_are_pending_messages = True
             while there_are_pending_messages:
@@ -121,26 +140,34 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
 
     def set_action(self, name: str, action: Callable[[MessageContract], list[MessageContract]]):
         """
-        Hooks a callable to a string key.
-
-        Callables are selected when listener processes the message depending on its type.
-
-        They should return a list of Messages corresponding to response to action requested.
-
-        Reserved actions are 'start', 'stop', 'remove'.
-        Receiving a message with one of these types will fire corresponding action.
-
+        Registers a user-defined action to handle messages of a specific type.
+        
+        The provided callable will be invoked when a message with the given type is processed,
+        and should return a list of response messages. Reserved action names ('start', 'stop',
+        'remove') cannot be overridden.
+        
+        Raises:
+            KeyError: If attempting to set an action with a reserved name.
         """
         if action in self.__internal_actions:
             raise KeyError(f'Trying to set an internal action {action}')
         self.__actions[name] = action
 
     def dispatch_to(self, receiver: MessageQueueListener, msg: MessageContract):
+        """
+        Sends a signed message to the specified receiver via the associated channel.
+        
+        The message is wrapped in a SignedMessage containing the sender's ID before dispatch.
+        """
         signed_message = SignedMessage(sender_id=self.id, msg_type=msg.type, msg_payload=msg.payload)
         self.__channel.dispatch(receiver.id, signed_message)
 
     def on_message(self, msg: SignedMessage) -> None:
-        """Executes action corresponding to message's type"""
+        """
+        Handles an incoming signed message by executing the corresponding action.
+        
+        If the message type matches an internal action, executes it. Otherwise, invokes the registered user-defined action for the message type and dispatches any response messages back to the original sender. Logs a debug message if the message type is unknown.
+        """
         try:
             try:
                 self.__internal_actions[msg.type]()

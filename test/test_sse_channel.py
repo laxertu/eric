@@ -14,6 +14,11 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
 
     async def test_sse_channel_default_output(self):
         # setup
+        """
+        Tests that the SSEChannel produces the correct default output for a dispatched message.
+        
+        Verifies that a listener receives a message with the expected structure and values when a message is dispatched, and that the listener can be stopped after receiving the message.
+        """
         channel = self.sut
         listener = channel.add_listener()
         await listener.start()
@@ -29,6 +34,11 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
 
 
     async def test_payload_adapter_json(self):
+        """
+        Tests that the SSEChannel correctly uses a custom payload adapter for message serialization.
+        
+        Verifies that when the payload_adapter is set to json.dumps, the 'data' field of streamed messages contains the JSON-serialized payload.
+        """
         self.sut.payload_adapter = json.dumps
         listener = MessageQueueListenerMock(num_messages_before_disconnect=1)
         self.sut.register_listener(listener)
@@ -40,6 +50,11 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
 
 
     async def test_stream_stops_if_listener_stops(self):
+        """
+        Tests that the message stream stops when the listener is stopped and resumes correctly.
+        
+        Verifies that messages are received only while the listener is active, and that stopping and restarting the listener results in the correct total number of messages received.
+        """
         l = self.sut.add_listener()
         self.sut.dispatch(l.id, Message(msg_type='test'))
         self.sut.dispatch(l.id, Message(msg_type='test'))

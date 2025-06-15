@@ -26,6 +26,9 @@ class MessageQueueListener(ABC):
     NEXT_ID = 1
 
     def __init__(self):
+        """
+        Initializes a MessageQueueListener with a unique string ID and sets its running state to False.
+        """
         self.id: str | None = None
         with _LISTENERS_NEXT_ID_LOCK:
             self.id: str = str(MessageQueueListener.NEXT_ID)
@@ -33,27 +36,52 @@ class MessageQueueListener(ABC):
         self.__is_running: bool = False
 
     async def start(self) -> None:
+        """
+        Starts the listener asynchronously by invoking the synchronous start method.
+        """
         self.start_sync()
 
     def start_sync(self) -> None:
+        """
+        Marks the listener as running in a synchronous context.
+        """
         logger.debug(f"Starting listener {self.id}")
         self.__is_running = True
 
     async def is_running(self) -> bool:
+        """
+        Checks if the listener is currently running.
+        
+        Returns:
+            True if the listener is running, otherwise False.
+        """
         return self.is_running_sync()
 
     def is_running_sync(self) -> bool:
+        """
+        Returns whether the listener is currently running.
+        """
         return self.__is_running
 
     async def stop(self) -> None:
+        """
+        Stops the listener asynchronously by delegating to the synchronous stop method.
+        """
         self.stop_sync()
 
     def stop_sync(self) -> None:
+        """
+        Stops the listener synchronously by setting its running state to False.
+        """
         logger.debug(f"Stopping listener {self.id}")
         self.__is_running = False
 
     def on_message(self, msg: MessageContract) -> None:
-        """Event handler. It executes when a message is delivered to client"""
+        """
+        Handles a message delivered to the listener.
+        
+        Override this method to define custom behavior when a message is received.
+        """
         pass
 
 
@@ -157,9 +185,9 @@ class AbstractChannel(ABC):
 
     async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
         """
-        Entry point for message streaming
-
-        A message with type = 'error' is yeld on invalid listener or channel
+        Asynchronously streams adapted messages for a listener as they become available.
+        
+        Yields adapted messages from the listener's queue, handling listener stop events and yielding error messages if the listener or channel is invalid.
         """
 
         def new_messages():
@@ -170,6 +198,11 @@ class AbstractChannel(ABC):
 
         async def event_generator() -> AsyncIterable[dict]:
 
+            """
+            Asynchronously generates adapted messages for a listener, yielding each message as it becomes available.
+            
+            Yields error messages if the listener or channel is invalid, and stops when the listener is no longer running.
+            """
             while True:
                 # If client closes connection, stop sending events
                 if not await listener.is_running():
@@ -191,6 +224,12 @@ class AbstractChannel(ABC):
             yield event
 
     async def watch(self) -> AsyncIterable[Any]:
+        """
+        Adds a new listener, starts it synchronously, and yields messages from its message stream.
+        
+        Yields:
+            Adapted messages for the newly added listener as they become available.
+        """
         listener = self.add_listener()
         listener.start_sync()
         return await self.message_stream(listener)

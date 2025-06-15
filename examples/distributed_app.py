@@ -36,6 +36,17 @@ def bye_handler(m: MessageContract) -> list[Message]:
     return close_connection_response()
 
 def create_listener(ch: SSEChannel):
+    """
+    Creates and starts a distributed application listener with predefined message handlers.
+    
+    The listener is configured to handle 'hello', 'hello_ack', and 'bye' message types using their respective handler functions, and is started synchronously on the provided SSE channel.
+    
+    Args:
+        ch: The SSEChannel to bind the listener to.
+    
+    Returns:
+        The initialized and started SimpleDistributedApplicationListener instance.
+    """
     l = SimpleDistributedApplicationListener(ch)
     l.set_action('hello', hello_response)
     l.set_action('hello_ack', hello_ack_response)
@@ -44,12 +55,24 @@ def create_listener(ch: SSEChannel):
     return l
 
 async def do_stuff(buddy: SimpleDistributedApplicationListener):
+    """
+    Consumes messages from the global SSE channel for the specified listener.
+    
+    This coroutine asynchronously iterates over the message stream associated with
+    the given listener, effectively draining incoming messages without processing
+    them.
+    """
     async for _ in ssc.message_stream(buddy):
         ...
 
 
 async def main():
 
+    """
+    Sets up two distributed listeners and facilitates a message exchange between them.
+    
+    Creates two listeners on a shared SSE channel, initiates a 'hello' message from one to the other, and concurrently runs asynchronous tasks to process incoming messages for both listeners until completion.
+    """
     alice = create_listener(ssc)
     bob = create_listener(ssc)
 

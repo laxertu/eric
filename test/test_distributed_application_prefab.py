@@ -30,6 +30,11 @@ class DistributedListenerTestCase(IsolatedAsyncioTestCase):
 
 
     async def test_application(self):
+        """
+        Asynchronously tests message dispatch and response handling between distributed listeners.
+        
+        This test verifies that two listeners on the same channel correctly exchange messages and receive the expected sequence of event types in response to dispatched messages.
+        """
         ssc = SSEChannel()
 
         alice = DistributedListenerTestCase.create_listener(ssc)
