@@ -58,5 +58,5 @@ class DataProcessingChannelTestCase(IsolatedAsyncioTestCase):
         channel.dispatch(listener.id, Message(msg_type='test3'))
 
         await listener.start()
-        types = {m['event'] async for m in await channel.process_queue(listener)}
+        types = {m['event'] async for m in channel.process_queue(listener)}
         self.assertEqual({'test1', 'test2', 'test3'}, types)

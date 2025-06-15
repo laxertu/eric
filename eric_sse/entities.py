@@ -191,9 +191,10 @@ class AbstractChannel(ABC):
             yield event
 
     async def watch(self) -> AsyncIterable[Any]:
+        # TODO tests
         listener = self.add_listener()
         listener.start_sync()
-        return await self.message_stream(listener)
+        return self.message_stream(listener)
 
     def notify_end(self):
         """Broadcasts a MESSAGE_TYPE_CLOSED Message"""

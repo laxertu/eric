@@ -41,9 +41,9 @@ async def main():
 
     await listener.start()
 
-    async for msg in await channel.process_queue(listener):
+    async for msg in channel.process_queue(listener):
         print(msg)
 
 
 
-asyncio.get_event_loop().run_until_complete(main())
+asyncio.run(main())

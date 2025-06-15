@@ -80,7 +80,8 @@ class DataProcessingChannel(AbstractChannel):
             for task_result in as_completed(self.__schedule_tasks(listener)):
                 yield self.adapt(task_result.result())
 
-        return event_generator(listener=l)
+        async for event in event_generator(listener=l):
+            yield event
 
     def __schedule_tasks(self, listener: MessageQueueListener) -> Iterator[Future]:
         with ThreadPoolExecutor(self.max_workers) as e:
