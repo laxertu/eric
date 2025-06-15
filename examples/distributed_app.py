@@ -45,7 +45,7 @@ def create_listener(ch: SSEChannel):
     return l
 
 async def do_stuff(buddy: SimpleDistributedApplicationListener):
-    async for m in ssc.message_stream(buddy):
+    async for _ in ssc.message_stream(buddy):
         ...
 
 
