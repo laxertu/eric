@@ -73,21 +73,6 @@ class DataProcessingChannel(AbstractChannel):
         super().__init__(stream_delay_seconds=stream_delay_seconds)
         self.max_workers = max_workers
 
-
-    async def msg_stream(self, l: MessageQueueListener):
-        with ThreadPoolExecutor(self.max_workers) as e:
-
-            there_are_pending_messages = True
-            while there_are_pending_messages:
-                try:
-                    msg = self._get_queue(l.id).pop()
-                    r = e.submit(self.__invoke_callback_and_return, l.on_message, msg)
-                    yield r
-                    #r.result()
-
-                except NoMessagesException:
-                    there_are_pending_messages = False
-
     async def process_queue(self, l: MessageQueueListener) -> AsyncIterable[dict]:
 
         with ThreadPoolExecutor(max_workers=self.max_workers) as e:
