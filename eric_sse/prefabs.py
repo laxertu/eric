@@ -1,11 +1,11 @@
-from concurrent.futures import ThreadPoolExecutor, Future, as_completed
-from typing import Callable, AsyncIterable, Iterator
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import Callable, AsyncIterable
 
 from eric_sse import get_logger
 from eric_sse.entities import AbstractChannel, MessageQueueListener
 from eric_sse.message import Message, SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
-from eric_sse.queue import AbstractMessageQueueFactory
+from eric_sse.queue import AbstractMessageQueueFactory, Queue
 
 logger = get_logger()
 
@@ -73,26 +73,38 @@ class DataProcessingChannel(AbstractChannel):
         super().__init__(stream_delay_seconds=stream_delay_seconds)
         self.max_workers = max_workers
 
-    async def process_queue(self, l: MessageQueueListener) -> AsyncIterable[dict]:
-        """Launches the processing of the given listener's queue"""
 
-        async def event_generator(listener: MessageQueueListener) -> AsyncIterable[dict]:
-            for task_result in as_completed(self.__schedule_tasks(listener)):
-                yield self.adapt(task_result.result())
-
-        async for event in event_generator(listener=l):
-            yield event
-
-    def __schedule_tasks(self, listener: MessageQueueListener) -> Iterator[Future]:
+    async def msg_stream(self, l: MessageQueueListener):
         with ThreadPoolExecutor(self.max_workers) as e:
+
             there_are_pending_messages = True
             while there_are_pending_messages:
                 try:
-                    msg = self._get_queue(listener.id).pop()
-                    yield e.submit(self.__invoke_callback_and_return, listener.on_message, msg)
+                    msg = self._get_queue(l.id).pop()
+                    r = e.submit(self.__invoke_callback_and_return, l.on_message, msg)
+                    yield r
+                    #r.result()
 
                 except NoMessagesException:
                     there_are_pending_messages = False
+
+    async def process_queue(self, l: MessageQueueListener) -> AsyncIterable[dict]:
+
+        with ThreadPoolExecutor(max_workers=self.max_workers) as e:
+
+            there_are_pending_messages = True
+            tasks = set()
+            while there_are_pending_messages:
+                try:
+                    msg = self._get_queue(listener_id=l.id).pop()
+                    tasks.add(e.submit(self.__invoke_callback_and_return, l.on_message, msg))
+
+                except NoMessagesException:
+                    there_are_pending_messages = False
+
+            for task_result in as_completed(tasks):
+                yield self.adapt(task_result.result())
+
 
     @staticmethod
     def __invoke_callback_and_return(callback: Callable[[MessageContract], None], msg: MessageContract):

@@ -40,10 +40,8 @@ async def main():
     Producer.produce_num(c=channel, l=listener, num=20)
 
     await listener.start()
-
-    async for msg in channel.process_queue(listener):
-        print(msg)
-
+    async for m in channel.process_queue(listener):
+        print(m)
 
 
 asyncio.run(main())
