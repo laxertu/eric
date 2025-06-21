@@ -400,11 +400,12 @@ MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered a
 
 <a id="eric_sse.prefabs.DataProcessingChannel.__init__"></a>
 
-#### \_\_init_\_(max_workers, stream_delay_seconds=0)
+#### \_\_init_\_(max_workers, stream_delay_seconds=0, executor_class=<class 'concurrent.futures.thread.ThreadPoolExecutor'>)
 
 * **Parameters:**
   * **max_workers** (*int*) – Num of workers to use
   * **stream_delay_seconds** (*int*) – Can be used to limit response rate of streaming. Only applies to message_stream calls.
+  * **executor_class** (*type*)
 
 <a id="eric_sse.prefabs.DataProcessingChannel.process_queue"></a>
 
@@ -795,3 +796,29 @@ an [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessagesExce
 ### *exception* NoMessagesException
 
 Raised when trying to fetch from an empty queue
+
+<a id="module-eric_sse.benchmark"></a>
+
+<a id="benchmarking-tools"></a>
+
+# Benchmarking tools
+
+<a id="eric_sse.benchmark.DataProcessingChannelBenchMark"></a>
+
+### *class* DataProcessingChannelBenchMark
+
+Bases: `object`
+
+<a id="eric_sse.benchmark.DataProcessingChannelBenchMark.__init__"></a>
+
+#### \_\_init_\_(channel)
+
+* **Parameters:**
+  **channel** ([*DataProcessingChannel*](#eric_sse.prefabs.DataProcessingChannel))
+
+<a id="eric_sse.benchmark.DataProcessingChannelBenchMark.run"></a>
+
+#### *async* run(listener)
+
+* **Parameters:**
+  **listener** ([*MessageQueueListener*](#eric_sse.entities.MessageQueueListener))

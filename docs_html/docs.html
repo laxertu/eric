@@ -145,6 +145,7 @@
 
 
 
+
 <li class="toctree-l1"><a class="reference internal" href="devs.html">Developers section</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -426,6 +427,14 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.InvalidListenerException"><code class="docutils literal notranslate"><span class="pre">InvalidListenerException</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.InvalidMessageFormat"><code class="docutils literal notranslate"><span class="pre">InvalidMessageFormat</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.NoMessagesException"><code class="docutils literal notranslate"><span class="pre">NoMessagesException</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.benchmark">Benchmarking tools</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.benchmark.DataProcessingChannelBenchMark"><code class="docutils literal notranslate"><span class="pre">DataProcessingChannelBenchMark</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.benchmark.DataProcessingChannelBenchMark.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.benchmark.DataProcessingChannelBenchMark.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -901,12 +910,13 @@ Just override <strong>adapt</strong> method to control output returned to client
 <p>MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.prefabs.DataProcessingChannel.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_workers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream_delay_seconds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.DataProcessingChannel.__init__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_workers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream_delay_seconds=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor_class=&lt;class</span> <span class="pre">'concurrent.futures.thread.ThreadPoolExecutor'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.DataProcessingChannel.__init__" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>max_workers</strong> (<em>int</em>) – Num of workers to use</p></li>
 <li><p><strong>stream_delay_seconds</strong> (<em>int</em>) – Can be used to limit response rate of streaming. Only applies to message_stream calls.</p></li>
+<li><p><strong>executor_class</strong> (<em>type</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -1379,6 +1389,35 @@ an <a class="reference internal" href="#eric_sse.exception.NoMessagesException" 
 </dd></dl>
 
 </section>
+<section id="module-eric_sse.benchmark">
+<span id="benchmarking-tools"></span><h1>Benchmarking tools<a class="headerlink" href="#module-eric_sse.benchmark" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.benchmark.DataProcessingChannelBenchMark">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DataProcessingChannelBenchMark</span></span><a class="headerlink" href="#eric_sse.benchmark.DataProcessingChannelBenchMark" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.benchmark.DataProcessingChannelBenchMark.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.benchmark.DataProcessingChannelBenchMark.__init__" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel</strong> (<a class="reference internal" href="#eric_sse.prefabs.DataProcessingChannel" title="eric_sse.prefabs.DataProcessingChannel"><em>DataProcessingChannel</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.benchmark.DataProcessingChannelBenchMark.run">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.benchmark.DataProcessingChannelBenchMark.run" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>listener</strong> (<a class="reference internal" href="#eric_sse.entities.MessageQueueListener" title="eric_sse.entities.MessageQueueListener"><em>MessageQueueListener</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 
 
                 </article>
@@ -1561,6 +1600,14 @@ an <a class="reference internal" href="#eric_sse.exception.NoMessagesException" 
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.InvalidListenerException"><code class="docutils literal notranslate"><span class="pre">InvalidListenerException</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.InvalidMessageFormat"><code class="docutils literal notranslate"><span class="pre">InvalidMessageFormat</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.NoMessagesException"><code class="docutils literal notranslate"><span class="pre">NoMessagesException</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.benchmark">Benchmarking tools</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.benchmark.DataProcessingChannelBenchMark"><code class="docutils literal notranslate"><span class="pre">DataProcessingChannelBenchMark</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.benchmark.DataProcessingChannelBenchMark.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.benchmark.DataProcessingChannelBenchMark.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
