@@ -914,11 +914,10 @@ Just override <strong>adapt</strong> method to control output returned to client
 
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.prefabs.DataProcessingChannel.process_queue">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.DataProcessingChannel.process_queue" title="Link to this definition">#</a></dt>
-<dd><p>Launches the processing of the given listener’s queue</p>
-<dl class="field-list simple">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.DataProcessingChannel.process_queue" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>l</strong> (<a class="reference internal" href="#eric_sse.entities.MessageQueueListener" title="eric_sse.entities.MessageQueueListener"><em>MessageQueueListener</em></a>)</p>
+<dd class="field-odd"><p><strong>listener</strong> (<a class="reference internal" href="#eric_sse.entities.MessageQueueListener" title="eric_sse.entities.MessageQueueListener"><em>MessageQueueListener</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>AsyncIterable</em>[dict]</p>
@@ -931,7 +930,7 @@ Just override <strong>adapt</strong> method to control output returned to client
 <span class="sig-name descname"><span class="pre">adapt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.DataProcessingChannel.adapt" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>msg</strong> (<a class="reference internal" href="#eric_sse.message.Message" title="eric_sse.message.Message"><em>Message</em></a>)</p>
+<dd class="field-odd"><p><strong>msg</strong> (<a class="reference internal" href="#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict</p>
@@ -963,7 +962,7 @@ Just override <strong>adapt</strong> method to control output returned to client
 <p>Callables are selected when listener processes the message depending on its type.</p>
 <p>They should return a list of Messages corresponding to response to action requested.</p>
 <p>Reserved actions are ‘start’, ‘stop’, ‘remove’.
-Receiving a message with one of these types will fire correspondant action.</p>
+Receiving a message with one of these types will fire corresponding action.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -990,7 +989,7 @@ Receiving a message with one of these types will fire correspondant action.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.prefabs.SimpleDistributedApplicationListener.on_message">
 <span class="sig-name descname"><span class="pre">on_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.on_message" title="Link to this definition">#</a></dt>
-<dd><p>Executes action correspondant to message’s type</p>
+<dd><p>Executes action corresponding to message’s type</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>msg</strong> (<a class="reference internal" href="#eric_sse.message.SignedMessage" title="eric_sse.message.SignedMessage"><em>SignedMessage</em></a>)</p>

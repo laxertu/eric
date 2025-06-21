@@ -294,6 +294,12 @@
                   
   <section id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
+<p>0.8.0</p>
+<ul class="simple">
+<li><p>Now SocketServer starts correspondant listener on ‘l’ command</p></li>
+<li><p><strong>BREAKING</strong> DataProcessingChannel.process_queue and AbstractChannel.message_stream now cannot be awaited</p></li>
+<li><p><strong>BREAKING</strong> Changed DataProcessingChannel.process_queue ‘l’ parameter changed to ‘listener’</p></li>
+</ul>
 <p>0.7.6</p>
 <p>Added a get all channels’ ids to sse container</p>
 <p>0.7.5</p>

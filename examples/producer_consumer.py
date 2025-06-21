@@ -3,7 +3,7 @@ from random import uniform
 from time import sleep
 from eric_sse import get_logger
 from eric_sse.entities import MessageQueueListener, MESSAGE_TYPE_CLOSED
-from eric_sse.message import Message, SignedMessage
+from eric_sse.message import SignedMessage
 from eric_sse.prefabs import DataProcessingChannel
 from eric_redis_queues import RedisQueueFactory
 
@@ -40,10 +40,8 @@ async def main():
     Producer.produce_num(c=channel, l=listener, num=20)
 
     await listener.start()
-
-    async for msg in await channel.process_queue(listener):
-        print(msg)
-
+    async for m in channel.process_queue(listener):
+        print(m)
 
 
-asyncio.get_event_loop().run_until_complete(main())
+asyncio.run(main())

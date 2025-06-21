@@ -1,9 +1,9 @@
-from concurrent.futures import ThreadPoolExecutor, Future, as_completed
-from typing import Callable, AsyncIterable, Iterator
-
+from asyncio import as_completed as as_completed_future, get_running_loop
+from concurrent.futures import ThreadPoolExecutor
+from typing import Callable, AsyncIterable
 from eric_sse import get_logger
 from eric_sse.entities import AbstractChannel, MessageQueueListener
-from eric_sse.message import Message, SignedMessage, MessageContract
+from eric_sse.message import SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
 from eric_sse.queue import AbstractMessageQueueFactory
 
@@ -73,32 +73,32 @@ class DataProcessingChannel(AbstractChannel):
         super().__init__(stream_delay_seconds=stream_delay_seconds)
         self.max_workers = max_workers
 
-    async def process_queue(self, l: MessageQueueListener) -> AsyncIterable[dict]:
-        """Launches the processing of the given listener's queue"""
+    async def process_queue(self, listener: MessageQueueListener) -> AsyncIterable[dict]:
 
-        async def event_generator(listener: MessageQueueListener) -> AsyncIterable[dict]:
-            for f in as_completed(self.__prepare_executor(listener)):
-                yield self.adapt(f.result())
+        with ThreadPoolExecutor(max_workers=self.max_workers) as e:
 
-        return event_generator(listener=l)
-
-    def __prepare_executor(self, listener: MessageQueueListener) -> Iterator[Future]:
-        with ThreadPoolExecutor(self.max_workers) as e:
             there_are_pending_messages = True
+            tasks = []
+            loop = get_running_loop()
             while there_are_pending_messages:
                 try:
-                    msg = self._get_queue(listener.id).pop()
-                    yield e.submit(self.__invoke_callback_and_return, listener.on_message, msg)
+                    msg = self._get_queue(listener_id=listener.id).pop()
+                    tasks.append(loop.run_in_executor(e, self.__invoke_callback_and_return, listener.on_message, msg))
 
                 except NoMessagesException:
                     there_are_pending_messages = False
+
+            for task_dome in as_completed_future(tasks):
+                task_result = await task_dome
+                yield self.adapt(task_result)
+
 
     @staticmethod
     def __invoke_callback_and_return(callback: Callable[[MessageContract], None], msg: MessageContract):
         callback(msg)
         return msg
 
-    def adapt(self, msg: Message) -> dict:
+    def adapt(self, msg: MessageContract) -> dict:
         return {
             "event": msg.type,
             "data": msg.payload
@@ -128,7 +128,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         They should return a list of Messages corresponding to response to action requested.
 
         Reserved actions are 'start', 'stop', 'remove'.
-        Receiving a message with one of these types will fire correspondant action.
+        Receiving a message with one of these types will fire corresponding action.
 
         """
         if action in self.__internal_actions:
@@ -140,7 +140,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         self.__channel.dispatch(receiver.id, signed_message)
 
     def on_message(self, msg: SignedMessage) -> None:
-        """Executes action correspondant to message's type"""
+        """Executes action corresponding to message's type"""
         try:
             try:
                 self.__internal_actions[msg.type]()

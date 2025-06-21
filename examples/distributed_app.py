@@ -5,7 +5,6 @@ from eric_sse.prefabs import SimpleDistributedApplicationListener, SSEChannel
 
 import  eric_sse
 logger  = eric_sse.get_logger()
-logger.setLevel(logging.ERROR)
 
 ssc = SSEChannel()
 
@@ -45,7 +44,7 @@ def create_listener(ch: SSEChannel):
     return l
 
 async def do_stuff(buddy: SimpleDistributedApplicationListener):
-    async for m in await ssc.message_stream(buddy):
+    async for _ in ssc.message_stream(buddy):
         ...
 
 
@@ -63,4 +62,4 @@ async def main():
     await f1
     await f2
 
-asyncio.get_event_loop().run_until_complete(main())
+asyncio.run(main())
