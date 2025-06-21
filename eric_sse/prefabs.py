@@ -1,7 +1,6 @@
-from asyncio import as_completed as as_completed_future, Future, get_running_loop
+from asyncio import as_completed as as_completed_future, get_running_loop
 from concurrent.futures import ThreadPoolExecutor
-from typing import Callable, AsyncIterable, AsyncIterator, List
-from itertools import cycle
+from typing import Callable, AsyncIterable
 from eric_sse import get_logger
 from eric_sse.entities import AbstractChannel, MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
