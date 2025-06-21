@@ -408,12 +408,10 @@ MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered a
 
 <a id="eric_sse.prefabs.DataProcessingChannel.process_queue"></a>
 
-#### *async* process_queue(l)
-
-Launches the processing of the given listener’s queue
+#### *async* process_queue(listener)
 
 * **Parameters:**
-  **l** ([*MessageQueueListener*](#eric_sse.entities.MessageQueueListener))
+  **listener** ([*MessageQueueListener*](#eric_sse.entities.MessageQueueListener))
 * **Return type:**
   *AsyncIterable*[dict]
 
@@ -422,7 +420,7 @@ Launches the processing of the given listener’s queue
 #### adapt(msg)
 
 * **Parameters:**
-  **msg** ([*Message*](#eric_sse.message.Message))
+  **msg** ([*MessageContract*](#eric_sse.message.MessageContract))
 * **Return type:**
   dict
 
