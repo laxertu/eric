@@ -84,7 +84,7 @@ class DataProcessingChannel(AbstractChannel):
             while there_are_pending_messages:
                 try:
                     msg = self._get_queue(listener_id=listener.id).pop()
-                    tasks.append(loop.run_in_executor(e, self.__invoke_callback_and_return, listener.on_message, msg))
+                    tasks.append(loop.run_in_executor(e, self._invoke_callback_and_return, listener.on_message, msg))
 
                 except NoMessagesException:
                     there_are_pending_messages = False
@@ -95,7 +95,7 @@ class DataProcessingChannel(AbstractChannel):
 
 
     @staticmethod
-    def __invoke_callback_and_return(callback: Callable[[MessageContract], None], msg: MessageContract):
+    def _invoke_callback_and_return(callback: Callable[[MessageContract], None], msg: MessageContract):
         callback(msg)
         return msg
 

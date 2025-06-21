@@ -2,10 +2,12 @@ import asyncio
 from random import uniform
 from time import sleep
 from eric_sse import get_logger
+from eric_sse.queue import InMemoryQueue
 from eric_sse.entities import MessageQueueListener, MESSAGE_TYPE_CLOSED
 from eric_sse.message import SignedMessage
 from eric_sse.prefabs import DataProcessingChannel
 from eric_redis_queues import RedisQueueFactory
+
 
 logger = get_logger()
 
@@ -33,7 +35,7 @@ class MyChannel(DataProcessingChannel):
 async def main():
     # Here you can control message deliver frequency and max workers num
     channel = MyChannel(stream_delay_seconds=0, max_workers=6)
-    channel.set_f()
+    #channel.set_f()
     listener = Consumer()
     channel.register_listener(listener)
 
