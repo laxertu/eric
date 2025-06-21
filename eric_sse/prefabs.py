@@ -1,11 +1,12 @@
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from typing import Callable, AsyncIterable
-
+from asyncio import as_completed as as_completed_future, Future, get_running_loop
+from concurrent.futures import ThreadPoolExecutor
+from typing import Callable, AsyncIterable, AsyncIterator, List
+from itertools import cycle
 from eric_sse import get_logger
 from eric_sse.entities import AbstractChannel, MessageQueueListener
-from eric_sse.message import Message, SignedMessage, MessageContract
+from eric_sse.message import SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
-from eric_sse.queue import AbstractMessageQueueFactory, Queue
+from eric_sse.queue import AbstractMessageQueueFactory
 
 logger = get_logger()
 
@@ -73,22 +74,24 @@ class DataProcessingChannel(AbstractChannel):
         super().__init__(stream_delay_seconds=stream_delay_seconds)
         self.max_workers = max_workers
 
-    async def process_queue(self, l: MessageQueueListener) -> AsyncIterable[dict]:
+    async def process_queue(self, listener: MessageQueueListener) -> AsyncIterable[dict]:
 
         with ThreadPoolExecutor(max_workers=self.max_workers) as e:
 
             there_are_pending_messages = True
-            tasks = set()
+            tasks = []
+            loop = get_running_loop()
             while there_are_pending_messages:
                 try:
-                    msg = self._get_queue(listener_id=l.id).pop()
-                    tasks.add(e.submit(self.__invoke_callback_and_return, l.on_message, msg))
+                    msg = self._get_queue(listener_id=listener.id).pop()
+                    tasks.append(loop.run_in_executor(e, self.__invoke_callback_and_return, listener.on_message, msg))
 
                 except NoMessagesException:
                     there_are_pending_messages = False
 
-            for task_result in as_completed(tasks):
-                yield self.adapt(task_result.result())
+            for task_dome in as_completed_future(tasks):
+                task_result = await task_dome
+                yield self.adapt(task_result)
 
 
     @staticmethod
@@ -96,7 +99,7 @@ class DataProcessingChannel(AbstractChannel):
         callback(msg)
         return msg
 
-    def adapt(self, msg: Message) -> dict:
+    def adapt(self, msg: MessageContract) -> dict:
         return {
             "event": msg.type,
             "data": msg.payload
