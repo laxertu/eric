@@ -58,7 +58,7 @@ async def main():
 
     for channel in [threaded_channel, process_channel]:
         for listener in [io_bound_listener, cpu_bound_listener]:
-            print(f'Launching benchmark with max_workers: {max_workers} {channel.executor_class} {type(listener)}')
+            print(f'Launching benchmark of {num_messages} messages and max_workers: {max_workers} {channel.executor_class} {type(listener)}')
             await do_benchmark(channel=channel, listener=listener, num_messages=mum_messages)
 
 
