@@ -24,7 +24,7 @@ class DataProcessingChannelBenchMark:
     def __init__(self, channel: DataProcessingChannel):
         self.channel = channel
 
-    def add_listener(self, listener: MessageQueueListener):
+    def add_listener(self, listener: MessageQueueListener) -> ListenerWrapper:
         wrapper = ListenerWrapper(listener)
         self.channel.register_listener(wrapper)
         return wrapper
