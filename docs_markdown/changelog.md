@@ -2,7 +2,7 @@
 
 # Changelog
 
-0.8.0
+0.7.7
 
 * Now SocketServer starts correspondant listener on ‘l’ command
 * **BREAKING** DataProcessingChannel.process_queue and AbstractChannel.message_stream now cannot be awaited
