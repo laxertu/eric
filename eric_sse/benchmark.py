@@ -11,8 +11,9 @@ class DataProcessingChannelBenchMark:
     def __init__(self, channel: DataProcessingChannel):
         self.channel = channel
 
-    def run(self, listener: MessageQueueListener):
+    async def run(self, listener: MessageQueueListener):
         start = time.time()
-        self.channel.process_queue(listener)
+        async for _ in self.channel.process_queue(listener):
+            pass
         logger.info(f"Message processing time: {time.time() - start}")
 

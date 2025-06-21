@@ -77,7 +77,6 @@ class DataProcessingChannel(AbstractChannel):
     async def process_queue(self, listener: MessageQueueListener) -> AsyncIterable[dict]:
 
         with self.executor_class(max_workers=self.max_workers) as e:
-
             there_are_pending_messages = True
             tasks = []
             loop = get_running_loop()
