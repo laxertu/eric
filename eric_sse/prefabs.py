@@ -1,5 +1,5 @@
 from asyncio import as_completed as as_completed_future, get_running_loop
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, Executor
 from typing import Callable, AsyncIterable
 from eric_sse import get_logger
 from eric_sse.entities import AbstractChannel, MessageQueueListener
@@ -65,17 +65,18 @@ class DataProcessingChannel(AbstractChannel):
     MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.  
     """
 
-    def __init__(self, max_workers: int, stream_delay_seconds: int = 0):
+    def __init__(self, max_workers: int, stream_delay_seconds: int = 0, executor_class: Executor.__class__ = ThreadPoolExecutor):
         """
         :param max_workers: Num of workers to use
         :param stream_delay_seconds: Can be used to limit response rate of streaming. Only applies to message_stream calls.
         """
         super().__init__(stream_delay_seconds=stream_delay_seconds)
         self.max_workers = max_workers
+        self.executor_class = executor_class
 
     async def process_queue(self, listener: MessageQueueListener) -> AsyncIterable[dict]:
 
-        with ThreadPoolExecutor(max_workers=self.max_workers) as e:
+        with self.executor_class(max_workers=self.max_workers) as e:
 
             there_are_pending_messages = True
             tasks = []
