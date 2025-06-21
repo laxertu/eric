@@ -15,5 +15,5 @@ class DataProcessingChannelBenchMark:
         start = time.time()
         async for _ in self.channel.process_queue(listener):
             pass
-        logger.info(f"Message processing time: {time.time() - start}")
+        print(f"Message processing time: {time.time() - start}")
 

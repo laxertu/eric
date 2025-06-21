@@ -12,7 +12,7 @@ logger = get_logger()
 
 class IOBoundProcessListener(MessageQueueListener):
     def on_message(self, msg: Message) -> None:
-        sleep(1)
+        sleep(0.2)
         logger.debug(f"Received {msg.type}: {msg.payload}")
 
 class CPUBoundProcessListener(MessageQueueListener):
@@ -28,6 +28,11 @@ try:
     max_workers = int(sys.argv[1])
 except (IndexError, ValueError):
     max_workers = 6
+
+try:
+    num_messages = int(sys.argv[2])
+except (IndexError, ValueError):
+    num_messages = 50
 
 
 async def do_benchmark(channel: DataProcessingChannel, listener: MessageQueueListener, num_messages: int):
@@ -51,10 +56,10 @@ async def main():
     io_bound_listener = IOBoundProcessListener()
     cpu_bound_listener = CPUBoundProcessListener()
 
-    print(f'Launching benchmark with max_workers: {max_workers} IO bound processes threaded channel ThreadPoolExecutor')
-    await do_benchmark(num_messages=mum_messages, listener=io_bound_listener, channel=threaded_channel)
-    print(f'Launching benchmark with max_workers: {max_workers} CPU bound processes ProcessPoolExecutor')
-    await do_benchmark(num_messages=mum_messages, listener=cpu_bound_listener, channel=process_channel)
+    for channel in [threaded_channel, process_channel]:
+        for listener in [io_bound_listener, cpu_bound_listener]:
+            print(f'Launching benchmark with max_workers: {max_workers} {channel.executor_class} {type(listener)}')
+            await do_benchmark(channel=channel, listener=listener, num_messages=mum_messages)
 
 
 
