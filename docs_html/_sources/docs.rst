@@ -63,3 +63,10 @@ Exceptions
 .. automodule:: eric_sse.exception
     :members:
 
+Benchmarking tools
+==================
+.. automodule:: eric_sse.benchmark
+    :members:
+    :undoc-members:
+    :member-order: bysource
+    :show-inheritance:

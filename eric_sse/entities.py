@@ -186,6 +186,7 @@ class AbstractChannel(ABC):
                 except Exception as e:
                     logger.debug(traceback.format_exc())
                     logger.error(e)
+                    yield self.adapt(Message(msg_type='error'))
 
         async for event in event_generator():
             yield event

@@ -1,6 +1,6 @@
 import sys, asyncio
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
-from random import uniform, random
+from random import uniform
 from time import sleep
 
 from eric_sse.entities import Message, MessageQueueListener
@@ -35,20 +35,19 @@ except (IndexError, ValueError):
     num_messages = 50
 
 
-async def do_benchmark(channel: DataProcessingChannel, listener: MessageQueueListener, num_messages: int):
+async def do_benchmark(channel: DataProcessingChannel, listener: MessageQueueListener):
 
-    channel.register_listener(listener)
-    listener.start_sync()
-
-    for _ in range(num_messages):
-        channel.dispatch(listener.id, Message(msg_type='test'))
 
     benchmark = DataProcessingChannelBenchMark(channel)
-    await benchmark.run(listener)
+    wrapped_listener = benchmark.add_listener(listener=listener)
+
+    for _ in range(num_messages):
+        channel.dispatch(wrapped_listener.id, Message(msg_type='test'))
+
+    await benchmark.run(wrapped_listener)
 
 async def main():
 
-    mum_messages = 50
 
     threaded_channel = DataProcessingChannel(executor_class=ThreadPoolExecutor, max_workers=max_workers)
     process_channel = DataProcessingChannel(executor_class=ProcessPoolExecutor, max_workers=max_workers)
@@ -59,8 +58,6 @@ async def main():
     for listener in [io_bound_listener, cpu_bound_listener]:
         for channel in [threaded_channel, process_channel]:
             print(f'Launching benchmark of {num_messages} messages and max_workers: {max_workers} {channel.executor_class} {type(listener)}')
-            await do_benchmark(channel=channel, listener=listener, num_messages=mum_messages)
-
-
+            await do_benchmark(channel=channel, listener=listener)
 
 asyncio.run(main())
