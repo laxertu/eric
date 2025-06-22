@@ -2,6 +2,10 @@
 
 # Changelog
 
+0.7.9
+
+* Channel and listener id generation now relies on uuid4
+
 0.7.7
 
 * Now SocketServer starts correspondant listener on ‘l’ command
