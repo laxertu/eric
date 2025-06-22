@@ -15,21 +15,15 @@ MESSAGE_TYPE_CLOSED = '_eric_channel_closed'
 MESSAGE_TYPE_END_OF_STREAM = '_eric_channel_eof'
 MESSAGE_TYPE_INTERNAL_ERROR = '_eric_error'
 
-_LISTENERS_NEXT_ID_LOCK = Lock()
-
 class MessageQueueListener(ABC):
     """
     Base class for listeners.
 
     Optionally you can override on_message method if you need to inject code at message delivery time.
     """
-    NEXT_ID = 1
 
     def __init__(self):
-        self.id: str | None = None
-        with _LISTENERS_NEXT_ID_LOCK:
-            self.id: str = str(MessageQueueListener.NEXT_ID)
-            MessageQueueListener.NEXT_ID += 1
+        self.id: str = eric_sse.generate_uuid()
         self.__is_running: bool = False
 
     async def start(self) -> None:
@@ -70,18 +64,12 @@ class AbstractChannel(ABC):
 
     :param eric_sse.queue.AbstractMessageQueueFactory queues_factory:
     """
-    NEXT_ID = 1
-
     def __init__(
             self,
             stream_delay_seconds: int = 0,
             queues_factory: AbstractMessageQueueFactory | None = None
     ):
-        logger.debug(f'Creating channel {AbstractChannel.NEXT_ID}')
-        with Lock():
-            self.id: str = str(AbstractChannel.NEXT_ID)
-            AbstractChannel.NEXT_ID += 1
-
+        self.id: str = eric_sse.generate_uuid()
         self.stream_delay_seconds = stream_delay_seconds
 
         self.__listeners: dict[str: MessageQueueListener] = {}

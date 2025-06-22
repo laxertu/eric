@@ -1,6 +1,6 @@
 import logging
 from logging import getLogger, StreamHandler, Logger
-
+from uuid import uuid4
 
 def get_logger() -> Logger:
     logger = getLogger(__name__)
@@ -14,3 +14,6 @@ def get_logger() -> Logger:
         logger.addHandler(handler)
 
     return logger
+
+def generate_uuid() -> str:
+    return str(uuid4())
