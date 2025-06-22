@@ -9,8 +9,7 @@ from test.mock.listener import MessageQueueListenerMock
 class SSEStreamTestCase(IsolatedAsyncioTestCase):
     def setUp(self):
         self.sut = SSEChannel()
-        SSEChannel.NEXT_ID = 1
-        MessageQueueListener.NEXT_ID = 1
+
 
     async def test_sse_channel_default_output(self):
         # setup

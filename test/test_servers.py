@@ -82,10 +82,10 @@ class ClientIntegrationTestCase(IsolatedAsyncioTestCase):
     async def test_integration(self):
 
         channel_id = await self.sut.create_channel()
-        self.assertTrue(int(channel_id) > 0)
+        self.assertTrue(len(channel_id) > 0)
 
         listener_id = await self.sut.register(channel_id)
-        self.assertTrue(int(listener_id) > 0)
+        self.assertTrue(len(listener_id) > 0)
 
         error_message = await self.sut.register('2')
         self.assertTrue('InvalidChannelException' in error_message)
