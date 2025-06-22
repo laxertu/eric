@@ -69,7 +69,7 @@ class AbstractChannel(ABC):
             stream_delay_seconds: int = 0,
             queues_factory: AbstractMessageQueueFactory | None = None
     ):
-        self.id = eric_sse.generate_uuid()
+        self.id: str = eric_sse.generate_uuid()
         self.stream_delay_seconds = stream_delay_seconds
 
         self.__listeners: dict[str: MessageQueueListener] = {}
