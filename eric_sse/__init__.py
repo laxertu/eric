@@ -7,7 +7,7 @@ def get_logger() -> Logger:
     if not logger.handlers:
         logger.setLevel(logging.INFO)
         formatter = logging.Formatter(
-            fmt='[%(asctime)s][ERIC][%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S'
+            fmt='[%(asctime)s][ERIC][%(levelname)s]%(message)s', datefmt='%Y-%m-%d %H:%M:%S'
         )
         handler = StreamHandler()
         handler.setFormatter(formatter)

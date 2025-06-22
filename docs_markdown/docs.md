@@ -400,11 +400,12 @@ MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered a
 
 <a id="eric_sse.prefabs.DataProcessingChannel.__init__"></a>
 
-#### \_\_init_\_(max_workers, stream_delay_seconds=0)
+#### \_\_init_\_(max_workers, stream_delay_seconds=0, executor_class=<class 'concurrent.futures.thread.ThreadPoolExecutor'>)
 
 * **Parameters:**
   * **max_workers** (*int*) – Num of workers to use
   * **stream_delay_seconds** (*int*) – Can be used to limit response rate of streaming. Only applies to message_stream calls.
+  * **executor_class** (*type*)
 
 <a id="eric_sse.prefabs.DataProcessingChannel.process_queue"></a>
 
@@ -795,3 +796,70 @@ an [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessagesExce
 ### *exception* NoMessagesException
 
 Raised when trying to fetch from an empty queue
+
+<a id="module-eric_sse.benchmark"></a>
+
+<a id="benchmarking-tools"></a>
+
+# Benchmarking tools
+
+<a id="eric_sse.benchmark.ListenerWrapper"></a>
+
+### *class* ListenerWrapper
+
+Bases: [`MessageQueueListener`](#eric_sse.entities.MessageQueueListener)
+
+Wraps a listener to benchmark its on_message method.
+
+<a id="eric_sse.benchmark.ListenerWrapper.__init__"></a>
+
+#### \_\_init_\_(listener)
+
+* **Parameters:**
+  **listener** ([*MessageQueueListener*](#eric_sse.entities.MessageQueueListener))
+
+<a id="eric_sse.benchmark.ListenerWrapper.on_message"></a>
+
+#### on_message(msg)
+
+Performs on_message benchmarking
+
+* **Parameters:**
+  **msg** ([*MessageContract*](#eric_sse.message.MessageContract))
+* **Return type:**
+  None
+
+<a id="eric_sse.benchmark.DataProcessingChannelBenchMark"></a>
+
+### *class* DataProcessingChannelBenchMark
+
+Bases: `object`
+
+<a id="eric_sse.benchmark.DataProcessingChannelBenchMark.__init__"></a>
+
+#### \_\_init_\_(channel)
+
+Wraps a channel to benchmark its process_queue method.
+
+* **Parameters:**
+  **channel** ([*DataProcessingChannel*](#eric_sse.prefabs.DataProcessingChannel))
+
+<a id="eric_sse.benchmark.DataProcessingChannelBenchMark.add_listener"></a>
+
+#### add_listener(listener)
+
+Adds a listener to the channel after having wrapped it
+
+* **Parameters:**
+  **listener** ([*MessageQueueListener*](#eric_sse.entities.MessageQueueListener))
+* **Return type:**
+  [*ListenerWrapper*](#eric_sse.benchmark.ListenerWrapper)
+
+<a id="eric_sse.benchmark.DataProcessingChannelBenchMark.run"></a>
+
+#### *async* run(listener)
+
+Runs benchmark
+
+* **Parameters:**
+  **listener** ([*ListenerWrapper*](#eric_sse.benchmark.ListenerWrapper))

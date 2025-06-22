@@ -144,6 +144,7 @@
 
 
 
+
 <li class="toctree-l1"><a class="reference internal" href="devs.html">Developers section</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -305,6 +306,7 @@
  | <a href="#G"><strong>G</strong></a>
  | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
  | <a href="#O"><strong>O</strong></a>
@@ -324,6 +326,10 @@
 
       <ul>
         <li><a href="docs.html#eric_sse.prefabs.DataProcessingChannel.__init__">(DataProcessingChannel method)</a>
+</li>
+        <li><a href="docs.html#eric_sse.benchmark.DataProcessingChannelBenchMark.__init__">(DataProcessingChannelBenchMark method)</a>
+</li>
+        <li><a href="docs.html#eric_sse.benchmark.ListenerWrapper.__init__">(ListenerWrapper method)</a>
 </li>
         <li><a href="docs.html#eric_sse.message.Message.__init__">(Message method)</a>
 </li>
@@ -367,7 +373,11 @@
       <li><a href="docs.html#eric_sse.servers.SSEChannelContainer.add">add() (SSEChannelContainer method)</a>
 </li>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.add_listener">add_listener() (AbstractChannel method)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.benchmark.DataProcessingChannelBenchMark.add_listener">(DataProcessingChannelBenchMark method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -406,12 +416,14 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.prefabs.DataProcessingChannel">DataProcessingChannel (class in eric_sse.prefabs)</a>
 </li>
-      <li><a href="docs.html#eric_sse.queue.Queue.delete">delete() (Queue method)</a>
+      <li><a href="docs.html#eric_sse.benchmark.DataProcessingChannelBenchMark">DataProcessingChannelBenchMark (class in eric_sse.benchmark)</a>
 </li>
-      <li><a href="docs.html#eric_sse.entities.AbstractChannel.deliver_next">deliver_next() (AbstractChannel method)</a>
+      <li><a href="docs.html#eric_sse.queue.Queue.delete">delete() (Queue method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.entities.AbstractChannel.deliver_next">deliver_next() (AbstractChannel method)</a>
+</li>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.dispatch">dispatch() (AbstractChannel method)</a>
 
       <ul>
@@ -426,6 +438,13 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    eric_sse.benchmark
+
+      <ul>
+        <li><a href="docs.html#module-eric_sse.benchmark">module</a>
+</li>
+      </ul></li>
       <li>
     eric_sse.clients
 
@@ -447,6 +466,8 @@
         <li><a href="docs.html#module-eric_sse.exception">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     eric_sse.message
 
@@ -454,8 +475,6 @@
         <li><a href="docs.html#module-eric_sse.message">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     eric_sse.prefabs
 
@@ -524,6 +543,14 @@
   </ul></td>
 </tr></table>
 
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.benchmark.ListenerWrapper">ListenerWrapper (class in eric_sse.benchmark)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -541,6 +568,8 @@
     module
 
       <ul>
+        <li><a href="docs.html#module-eric_sse.benchmark">eric_sse.benchmark</a>
+</li>
         <li><a href="docs.html#module-eric_sse.clients">eric_sse.clients</a>
 </li>
         <li><a href="docs.html#module-eric_sse.entities">eric_sse.entities</a>
@@ -574,9 +603,11 @@
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.entities.MessageQueueListener.on_message">on_message() (MessageQueueListener method)</a>
+      <li><a href="docs.html#eric_sse.benchmark.ListenerWrapper.on_message">on_message() (ListenerWrapper method)</a>
 
       <ul>
+        <li><a href="docs.html#eric_sse.entities.MessageQueueListener.on_message">(MessageQueueListener method)</a>
+</li>
         <li><a href="docs.html#eric_sse.prefabs.SimpleDistributedApplicationListener.on_message">(SimpleDistributedApplicationListener method)</a>
 </li>
       </ul></li>
@@ -637,6 +668,8 @@
       <li><a href="docs.html#eric_sse.queue.RepositoryError">RepositoryError</a>
 </li>
       <li><a href="docs.html#eric_sse.servers.SSEChannelContainer.rm">rm() (SSEChannelContainer method)</a>
+</li>
+      <li><a href="docs.html#eric_sse.benchmark.DataProcessingChannelBenchMark.run">run() (DataProcessingChannelBenchMark method)</a>
 </li>
   </ul></td>
 </tr></table>
