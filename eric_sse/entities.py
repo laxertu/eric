@@ -1,7 +1,7 @@
 import asyncio
+import dataclasses
 import traceback
 from abc import ABC, abstractmethod
-from threading import Lock
 from typing import AsyncIterable, Any
 
 import eric_sse
@@ -50,6 +50,10 @@ class MessageQueueListener(ABC):
         """Event handler. It executes when a message is delivered to client"""
         pass
 
+@dataclasses.dataclass
+class Connection:
+    listener: MessageQueueListener
+    queue: Queue
 
 class AbstractChannel(ABC):
     """
@@ -72,8 +76,7 @@ class AbstractChannel(ABC):
         self.id: str = eric_sse.generate_uuid()
         self.stream_delay_seconds = stream_delay_seconds
 
-        self.__listeners: dict[str: MessageQueueListener] = {}
-        self.__queues: dict[str: Queue] = {}
+        self.__connections: dict[str: Connection] = {}
         self.__queues_factory = queues_factory if queues_factory else InMemoryMessageQueueFactory()
 
     def _set_queues_factory(self, queues_factory: AbstractMessageQueueFactory):
@@ -89,13 +92,12 @@ class AbstractChannel(ABC):
         """
         Adds a listener to channel
         """
-        self.__listeners[l.id] = l
-        self.__queues[l.id] = self.__queues_factory.create()
+        queue = self.__queues_factory.create()
+        self.__connections[l.id] = Connection(listener=l, queue=queue)
 
     def remove_listener(self, l_id: str):
         self._get_queue(listener_id=l_id).delete()
-        del self.__queues[l_id]
-        del self.__listeners[l_id]
+        del self.__connections[l_id]
 
     def deliver_next(self, listener_id: str) -> MessageContract:
         """
@@ -112,12 +114,9 @@ class AbstractChannel(ABC):
 
     def _get_queue(self, listener_id: str) -> Queue:
         try:
-            return self.__queues[listener_id]
+            return self.__connections[listener_id].queue
         except KeyError:
             raise InvalidListenerException(f"Invalid listener {listener_id}")
-
-    def _set_queue(self, listener_id: str, queue: Queue):
-        self.__queues[listener_id] = queue
 
     def dispatch(self, listener_id: str, msg: MessageContract):
         """Adds a message to listener's queue"""
@@ -130,12 +129,12 @@ class AbstractChannel(ABC):
 
     def broadcast(self, msg: MessageContract):
         """Enqueue a message to all listeners"""
-        for listener_id in self.__listeners.keys():
+        for listener_id in self.__connections.keys():
             self.dispatch(listener_id, msg=msg)
 
     def get_listener(self, listener_id: str) -> MessageQueueListener:
         try:
-            return self.__listeners[listener_id]
+            return self.__connections[listener_id].listener
         except KeyError:
             raise InvalidListenerException
 
