@@ -5,7 +5,7 @@ from eric_sse import get_logger
 from eric_sse.entities import AbstractChannel, MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
-from eric_sse.queue import AbstractMessageQueueFactory
+from eric_sse.queue import AbstractMessageQueueRepository
 
 logger = get_logger()
 
@@ -19,14 +19,14 @@ class SSEChannel(AbstractChannel):
 
     :param int stream_delay_seconds:
     :param int retry_timeout_milliseconds:
-    :param eric_sse.queue.AbstractMessageQueueFactory queues_factory:
+    :param eric_sse.queue.AbstractMessageQueueRepository queues_factory:
     """
 
     def __init__(
             self,
             stream_delay_seconds: int = 0,
             retry_timeout_milliseconds: int = 5,
-            queues_factory: AbstractMessageQueueFactory = None
+            queues_factory: AbstractMessageQueueRepository = None
     ):
         super().__init__(stream_delay_seconds=stream_delay_seconds, queues_factory=queues_factory)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds

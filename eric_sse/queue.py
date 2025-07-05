@@ -44,7 +44,7 @@ class InMemoryQueue(Queue):
     def delete(self) -> None:
         self.__messages = []
 
-class AbstractMessageQueueFactory(ABC):
+class AbstractMessageQueueRepository(ABC):
     """
     Abstraction for queues creation
 
@@ -55,7 +55,7 @@ class AbstractMessageQueueFactory(ABC):
         ...
 
 
-class InMemoryMessageQueueFactory(AbstractMessageQueueFactory):
+class InMemoryMessageQueueFactory(AbstractMessageQueueRepository):
     """
     Default implementation used by :class:`eric_sse.entities.AbstractChannel`
     """

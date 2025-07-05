@@ -7,7 +7,7 @@ from typing import AsyncIterable, Any
 import eric_sse
 from eric_sse.exception import InvalidListenerException, NoMessagesException, InvalidChannelException
 from eric_sse.message import MessageContract, Message
-from eric_sse.queue import Queue, AbstractMessageQueueFactory, InMemoryMessageQueueFactory
+from eric_sse.queue import Queue, AbstractMessageQueueRepository, InMemoryMessageQueueFactory
 
 logger = eric_sse.get_logger()
 
@@ -52,7 +52,7 @@ class MessageQueueListener(ABC):
 
 
 class ConnectionManager:
-    def __init__(self, queues_factory: AbstractMessageQueueFactory):
+    def __init__(self, queues_factory: AbstractMessageQueueRepository):
         self.__listeners: dict[str: MessageQueueListener] = {}
         self.__queues: dict[str: Queue] = {}
         self.__queues_factory = queues_factory
@@ -100,12 +100,12 @@ class AbstractChannel(ABC):
 
     :param int stream_delay_seconds: Wait time in seconds between message delivery.
 
-    :param eric_sse.queue.AbstractMessageQueueFactory queues_factory:
+    :param eric_sse.queue.AbstractMessageQueueRepository queues_factory:
     """
     def __init__(
             self,
             stream_delay_seconds: int = 0,
-            queues_factory: AbstractMessageQueueFactory | None = None
+            queues_factory: AbstractMessageQueueRepository | None = None
     ):
         self.id: str = eric_sse.generate_uuid()
         self.stream_delay_seconds = stream_delay_seconds
@@ -116,7 +116,7 @@ class AbstractChannel(ABC):
 
         self.__connection_manager: ConnectionManager = ConnectionManager(self.__queues_factory)
 
-    def _set_queues_factory(self, queues_factory: AbstractMessageQueueFactory):
+    def _set_queues_factory(self, queues_factory: AbstractMessageQueueRepository):
         self.__queues_factory = queues_factory
 
     def add_listener(self) -> MessageQueueListener:
