@@ -1,7 +1,5 @@
 from unittest import IsolatedAsyncioTestCase
 
-import pytest
-
 from eric_sse.message import MessageContract, Message
 from eric_sse.prefabs import SSEChannel, SimpleDistributedApplicationListener, DataProcessingChannel
 
