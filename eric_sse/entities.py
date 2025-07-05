@@ -30,12 +30,14 @@ class ConnectionManager:
         self.register_listener(l)
         return l
 
-    def register_listener(self, l: MessageQueueListener):
+    def register_listener(self, listener: MessageQueueListener):
         """
         Adds a listener to channel
         """
-        self.__listeners[l.id] = l
-        self.__queues[l.id] = self.__queues_factory.create()
+        self.__listeners[listener.id] = listener
+        self.__queues[listener.id] = self.__queues_factory.create()
+
+        self.__queues_factory.persist({listener.id: listener}, {listener.id: self.__queues[listener.id]})
 
     def remove_listener(self, l_id: str):
         self.get_queue(listener_id=l_id).delete()
