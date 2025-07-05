@@ -1,4 +1,4 @@
-from eric_sse.entities import MessageQueueListener
+from eric_sse.listener import MessageQueueListener
 from eric_sse.message import Message
 
 

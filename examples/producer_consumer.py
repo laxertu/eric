@@ -4,10 +4,11 @@ from argparse import ArgumentParser
 from random import uniform
 from time import sleep
 from eric_sse import get_logger
-from eric_sse.entities import MessageQueueListener, MESSAGE_TYPE_CLOSED
+from eric_sse.entities import MESSAGE_TYPE_CLOSED
+from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage
 from eric_sse.prefabs import DataProcessingChannel
-from eric_redis_queues import RedisQueueFactory
+from eric_sse.repository import AbstractMessageQueueRepository
 
 arguments_parser = ArgumentParser()
 arguments_parser.add_argument('-b', choices=['r', 'i'], default='i', help='Backend to use. "r" = redis, "i" = in memory')
@@ -30,8 +31,9 @@ class Consumer(MessageQueueListener):
         logger.info(f"Received {msg.type}: {msg.payload}")
 
 class MyChannel(DataProcessingChannel):
-    def activate_redis(self):
-        self._set_queues_factory(RedisQueueFactory())
+    def _set_queues_repository(self, queues_factory: AbstractMessageQueueRepository):
+        self.__queues_repository = queues_factory
+
     def adapt(self, msg: SignedMessage) -> dict:
         return {'sender_id': msg.sender_id, 'payload': msg.payload}
 
@@ -39,9 +41,6 @@ async def main():
     # Here you can control message deliver frequency and max workers num
     channel = MyChannel(stream_delay_seconds=0, max_workers=6)
 
-    if cli_arguments.b == 'r':
-        logger.info("Activating redis backend")
-        channel.activate_redis()
 
     listener = Consumer()
     channel.register_listener(listener)

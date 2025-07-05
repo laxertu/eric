@@ -11,7 +11,7 @@ from eric_sse import get_logger
 from eric_sse.message import MessageContract, Message
 from eric_sse.exception import InvalidChannelException, InvalidMessageFormat
 from eric_sse.prefabs import SSEChannel
-from eric_sse.queue import AbstractMessageQueueRepository
+from eric_sse.repository import AbstractMessageQueueRepository
 
 logger = get_logger()
 
@@ -23,7 +23,7 @@ class SSEChannelContainer:
         self.__channels: dict[str: SSEChannel] = {}
 
     def add(self, queues_factory: AbstractMessageQueueRepository | None = None) -> SSEChannel:
-        channel = SSEChannel(queues_factory=queues_factory)
+        channel = SSEChannel(queues_repository=queues_factory)
         if channel.id in self.__channels:
             raise InvalidChannelException(f'Channel with id {channel.id} already exists')
         self.__channels[channel.id] = channel
