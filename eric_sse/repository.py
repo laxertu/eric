@@ -15,7 +15,15 @@ class AbstractMessageQueueRepository(ABC):
         ...
 
     @abstractmethod
-    def persist(self, listeners: dict[str, MessageQueueListener], queues: dict[str: Queue]) -> None:
+    def persist(self, listeners: list[MessageQueueListener], queues: dict[str, Queue]) -> None:
+        """
+        :param listeners: listeners to persist
+        :param queues: queues to persist. A dictionary where keys are correspondant listeners ids and values are Queue
+
+        * If some key of queues do not match with some listener in listeners, then they will be created. see create() method
+
+        * If some listeners in listeners do not match with some queues, then they will *not* be persisted
+        """
         ...
 
     @abstractmethod
@@ -40,6 +48,6 @@ class InMemoryMessageQueueRepository(AbstractMessageQueueRepository):
     def load(self) -> (dict[str, MessageQueueListener], dict[str, Queue]):
         return {}, {}
 
-    def delete(self, listener_id: str) -> bool:
+    def delete(self, listener_id: str):
         pass
 

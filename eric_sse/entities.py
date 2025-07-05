@@ -18,6 +18,7 @@ MESSAGE_TYPE_INTERNAL_ERROR = '_eric_error'
 
 
 class ConnectionManager:
+    """Maintains relationships between listeners and queues"""
     def __init__(self, queues_repository: AbstractMessageQueueRepository):
         self.__listeners: dict[str: MessageQueueListener] = {}
         self.__queues: dict[str: Queue] = {}
@@ -40,6 +41,9 @@ class ConnectionManager:
         self.__queues_factory.persist({listener.id: listener}, {listener.id: self.__queues[listener.id]})
 
     def remove_listener(self, listener_id: str):
+        """
+        Removes a listener from channel
+        """
         self.get_queue(listener_id=listener_id).delete()
         del self.__queues[listener_id]
         del self.__listeners[listener_id]
@@ -58,6 +62,7 @@ class ConnectionManager:
             raise InvalidListenerException
 
     def get_listeners(self) -> dict[str, MessageQueueListener]:
+        """Returns a dict mapping listener ids to listeners"""
         return self.__listeners
 
 class AbstractChannel(ABC):
