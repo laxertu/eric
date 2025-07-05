@@ -51,6 +51,44 @@ class MessageQueueListener(ABC):
         pass
 
 
+class ConnectionManager:
+    def __init__(self, queues_factory: AbstractMessageQueueFactory):
+        self.__listeners: dict[str: MessageQueueListener] = {}
+        self.__queues: dict[str: Queue] = {}
+        self.__queues_factory = queues_factory
+
+
+    def add_listener(self) -> MessageQueueListener:
+        """Add the default listener"""
+        l = MessageQueueListener()
+        self.register_listener(l)
+        return l
+
+    def register_listener(self, l: MessageQueueListener):
+        """
+        Adds a listener to channel
+        """
+        self.__listeners[l.id] = l
+        self.__queues[l.id] = self.__queues_factory.create()
+
+    def remove_listener(self, l_id: str):
+        self.get_queue(listener_id=l_id).delete()
+        del self.__queues[l_id]
+        del self.__listeners[l_id]
+
+    def get_queue(self, listener_id: str) -> Queue:
+        try:
+            return self.__queues[listener_id]
+        except KeyError:
+            raise InvalidListenerException(f"Invalid listener {listener_id}")
+
+    def get_listener(self, listener_id: str) -> MessageQueueListener:
+        try:
+            return self.__listeners[listener_id]
+        except KeyError:
+            raise InvalidListenerException
+
+
 class AbstractChannel(ABC):
     """
     Base class for channels.
@@ -76,6 +114,8 @@ class AbstractChannel(ABC):
         self.__queues: dict[str: Queue] = {}
         self.__queues_factory = queues_factory if queues_factory else InMemoryMessageQueueFactory()
 
+        self.__connection_manager: ConnectionManager = ConnectionManager(self.__queues_factory)
+
     def _set_queues_factory(self, queues_factory: AbstractMessageQueueFactory):
         self.__queues_factory = queues_factory
 
@@ -86,16 +126,10 @@ class AbstractChannel(ABC):
         return l
 
     def register_listener(self, l: MessageQueueListener):
-        """
-        Adds a listener to channel
-        """
-        self.__listeners[l.id] = l
-        self.__queues[l.id] = self.__queues_factory.create()
+        return self.__connection_manager.register_listener(l)
 
     def remove_listener(self, l_id: str):
-        self._get_queue(listener_id=l_id).delete()
-        del self.__queues[l_id]
-        del self.__listeners[l_id]
+        self.__connection_manager.remove_listener(l_id)
 
     def deliver_next(self, listener_id: str) -> MessageContract:
         """
@@ -111,13 +145,7 @@ class AbstractChannel(ABC):
         raise NoMessagesException
 
     def _get_queue(self, listener_id: str) -> Queue:
-        try:
-            return self.__queues[listener_id]
-        except KeyError:
-            raise InvalidListenerException(f"Invalid listener {listener_id}")
-
-    def _set_queue(self, listener_id: str, queue: Queue):
-        self.__queues[listener_id] = queue
+        return self.__connection_manager.get_queue(listener_id)
 
     def dispatch(self, listener_id: str, msg: MessageContract):
         """Adds a message to listener's queue"""
@@ -134,10 +162,7 @@ class AbstractChannel(ABC):
             self.dispatch(listener_id, msg=msg)
 
     def get_listener(self, listener_id: str) -> MessageQueueListener:
-        try:
-            return self.__listeners[listener_id]
-        except KeyError:
-            raise InvalidListenerException
+        return self.__connection_manager.get_listener(listener_id)
 
     @abstractmethod
     def adapt(self, msg: MessageContract) -> Any:
