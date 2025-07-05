@@ -136,7 +136,7 @@ class SocketServer:
             yield l.id
 
         elif verb == 'rl':
-            SocketServer.cc.get(channel_id).remove_listener(l_id=receiver_id)
+            SocketServer.cc.get(channel_id).remove_listener(listener_id=receiver_id)
             yield SocketServer.ACK
 
         elif verb == 'rc':

@@ -91,11 +91,11 @@ class AbstractChannel(ABC):
         self.register_listener(l)
         return l
 
-    def register_listener(self, l: MessageQueueListener):
-        return self.__connection_manager.register_listener(l)
+    def register_listener(self, listener: MessageQueueListener):
+        return self.__connection_manager.register_listener(listener)
 
-    def remove_listener(self, l_id: str):
-        self.__connection_manager.remove_listener(l_id)
+    def remove_listener(self, listener_id: str):
+        self.__connection_manager.remove_listener(listener_id)
 
     def deliver_next(self, listener_id: str) -> MessageContract:
         """
