@@ -1,13 +1,14 @@
 import asyncio
 import traceback
 from abc import ABC, abstractmethod
-from threading import Lock
 from typing import AsyncIterable, Any
 
 import eric_sse
 from eric_sse.exception import InvalidListenerException, NoMessagesException, InvalidChannelException
+from eric_sse.listener import MessageQueueListener
 from eric_sse.message import MessageContract, Message
-from eric_sse.queue import Queue, AbstractMessageQueueFactory, InMemoryMessageQueueFactory
+from eric_sse.queue import Queue
+from eric_sse.repository import AbstractMessageQueueRepository, InMemoryMessageQueueRepository
 
 logger = eric_sse.get_logger()
 
@@ -15,41 +16,54 @@ MESSAGE_TYPE_CLOSED = '_eric_channel_closed'
 MESSAGE_TYPE_END_OF_STREAM = '_eric_channel_eof'
 MESSAGE_TYPE_INTERNAL_ERROR = '_eric_error'
 
-class MessageQueueListener(ABC):
-    """
-    Base class for listeners.
 
-    Optionally you can override on_message method if you need to inject code at message delivery time.
-    """
+class ConnectionManager:
+    """Maintains relationships between listeners and queues"""
+    def __init__(self, queues_repository: AbstractMessageQueueRepository):
+        self.__listeners: dict[str: MessageQueueListener] = {}
+        self.__queues: dict[str: Queue] = {}
+        self.__queues_factory = queues_repository
 
-    def __init__(self):
-        self.id: str = eric_sse.generate_uuid()
-        self.__is_running: bool = False
 
-    async def start(self) -> None:
-        self.start_sync()
+    def add_listener(self) -> MessageQueueListener:
+        """Add the default listener"""
+        l = MessageQueueListener()
+        self.register_listener(l)
+        return l
 
-    def start_sync(self) -> None:
-        logger.debug(f"Starting listener {self.id}")
-        self.__is_running = True
+    def register_listener(self, listener: MessageQueueListener):
+        """
+        Adds a listener to channel
+        """
+        self.__listeners[listener.id] = listener
+        self.__queues[listener.id] = self.__queues_factory.create()
 
-    async def is_running(self) -> bool:
-        return self.is_running_sync()
+        self.__queues_factory.persist({listener.id: listener}, {listener.id: self.__queues[listener.id]})
 
-    def is_running_sync(self) -> bool:
-        return self.__is_running
+    def remove_listener(self, listener_id: str):
+        """
+        Removes a listener from channel
+        """
+        self.get_queue(listener_id=listener_id).delete()
+        del self.__queues[listener_id]
+        del self.__listeners[listener_id]
+        self.__queues_factory.delete(listener_id)
 
-    async def stop(self) -> None:
-        self.stop_sync()
+    def get_queue(self, listener_id: str) -> Queue:
+        try:
+            return self.__queues[listener_id]
+        except KeyError:
+            raise InvalidListenerException(f"Invalid listener {listener_id}") from None
 
-    def stop_sync(self) -> None:
-        logger.debug(f"Stopping listener {self.id}")
-        self.__is_running = False
+    def get_listener(self, listener_id: str) -> MessageQueueListener:
+        try:
+            return self.__listeners[listener_id]
+        except KeyError:
+            raise InvalidListenerException
 
-    def on_message(self, msg: MessageContract) -> None:
-        """Event handler. It executes when a message is delivered to client"""
-        pass
-
+    def get_listeners(self) -> dict[str, MessageQueueListener]:
+        """Returns a dict mapping listener ids to listeners"""
+        return self.__listeners
 
 class AbstractChannel(ABC):
     """
@@ -62,22 +76,19 @@ class AbstractChannel(ABC):
 
     :param int stream_delay_seconds: Wait time in seconds between message delivery.
 
-    :param eric_sse.queue.AbstractMessageQueueFactory queues_factory:
+    :param eric_sse.repository.AbstractMessageQueueRepository queues_repository:
     """
     def __init__(
             self,
             stream_delay_seconds: int = 0,
-            queues_factory: AbstractMessageQueueFactory | None = None
+            queues_repository: AbstractMessageQueueRepository | None = None
     ):
         self.id: str = eric_sse.generate_uuid()
         self.stream_delay_seconds = stream_delay_seconds
 
-        self.__listeners: dict[str: MessageQueueListener] = {}
-        self.__queues: dict[str: Queue] = {}
-        self.__queues_factory = queues_factory if queues_factory else InMemoryMessageQueueFactory()
+        queues_repository = queues_repository if queues_repository else InMemoryMessageQueueRepository()
+        self.__connection_manager: ConnectionManager = ConnectionManager(queues_repository)
 
-    def _set_queues_factory(self, queues_factory: AbstractMessageQueueFactory):
-        self.__queues_factory = queues_factory
 
     def add_listener(self) -> MessageQueueListener:
         """Add the default listener"""
@@ -85,17 +96,11 @@ class AbstractChannel(ABC):
         self.register_listener(l)
         return l
 
-    def register_listener(self, l: MessageQueueListener):
-        """
-        Adds a listener to channel
-        """
-        self.__listeners[l.id] = l
-        self.__queues[l.id] = self.__queues_factory.create()
+    def register_listener(self, listener: MessageQueueListener):
+        return self.__connection_manager.register_listener(listener)
 
-    def remove_listener(self, l_id: str):
-        self._get_queue(listener_id=l_id).delete()
-        del self.__queues[l_id]
-        del self.__listeners[l_id]
+    def remove_listener(self, listener_id: str):
+        self.__connection_manager.remove_listener(listener_id)
 
     def deliver_next(self, listener_id: str) -> MessageContract:
         """
@@ -111,13 +116,7 @@ class AbstractChannel(ABC):
         raise NoMessagesException
 
     def _get_queue(self, listener_id: str) -> Queue:
-        try:
-            return self.__queues[listener_id]
-        except KeyError:
-            raise InvalidListenerException(f"Invalid listener {listener_id}")
-
-    def _set_queue(self, listener_id: str, queue: Queue):
-        self.__queues[listener_id] = queue
+        return self.__connection_manager.get_queue(listener_id)
 
     def dispatch(self, listener_id: str, msg: MessageContract):
         """Adds a message to listener's queue"""
@@ -130,14 +129,11 @@ class AbstractChannel(ABC):
 
     def broadcast(self, msg: MessageContract):
         """Enqueue a message to all listeners"""
-        for listener_id in self.__listeners.keys():
+        for listener_id in self.__connection_manager.get_listeners():
             self.dispatch(listener_id, msg=msg)
 
     def get_listener(self, listener_id: str) -> MessageQueueListener:
-        try:
-            return self.__listeners[listener_id]
-        except KeyError:
-            raise InvalidListenerException
+        return self.__connection_manager.get_listener(listener_id)
 
     @abstractmethod
     def adapt(self, msg: MessageContract) -> Any:

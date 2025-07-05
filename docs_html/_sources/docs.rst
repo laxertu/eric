@@ -26,6 +26,12 @@ Channels and listeners
     :exclude-members: NEXT_ID
     :member-order: bysource
 
+.. automodule:: eric_sse.listener
+    :members:
+    :undoc-members:
+    :exclude-members: NEXT_ID
+    :member-order: bysource
+
 
 Prefab channels and listeners
 =============================
@@ -52,11 +58,18 @@ Prefab servers and clients
 Queues
 ======
 .. automodule:: eric_sse.queue
-    :members: AbstractMessageQueueFactory, InMemoryMessageQueueFactory, RepositoryError, Queue
     :undoc-members:
+    :members:
     :member-order: bysource
     :show-inheritance:
 
+Persistence
+===========
+.. automodule:: eric_sse.repository
+    :undoc-members:
+    :members:
+    :member-order: bysource
+    :show-inheritance:
 
 Exceptions
 ==========

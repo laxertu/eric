@@ -15,28 +15,25 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!--
-    this give us a css class that will be invisible only if js is disabled
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
   
-  <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
@@ -47,7 +44,6 @@
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -63,8 +59,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -72,6 +79,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -79,8 +87,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -98,8 +106,7 @@
       
         
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -129,15 +136,20 @@
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="docs.html">Overview</a></li>
+
 
 
 
@@ -155,14 +167,9 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
-      <div class="sidebar-primary-item">
-<div id="ethical-ad-placement"
-      class="flat"
-      data-ea-publisher="readthedocs"
-      data-ea-type="readthedocs-sidebar"
-      data-ea-manual="true">
-</div></div>
   </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -258,16 +265,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 
 </div></div>
       
@@ -325,15 +340,19 @@
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.__init__">__init__() (AbstractChannel method)</a>
 
       <ul>
+        <li><a href="docs.html#eric_sse.entities.ConnectionManager.__init__">(ConnectionManager method)</a>
+</li>
         <li><a href="docs.html#eric_sse.prefabs.DataProcessingChannel.__init__">(DataProcessingChannel method)</a>
 </li>
         <li><a href="docs.html#eric_sse.benchmark.DataProcessingChannelBenchMark.__init__">(DataProcessingChannelBenchMark method)</a>
+</li>
+        <li><a href="docs.html#eric_sse.queue.InMemoryQueue.__init__">(InMemoryQueue method)</a>
 </li>
         <li><a href="docs.html#eric_sse.benchmark.ListenerWrapper.__init__">(ListenerWrapper method)</a>
 </li>
         <li><a href="docs.html#eric_sse.message.Message.__init__">(Message method)</a>
 </li>
-        <li><a href="docs.html#eric_sse.entities.MessageQueueListener.__init__">(MessageQueueListener method)</a>
+        <li><a href="docs.html#eric_sse.listener.MessageQueueListener.__init__">(MessageQueueListener method)</a>
 </li>
         <li><a href="docs.html#eric_sse.message.SignedMessage.__init__">(SignedMessage method)</a>
 </li>
@@ -358,7 +377,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel">AbstractChannel (class in eric_sse.entities)</a>
 </li>
-      <li><a href="docs.html#eric_sse.queue.AbstractMessageQueueFactory">AbstractMessageQueueFactory (class in eric_sse.queue)</a>
+      <li><a href="docs.html#eric_sse.repository.AbstractMessageQueueRepository">AbstractMessageQueueRepository (class in eric_sse.repository)</a>
 </li>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.adapt">adapt() (AbstractChannel method)</a>
 
@@ -375,6 +394,8 @@
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.add_listener">add_listener() (AbstractChannel method)</a>
 
       <ul>
+        <li><a href="docs.html#eric_sse.entities.ConnectionManager.add_listener">(ConnectionManager method)</a>
+</li>
         <li><a href="docs.html#eric_sse.benchmark.DataProcessingChannelBenchMark.add_listener">(DataProcessingChannelBenchMark method)</a>
 </li>
       </ul></li>
@@ -398,14 +419,16 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.servers.SocketServer.connect_callback">connect_callback() (SocketServer static method)</a>
 </li>
-      <li><a href="docs.html#eric_sse.queue.AbstractMessageQueueFactory.create">create() (AbstractMessageQueueFactory method)</a>
-
-      <ul>
-        <li><a href="docs.html#eric_sse.queue.InMemoryMessageQueueFactory.create">(InMemoryMessageQueueFactory method)</a>
+      <li><a href="docs.html#eric_sse.entities.ConnectionManager">ConnectionManager (class in eric_sse.entities)</a>
 </li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.repository.AbstractMessageQueueRepository.create">create() (AbstractMessageQueueRepository method)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.repository.InMemoryMessageQueueRepository.create">(InMemoryMessageQueueRepository method)</a>
+</li>
+      </ul></li>
       <li><a href="docs.html#eric_sse.clients.SocketClient.create_channel">create_channel() (SocketClient method)</a>
 </li>
   </ul></td>
@@ -418,8 +441,16 @@
 </li>
       <li><a href="docs.html#eric_sse.benchmark.DataProcessingChannelBenchMark">DataProcessingChannelBenchMark (class in eric_sse.benchmark)</a>
 </li>
-      <li><a href="docs.html#eric_sse.queue.Queue.delete">delete() (Queue method)</a>
+      <li><a href="docs.html#eric_sse.repository.AbstractMessageQueueRepository.delete">delete() (AbstractMessageQueueRepository method)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.repository.InMemoryMessageQueueRepository.delete">(InMemoryMessageQueueRepository method)</a>
 </li>
+        <li><a href="docs.html#eric_sse.queue.InMemoryQueue.delete">(InMemoryQueue method)</a>
+</li>
+        <li><a href="docs.html#eric_sse.queue.Queue.delete">(Queue method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.deliver_next">deliver_next() (AbstractChannel method)</a>
@@ -466,6 +497,13 @@
         <li><a href="docs.html#module-eric_sse.exception">module</a>
 </li>
       </ul></li>
+      <li>
+    eric_sse.listener
+
+      <ul>
+        <li><a href="docs.html#module-eric_sse.listener">module</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li>
@@ -490,6 +528,13 @@
 </li>
       </ul></li>
       <li>
+    eric_sse.repository
+
+      <ul>
+        <li><a href="docs.html#module-eric_sse.repository">module</a>
+</li>
+      </ul></li>
+      <li>
     eric_sse.servers
 
       <ul>
@@ -504,11 +549,19 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.servers.SSEChannelContainer.get">get() (SSEChannelContainer method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.servers.SSEChannelContainer.get_all_ids">get_all_ids() (SSEChannelContainer method)</a>
 </li>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.get_listener">get_listener() (AbstractChannel method)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.entities.ConnectionManager.get_listener">(ConnectionManager method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.entities.ConnectionManager.get_listeners">get_listeners() (ConnectionManager method)</a>
+</li>
+      <li><a href="docs.html#eric_sse.entities.ConnectionManager.get_queue">get_queue() (ConnectionManager method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -526,7 +579,9 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.message.UniqueMessage.id">id (UniqueMessage property)</a>
 </li>
-      <li><a href="docs.html#eric_sse.queue.InMemoryMessageQueueFactory">InMemoryMessageQueueFactory (class in eric_sse.queue)</a>
+      <li><a href="docs.html#eric_sse.repository.InMemoryMessageQueueRepository">InMemoryMessageQueueRepository (class in eric_sse.repository)</a>
+</li>
+      <li><a href="docs.html#eric_sse.queue.InMemoryQueue">InMemoryQueue (class in eric_sse.queue)</a>
 </li>
       <li><a href="docs.html#eric_sse.exception.InvalidChannelException">InvalidChannelException</a>
 </li>
@@ -536,9 +591,9 @@
 </li>
       <li><a href="docs.html#eric_sse.exception.InvalidMessageFormat">InvalidMessageFormat</a>
 </li>
-      <li><a href="docs.html#eric_sse.entities.MessageQueueListener.is_running">is_running() (MessageQueueListener method)</a>
+      <li><a href="docs.html#eric_sse.listener.MessageQueueListener.is_running">is_running() (MessageQueueListener method)</a>
 </li>
-      <li><a href="docs.html#eric_sse.entities.MessageQueueListener.is_running_sync">is_running_sync() (MessageQueueListener method)</a>
+      <li><a href="docs.html#eric_sse.listener.MessageQueueListener.is_running_sync">is_running_sync() (MessageQueueListener method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -548,6 +603,14 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.benchmark.ListenerWrapper">ListenerWrapper (class in eric_sse.benchmark)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.repository.AbstractMessageQueueRepository.load">load() (AbstractMessageQueueRepository method)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.repository.InMemoryMessageQueueRepository.load">(InMemoryMessageQueueRepository method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -562,7 +625,7 @@
 </li>
       <li><a href="docs.html#eric_sse.message.MessageContract">MessageContract (class in eric_sse.message)</a>
 </li>
-      <li><a href="docs.html#eric_sse.entities.MessageQueueListener">MessageQueueListener (class in eric_sse.entities)</a>
+      <li><a href="docs.html#eric_sse.listener.MessageQueueListener">MessageQueueListener (class in eric_sse.listener)</a>
 </li>
       <li>
     module
@@ -576,11 +639,15 @@
 </li>
         <li><a href="docs.html#module-eric_sse.exception">eric_sse.exception</a>
 </li>
+        <li><a href="docs.html#module-eric_sse.listener">eric_sse.listener</a>
+</li>
         <li><a href="docs.html#module-eric_sse.message">eric_sse.message</a>
 </li>
         <li><a href="docs.html#module-eric_sse.prefabs">eric_sse.prefabs</a>
 </li>
         <li><a href="docs.html#module-eric_sse.queue">eric_sse.queue</a>
+</li>
+        <li><a href="docs.html#module-eric_sse.repository">eric_sse.repository</a>
 </li>
         <li><a href="docs.html#module-eric_sse.servers">eric_sse.servers</a>
 </li>
@@ -606,7 +673,7 @@
       <li><a href="docs.html#eric_sse.benchmark.ListenerWrapper.on_message">on_message() (ListenerWrapper method)</a>
 
       <ul>
-        <li><a href="docs.html#eric_sse.entities.MessageQueueListener.on_message">(MessageQueueListener method)</a>
+        <li><a href="docs.html#eric_sse.listener.MessageQueueListener.on_message">(MessageQueueListener method)</a>
 </li>
         <li><a href="docs.html#eric_sse.prefabs.SimpleDistributedApplicationListener.on_message">(SimpleDistributedApplicationListener method)</a>
 </li>
@@ -625,16 +692,30 @@
         <li><a href="docs.html#eric_sse.message.UniqueMessage.payload">(UniqueMessage property)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.prefabs.SSEChannel.payload_adapter">payload_adapter (SSEChannel attribute)</a>
 </li>
-      <li><a href="docs.html#eric_sse.queue.Queue.pop">pop() (Queue method)</a>
+      <li><a href="docs.html#eric_sse.repository.AbstractMessageQueueRepository.persist">persist() (AbstractMessageQueueRepository method)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.repository.InMemoryMessageQueueRepository.persist">(InMemoryMessageQueueRepository method)</a>
 </li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.queue.InMemoryQueue.pop">pop() (InMemoryQueue method)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.queue.Queue.pop">(Queue method)</a>
+</li>
+      </ul></li>
       <li><a href="docs.html#eric_sse.prefabs.DataProcessingChannel.process_queue">process_queue() (DataProcessingChannel method)</a>
 </li>
-      <li><a href="docs.html#eric_sse.queue.Queue.push">push() (Queue method)</a>
+      <li><a href="docs.html#eric_sse.queue.InMemoryQueue.push">push() (InMemoryQueue method)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.queue.Queue.push">(Queue method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -652,12 +733,18 @@
       <li><a href="docs.html#eric_sse.clients.SocketClient.register">register() (SocketClient method)</a>
 </li>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.register_listener">register_listener() (AbstractChannel method)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.entities.ConnectionManager.register_listener">(ConnectionManager method)</a>
 </li>
+      </ul></li>
       <li><a href="docs.html#eric_sse.clients.SocketClient.remove_channel">remove_channel() (SocketClient method)</a>
 </li>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.remove_listener">remove_listener() (AbstractChannel method)</a>
 
       <ul>
+        <li><a href="docs.html#eric_sse.entities.ConnectionManager.remove_listener">(ConnectionManager method)</a>
+</li>
         <li><a href="docs.html#eric_sse.clients.SocketClient.remove_listener">(SocketClient method)</a>
 </li>
       </ul></li>
@@ -703,17 +790,17 @@
 </li>
       <li><a href="docs.html#eric_sse.servers.SSEChannelContainer">SSEChannelContainer (class in eric_sse.servers)</a>
 </li>
-      <li><a href="docs.html#eric_sse.entities.MessageQueueListener.start">start() (MessageQueueListener method)</a>
+      <li><a href="docs.html#eric_sse.listener.MessageQueueListener.start">start() (MessageQueueListener method)</a>
 
       <ul>
         <li><a href="docs.html#eric_sse.servers.SocketServer.start">(SocketServer static method)</a>
 </li>
       </ul></li>
-      <li><a href="docs.html#eric_sse.entities.MessageQueueListener.start_sync">start_sync() (MessageQueueListener method)</a>
+      <li><a href="docs.html#eric_sse.listener.MessageQueueListener.start_sync">start_sync() (MessageQueueListener method)</a>
 </li>
-      <li><a href="docs.html#eric_sse.entities.MessageQueueListener.stop">stop() (MessageQueueListener method)</a>
+      <li><a href="docs.html#eric_sse.listener.MessageQueueListener.stop">stop() (MessageQueueListener method)</a>
 </li>
-      <li><a href="docs.html#eric_sse.entities.MessageQueueListener.stop_sync">stop_sync() (MessageQueueListener method)</a>
+      <li><a href="docs.html#eric_sse.listener.MessageQueueListener.stop_sync">stop_sync() (MessageQueueListener method)</a>
 </li>
       <li><a href="docs.html#eric_sse.clients.SocketClient.stream">stream() (SocketClient method)</a>
 </li>
@@ -805,8 +892,8 @@ By Luca Stretti
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

@@ -3,7 +3,8 @@ from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from random import uniform
 from time import sleep
 
-from eric_sse.entities import Message, MessageQueueListener
+from eric_sse.entities import Message
+from eric_sse.listener import MessageQueueListener
 from eric_sse.prefabs import DataProcessingChannel
 from eric_sse.benchmark import DataProcessingChannelBenchMark
 
