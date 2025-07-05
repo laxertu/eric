@@ -39,10 +39,11 @@ class ConnectionManager:
 
         self.__queues_factory.persist({listener.id: listener}, {listener.id: self.__queues[listener.id]})
 
-    def remove_listener(self, l_id: str):
-        self.get_queue(listener_id=l_id).delete()
-        del self.__queues[l_id]
-        del self.__listeners[l_id]
+    def remove_listener(self, listener_id: str):
+        self.get_queue(listener_id=listener_id).delete()
+        del self.__queues[listener_id]
+        del self.__listeners[listener_id]
+        self.__queues_factory.delete(listener_id)
 
     def get_queue(self, listener_id: str) -> Queue:
         try:

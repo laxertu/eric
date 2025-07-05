@@ -22,6 +22,10 @@ class AbstractMessageQueueRepository(ABC):
     def load(self) -> (dict[str: MessageQueueListener], dict[str: Queue]):
         ...
 
+    @abstractmethod
+    def delete(self, listener_id: str) -> bool:
+        ...
+
 
 class InMemoryMessageQueueRepository(AbstractMessageQueueRepository):
     """
@@ -35,3 +39,7 @@ class InMemoryMessageQueueRepository(AbstractMessageQueueRepository):
 
     def load(self) -> (dict[str: MessageQueueListener], dict[str: Queue]):
         return {}, {}
+
+    def delete(self, listener_id: str) -> bool:
+        pass
+
