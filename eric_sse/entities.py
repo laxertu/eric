@@ -49,7 +49,7 @@ class ConnectionManager:
         try:
             return self.__queues[listener_id]
         except KeyError:
-            raise InvalidListenerException(f"Invalid listener {listener_id}")
+            raise InvalidListenerException(f"Invalid listener {listener_id}") from None
 
     def get_listener(self, listener_id: str) -> MessageQueueListener:
         try:

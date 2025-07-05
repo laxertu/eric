@@ -22,8 +22,8 @@ class SSEChannelContainer:
     def __init__(self):
         self.__channels: dict[str: SSEChannel] = {}
 
-    def add(self, queues_factory: AbstractMessageQueueRepository | None = None) -> SSEChannel:
-        channel = SSEChannel(queues_repository=queues_factory)
+    def add(self, queues_repository: AbstractMessageQueueRepository | None = None) -> SSEChannel:
+        channel = SSEChannel(queues_repository=queues_repository)
         if channel.id in self.__channels:
             raise InvalidChannelException(f'Channel with id {channel.id} already exists')
         self.__channels[channel.id] = channel

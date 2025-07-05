@@ -15,15 +15,15 @@ class AbstractMessageQueueRepository(ABC):
         ...
 
     @abstractmethod
-    def persist(self, listeners: dict[str: MessageQueueListener], queues: dict[str: Queue]) -> None:
+    def persist(self, listeners: dict[str, MessageQueueListener], queues: dict[str: Queue]) -> None:
         ...
 
     @abstractmethod
-    def load(self) -> (dict[str: MessageQueueListener], dict[str: Queue]):
+    def load(self) -> (dict[str, MessageQueueListener], dict[str: Queue]):
         ...
 
     @abstractmethod
-    def delete(self, listener_id: str) -> bool:
+    def delete(self, listener_id: str):
         ...
 
 
@@ -34,10 +34,10 @@ class InMemoryMessageQueueRepository(AbstractMessageQueueRepository):
     def create(self) -> Queue:
         return InMemoryQueue()
 
-    def persist(self, listeners: dict[str: MessageQueueListener], queues: dict[str: Queue]) -> None:
+    def persist(self, listeners: dict[str, MessageQueueListener], queues: dict[str: Queue]) -> None:
         pass
 
-    def load(self) -> (dict[str: MessageQueueListener], dict[str: Queue]):
+    def load(self) -> (dict[str, MessageQueueListener], dict[str, Queue]):
         return {}, {}
 
     def delete(self, listener_id: str) -> bool:
