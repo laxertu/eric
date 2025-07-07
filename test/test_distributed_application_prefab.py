@@ -19,7 +19,7 @@ def hello_ack_response(m: MessageContract) -> list[Message]:
         Message(msg_type='stop')
     ]
 
-#@pytest.mark.skip(reason="not implemented")
+
 class DistributedListenerTestCase(IsolatedAsyncioTestCase):
 
     @staticmethod
