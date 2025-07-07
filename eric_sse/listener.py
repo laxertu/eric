@@ -1,11 +1,9 @@
-from abc import ABC
-
 import eric_sse
 from eric_sse.message import MessageContract
 
 logger = eric_sse.get_logger()
 
-class MessageQueueListener(ABC):
+class MessageQueueListener:
     """
     Base class for listeners.
 
