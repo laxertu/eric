@@ -31,23 +31,23 @@ class ConnectionManager:
         self.register_listener(l)
         return l
 
-    def register_listener(self, listener: MessageQueueListener):
+    async def register_listener(self, listener: MessageQueueListener):
         """
         Adds a listener to channel
         """
         self.__listeners[listener.id] = listener
-        self.__queues[listener.id] = self.__queues_factory.create()
+        self.__queues[listener.id] = await self.__queues_factory.create()
 
-        self.__queues_factory.persist({listener.id: listener}, {listener.id: self.__queues[listener.id]})
+        await self.__queues_factory.persist([listener], {listener.id: self.__queues[listener.id]})
 
-    def remove_listener(self, listener_id: str):
+    async def remove_listener(self, listener_id: str):
         """
         Removes a listener from channel
         """
-        self.get_queue(listener_id=listener_id).delete()
         del self.__queues[listener_id]
         del self.__listeners[listener_id]
-        self.__queues_factory.delete(listener_id)
+
+        await self.__queues_factory.delete(listener_id)
 
     def get_queue(self, listener_id: str) -> Queue:
         try:
@@ -90,19 +90,19 @@ class AbstractChannel(ABC):
         self.__connection_manager: ConnectionManager = ConnectionManager(queues_repository)
 
 
-    def add_listener(self) -> MessageQueueListener:
+    async def add_listener(self) -> MessageQueueListener:
         """Add the default listener"""
         l = MessageQueueListener()
-        self.register_listener(l)
+        await self.register_listener(l)
         return l
 
-    def register_listener(self, listener: MessageQueueListener):
-        return self.__connection_manager.register_listener(listener)
+    async def register_listener(self, listener: MessageQueueListener):
+        return await self.__connection_manager.register_listener(listener)
 
-    def remove_listener(self, listener_id: str):
-        self.__connection_manager.remove_listener(listener_id)
+    async def remove_listener(self, listener_id: str):
+        await self.__connection_manager.remove_listener(listener_id)
 
-    def deliver_next(self, listener_id: str) -> MessageContract:
+    async def deliver_next(self, listener_id: str) -> MessageContract:
         """
         Returns next message for given listener id.
 
@@ -110,27 +110,27 @@ class AbstractChannel(ABC):
         """
         listener = self.get_listener(listener_id)
         if listener.is_running_sync():
-            msg = self._get_queue(listener_id).pop()
-            listener.on_message(msg)
+            queue = self.__connection_manager.get_queue(listener.id)
+            msg = await queue.pop()
+            await listener.on_message(msg)
             return msg
+
         raise NoMessagesException
 
     def _get_queue(self, listener_id: str) -> Queue:
         return self.__connection_manager.get_queue(listener_id)
 
-    def dispatch(self, listener_id: str, msg: MessageContract):
+    async def dispatch(self, listener_id: str, msg: MessageContract):
         """Adds a message to listener's queue"""
 
-        self.__add_to_queue(listener_id, msg)
+        queue = self._get_queue(listener_id)
+        await queue.push(msg)
         logger.debug(f"Dispatched {msg} to {listener_id}")
 
-    def __add_to_queue(self, listener_id: str, msg: MessageContract):
-        self._get_queue(listener_id).push(msg)
-
-    def broadcast(self, msg: MessageContract):
+    async def broadcast(self, msg: MessageContract):
         """Enqueue a message to all listeners"""
         for listener_id in self.__connection_manager.get_listeners():
-            self.dispatch(listener_id, msg=msg)
+            await self.dispatch(listener_id, msg=msg)
 
     def get_listener(self, listener_id: str) -> MessageQueueListener:
         return self.__connection_manager.get_listener(listener_id)
@@ -146,9 +146,10 @@ class AbstractChannel(ABC):
         A message with type = 'error' is yeld on invalid listener or channel
         """
 
-        def new_messages():
+        async def new_messages():
             try:
-                yield self.deliver_next(listener.id)
+                result = await self.deliver_next(listener.id)
+                yield result
             except NoMessagesException:
                 ...
 
@@ -161,7 +162,7 @@ class AbstractChannel(ABC):
                     break
 
                 try:
-                    for message in new_messages():
+                    async for message in new_messages():
                         yield self.adapt(message)
 
                     await asyncio.sleep(self.stream_delay_seconds)
@@ -177,7 +178,7 @@ class AbstractChannel(ABC):
 
     async def watch(self) -> AsyncIterable[Any]:
         # TODO tests
-        listener = self.add_listener()
+        listener = await self.add_listener()
         listener.start_sync()
         return self.message_stream(listener)
 

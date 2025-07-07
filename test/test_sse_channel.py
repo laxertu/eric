@@ -14,11 +14,11 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
     async def test_sse_channel_default_output(self):
         # setup
         channel = self.sut
-        listener = channel.add_listener()
+        listener = await channel.add_listener()
         await listener.start()
 
         msg_to_send = Message(msg_type='test', msg_payload={})
-        channel.dispatch(listener_id=listener.id, msg=msg_to_send)
+        await channel.dispatch(listener_id=listener.id, msg=msg_to_send)
 
         async for msg_received in self.sut.message_stream(listener=listener):
             self.assertDictEqual(
@@ -30,18 +30,18 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
     async def test_payload_adapter_json(self):
         self.sut.payload_adapter = json.dumps
         listener = MessageQueueListenerMock(num_messages_before_disconnect=1)
-        self.sut.register_listener(listener)
+        await self.sut.register_listener(listener)
         listener.start_sync()
-        self.sut.dispatch(listener.id, Message(msg_type="test", msg_payload={'a': 1}))
+        await self.sut.dispatch(listener.id, Message(msg_type="test", msg_payload={'a': 1}))
 
         async for m in self.sut.message_stream(listener):
             self.assertEqual(m['data'], json.dumps({'a': 1}))
 
 
     async def test_stream_stops_if_listener_stops(self):
-        l = self.sut.add_listener()
-        self.sut.dispatch(l.id, Message(msg_type='test'))
-        self.sut.dispatch(l.id, Message(msg_type='test'))
+        l = await self.sut.add_listener()
+        await self.sut.dispatch(l.id, Message(msg_type='test'))
+        await self.sut.dispatch(l.id, Message(msg_type='test'))
 
         l.start_sync()
         total_messages_received = 0

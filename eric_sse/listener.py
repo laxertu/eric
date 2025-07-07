@@ -36,6 +36,6 @@ class MessageQueueListener(ABC):
         logger.debug(f"Stopping listener {self.id}")
         self.__is_running = False
 
-    def on_message(self, msg: MessageContract) -> None:
+    async def on_message(self, msg: MessageContract) -> None:
         """Event handler. It executes when a message is delivered to client"""
         pass
