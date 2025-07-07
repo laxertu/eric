@@ -181,7 +181,3 @@ class AbstractChannel(ABC):
         listener = await self.add_listener()
         listener.start_sync()
         return self.message_stream(listener)
-
-    def notify_end(self):
-        """Broadcasts a MESSAGE_TYPE_CLOSED Message"""
-        self.broadcast(Message(msg_type=MESSAGE_TYPE_CLOSED))

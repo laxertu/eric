@@ -161,7 +161,7 @@ Add the default listener
 
 <a id="eric_sse.entities.ConnectionManager.register_listener"></a>
 
-#### register_listener(listener)
+#### *async* register_listener(listener)
 
 Adds a listener to channel
 
@@ -170,7 +170,7 @@ Adds a listener to channel
 
 <a id="eric_sse.entities.ConnectionManager.remove_listener"></a>
 
-#### remove_listener(listener_id)
+#### *async* remove_listener(listener_id)
 
 Removes a listener from channel
 
@@ -229,7 +229,7 @@ see [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel)
 
 <a id="eric_sse.entities.AbstractChannel.add_listener"></a>
 
-#### add_listener()
+#### *async* add_listener()
 
 Add the default listener
 
@@ -238,21 +238,21 @@ Add the default listener
 
 <a id="eric_sse.entities.AbstractChannel.register_listener"></a>
 
-#### register_listener(listener)
+#### *async* register_listener(listener)
 
 * **Parameters:**
   **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
 
 <a id="eric_sse.entities.AbstractChannel.remove_listener"></a>
 
-#### remove_listener(listener_id)
+#### *async* remove_listener(listener_id)
 
 * **Parameters:**
   **listener_id** (*str*)
 
 <a id="eric_sse.entities.AbstractChannel.deliver_next"></a>
 
-#### deliver_next(listener_id)
+#### *async* deliver_next(listener_id)
 
 Returns next message for given listener id.
 
@@ -265,7 +265,7 @@ Raises a NoMessagesException if queue is empty
 
 <a id="eric_sse.entities.AbstractChannel.dispatch"></a>
 
-#### dispatch(listener_id, msg)
+#### *async* dispatch(listener_id, msg)
 
 Adds a message to listener’s queue
 
@@ -275,7 +275,7 @@ Adds a message to listener’s queue
 
 <a id="eric_sse.entities.AbstractChannel.broadcast"></a>
 
-#### broadcast(msg)
+#### *async* broadcast(msg)
 
 Enqueue a message to all listeners
 
@@ -319,12 +319,6 @@ A message with type = ‘error’ is yeld on invalid listener or channel
 
 * **Return type:**
   *AsyncIterable*[*Any*]
-
-<a id="eric_sse.entities.AbstractChannel.notify_end"></a>
-
-#### notify_end()
-
-Broadcasts a MESSAGE_TYPE_CLOSED Message
 
 <a id="module-eric_sse.listener"></a>
 
@@ -384,7 +378,7 @@ Optionally you can override on_message method if you need to inject code at mess
 
 <a id="eric_sse.listener.MessageQueueListener.on_message"></a>
 
-#### on_message(msg)
+#### *async* on_message(msg)
 
 Event handler. It executes when a message is delivered to client
 
@@ -526,7 +520,7 @@ Receiving a message with one of these types will fire corresponding action.
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.dispatch_to"></a>
 
-#### dispatch_to(receiver, msg)
+#### *async* dispatch_to(receiver, msg)
 
 * **Parameters:**
   * **receiver** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
@@ -534,7 +528,7 @@ Receiving a message with one of these types will fire corresponding action.
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"></a>
 
-#### on_message(msg)
+#### *async* on_message(msg)
 
 Executes action corresponding to message’s type
 
@@ -770,7 +764,7 @@ Abstract base class for queues (FIFO)
 
 <a id="eric_sse.queue.Queue.pop"></a>
 
-#### *abstract* pop()
+#### *abstract async* pop()
 
 Next message from the queue.
 
@@ -781,7 +775,7 @@ Raises a [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessag
 
 <a id="eric_sse.queue.Queue.push"></a>
 
-#### *abstract* push(message)
+#### *abstract async* push(message)
 
 * **Parameters:**
   **message** ([*MessageContract*](#eric_sse.message.MessageContract))
@@ -790,7 +784,7 @@ Raises a [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessag
 
 <a id="eric_sse.queue.Queue.delete"></a>
 
-#### *abstract* delete()
+#### *abstract async* delete()
 
 Removes all messages from the queue.
 
@@ -809,14 +803,18 @@ Bases: [`Queue`](#eric_sse.queue.Queue)
 
 <a id="eric_sse.queue.InMemoryQueue.pop"></a>
 
-#### pop()
+#### *async* pop()
+
+Next message from the queue.
+
+Raises a [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessagesException) if the queue is empty.
 
 * **Return type:**
   [*MessageContract*](#eric_sse.message.MessageContract)
 
 <a id="eric_sse.queue.InMemoryQueue.push"></a>
 
-#### push(message)
+#### *async* push(message)
 
 * **Parameters:**
   **message** ([*MessageContract*](#eric_sse.message.MessageContract))
@@ -825,23 +823,12 @@ Bases: [`Queue`](#eric_sse.queue.Queue)
 
 <a id="eric_sse.queue.InMemoryQueue.delete"></a>
 
-#### delete()
+#### *async* delete()
 
 Removes all messages from the queue.
 
 * **Return type:**
   None
-
-<a id="eric_sse.queue.RepositoryError"></a>
-
-### *exception* RepositoryError
-
-Bases: `Exception`
-
-Raised when an unexpected error occurs while trying to fetch messages from a queue.
-
-Concrete implementations of [`Queue`](#eric_sse.queue.Queue) should wrap here the unexpected exceptions they catch before raising, and
-an [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessagesException) when a pop is requested on an empty queue.
 
 <a id="module-eric_sse.repository"></a>
 
@@ -861,14 +848,14 @@ see [`eric_sse.entities.AbstractChannel`](#eric_sse.entities.AbstractChannel)
 
 <a id="eric_sse.repository.AbstractMessageQueueRepository.create"></a>
 
-#### *abstract* create()
+#### *abstract async* create()
 
 * **Return type:**
   [*Queue*](#eric_sse.queue.Queue)
 
 <a id="eric_sse.repository.AbstractMessageQueueRepository.persist"></a>
 
-#### *abstract* persist(listeners, queues)
+#### *abstract async* persist(listeners, queues)
 
 * **Parameters:**
   * **listeners** (*list* *[*[*MessageQueueListener*](#eric_sse.listener.MessageQueueListener) *]*) – listeners to persist
@@ -881,17 +868,19 @@ see [`eric_sse.entities.AbstractChannel`](#eric_sse.entities.AbstractChannel)
 
 <a id="eric_sse.repository.AbstractMessageQueueRepository.load"></a>
 
-#### *abstract* load()
+#### *abstract async* load()
 
 * **Return type:**
-  (dict[str, [eric_sse.listener.MessageQueueListener](#eric_sse.listener.MessageQueueListener)], dict[slice(<class ‘str’>, <class ‘eric_sse.queue.Queue’>, None)])
+  (list[[eric_sse.listener.MessageQueueListener](#eric_sse.listener.MessageQueueListener)], dict[slice(<class ‘str’>, <class ‘eric_sse.queue.Queue’>, None)])
 
 <a id="eric_sse.repository.AbstractMessageQueueRepository.delete"></a>
 
-#### *abstract* delete(listener_id)
+#### *abstract async* delete(listener_id)
 
 * **Parameters:**
   **listener_id** (*str*)
+* **Return type:**
+  None
 
 <a id="eric_sse.repository.InMemoryMessageQueueRepository"></a>
 
@@ -903,18 +892,18 @@ Default implementation used by [`eric_sse.entities.AbstractChannel`](#eric_sse.e
 
 <a id="eric_sse.repository.InMemoryMessageQueueRepository.create"></a>
 
-#### create()
+#### *async* create()
 
 * **Return type:**
   [*Queue*](#eric_sse.queue.Queue)
 
 <a id="eric_sse.repository.InMemoryMessageQueueRepository.persist"></a>
 
-#### persist(listeners, queues)
+#### *async* persist(listeners, queues)
 
 * **Parameters:**
-  * **listeners** (*dict* *[**str* *,* [*MessageQueueListener*](#eric_sse.listener.MessageQueueListener) *]*) – listeners to persist
-  * **queues** (*dict* *[**slice* *(* *<class 'str'>* *,*  *<class 'eric_sse.queue.Queue'>* *,* *None* *)* *]*) – queues to persist. A dictionary where keys are correspondant listeners ids and values are Queue
+  * **listeners** (*list* *[*[*MessageQueueListener*](#eric_sse.listener.MessageQueueListener) *]*) – listeners to persist
+  * **queues** (*dict* *[**str* *,* [*Queue*](#eric_sse.queue.Queue) *]*) – queues to persist. A dictionary where keys are correspondant listeners ids and values are Queue
 * **Return type:**
   None
 
@@ -923,17 +912,19 @@ Default implementation used by [`eric_sse.entities.AbstractChannel`](#eric_sse.e
 
 <a id="eric_sse.repository.InMemoryMessageQueueRepository.load"></a>
 
-#### load()
+#### *async* load()
 
 * **Return type:**
-  (dict[str, [eric_sse.listener.MessageQueueListener](#eric_sse.listener.MessageQueueListener)], dict[str, [eric_sse.queue.Queue](#eric_sse.queue.Queue)])
+  (list[[eric_sse.listener.MessageQueueListener](#eric_sse.listener.MessageQueueListener)], dict[slice(<class ‘str’>, <class ‘eric_sse.queue.Queue’>, None)])
 
 <a id="eric_sse.repository.InMemoryMessageQueueRepository.delete"></a>
 
-#### delete(listener_id)
+#### *async* delete(listener_id)
 
 * **Parameters:**
   **listener_id** (*str*)
+* **Return type:**
+  None
 
 <a id="module-eric_sse.exception"></a>
 
@@ -958,6 +949,15 @@ Default implementation used by [`eric_sse.entities.AbstractChannel`](#eric_sse.e
 ### *exception* NoMessagesException
 
 Raised when trying to fetch from an empty queue
+
+<a id="eric_sse.exception.RepositoryError"></a>
+
+### *exception* RepositoryError
+
+Raised when an unexpected error occurs while trying to fetch messages from a queue.
+
+Concrete implementations of `Queue` should wrap here the unexpected exceptions they catch before raising, and
+an [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessagesException) when a pop is requested on an empty queue.
 
 <a id="module-eric_sse.benchmark"></a>
 

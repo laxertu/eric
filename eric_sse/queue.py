@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from threading import Lock
+from asyncio import Lock
 
 from eric_sse.message import MessageContract
 from eric_sse.exception import NoMessagesException
@@ -31,7 +31,8 @@ class InMemoryQueue(Queue):
 
     async def pop(self) -> MessageContract:
         try:
-            with Lock():
+            lock = Lock()
+            async with lock:
                 m = self.__messages.pop(0)
                 return m
         except IndexError:

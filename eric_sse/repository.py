@@ -31,7 +31,7 @@ class AbstractMessageQueueRepository(ABC):
         ...
 
     @abstractmethod
-    async def delete(self, listener_id: str):
+    async def delete(self, listener_id: str) -> None:
         ...
 
 
@@ -48,5 +48,5 @@ class InMemoryMessageQueueRepository(AbstractMessageQueueRepository):
     async def load(self) -> (list[MessageQueueListener], dict[str: Queue]):
         return [], {}
 
-    async def delete(self, listener_id: str):
+    async def delete(self, listener_id: str) -> None:
         pass
