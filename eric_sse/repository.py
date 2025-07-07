@@ -11,11 +11,11 @@ class AbstractMessageQueueRepository(ABC):
     see :class:`eric_sse.entities.AbstractChannel`
     """
     @abstractmethod
-    def create(self) -> Queue:
+    async def create(self) -> Queue:
         ...
 
     @abstractmethod
-    def persist(self, listeners: list[MessageQueueListener], queues: dict[str, Queue]) -> None:
+    async def persist(self, listeners: list[MessageQueueListener], queues: dict[str, Queue]) -> None:
         """
         :param listeners: listeners to persist
         :param queues: queues to persist. A dictionary where keys are correspondant listeners ids and values are Queue
@@ -27,11 +27,11 @@ class AbstractMessageQueueRepository(ABC):
         ...
 
     @abstractmethod
-    def load(self) -> (dict[str, MessageQueueListener], dict[str: Queue]):
+    async def load(self) -> (list[MessageQueueListener], dict[str: Queue]):
         ...
 
     @abstractmethod
-    def delete(self, listener_id: str):
+    async def delete(self, listener_id: str):
         ...
 
 
@@ -39,14 +39,14 @@ class InMemoryMessageQueueRepository(AbstractMessageQueueRepository):
     """
     Default implementation used by :class:`eric_sse.entities.AbstractChannel`
     """
-    def create(self) -> Queue:
+    async def create(self) -> Queue:
         return InMemoryQueue()
 
-    def persist(self, listeners: dict[str, MessageQueueListener], queues: dict[str: Queue]) -> None:
+    async def persist(self, listeners: list[MessageQueueListener], queues: dict[str, Queue]) -> None:
         pass
 
-    def load(self) -> (dict[str, MessageQueueListener], dict[str, Queue]):
-        return {}, {}
+    async def load(self) -> (list[MessageQueueListener], dict[str: Queue]):
+        return [], {}
 
-    def delete(self, listener_id: str):
+    async def delete(self, listener_id: str):
         pass

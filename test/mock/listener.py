@@ -10,7 +10,7 @@ class MessageQueueListenerMock(MessageQueueListener):
         self.num_received = 0
         self.fixtures = fixtures
 
-    def on_message(self, msg: Message) -> None:
+    async def on_message(self, msg: Message) -> None:
         self.num_received += 1
 
         if self.fixtures is not None:

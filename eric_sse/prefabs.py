@@ -1,5 +1,4 @@
-from asyncio import as_completed as as_completed_future, get_running_loop
-from concurrent.futures import ThreadPoolExecutor, Executor
+from concurrent.futures import ThreadPoolExecutor, Executor, as_completed
 from typing import Callable, AsyncIterable
 from eric_sse import get_logger
 from eric_sse.entities import AbstractChannel
@@ -80,23 +79,23 @@ class DataProcessingChannel(AbstractChannel):
         with self.executor_class(max_workers=self.max_workers) as e:
             there_are_pending_messages = True
             tasks = []
-            loop = get_running_loop()
+
             while there_are_pending_messages:
                 try:
-                    msg = self._get_queue(listener_id=listener.id).pop()
-                    tasks.append(loop.run_in_executor(e, self._invoke_callback_and_return, listener.on_message, msg))
+                    msg = await self._get_queue(listener_id=listener.id).pop()
+                    tasks.append(e.submit(self._invoke_callback_and_return, callback=listener.on_message, msg=msg))
 
                 except NoMessagesException:
                     there_are_pending_messages = False
 
-            for task_dome in as_completed_future(tasks):
-                task_result = await task_dome
-                yield self.adapt(task_result)
+            for task_done in as_completed(tasks):
+                result = await task_done.result()
+                yield self.adapt(result)
 
 
     @staticmethod
-    def _invoke_callback_and_return(callback: Callable[[MessageContract], None], msg: MessageContract):
-        callback(msg)
+    async def _invoke_callback_and_return(callback: Callable, msg: MessageContract):
+        await callback(msg)
         return msg
 
     def adapt(self, msg: MessageContract) -> dict:
@@ -104,7 +103,6 @@ class DataProcessingChannel(AbstractChannel):
             "event": msg.type,
             "data": msg.payload
         }
-
 
 class SimpleDistributedApplicationListener(MessageQueueListener):
     """Listener for distributed applications"""
@@ -118,7 +116,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
             'stop': self.stop_sync,
             'remove': self.remove_sync
         }
-        channel.register_listener(self)
+
 
     def set_action(self, name: str, action: Callable[[MessageContract], list[MessageContract]]):
         """
@@ -136,11 +134,11 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
             raise KeyError(f'Trying to set an internal action {action}')
         self.__actions[name] = action
 
-    def dispatch_to(self, receiver: MessageQueueListener, msg: MessageContract):
+    async def dispatch_to(self, receiver: MessageQueueListener, msg: MessageContract):
         signed_message = SignedMessage(sender_id=self.id, msg_type=msg.type, msg_payload=msg.payload)
-        self.__channel.dispatch(receiver.id, signed_message)
+        await self.__channel.dispatch(receiver.id, signed_message)
 
-    def on_message(self, msg: SignedMessage) -> None:
+    async def on_message(self, msg: SignedMessage) -> None:
         """Executes action corresponding to message's type"""
         try:
             try:
@@ -152,7 +150,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
             msgs = self.__actions[msg.type](msg)
             for response in msgs:
                 signed_response = SignedMessage(sender_id=self.id, msg_type=response.type, msg_payload=response.payload)
-                self.__channel.dispatch(msg.sender_id, signed_response)
+                await self.__channel.dispatch(msg.sender_id, signed_response)
         except KeyError:
             logger.debug(f'Unknown action {msg.type}')
 

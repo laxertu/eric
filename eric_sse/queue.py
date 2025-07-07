@@ -8,7 +8,7 @@ from eric_sse.exception import NoMessagesException
 class Queue(ABC):
     """Abstract base class for queues (FIFO)"""
     @abstractmethod
-    def pop(self) -> MessageContract:
+    async def pop(self) -> MessageContract:
         """
         Next message from the queue.
 
@@ -17,11 +17,11 @@ class Queue(ABC):
         ...
 
     @abstractmethod
-    def push(self, message: MessageContract) -> None:
+    async def push(self, message: MessageContract) -> None:
         ...
 
     @abstractmethod
-    def delete(self) -> None:
+    async def delete(self) -> None:
         """Removes all messages from the queue."""
         ...
 
@@ -29,19 +29,18 @@ class InMemoryQueue(Queue):
     def __init__(self):
         self.__messages: list[MessageContract] = []
 
-    def pop(self) -> MessageContract:
-        """
-        """
+    async def pop(self) -> MessageContract:
         try:
             with Lock():
-                return self.__messages.pop(0)
+                m = self.__messages.pop(0)
+                return m
         except IndexError:
             raise NoMessagesException
 
-    def push(self, message: MessageContract) -> None:
+    async def push(self, message: MessageContract) -> None:
         self.__messages.append(message)
 
-    def delete(self) -> None:
+    async def delete(self) -> None:
         self.__messages = []
 
 

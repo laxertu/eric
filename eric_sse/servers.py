@@ -120,7 +120,7 @@ class SocketServer:
         logger.info(f'received command {verb}')
 
         if verb == 'd':
-            SocketServer.cc.get(channel_id).dispatch(receiver_id, message)
+            await SocketServer.cc.get(channel_id).dispatch(receiver_id, message)
             yield SocketServer.ACK
 
         elif verb == 'c':
@@ -128,15 +128,15 @@ class SocketServer:
             yield channel.id
 
         elif verb == 'b':
-            SocketServer.cc.get(channel_id).broadcast(message)
+            await SocketServer.cc.get(channel_id).broadcast(message)
             yield SocketServer.ACK
 
         elif verb == 'r':
-            l = SocketServer.cc.get(channel_id).add_listener()
+            l = await SocketServer.cc.get(channel_id).add_listener()
             yield l.id
 
         elif verb == 'rl':
-            SocketServer.cc.get(channel_id).remove_listener(listener_id=receiver_id)
+            await SocketServer.cc.get(channel_id).remove_listener(listener_id=receiver_id)
             yield SocketServer.ACK
 
         elif verb == 'rc':
@@ -148,7 +148,7 @@ class SocketServer:
             channel = SocketServer.cc.get(channel_id)
             listener = channel.get_listener(receiver_id)
             await listener.start()
-            async for m in await channel.message_stream(listener):
+            async for m in channel.message_stream(listener):
                 yield f'{json.dumps(m)}{linesep}'
 
         elif verb == 'w':
