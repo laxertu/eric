@@ -8,7 +8,7 @@ from eric_sse.exception import InvalidListenerException, NoMessagesException, In
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import MessageContract, Message
 from eric_sse.queue import Queue
-from eric_sse.repository import AbstractMessageQueueRepository, InMemoryMessageQueueRepository
+from eric_sse.connection import AbstractConnectionRepository, InMemoryConnectionRepository, Connection
 
 logger = eric_sse.get_logger()
 
@@ -17,13 +17,18 @@ MESSAGE_TYPE_END_OF_STREAM = '_eric_channel_eof'
 MESSAGE_TYPE_INTERNAL_ERROR = '_eric_error'
 
 
-class ConnectionManager:
+class _ConnectionManager:
     """Maintains relationships between listeners and queues"""
-    def __init__(self, queues_repository: AbstractMessageQueueRepository):
+    def __init__(self, queues_repository: AbstractConnectionRepository):
         self.__listeners: dict[str: MessageQueueListener] = {}
         self.__queues: dict[str: Queue] = {}
-        self.__queues_factory = queues_repository
+        self.__queues_repository = queues_repository
 
+
+    def load(self):
+        for c in self.__queues_repository.load():
+            self.__listeners[c.listener.id] = c.listener
+            self.__queues[c.listener.id] = c.queue
 
     def add_listener(self) -> MessageQueueListener:
         """Add the default listener"""
@@ -31,23 +36,28 @@ class ConnectionManager:
         self.register_listener(l)
         return l
 
-    async def register_listener(self, listener: MessageQueueListener):
+    def register_listener(self, listener: MessageQueueListener):
         """
         Adds a listener to channel
         """
         self.__listeners[listener.id] = listener
-        self.__queues[listener.id] = await self.__queues_factory.create()
+        self.__queues[listener.id] = self.__queues_repository.create_queue(listener_id=listener.id)
+        self.__queues_repository.persist(Connection(listener=listener, queue=self.__queues[listener.id]))
 
-        await self.__queues_factory.persist([listener], {listener.id: self.__queues[listener.id]})
+    def register_connection(self, listener: MessageQueueListener, queue: Queue):
+        self.__listeners[listener.id] = listener
+        self.__queues[listener.id] = queue
+        self.__queues_repository.persist(Connection(listener=listener, queue=self.__queues[listener.id]))
 
-    async def remove_listener(self, listener_id: str):
+
+    def remove_listener(self, listener_id: str):
         """
         Removes a listener from channel
         """
         del self.__queues[listener_id]
         del self.__listeners[listener_id]
 
-        await self.__queues_factory.delete(listener_id)
+        self.__queues_repository.delete(listener_id)
 
     def get_queue(self, listener_id: str) -> Queue:
         try:
@@ -76,43 +86,46 @@ class AbstractChannel(ABC):
 
     :param int stream_delay_seconds: Wait time in seconds between message delivery.
 
-    :param eric_sse.repository.AbstractMessageQueueRepository queues_repository:
+    :param eric_sse.connection.AbstractConnectionRepository connections_repository:
     """
     def __init__(
             self,
             stream_delay_seconds: int = 0,
-            queues_repository: AbstractMessageQueueRepository | None = None
+            connections_repository: AbstractConnectionRepository | None = None
     ):
         self.id: str = eric_sse.generate_uuid()
         self.stream_delay_seconds = stream_delay_seconds
 
-        queues_repository = queues_repository if queues_repository else InMemoryMessageQueueRepository()
-        self.__connection_manager: ConnectionManager = ConnectionManager(queues_repository)
+        connections_repository = connections_repository if connections_repository else InMemoryConnectionRepository()
+        self.__connection_manager: _ConnectionManager = _ConnectionManager(connections_repository)
+
+    def open(self):
+        self.__connection_manager.load()
 
 
-    async def add_listener(self) -> MessageQueueListener:
+    def add_listener(self) -> MessageQueueListener:
         """Add the default listener"""
         l = MessageQueueListener()
-        await self.register_listener(l)
+        self.register_listener(l)
         return l
 
-    async def register_listener(self, listener: MessageQueueListener):
-        return await self.__connection_manager.register_listener(listener)
+    def register_listener(self, listener: MessageQueueListener):
+        return self.__connection_manager.register_listener(listener)
 
-    async def remove_listener(self, listener_id: str):
-        await self.__connection_manager.remove_listener(listener_id)
+    def remove_listener(self, listener_id: str):
+        self.__connection_manager.remove_listener(listener_id)
 
-    async def deliver_next(self, listener_id: str) -> MessageContract:
+    def deliver_next(self, listener_id: str) -> MessageContract:
         """
         Returns next message for given listener id.
 
         Raises a NoMessagesException if queue is empty
         """
         listener = self.get_listener(listener_id)
-        if listener.is_running_sync():
+        if listener.is_running():
             queue = self.__connection_manager.get_queue(listener.id)
-            msg = await queue.pop()
-            await listener.on_message(msg)
+            msg = queue.pop()
+            listener.on_message(msg)
             return msg
 
         raise NoMessagesException
@@ -120,17 +133,17 @@ class AbstractChannel(ABC):
     def _get_queue(self, listener_id: str) -> Queue:
         return self.__connection_manager.get_queue(listener_id)
 
-    async def dispatch(self, listener_id: str, msg: MessageContract):
+    def dispatch(self, listener_id: str, msg: MessageContract):
         """Adds a message to listener's queue"""
 
         queue = self._get_queue(listener_id)
-        await queue.push(msg)
+        queue.push(msg)
         logger.debug(f"Dispatched {msg} to {listener_id}")
 
-    async def broadcast(self, msg: MessageContract):
+    def broadcast(self, msg: MessageContract):
         """Enqueue a message to all listeners"""
         for listener_id in self.__connection_manager.get_listeners():
-            await self.dispatch(listener_id, msg=msg)
+            self.dispatch(listener_id, msg=msg)
 
     def get_listener(self, listener_id: str) -> MessageQueueListener:
         return self.__connection_manager.get_listener(listener_id)
@@ -148,7 +161,7 @@ class AbstractChannel(ABC):
 
         async def new_messages():
             try:
-                result = await self.deliver_next(listener.id)
+                result = self.deliver_next(listener.id)
                 yield result
             except NoMessagesException:
                 ...
@@ -157,7 +170,7 @@ class AbstractChannel(ABC):
 
             while True:
                 # If client closes connection, stop sending events
-                if not await listener.is_running():
+                if not listener.is_running():
                     logger.debug("Listener stopped. Exiting")
                     break
 
@@ -178,6 +191,6 @@ class AbstractChannel(ABC):
 
     async def watch(self) -> AsyncIterable[Any]:
         # TODO tests
-        listener = await self.add_listener()
-        listener.start_sync()
+        listener = self.add_listener()
+        listener.start()
         return self.message_stream(listener)

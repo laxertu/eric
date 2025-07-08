@@ -310,6 +310,15 @@ document.write(`
                   
   <section id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
+<p>1.0.0</p>
+<ul class="simple">
+<li><p>Rework of persistence layer support. Factories of queues have been replaced with connections repositories</p></li>
+<li><p>Moved MessageQueueListener to a separate module</p></li>
+<li><p>Removed _sync methods form MessageQueueListener</p></li>
+<li><p>Moved RepositoryError to exception module</p></li>
+<li><p>Prefabs dependencies were updated accordingly</p></li>
+<li><p>Benchmark module renamed to profile</p></li>
+</ul>
 <p>0.7.9</p>
 <ul class="simple">
 <li><p>Channel and listener id generation now relies on uuid4</p></li>

@@ -2,7 +2,7 @@
 name = "eric-sse"
 description = "A lightweight message dispatcher based on SSE protocol data transfer objects format"
 requires-python = ">=3.10, <3.12"
-version = "1.0.0a1"
+version = "1.0.0a3"
 authors = [
     {name = "Luca Stretti", email = "laxertu@gmail.com"}
 ]

@@ -10,7 +10,7 @@ class MessageQueueListenerMock(MessageQueueListener):
         self.num_received = 0
         self.fixtures = fixtures
 
-    async def on_message(self, msg: Message) -> None:
+    def on_message(self, msg: Message) -> None:
         self.num_received += 1
 
         if self.fixtures is not None:
@@ -18,4 +18,4 @@ class MessageQueueListenerMock(MessageQueueListener):
             assert msg.payload == self.fixtures[self.num_received].payload
 
         if self.num_received >= self.disconnect_after:
-            self.stop_sync()
+            self.stop()

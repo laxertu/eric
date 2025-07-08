@@ -1,6 +1,7 @@
 import asyncio
 import json
 import signal
+
 from asyncio import StreamReader, StreamWriter, start_unix_server
 from asyncio.exceptions import CancelledError
 from os import linesep
@@ -11,7 +12,7 @@ from eric_sse import get_logger
 from eric_sse.message import MessageContract, Message
 from eric_sse.exception import InvalidChannelException, InvalidMessageFormat
 from eric_sse.prefabs import SSEChannel
-from eric_sse.repository import AbstractMessageQueueRepository
+from eric_sse.connection import AbstractConnectionRepository
 
 logger = get_logger()
 
@@ -22,8 +23,8 @@ class SSEChannelContainer:
     def __init__(self):
         self.__channels: dict[str: SSEChannel] = {}
 
-    def add(self, queues_repository: AbstractMessageQueueRepository | None = None) -> SSEChannel:
-        channel = SSEChannel(queues_repository=queues_repository)
+    def add(self, queues_repository: AbstractConnectionRepository | None = None) -> SSEChannel:
+        channel = SSEChannel(connections_repository=queues_repository)
         if channel.id in self.__channels:
             raise InvalidChannelException(f'Channel with id {channel.id} already exists')
         self.__channels[channel.id] = channel
@@ -120,7 +121,7 @@ class SocketServer:
         logger.info(f'received command {verb}')
 
         if verb == 'd':
-            await SocketServer.cc.get(channel_id).dispatch(receiver_id, message)
+            SocketServer.cc.get(channel_id).dispatch(receiver_id, message)
             yield SocketServer.ACK
 
         elif verb == 'c':
@@ -128,15 +129,15 @@ class SocketServer:
             yield channel.id
 
         elif verb == 'b':
-            await SocketServer.cc.get(channel_id).broadcast(message)
+            SocketServer.cc.get(channel_id).broadcast(message)
             yield SocketServer.ACK
 
         elif verb == 'r':
-            l = await SocketServer.cc.get(channel_id).add_listener()
+            l = SocketServer.cc.get(channel_id).add_listener()
             yield l.id
 
         elif verb == 'rl':
-            await SocketServer.cc.get(channel_id).remove_listener(listener_id=receiver_id)
+            SocketServer.cc.get(channel_id).remove_listener(listener_id=receiver_id)
             yield SocketServer.ACK
 
         elif verb == 'rc':
@@ -147,7 +148,7 @@ class SocketServer:
             logger.info(f"Started listener {receiver_id} on {channel_id}")
             channel = SocketServer.cc.get(channel_id)
             listener = channel.get_listener(receiver_id)
-            await listener.start()
+            listener.start()
             async for m in channel.message_stream(listener):
                 yield f'{json.dumps(m)}{linesep}'
 
@@ -167,6 +168,7 @@ class SocketServer:
         logger.info("done")
 
     async def main(self):
+        """Starts the server"""
         server = await start_unix_server(SocketServer.connect_callback, path=Path(self.__file_descriptor_path))
         self.__unix_server = server
         addr = server.sockets[0].getsockname()
@@ -179,7 +181,11 @@ class SocketServer:
 
     @staticmethod
     def start(file_descriptor_path: str):
-        """Shortcut to start a server"""
+        """
+        Shortcut to start a server given a file descriptor path
+
+        :param file_descriptor_path: file descriptor path, all understood by `Path <https://docs.python.org/3/library/pathlib.html#pathlib.Path>`_ is fine
+        """
         logger.info('starting')
         try:
             server = SocketServer(file_descriptor_path)
