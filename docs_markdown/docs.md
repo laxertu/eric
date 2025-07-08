@@ -982,7 +982,7 @@ Wraps a listener to benchmark its on_message method.
 
 <a id="eric_sse.benchmark.ListenerWrapper.on_message"></a>
 
-#### on_message(msg)
+#### *async* on_message(msg)
 
 Performs on_message benchmarking
 
@@ -1008,7 +1008,7 @@ Wraps a channel to benchmark its process_queue method.
 
 <a id="eric_sse.benchmark.DataProcessingChannelBenchMark.add_listener"></a>
 
-#### add_listener(listener)
+#### *async* add_listener(listener)
 
 Adds a listener to the channel after having wrapped it
 
