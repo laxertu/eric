@@ -1,4 +1,5 @@
-from concurrent.futures import ThreadPoolExecutor, Executor, as_completed
+from asyncio import create_task, gather
+from concurrent.futures import ThreadPoolExecutor, Executor
 from typing import Callable, AsyncIterable
 from eric_sse import get_logger
 from eric_sse.entities import AbstractChannel
@@ -83,14 +84,13 @@ class DataProcessingChannel(AbstractChannel):
             while there_are_pending_messages:
                 try:
                     msg = await self._get_queue(listener_id=listener.id).pop()
-                    tasks.append(e.submit(self._invoke_callback_and_return, callback=listener.on_message, msg=msg))
+                    tasks.append(create_task(self._invoke_callback_and_return(callback=listener.on_message, msg=msg)))
 
                 except NoMessagesException:
                     there_are_pending_messages = False
 
-            for task_done in as_completed(tasks):
-                result = await task_done.result()
-                yield self.adapt(result)
+            for processed_message in await gather(*tasks):
+                yield self.adapt(processed_message)
 
 
     @staticmethod
