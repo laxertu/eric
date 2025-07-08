@@ -19,14 +19,14 @@ logger = get_logger()
 class Producer:
 
     @staticmethod
-    def produce_num(c: DataProcessingChannel, l: MessageQueueListener, num: int):
+    async def produce_num(c: DataProcessingChannel, l: MessageQueueListener, num: int):
         for i in range(0, num):
-            c.dispatch(l.id, SignedMessage(msg_type='counter', msg_payload=i, sender_id='producer'))
-        c.dispatch(l.id, SignedMessage(msg_type=MESSAGE_TYPE_CLOSED, sender_id='producer'))
+            await c.dispatch(l.id, SignedMessage(msg_type='counter', msg_payload=i, sender_id='producer'))
+        await c.dispatch(l.id, SignedMessage(msg_type=MESSAGE_TYPE_CLOSED, sender_id='producer'))
 
 
 class Consumer(MessageQueueListener):
-    def on_message(self, msg: SignedMessage) -> None:
+    async def on_message(self, msg: SignedMessage) -> None:
         sleep(uniform(0, 1))
         logger.info(f"Received {msg.type}: {msg.payload}")
 
@@ -43,9 +43,9 @@ async def main():
 
 
     listener = Consumer()
-    channel.register_listener(listener)
+    await channel.register_listener(listener)
 
-    Producer.produce_num(c=channel, l=listener, num=20)
+    await Producer.produce_num(c=channel, l=listener, num=20)
 
     await listener.start()
     async for m in channel.process_queue(listener):

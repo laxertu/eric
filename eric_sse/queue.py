@@ -28,11 +28,11 @@ class Queue(ABC):
 class InMemoryQueue(Queue):
     def __init__(self):
         self.__messages: list[MessageContract] = []
+        self.__lock = Lock()
 
     async def pop(self) -> MessageContract:
         try:
-            lock = Lock()
-            async with lock:
+            async with self.__lock:
                 m = self.__messages.pop(0)
                 return m
         except IndexError:
@@ -42,6 +42,7 @@ class InMemoryQueue(Queue):
         self.__messages.append(message)
 
     async def delete(self) -> None:
-        self.__messages = []
+        async with self.__lock:
+            self.__messages = []
 
 

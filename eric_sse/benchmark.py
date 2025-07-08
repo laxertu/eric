@@ -14,10 +14,10 @@ class ListenerWrapper(MessageQueueListener):
         super().__init__()
         self.listener = listener
 
-    def on_message(self, msg: MessageContract) -> None:
+    async def on_message(self, msg: MessageContract) -> None:
         """Performs on_message benchmarking"""
         start = time.time()
-        self.listener.on_message(msg)
+        await self.listener.on_message(msg)
         logger.info(f"[BENCHMARK][MESSAGE] processing time: {time.time() - start}")
 
 
@@ -27,10 +27,10 @@ class DataProcessingChannelBenchMark:
         """Wraps a channel to benchmark its process_queue method."""
         self.channel = channel
 
-    def add_listener(self, listener: MessageQueueListener) -> ListenerWrapper:
+    async def add_listener(self, listener: MessageQueueListener) -> ListenerWrapper:
         """Adds a listener to the channel after having wrapped it"""
         wrapper = ListenerWrapper(listener)
-        self.channel.register_listener(wrapper)
+        await self.channel.register_listener(wrapper)
         return wrapper
 
     async def run(self, listener: ListenerWrapper):

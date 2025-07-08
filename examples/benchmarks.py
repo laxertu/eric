@@ -1,7 +1,6 @@
 import sys, asyncio
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from random import uniform
-from time import sleep
 
 from eric_sse.entities import Message
 from eric_sse.listener import MessageQueueListener
@@ -12,12 +11,12 @@ from eric_sse import get_logger
 logger = get_logger()
 
 class IOBoundProcessListener(MessageQueueListener):
-    def on_message(self, msg: Message) -> None:
-        sleep(0.2)
+    async def on_message(self, msg: Message) -> None:
+        await asyncio.sleep(0.2)
         logger.debug(f"Received {msg.type}: {msg.payload}")
 
 class CPUBoundProcessListener(MessageQueueListener):
-    def on_message(self, msg: Message) -> None:
+    async def on_message(self, msg: Message) -> None:
         for i in range(0, 1000):
             x = uniform(0, 1)
 
@@ -40,10 +39,10 @@ async def do_benchmark(channel: DataProcessingChannel, listener: MessageQueueLis
 
 
     benchmark = DataProcessingChannelBenchMark(channel)
-    wrapped_listener = benchmark.add_listener(listener=listener)
+    wrapped_listener = await benchmark.add_listener(listener=listener)
 
     for _ in range(num_messages):
-        channel.dispatch(wrapped_listener.id, Message(msg_type='test'))
+        await channel.dispatch(wrapped_listener.id, Message(msg_type='test'))
 
     await benchmark.run(wrapped_listener)
 
