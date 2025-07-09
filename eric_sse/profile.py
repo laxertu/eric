@@ -21,7 +21,7 @@ class ListenerWrapper(MessageQueueListener):
         logger.info(f"[BENCHMARK][MESSAGE] processing time: {time.time() - start}")
 
 
-class DataProcessingChannelBenchMark:
+class DataProcessingChannelProfiler:
 
     def __init__(self, channel: DataProcessingChannel):
         """Wraps a channel to benchmark its process_queue method."""

@@ -76,9 +76,9 @@ Exceptions
 .. automodule:: eric_sse.exception
     :members:
 
-Benchmarking tools
+Profiling tools
 ==================
-.. automodule:: eric_sse.benchmark
+.. automodule:: eric_sse.profile
     :members:
     :undoc-members:
     :member-order: bysource

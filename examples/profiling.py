@@ -5,7 +5,7 @@ from random import uniform
 from eric_sse.entities import Message
 from eric_sse.listener import MessageQueueListener
 from eric_sse.prefabs import DataProcessingChannel
-from eric_sse.profile import DataProcessingChannelBenchMark
+from eric_sse.profile import DataProcessingChannelProfiler
 
 from eric_sse import get_logger
 logger = get_logger()
@@ -38,7 +38,7 @@ except (IndexError, ValueError):
 async def do_benchmark(channel: DataProcessingChannel, listener: MessageQueueListener):
 
 
-    benchmark = DataProcessingChannelBenchMark(channel)
+    benchmark = DataProcessingChannelProfiler(channel)
     wrapped_listener = await benchmark.add_listener(listener=listener)
 
     for _ in range(num_messages):

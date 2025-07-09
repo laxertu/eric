@@ -933,13 +933,13 @@ Raised when an unexpected error occurs while trying to fetch messages from a que
 Concrete implementations of `Queue` should wrap here the unexpected exceptions they catch before raising, and
 an [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessagesException) when a pop is requested on an empty queue.
 
-<a id="module-eric_sse.benchmark"></a>
+<a id="module-eric_sse.profile"></a>
 
-<a id="benchmarking-tools"></a>
+<a id="profiling-tools"></a>
 
-# Benchmarking tools
+# Profiling tools
 
-<a id="eric_sse.benchmark.ListenerWrapper"></a>
+<a id="eric_sse.profile.ListenerWrapper"></a>
 
 ### *class* ListenerWrapper
 
@@ -947,14 +947,14 @@ Bases: [`MessageQueueListener`](#eric_sse.listener.MessageQueueListener)
 
 Wraps a listener to benchmark its on_message method.
 
-<a id="eric_sse.benchmark.ListenerWrapper.__init__"></a>
+<a id="eric_sse.profile.ListenerWrapper.__init__"></a>
 
 #### \_\_init_\_(listener)
 
 * **Parameters:**
   **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
 
-<a id="eric_sse.benchmark.ListenerWrapper.on_message"></a>
+<a id="eric_sse.profile.ListenerWrapper.on_message"></a>
 
 #### *async* on_message(msg)
 
@@ -965,13 +965,13 @@ Performs on_message benchmarking
 * **Return type:**
   None
 
-<a id="eric_sse.benchmark.DataProcessingChannelBenchMark"></a>
+<a id="eric_sse.profile.DataProcessingChannelProfiler"></a>
 
-### *class* DataProcessingChannelBenchMark
+### *class* DataProcessingChannelProfiler
 
 Bases: `object`
 
-<a id="eric_sse.benchmark.DataProcessingChannelBenchMark.__init__"></a>
+<a id="eric_sse.profile.DataProcessingChannelProfiler.__init__"></a>
 
 #### \_\_init_\_(channel)
 
@@ -980,7 +980,7 @@ Wraps a channel to benchmark its process_queue method.
 * **Parameters:**
   **channel** ([*DataProcessingChannel*](#eric_sse.prefabs.DataProcessingChannel))
 
-<a id="eric_sse.benchmark.DataProcessingChannelBenchMark.add_listener"></a>
+<a id="eric_sse.profile.DataProcessingChannelProfiler.add_listener"></a>
 
 #### *async* add_listener(listener)
 
@@ -989,13 +989,13 @@ Adds a listener to the channel after having wrapped it
 * **Parameters:**
   **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
 * **Return type:**
-  [*ListenerWrapper*](#eric_sse.benchmark.ListenerWrapper)
+  [*ListenerWrapper*](#eric_sse.profile.ListenerWrapper)
 
-<a id="eric_sse.benchmark.DataProcessingChannelBenchMark.run"></a>
+<a id="eric_sse.profile.DataProcessingChannelProfiler.run"></a>
 
 #### *async* run(listener)
 
 Runs benchmark
 
 * **Parameters:**
-  **listener** ([*ListenerWrapper*](#eric_sse.benchmark.ListenerWrapper))
+  **listener** ([*ListenerWrapper*](#eric_sse.profile.ListenerWrapper))
