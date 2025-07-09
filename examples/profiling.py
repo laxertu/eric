@@ -5,7 +5,7 @@ from random import uniform
 from eric_sse.entities import Message
 from eric_sse.listener import MessageQueueListener
 from eric_sse.prefabs import DataProcessingChannel
-from eric_sse.benchmark import DataProcessingChannelBenchMark
+from eric_sse.profile import DataProcessingChannelBenchMark
 
 from eric_sse import get_logger
 logger = get_logger()
