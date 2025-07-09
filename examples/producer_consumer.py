@@ -10,6 +10,7 @@ from eric_sse.message import SignedMessage
 from eric_sse.prefabs import DataProcessingChannel
 from eric_sse.repository import AbstractMessageQueueRepository
 
+# TODO support to these parameters
 arguments_parser = ArgumentParser()
 arguments_parser.add_argument('-b', choices=['r', 'i'], default='i', help='Backend to use. "r" = redis, "i" = in memory')
 cli_arguments = arguments_parser.parse_args()
