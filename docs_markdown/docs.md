@@ -945,7 +945,7 @@ an [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessagesExce
 
 Bases: [`MessageQueueListener`](#eric_sse.listener.MessageQueueListener)
 
-Wraps a listener to benchmark its on_message method.
+Wraps a listener to profile its on_message method.
 
 <a id="eric_sse.profile.ListenerWrapper.__init__"></a>
 
@@ -958,7 +958,7 @@ Wraps a listener to benchmark its on_message method.
 
 #### *async* on_message(msg)
 
-Performs on_message benchmarking
+Performs on_message profiling
 
 * **Parameters:**
   **msg** ([*MessageContract*](#eric_sse.message.MessageContract))
@@ -975,7 +975,7 @@ Bases: `object`
 
 #### \_\_init_\_(channel)
 
-Wraps a channel to benchmark its process_queue method.
+Wraps a channel to profile its process_queue method.
 
 * **Parameters:**
   **channel** ([*DataProcessingChannel*](#eric_sse.prefabs.DataProcessingChannel))
@@ -995,7 +995,7 @@ Adds a listener to the channel after having wrapped it
 
 #### *async* run(listener)
 
-Runs benchmark
+Runs profile
 
 * **Parameters:**
   **listener** ([*ListenerWrapper*](#eric_sse.profile.ListenerWrapper))

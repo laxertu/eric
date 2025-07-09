@@ -1613,7 +1613,7 @@ an <a class="reference internal" href="#eric_sse.exception.NoMessagesException" 
 <dt class="sig sig-object py" id="eric_sse.profile.ListenerWrapper">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ListenerWrapper</span></span><a class="headerlink" href="#eric_sse.profile.ListenerWrapper" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a></p>
-<p>Wraps a listener to benchmark its on_message method.</p>
+<p>Wraps a listener to profile its on_message method.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.profile.ListenerWrapper.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.profile.ListenerWrapper.__init__" title="Link to this definition">#</a></dt>
@@ -1627,7 +1627,7 @@ an <a class="reference internal" href="#eric_sse.exception.NoMessagesException" 
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.profile.ListenerWrapper.on_message">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.profile.ListenerWrapper.on_message" title="Link to this definition">#</a></dt>
-<dd><p>Performs on_message benchmarking</p>
+<dd><p>Performs on_message profiling</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>msg</strong> (<a class="reference internal" href="#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>)</p>
@@ -1647,7 +1647,7 @@ an <a class="reference internal" href="#eric_sse.exception.NoMessagesException" 
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.profile.DataProcessingChannelProfiler.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.profile.DataProcessingChannelProfiler.__init__" title="Link to this definition">#</a></dt>
-<dd><p>Wraps a channel to benchmark its process_queue method.</p>
+<dd><p>Wraps a channel to profile its process_queue method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>channel</strong> (<a class="reference internal" href="#eric_sse.prefabs.DataProcessingChannel" title="eric_sse.prefabs.DataProcessingChannel"><em>DataProcessingChannel</em></a>)</p>
@@ -1672,7 +1672,7 @@ an <a class="reference internal" href="#eric_sse.exception.NoMessagesException" 
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.profile.DataProcessingChannelProfiler.run">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.profile.DataProcessingChannelProfiler.run" title="Link to this definition">#</a></dt>
-<dd><p>Runs benchmark</p>
+<dd><p>Runs profile</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>listener</strong> (<a class="reference internal" href="#eric_sse.profile.ListenerWrapper" title="eric_sse.profile.ListenerWrapper"><em>ListenerWrapper</em></a>)</p>

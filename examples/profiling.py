@@ -35,16 +35,16 @@ except (IndexError, ValueError):
     num_messages = 50
 
 
-async def do_benchmark(channel: DataProcessingChannel, listener: MessageQueueListener):
+async def do_profile(channel: DataProcessingChannel, listener: MessageQueueListener):
 
 
-    benchmark = DataProcessingChannelProfiler(channel)
-    wrapped_listener = await benchmark.add_listener(listener=listener)
+    profile = DataProcessingChannelProfiler(channel)
+    wrapped_listener = await profile.add_listener(listener=listener)
 
     for _ in range(num_messages):
         await channel.dispatch(wrapped_listener.id, Message(msg_type='test'))
 
-    await benchmark.run(wrapped_listener)
+    await profile.run(wrapped_listener)
 
 async def main():
 
@@ -58,6 +58,6 @@ async def main():
     for listener in [io_bound_listener, cpu_bound_listener]:
         for channel in [threaded_channel, process_channel]:
             print(f'Launching benchmark of {num_messages} messages and max_workers: {max_workers} {channel.executor_class} {type(listener)}')
-            await do_benchmark(channel=channel, listener=listener)
+            await do_profile(channel=channel, listener=listener)
 
 asyncio.run(main())
