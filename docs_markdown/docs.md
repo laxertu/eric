@@ -494,6 +494,10 @@ Bases: [`MessageQueueListener`](#eric_sse.listener.MessageQueueListener)
 
 Listener for distributed applications
 
+As listener is registered to channel at init time, you have to await object construction itself:
+
+my_listener = await(SimpleDistributedApplicationListener(my_channel))
+
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.__init__"></a>
 
 #### \_\_init_\_(channel)
