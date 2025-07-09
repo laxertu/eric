@@ -24,7 +24,7 @@ class DistributedListenerTestCase(IsolatedAsyncioTestCase):
 
     @staticmethod
     async def create_listener(ch: SSEChannel):
-        l = SimpleDistributedApplicationListener(ch)
+        l = await SimpleDistributedApplicationListener(ch)
         l.set_action('hello', hello_response)
         l.set_action('hello_ack', hello_ack_response)
         l.start_sync()

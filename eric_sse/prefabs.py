@@ -1,3 +1,4 @@
+import asyncio
 from asyncio import create_task, gather
 from concurrent.futures import ThreadPoolExecutor, Executor
 from typing import Callable, AsyncIterable
@@ -113,10 +114,15 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         self.__actions: dict[str, Callable[[MessageContract], list[MessageContract]]] = dict()
         self.__internal_actions: dict[str, Callable[[], None]] = {
             'start': self.start_sync,
-            'stop': self.stop_sync,
-            'remove': self.remove_sync
+            'stop': self.stop_sync
         }
 
+    def __await__(self):
+        async def closure():
+            await self.__channel.register_listener(self)
+            return self
+
+        return closure().__await__()
 
     def set_action(self, name: str, action: Callable[[MessageContract], list[MessageContract]]):
         """
@@ -126,7 +132,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
 
         They should return a list of Messages corresponding to response to action requested.
 
-        Reserved actions are 'start', 'stop', 'remove'.
+        Reserved actions are 'start', 'stop'.
         Receiving a message with one of these types will fire corresponding action.
 
         """
@@ -136,7 +142,8 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
 
     async def dispatch_to(self, receiver: MessageQueueListener, msg: MessageContract):
         signed_message = SignedMessage(sender_id=self.id, msg_type=msg.type, msg_payload=msg.payload)
-        await self.__channel.dispatch(receiver.id, signed_message)
+        channel = self.__channel
+        await channel.dispatch(receiver.id, signed_message)
 
     async def on_message(self, msg: SignedMessage) -> None:
         """Executes action corresponding to message's type"""
@@ -150,11 +157,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
             msgs = self.__actions[msg.type](msg)
             for response in msgs:
                 signed_response = SignedMessage(sender_id=self.id, msg_type=response.type, msg_payload=response.payload)
-                await self.__channel.dispatch(msg.sender_id, signed_response)
+                channel = self.__channel
+                await channel.dispatch(msg.sender_id, signed_response)
         except KeyError:
             logger.debug(f'Unknown action {msg.type}')
-
-    def remove_sync(self):
-        """Stop and unregister"""
-        self.stop_sync()
-        self.__channel.remove_listener(self.id)

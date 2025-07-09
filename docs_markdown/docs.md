@@ -511,7 +511,7 @@ Callables are selected when listener processes the message depending on its type
 
 They should return a list of Messages corresponding to response to action requested.
 
-Reserved actions are ‘start’, ‘stop’, ‘remove’.
+Reserved actions are ‘start’, ‘stop’.
 Receiving a message with one of these types will fire corresponding action.
 
 * **Parameters:**
@@ -536,12 +536,6 @@ Executes action corresponding to message’s type
   **msg** ([*SignedMessage*](#eric_sse.message.SignedMessage))
 * **Return type:**
   None
-
-<a id="eric_sse.prefabs.SimpleDistributedApplicationListener.remove_sync"></a>
-
-#### remove_sync()
-
-Stop and unregister
 
 <a id="module-eric_sse.servers"></a>
 

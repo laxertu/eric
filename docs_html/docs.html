@@ -391,7 +391,6 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.set_action"><code class="docutils literal notranslate"><span class="pre">set_action()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.dispatch_to"><code class="docutils literal notranslate"><span class="pre">dispatch_to()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"><code class="docutils literal notranslate"><span class="pre">on_message()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.remove_sync"><code class="docutils literal notranslate"><span class="pre">remove_sync()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -1096,7 +1095,7 @@ Just override <strong>adapt</strong> method to control output returned to client
 <dd><p>Hooks a callable to a string key.</p>
 <p>Callables are selected when listener processes the message depending on its type.</p>
 <p>They should return a list of Messages corresponding to response to action requested.</p>
-<p>Reserved actions are ‘start’, ‘stop’, ‘remove’.
+<p>Reserved actions are ‘start’, ‘stop’.
 Receiving a message with one of these types will fire corresponding action.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1133,12 +1132,6 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <dd class="field-even"><p>None</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eric_sse.prefabs.SimpleDistributedApplicationListener.remove_sync">
-<span class="sig-name descname"><span class="pre">remove_sync</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.remove_sync" title="Link to this definition">#</a></dt>
-<dd><p>Stop and unregister</p>
 </dd></dl>
 
 </dd></dl>
@@ -1855,7 +1848,6 @@ an <a class="reference internal" href="#eric_sse.exception.NoMessagesException" 
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.set_action"><code class="docutils literal notranslate"><span class="pre">set_action()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.dispatch_to"><code class="docutils literal notranslate"><span class="pre">dispatch_to()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"><code class="docutils literal notranslate"><span class="pre">on_message()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.remove_sync"><code class="docutils literal notranslate"><span class="pre">remove_sync()</span></code></a></li>
 </ul>
 </li>
 </ul>
