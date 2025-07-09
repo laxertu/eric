@@ -1,4 +1,3 @@
-import asyncio
 from asyncio import create_task, gather
 from concurrent.futures import ThreadPoolExecutor, Executor
 from typing import Callable, AsyncIterable

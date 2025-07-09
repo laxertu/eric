@@ -336,42 +336,21 @@ Optionally you can override on_message method if you need to inject code at mess
 
 <a id="eric_sse.listener.MessageQueueListener.start"></a>
 
-#### *async* start()
-
-* **Return type:**
-  None
-
-<a id="eric_sse.listener.MessageQueueListener.start_sync"></a>
-
-#### start_sync()
+#### start()
 
 * **Return type:**
   None
 
 <a id="eric_sse.listener.MessageQueueListener.is_running"></a>
 
-#### *async* is_running()
-
-* **Return type:**
-  bool
-
-<a id="eric_sse.listener.MessageQueueListener.is_running_sync"></a>
-
-#### is_running_sync()
+#### is_running()
 
 * **Return type:**
   bool
 
 <a id="eric_sse.listener.MessageQueueListener.stop"></a>
 
-#### *async* stop()
-
-* **Return type:**
-  None
-
-<a id="eric_sse.listener.MessageQueueListener.stop_sync"></a>
-
-#### stop_sync()
+#### stop()
 
 * **Return type:**
   None
