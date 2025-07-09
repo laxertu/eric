@@ -147,7 +147,7 @@ class SocketServer:
             logger.info(f"Started listener {receiver_id} on {channel_id}")
             channel = SocketServer.cc.get(channel_id)
             listener = channel.get_listener(receiver_id)
-            await listener.start()
+            listener.start()
             async for m in channel.message_stream(listener):
                 yield f'{json.dumps(m)}{linesep}'
 

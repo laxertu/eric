@@ -119,8 +119,8 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         self.__channel = channel
         self.__actions: dict[str, Callable[[MessageContract], list[MessageContract]]] = dict()
         self.__internal_actions: dict[str, Callable[[], None]] = {
-            'start': self.start_sync,
-            'stop': self.stop_sync
+            'start': self.start,
+            'stop': self.stop
         }
 
     def __await__(self):

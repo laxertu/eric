@@ -18,4 +18,4 @@ class MessageQueueListenerMock(MessageQueueListener):
             assert msg.payload == self.fixtures[self.num_received].payload
 
         if self.num_received >= self.disconnect_after:
-            self.stop_sync()
+            self.stop()

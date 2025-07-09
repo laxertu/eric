@@ -39,7 +39,7 @@ async def create_listener(ch: SSEChannel):
     l.set_action('hello', hello_response)
     l.set_action('hello_ack', hello_ack_response)
     l.set_action('bye', bye_handler)
-    l.start_sync()
+    l.start()
     # TODO automatic register
     #await ch.register_listener(l)
     return l

@@ -109,7 +109,7 @@ class AbstractChannel(ABC):
         Raises a NoMessagesException if queue is empty
         """
         listener = self.get_listener(listener_id)
-        if listener.is_running_sync():
+        if listener.is_running():
             queue = self.__connection_manager.get_queue(listener.id)
             msg = await queue.pop()
             await listener.on_message(msg)
@@ -157,7 +157,7 @@ class AbstractChannel(ABC):
 
             while True:
                 # If client closes connection, stop sending events
-                if not await listener.is_running():
+                if not listener.is_running():
                     logger.debug("Listener stopped. Exiting")
                     break
 
@@ -179,5 +179,5 @@ class AbstractChannel(ABC):
     async def watch(self) -> AsyncIterable[Any]:
         # TODO tests
         listener = await self.add_listener()
-        listener.start_sync()
+        listener.start()
         return self.message_stream(listener)
