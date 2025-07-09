@@ -17,7 +17,7 @@ class IOBoundProcessListener(MessageQueueListener):
 
 class CPUBoundProcessListener(MessageQueueListener):
     async def on_message(self, msg: Message) -> None:
-        for i in range(0, 1000):
+        for i in range(0, 100):
             x = uniform(0, 1)
 
             for j in range(0, 100):

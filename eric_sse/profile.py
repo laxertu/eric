@@ -10,15 +10,18 @@ logger = get_logger()
 class ListenerWrapper(MessageQueueListener):
     """Wraps a listener to profile its on_message method."""
 
-    def __init__(self, listener: MessageQueueListener):
+    def __init__(self, listener: MessageQueueListener, profile_messages: bool = False):
         super().__init__()
         self.listener = listener
+        self.profile_messages = profile_messages
 
     async def on_message(self, msg: MessageContract) -> None:
         """Performs on_message profiling"""
         start = time.time()
         await self.listener.on_message(msg)
-        logger.info(f"[PROFILER][MESSAGE] processing time: {time.time() - start}")
+
+        if self.profile_messages:
+            logger.info(f"[PROFILER][MESSAGE] processing time: {time.time() - start}")
 
 
 class DataProcessingChannelProfiler:
