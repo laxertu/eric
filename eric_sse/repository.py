@@ -15,19 +15,14 @@ class AbstractMessageQueueRepository(ABC):
         ...
 
     @abstractmethod
-    async def persist(self, listeners: list[MessageQueueListener], queues: dict[str, Queue]) -> None:
-        """
-        :param listeners: listeners to persist
-        :param queues: queues to persist. A dictionary where keys are correspondant listeners ids and values are Queue
-
-        * If some key of queues do not match with some listener in listeners, then they will be created. see create() method
-
-        * If some listeners in listeners do not match with some queues, then they will *not* be persisted
-        """
+    async def persist(self, listener: MessageQueueListener, queue: Queue) -> None:
         ...
 
     @abstractmethod
-    async def load(self) -> (list[MessageQueueListener], dict[str: Queue]):
+    async def load(self) -> (list[MessageQueueListener], dict[str, Queue]):
+        """
+        Returns a list of persisted listeners and a dictionary of queues indexed by the ids of those listeners
+        """
         ...
 
     @abstractmethod

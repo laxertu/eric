@@ -105,15 +105,15 @@ class DataProcessingChannel(AbstractChannel):
         }
 
 class SimpleDistributedApplicationListener(MessageQueueListener):
-    """
-    Listener for distributed applications
-
-    As listener is registered to channel at init time, you have to await object construction itself:
-
-    my_listener = await(SimpleDistributedApplicationListener(my_channel))
-    """
+    """Listener for distributed applications"""
 
     def __init__(self, channel: AbstractChannel):
+        """
+        As listener is registered to channel at init time, you have to await object construction itself:
+
+            my_listener = **await** SimpleDistributedApplicationListener(my_channel)
+
+        """
         super().__init__()
         self.__channel = channel
         self.__actions: dict[str, Callable[[MessageContract], list[MessageContract]]] = dict()

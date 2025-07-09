@@ -473,14 +473,13 @@ Bases: [`MessageQueueListener`](#eric_sse.listener.MessageQueueListener)
 
 Listener for distributed applications
 
-As listener is registered to channel at init time, you have to await object construction itself:
-
-my_listener = await(SimpleDistributedApplicationListener(my_channel))
-
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.__init__"></a>
 
 #### \_\_init_\_(channel)
 
+As listener is registered to channel at init time, you have to await object construction itself:
+
+> my_listener = **await** SimpleDistributedApplicationListener(my_channel)
 * **Parameters:**
   **channel** ([*AbstractChannel*](#eric_sse.entities.AbstractChannel))
 
@@ -832,23 +831,22 @@ see [`eric_sse.entities.AbstractChannel`](#eric_sse.entities.AbstractChannel)
 
 <a id="eric_sse.repository.AbstractMessageQueueRepository.persist"></a>
 
-#### *abstract async* persist(listeners, queues)
+#### *abstract async* persist(listener, queue)
 
 * **Parameters:**
-  * **listeners** (*list* *[*[*MessageQueueListener*](#eric_sse.listener.MessageQueueListener) *]*) – listeners to persist
-  * **queues** (*dict* *[**str* *,* [*Queue*](#eric_sse.queue.Queue) *]*) – queues to persist. A dictionary where keys are correspondant listeners ids and values are Queue
+  * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
+  * **queue** ([*Queue*](#eric_sse.queue.Queue))
 * **Return type:**
   None
-
-* If some key of queues do not match with some listener in listeners, then they will be created. see create() method
-* If some listeners in listeners do not match with some queues, then they will *not* be persisted
 
 <a id="eric_sse.repository.AbstractMessageQueueRepository.load"></a>
 
 #### *abstract async* load()
 
+Returns a list of persisted listeners and a dictionary of queues indexed by the ids of those listeners
+
 * **Return type:**
-  (list[[eric_sse.listener.MessageQueueListener](#eric_sse.listener.MessageQueueListener)], dict[slice(<class ‘str’>, <class ‘eric_sse.queue.Queue’>, None)])
+  (list[[eric_sse.listener.MessageQueueListener](#eric_sse.listener.MessageQueueListener)], dict[str, [eric_sse.queue.Queue](#eric_sse.queue.Queue)])
 
 <a id="eric_sse.repository.AbstractMessageQueueRepository.delete"></a>
 
@@ -879,17 +877,16 @@ Default implementation used by [`eric_sse.entities.AbstractChannel`](#eric_sse.e
 #### *async* persist(listeners, queues)
 
 * **Parameters:**
-  * **listeners** (*list* *[*[*MessageQueueListener*](#eric_sse.listener.MessageQueueListener) *]*) – listeners to persist
-  * **queues** (*dict* *[**str* *,* [*Queue*](#eric_sse.queue.Queue) *]*) – queues to persist. A dictionary where keys are correspondant listeners ids and values are Queue
+  * **listeners** (*list* *[*[*MessageQueueListener*](#eric_sse.listener.MessageQueueListener) *]*)
+  * **queues** (*dict* *[**str* *,* [*Queue*](#eric_sse.queue.Queue) *]*)
 * **Return type:**
   None
-
-* If some key of queues do not match with some listener in listeners, then they will be created. see create() method
-* If some listeners in listeners do not match with some queues, then they will *not* be persisted
 
 <a id="eric_sse.repository.InMemoryMessageQueueRepository.load"></a>
 
 #### *async* load()
+
+Returns a list of persisted listeners and a dictionary of queues indexed by the ids of those listeners
 
 * **Return type:**
   (list[[eric_sse.listener.MessageQueueListener](#eric_sse.listener.MessageQueueListener)], dict[slice(<class ‘str’>, <class ‘eric_sse.queue.Queue’>, None)])

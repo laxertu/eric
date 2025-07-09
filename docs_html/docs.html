@@ -1046,12 +1046,14 @@ Just override <strong>adapt</strong> method to control output returned to client
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SimpleDistributedApplicationListener</span></span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationListener" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a></p>
 <p>Listener for distributed applications</p>
-<p>As listener is registered to channel at init time, you have to await object construction itself:</p>
-<p>my_listener = await(SimpleDistributedApplicationListener(my_channel))</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.prefabs.SimpleDistributedApplicationListener.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.__init__" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>As listener is registered to channel at init time, you have to await object construction itself:</p>
+<blockquote>
+<div><p>my_listener = <strong>await</strong> SimpleDistributedApplicationListener(my_channel)</p>
+</div></blockquote>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>channel</strong> (<a class="reference internal" href="#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a>)</p>
 </dd>
@@ -1475,30 +1477,27 @@ Receiving a message with one of these types will fire corresponding action.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.repository.AbstractMessageQueueRepository.persist">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">persist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listeners</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queues</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.AbstractMessageQueueRepository.persist" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">persist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.AbstractMessageQueueRepository.persist" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>listeners</strong> (<em>list</em><em>[</em><a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a><em>]</em>) – listeners to persist</p></li>
-<li><p><strong>queues</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="#eric_sse.queue.Queue" title="eric_sse.queue.Queue"><em>Queue</em></a><em>]</em>) – queues to persist. A dictionary where keys are correspondant listeners ids and values are Queue</p></li>
+<li><p><strong>listener</strong> (<a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a>)</p></li>
+<li><p><strong>queue</strong> (<a class="reference internal" href="#eric_sse.queue.Queue" title="eric_sse.queue.Queue"><em>Queue</em></a>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
 </dd>
 </dl>
-<ul class="simple">
-<li><p>If some key of queues do not match with some listener in listeners, then they will be created. see create() method</p></li>
-<li><p>If some listeners in listeners do not match with some queues, then they will <em>not</em> be persisted</p></li>
-</ul>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.repository.AbstractMessageQueueRepository.load">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.AbstractMessageQueueRepository.load" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns a list of persisted listeners and a dictionary of queues indexed by the ids of those listeners</p>
+<dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(list[<a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener">eric_sse.listener.MessageQueueListener</a>], dict[slice(&lt;class ‘str’&gt;, &lt;class ‘eric_sse.queue.Queue’&gt;, None)])</p>
+<dd class="field-odd"><p>(list[<a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener">eric_sse.listener.MessageQueueListener</a>], dict[str, <a class="reference internal" href="#eric_sse.queue.Queue" title="eric_sse.queue.Queue">eric_sse.queue.Queue</a>])</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1539,24 +1538,21 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>listeners</strong> (<em>list</em><em>[</em><a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a><em>]</em>) – listeners to persist</p></li>
-<li><p><strong>queues</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="#eric_sse.queue.Queue" title="eric_sse.queue.Queue"><em>Queue</em></a><em>]</em>) – queues to persist. A dictionary where keys are correspondant listeners ids and values are Queue</p></li>
+<li><p><strong>listeners</strong> (<em>list</em><em>[</em><a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a><em>]</em>)</p></li>
+<li><p><strong>queues</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><a class="reference internal" href="#eric_sse.queue.Queue" title="eric_sse.queue.Queue"><em>Queue</em></a><em>]</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
 </dd>
 </dl>
-<ul class="simple">
-<li><p>If some key of queues do not match with some listener in listeners, then they will be created. see create() method</p></li>
-<li><p>If some listeners in listeners do not match with some queues, then they will <em>not</em> be persisted</p></li>
-</ul>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.repository.InMemoryMessageQueueRepository.load">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.InMemoryMessageQueueRepository.load" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns a list of persisted listeners and a dictionary of queues indexed by the ids of those listeners</p>
+<dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>(list[<a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener">eric_sse.listener.MessageQueueListener</a>], dict[slice(&lt;class ‘str’&gt;, &lt;class ‘eric_sse.queue.Queue’&gt;, None)])</p>
 </dd>

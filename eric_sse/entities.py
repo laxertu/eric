@@ -37,8 +37,7 @@ class ConnectionManager:
         """
         self.__listeners[listener.id] = listener
         self.__queues[listener.id] = await self.__queues_factory.create()
-
-        await self.__queues_factory.persist([listener], {listener.id: self.__queues[listener.id]})
+        await self.__queues_factory.persist(listener, self.__queues[listener.id])
 
     async def remove_listener(self, listener_id: str):
         """
