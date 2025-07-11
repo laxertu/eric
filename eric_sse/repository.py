@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import AsyncIterable, Tuple
 
 from eric_sse.listener import MessageQueueListener
 from eric_sse.queue import Queue, InMemoryQueue
@@ -19,7 +20,7 @@ class AbstractMessageQueueRepository(ABC):
         ...
 
     @abstractmethod
-    async def load(self) -> (list[MessageQueueListener], dict[str, Queue]):
+    async def load(self) -> AsyncIterable[Tuple[MessageQueueListener, Queue]]:
         """
         Returns a list of persisted listeners and a dictionary of queues indexed by the ids of those listeners
         """
@@ -40,8 +41,8 @@ class InMemoryMessageQueueRepository(AbstractMessageQueueRepository):
     async def persist(self, listeners: list[MessageQueueListener], queues: dict[str, Queue]) -> None:
         pass
 
-    async def load(self) -> (list[MessageQueueListener], dict[str: Queue]):
-        return [], {}
+    async def load(self) ->  AsyncIterable[Tuple[MessageQueueListener, Queue]]:
+        pass
 
     async def delete(self, listener_id: str) -> None:
         pass
