@@ -1,11 +1,12 @@
-from asyncio import as_completed as as_completed_future, get_running_loop
+from asyncio import create_task, gather
 from concurrent.futures import ThreadPoolExecutor, Executor
 from typing import Callable, AsyncIterable
 from eric_sse import get_logger
-from eric_sse.entities import AbstractChannel, MessageQueueListener
+from eric_sse.entities import AbstractChannel
+from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
-from eric_sse.queue import AbstractMessageQueueFactory
+from eric_sse.repository import AbstractMessageQueueRepository
 
 logger = get_logger()
 
@@ -19,16 +20,16 @@ class SSEChannel(AbstractChannel):
 
     :param int stream_delay_seconds:
     :param int retry_timeout_milliseconds:
-    :param eric_sse.queue.AbstractMessageQueueFactory queues_factory:
+    :param eric_sse.repository.AbstractMessageQueueRepository queues_repository:
     """
 
     def __init__(
             self,
             stream_delay_seconds: int = 0,
             retry_timeout_milliseconds: int = 5,
-            queues_factory: AbstractMessageQueueFactory = None
+            queues_repository: AbstractMessageQueueRepository = None
     ):
-        super().__init__(stream_delay_seconds=stream_delay_seconds, queues_factory=queues_factory)
+        super().__init__(stream_delay_seconds=stream_delay_seconds, queues_repository=queues_repository)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
 
         self.payload_adapter: (
@@ -79,23 +80,22 @@ class DataProcessingChannel(AbstractChannel):
         with self.executor_class(max_workers=self.max_workers) as e:
             there_are_pending_messages = True
             tasks = []
-            loop = get_running_loop()
+
             while there_are_pending_messages:
                 try:
-                    msg = self._get_queue(listener_id=listener.id).pop()
-                    tasks.append(loop.run_in_executor(e, self._invoke_callback_and_return, listener.on_message, msg))
+                    msg = await self._get_queue(listener_id=listener.id).pop()
+                    tasks.append(create_task(self._invoke_callback_and_return(callback=listener.on_message, msg=msg)))
 
                 except NoMessagesException:
                     there_are_pending_messages = False
 
-            for task_dome in as_completed_future(tasks):
-                task_result = await task_dome
-                yield self.adapt(task_result)
+            for processed_message in await gather(*tasks):
+                yield self.adapt(processed_message)
 
 
     @staticmethod
-    def _invoke_callback_and_return(callback: Callable[[MessageContract], None], msg: MessageContract):
-        callback(msg)
+    async def _invoke_callback_and_return(callback: Callable, msg: MessageContract):
+        await callback(msg)
         return msg
 
     def adapt(self, msg: MessageContract) -> dict:
@@ -104,20 +104,30 @@ class DataProcessingChannel(AbstractChannel):
             "data": msg.payload
         }
 
-
 class SimpleDistributedApplicationListener(MessageQueueListener):
     """Listener for distributed applications"""
 
     def __init__(self, channel: AbstractChannel):
+        """
+        As listener is registered to channel at init time, you have to await object construction itself:
+
+            my_listener = **await** SimpleDistributedApplicationListener(my_channel)
+
+        """
         super().__init__()
         self.__channel = channel
         self.__actions: dict[str, Callable[[MessageContract], list[MessageContract]]] = dict()
         self.__internal_actions: dict[str, Callable[[], None]] = {
-            'start': self.start_sync,
-            'stop': self.stop_sync,
-            'remove': self.remove_sync
+            'start': self.start,
+            'stop': self.stop
         }
-        channel.register_listener(self)
+
+    def __await__(self):
+        async def closure():
+            await self.__channel.register_listener(self)
+            return self
+
+        return closure().__await__()
 
     def set_action(self, name: str, action: Callable[[MessageContract], list[MessageContract]]):
         """
@@ -127,7 +137,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
 
         They should return a list of Messages corresponding to response to action requested.
 
-        Reserved actions are 'start', 'stop', 'remove'.
+        Reserved actions are 'start', 'stop'.
         Receiving a message with one of these types will fire corresponding action.
 
         """
@@ -135,11 +145,12 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
             raise KeyError(f'Trying to set an internal action {action}')
         self.__actions[name] = action
 
-    def dispatch_to(self, receiver: MessageQueueListener, msg: MessageContract):
+    async def dispatch_to(self, receiver: MessageQueueListener, msg: MessageContract):
         signed_message = SignedMessage(sender_id=self.id, msg_type=msg.type, msg_payload=msg.payload)
-        self.__channel.dispatch(receiver.id, signed_message)
+        channel = self.__channel
+        await channel.dispatch(receiver.id, signed_message)
 
-    def on_message(self, msg: SignedMessage) -> None:
+    async def on_message(self, msg: SignedMessage) -> None:
         """Executes action corresponding to message's type"""
         try:
             try:
@@ -151,11 +162,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
             msgs = self.__actions[msg.type](msg)
             for response in msgs:
                 signed_response = SignedMessage(sender_id=self.id, msg_type=response.type, msg_payload=response.payload)
-                self.__channel.dispatch(msg.sender_id, signed_response)
+                channel = self.__channel
+                await channel.dispatch(msg.sender_id, signed_response)
         except KeyError:
             logger.debug(f'Unknown action {msg.type}')
-
-    def remove_sync(self):
-        """Stop and unregister"""
-        self.stop_sync()
-        self.__channel.remove_listener(self.id)
