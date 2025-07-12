@@ -22,7 +22,7 @@ class ConnectionManager:
     def __init__(self, queues_repository: AbstractMessageQueueRepository):
         self.__listeners: dict[str: MessageQueueListener] = {}
         self.__queues: dict[str: Queue] = {}
-        self.__queues_factory = queues_repository
+        self.__queues_repository = queues_repository
 
 
     def add_listener(self) -> MessageQueueListener:
@@ -36,8 +36,8 @@ class ConnectionManager:
         Adds a listener to channel
         """
         self.__listeners[listener.id] = listener
-        self.__queues[listener.id] = await self.__queues_factory.create()
-        await self.__queues_factory.persist(listener, self.__queues[listener.id])
+        self.__queues[listener.id] = await self.__queues_repository.create()
+        await self.__queues_repository.persist(listener, self.__queues[listener.id])
 
     async def remove_listener(self, listener_id: str):
         """
@@ -46,7 +46,7 @@ class ConnectionManager:
         del self.__queues[listener_id]
         del self.__listeners[listener_id]
 
-        await self.__queues_factory.delete(listener_id)
+        await self.__queues_repository.delete(listener_id)
 
     def get_queue(self, listener_id: str) -> Queue:
         try:
