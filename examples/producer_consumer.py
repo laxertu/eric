@@ -32,8 +32,6 @@ class Consumer(MessageQueueListener):
         logger.info(f"Received {msg.type}: {msg.payload}")
 
 class MyChannel(DataProcessingChannel):
-    def _set_queues_repository(self, queues_factory: AbstractMessageQueueRepository):
-        self.__queues_repository = queues_factory
 
     def adapt(self, msg: SignedMessage) -> dict:
         return {'sender_id': msg.sender_id, 'payload': msg.payload}
@@ -48,7 +46,7 @@ async def main():
 
     await Producer.produce_num(c=channel, l=listener, num=20)
 
-    await listener.start()
+    listener.start()
     async for m in channel.process_queue(listener):
         print(m)
 
