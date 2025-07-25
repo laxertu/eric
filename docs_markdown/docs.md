@@ -21,7 +21,7 @@ Bases: `ABC`
 Contract class for messages
 
 A message is just a container of information identified by a type.
-For validation purposes you can override [`eric_sse.entities.MessageQueueListener.on_message`](#eric_sse.entities.MessageQueueListener.on_message)
+For validation purposes you can override `eric_sse.entities.MessageQueueListener.on_message`
 
 <a id="eric_sse.message.MessageContract.type"></a>
 
@@ -137,71 +137,6 @@ Returns the id of the listener that sent the message
 
 # Channels and listeners
 
-<a id="eric_sse.entities.MessageQueueListener"></a>
-
-### *class* MessageQueueListener
-
-Base class for listeners.
-
-Optionally you can override on_message method if you need to inject code at message delivery time.
-
-<a id="eric_sse.entities.MessageQueueListener.__init__"></a>
-
-#### \_\_init_\_()
-
-<a id="eric_sse.entities.MessageQueueListener.start"></a>
-
-#### *async* start()
-
-* **Return type:**
-  None
-
-<a id="eric_sse.entities.MessageQueueListener.start_sync"></a>
-
-#### start_sync()
-
-* **Return type:**
-  None
-
-<a id="eric_sse.entities.MessageQueueListener.is_running"></a>
-
-#### *async* is_running()
-
-* **Return type:**
-  bool
-
-<a id="eric_sse.entities.MessageQueueListener.is_running_sync"></a>
-
-#### is_running_sync()
-
-* **Return type:**
-  bool
-
-<a id="eric_sse.entities.MessageQueueListener.stop"></a>
-
-#### *async* stop()
-
-* **Return type:**
-  None
-
-<a id="eric_sse.entities.MessageQueueListener.stop_sync"></a>
-
-#### stop_sync()
-
-* **Return type:**
-  None
-
-<a id="eric_sse.entities.MessageQueueListener.on_message"></a>
-
-#### on_message(msg)
-
-Event handler. It executes when a message is delivered to client
-
-* **Parameters:**
-  **msg** ([*MessageContract*](#eric_sse.message.MessageContract))
-* **Return type:**
-  None
-
 <a id="eric_sse.entities.AbstractChannel"></a>
 
 ### *class* AbstractChannel
@@ -210,49 +145,47 @@ Base class for channels.
 
 Provides functionalities for listeners and message delivery management.
 
-[`eric_sse.queue.InMemoryMessageQueueFactory`](#eric_sse.queue.InMemoryMessageQueueFactory) is the default implementation used for queues_factory
+`eric_sse.queue.InMemoryMessageQueueFactory` is the default implementation used for queues_factory
 see [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel)
 
 * **Parameters:**
   * **stream_delay_seconds** (*int*) – Wait time in seconds between message delivery.
-  * **queues_factory** ([*eric_sse.queue.AbstractMessageQueueFactory*](#eric_sse.queue.AbstractMessageQueueFactory))
+  * **queues_repository** ([*eric_sse.repository.AbstractMessageQueueRepository*](#eric_sse.repository.AbstractMessageQueueRepository))
 
 <a id="eric_sse.entities.AbstractChannel.__init__"></a>
 
-#### \_\_init_\_(stream_delay_seconds=0, queues_factory=None)
+#### \_\_init_\_(stream_delay_seconds=0, queues_repository=None)
 
 * **Parameters:**
   * **stream_delay_seconds** (*int*)
-  * **queues_factory** ([*AbstractMessageQueueFactory*](#eric_sse.queue.AbstractMessageQueueFactory) *|* *None*)
+  * **queues_repository** ([*AbstractMessageQueueRepository*](#eric_sse.repository.AbstractMessageQueueRepository) *|* *None*)
 
 <a id="eric_sse.entities.AbstractChannel.add_listener"></a>
 
-#### add_listener()
+#### *async* add_listener()
 
 Add the default listener
 
 * **Return type:**
-  [*MessageQueueListener*](#eric_sse.entities.MessageQueueListener)
+  [*MessageQueueListener*](#eric_sse.listener.MessageQueueListener)
 
 <a id="eric_sse.entities.AbstractChannel.register_listener"></a>
 
-#### register_listener(l)
-
-Adds a listener to channel
+#### *async* register_listener(listener)
 
 * **Parameters:**
-  **l** ([*MessageQueueListener*](#eric_sse.entities.MessageQueueListener))
+  **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
 
 <a id="eric_sse.entities.AbstractChannel.remove_listener"></a>
 
-#### remove_listener(l_id)
+#### *async* remove_listener(listener_id)
 
 * **Parameters:**
-  **l_id** (*str*)
+  **listener_id** (*str*)
 
 <a id="eric_sse.entities.AbstractChannel.deliver_next"></a>
 
-#### deliver_next(listener_id)
+#### *async* deliver_next(listener_id)
 
 Returns next message for given listener id.
 
@@ -265,7 +198,7 @@ Raises a NoMessagesException if queue is empty
 
 <a id="eric_sse.entities.AbstractChannel.dispatch"></a>
 
-#### dispatch(listener_id, msg)
+#### *async* dispatch(listener_id, msg)
 
 Adds a message to listener’s queue
 
@@ -275,7 +208,7 @@ Adds a message to listener’s queue
 
 <a id="eric_sse.entities.AbstractChannel.broadcast"></a>
 
-#### broadcast(msg)
+#### *async* broadcast(msg)
 
 Enqueue a message to all listeners
 
@@ -289,7 +222,7 @@ Enqueue a message to all listeners
 * **Parameters:**
   **listener_id** (*str*)
 * **Return type:**
-  [*MessageQueueListener*](#eric_sse.entities.MessageQueueListener)
+  [*MessageQueueListener*](#eric_sse.listener.MessageQueueListener)
 
 <a id="eric_sse.entities.AbstractChannel.adapt"></a>
 
@@ -309,7 +242,7 @@ Entry point for message streaming
 A message with type = ‘error’ is yeld on invalid listener or channel
 
 * **Parameters:**
-  **listener** ([*MessageQueueListener*](#eric_sse.entities.MessageQueueListener))
+  **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
 * **Return type:**
   *AsyncIterable*[*Any*]
 
@@ -320,11 +253,47 @@ A message with type = ‘error’ is yeld on invalid listener or channel
 * **Return type:**
   *AsyncIterable*[*Any*]
 
-<a id="eric_sse.entities.AbstractChannel.notify_end"></a>
+<a id="module-eric_sse.listener"></a>
 
-#### notify_end()
+<a id="eric_sse.listener.MessageQueueListener"></a>
 
-Broadcasts a MESSAGE_TYPE_CLOSED Message
+### *class* MessageQueueListener
+
+Base class for listeners.
+
+Optionally you can override on_message method if you need to inject code at message delivery time.
+
+<a id="eric_sse.listener.MessageQueueListener.on_message"></a>
+
+#### *async* on_message(msg)
+
+Event handler. It executes when a message is delivered to client
+
+* **Parameters:**
+  **msg** ([*MessageContract*](#eric_sse.message.MessageContract))
+* **Return type:**
+  None
+
+<a id="eric_sse.listener.MessageQueueListener.start"></a>
+
+#### start()
+
+* **Return type:**
+  None
+
+<a id="eric_sse.listener.MessageQueueListener.stop"></a>
+
+#### stop()
+
+* **Return type:**
+  None
+
+<a id="eric_sse.listener.MessageQueueListener.is_running"></a>
+
+#### is_running()
+
+* **Return type:**
+  bool
 
 <a id="module-eric_sse.prefabs"></a>
 
@@ -346,16 +315,16 @@ Currently, ‘id’ field is not supported.
 * **Parameters:**
   * **stream_delay_seconds** (*int*)
   * **retry_timeout_milliseconds** (*int*)
-  * **queues_factory** ([*eric_sse.queue.AbstractMessageQueueFactory*](#eric_sse.queue.AbstractMessageQueueFactory))
+  * **queues_repository** ([*eric_sse.repository.AbstractMessageQueueRepository*](#eric_sse.repository.AbstractMessageQueueRepository))
 
 <a id="eric_sse.prefabs.SSEChannel.__init__"></a>
 
-#### \_\_init_\_(stream_delay_seconds=0, retry_timeout_milliseconds=5, queues_factory=None)
+#### \_\_init_\_(stream_delay_seconds=0, retry_timeout_milliseconds=5, queues_repository=None)
 
 * **Parameters:**
   * **stream_delay_seconds** (*int*)
   * **retry_timeout_milliseconds** (*int*)
-  * **queues_factory** ([*AbstractMessageQueueFactory*](#eric_sse.queue.AbstractMessageQueueFactory) *|* *None*)
+  * **queues_repository** ([*AbstractMessageQueueRepository*](#eric_sse.repository.AbstractMessageQueueRepository) *|* *None*)
 
 <a id="eric_sse.prefabs.SSEChannel.payload_adapter"></a>
 
@@ -411,14 +380,25 @@ MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered a
 
 #### *async* process_queue(listener)
 
+Starts a process by creating self.max_workers workers and executing on_message method of listener in parallel.
+
 * **Parameters:**
-  **listener** ([*MessageQueueListener*](#eric_sse.entities.MessageQueueListener))
+  **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
 * **Return type:**
   *AsyncIterable*[dict]
 
 <a id="eric_sse.prefabs.DataProcessingChannel.adapt"></a>
 
 #### adapt(msg)
+
+Returns a dictionary in the following format:
+
+```default
+{
+    "event": message type
+    "data": message payload
+}
+```
 
 * **Parameters:**
   **msg** ([*MessageContract*](#eric_sse.message.MessageContract))
@@ -429,16 +409,17 @@ MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered a
 
 ### *class* SimpleDistributedApplicationListener
 
-Bases: [`MessageQueueListener`](#eric_sse.entities.MessageQueueListener)
+Bases: [`MessageQueueListener`](#eric_sse.listener.MessageQueueListener)
 
 Listener for distributed applications
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.__init__"></a>
 
-#### \_\_init_\_(channel)
+#### \_\_init_\_()
 
-* **Parameters:**
-  **channel** ([*AbstractChannel*](#eric_sse.entities.AbstractChannel))
+As listener is registered to channel at init time, you have to await object construction itself:
+
+> my_listener = **await** SimpleDistributedApplicationListener(my_channel)
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.set_action"></a>
 
@@ -450,7 +431,7 @@ Callables are selected when listener processes the message depending on its type
 
 They should return a list of Messages corresponding to response to action requested.
 
-Reserved actions are ‘start’, ‘stop’, ‘remove’.
+Reserved actions are ‘start’, ‘stop’.
 Receiving a message with one of these types will fire corresponding action.
 
 * **Parameters:**
@@ -459,15 +440,15 @@ Receiving a message with one of these types will fire corresponding action.
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.dispatch_to"></a>
 
-#### dispatch_to(receiver, msg)
+#### *async* dispatch_to(receiver, msg)
 
 * **Parameters:**
-  * **receiver** ([*MessageQueueListener*](#eric_sse.entities.MessageQueueListener))
+  * **receiver** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
   * **msg** ([*MessageContract*](#eric_sse.message.MessageContract))
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"></a>
 
-#### on_message(msg)
+#### *async* on_message(msg)
 
 Executes action corresponding to message’s type
 
@@ -476,11 +457,18 @@ Executes action corresponding to message’s type
 * **Return type:**
   None
 
-<a id="eric_sse.prefabs.SimpleDistributedApplicationListener.remove_sync"></a>
+<a id="eric_sse.prefabs.SimpleDistributedApplicationChannel"></a>
 
-#### remove_sync()
+### *class* SimpleDistributedApplicationChannel
 
-Stop and unregister
+Bases: [`SSEChannel`](#eric_sse.prefabs.SSEChannel)
+
+<a id="eric_sse.prefabs.SimpleDistributedApplicationChannel.register_listener"></a>
+
+#### *async* register_listener(listener)
+
+* **Parameters:**
+  **listener** ([*SimpleDistributedApplicationListener*](#eric_sse.prefabs.SimpleDistributedApplicationListener))
 
 <a id="module-eric_sse.servers"></a>
 
@@ -500,10 +488,10 @@ Helper class for management of multiple SSE channels cases of use.
 
 <a id="eric_sse.servers.SSEChannelContainer.add"></a>
 
-#### add(queues_factory=None)
+#### add(queues_repository=None)
 
 * **Parameters:**
-  **queues_factory** ([*AbstractMessageQueueFactory*](#eric_sse.queue.AbstractMessageQueueFactory) *|* *None*)
+  **queues_repository** ([*AbstractMessageQueueRepository*](#eric_sse.repository.AbstractMessageQueueRepository) *|* *None*)
 * **Return type:**
   [*SSEChannel*](#eric_sse.prefabs.SSEChannel)
 
@@ -570,23 +558,6 @@ See examples
 * **Parameters:**
   **file_descriptor_path** (*str*)
 
-<a id="eric_sse.servers.SocketServer.connect_callback"></a>
-
-#### *async static* connect_callback(reader, writer)
-
-* **Parameters:**
-  * **reader** (*StreamReader*)
-  * **writer** (*StreamWriter*)
-
-<a id="eric_sse.servers.SocketServer.handle_command"></a>
-
-#### *static* handle_command(raw_command)
-
-* **Parameters:**
-  **raw_command** (*str*)
-* **Return type:**
-  *AsyncIterable*[str]
-
 <a id="eric_sse.servers.SocketServer.shutdown"></a>
 
 #### *async* shutdown()
@@ -597,11 +568,13 @@ Graceful Shutdown
 
 #### *async* main()
 
+Starts the server
+
 <a id="eric_sse.servers.SocketServer.start"></a>
 
 #### *static* start(file_descriptor_path)
 
-Shortcut to start a server
+Shortcut to start a server given a file descriptor path
 
 * **Parameters:**
   **file_descriptor_path** (*str*)
@@ -703,7 +676,7 @@ Abstract base class for queues (FIFO)
 
 <a id="eric_sse.queue.Queue.pop"></a>
 
-#### *abstract* pop()
+#### *abstract async* pop()
 
 Next message from the queue.
 
@@ -714,7 +687,7 @@ Raises a [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessag
 
 <a id="eric_sse.queue.Queue.push"></a>
 
-#### *abstract* push(message)
+#### *abstract async* push(message)
 
 * **Parameters:**
   **message** ([*MessageContract*](#eric_sse.message.MessageContract))
@@ -723,16 +696,61 @@ Raises a [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessag
 
 <a id="eric_sse.queue.Queue.delete"></a>
 
-#### *abstract* delete()
+#### *abstract async* delete()
 
 Removes all messages from the queue.
 
 * **Return type:**
   None
 
-<a id="eric_sse.queue.AbstractMessageQueueFactory"></a>
+<a id="eric_sse.queue.InMemoryQueue"></a>
 
-### *class* AbstractMessageQueueFactory
+### *class* InMemoryQueue
+
+Bases: [`Queue`](#eric_sse.queue.Queue)
+
+<a id="eric_sse.queue.InMemoryQueue.__init__"></a>
+
+#### \_\_init_\_()
+
+<a id="eric_sse.queue.InMemoryQueue.pop"></a>
+
+#### *async* pop()
+
+Next message from the queue.
+
+Raises a [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessagesException) if the queue is empty.
+
+* **Return type:**
+  [*MessageContract*](#eric_sse.message.MessageContract)
+
+<a id="eric_sse.queue.InMemoryQueue.push"></a>
+
+#### *async* push(message)
+
+* **Parameters:**
+  **message** ([*MessageContract*](#eric_sse.message.MessageContract))
+* **Return type:**
+  None
+
+<a id="eric_sse.queue.InMemoryQueue.delete"></a>
+
+#### *async* delete()
+
+Removes all messages from the queue.
+
+* **Return type:**
+  None
+
+<a id="module-eric_sse.repository"></a>
+
+<a id="persistence"></a>
+
+# Persistence
+
+<a id="eric_sse.repository.AbstractMessageQueueRepository"></a>
+
+### *class* AbstractMessageQueueRepository
 
 Bases: `ABC`
 
@@ -740,38 +758,83 @@ Abstraction for queues creation
 
 see [`eric_sse.entities.AbstractChannel`](#eric_sse.entities.AbstractChannel)
 
-<a id="eric_sse.queue.AbstractMessageQueueFactory.create"></a>
+<a id="eric_sse.repository.AbstractMessageQueueRepository.create"></a>
 
-#### *abstract* create()
+#### *abstract async* create()
 
 * **Return type:**
   [*Queue*](#eric_sse.queue.Queue)
 
-<a id="eric_sse.queue.InMemoryMessageQueueFactory"></a>
+<a id="eric_sse.repository.AbstractMessageQueueRepository.persist"></a>
 
-### *class* InMemoryMessageQueueFactory
+#### *abstract async* persist(listener, queue)
 
-Bases: [`AbstractMessageQueueFactory`](#eric_sse.queue.AbstractMessageQueueFactory)
+* **Parameters:**
+  * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
+  * **queue** ([*Queue*](#eric_sse.queue.Queue))
+* **Return type:**
+  None
+
+<a id="eric_sse.repository.AbstractMessageQueueRepository.load"></a>
+
+#### *abstract async* load()
+
+Returns a list of persisted listeners and a dictionary of queues indexed by the ids of those listeners
+
+* **Return type:**
+  *AsyncIterable*[*Tuple*[[*MessageQueueListener*](#eric_sse.listener.MessageQueueListener), [*Queue*](#eric_sse.queue.Queue)]]
+
+<a id="eric_sse.repository.AbstractMessageQueueRepository.delete"></a>
+
+#### *abstract async* delete(listener_id)
+
+* **Parameters:**
+  **listener_id** (*str*)
+* **Return type:**
+  None
+
+<a id="eric_sse.repository.InMemoryMessageQueueRepository"></a>
+
+### *class* InMemoryMessageQueueRepository
+
+Bases: [`AbstractMessageQueueRepository`](#eric_sse.repository.AbstractMessageQueueRepository)
 
 Default implementation used by [`eric_sse.entities.AbstractChannel`](#eric_sse.entities.AbstractChannel)
 
-<a id="eric_sse.queue.InMemoryMessageQueueFactory.create"></a>
+<a id="eric_sse.repository.InMemoryMessageQueueRepository.create"></a>
 
-#### create()
+#### *async* create()
 
 * **Return type:**
   [*Queue*](#eric_sse.queue.Queue)
 
-<a id="eric_sse.queue.RepositoryError"></a>
+<a id="eric_sse.repository.InMemoryMessageQueueRepository.persist"></a>
 
-### *exception* RepositoryError
+#### *async* persist(listeners, queues)
 
-Bases: `Exception`
+* **Parameters:**
+  * **listeners** (*list* *[*[*MessageQueueListener*](#eric_sse.listener.MessageQueueListener) *]*)
+  * **queues** (*dict* *[**str* *,* [*Queue*](#eric_sse.queue.Queue) *]*)
+* **Return type:**
+  None
 
-Raised when an unexpected error occurs while trying to fetch messages from a queue.
+<a id="eric_sse.repository.InMemoryMessageQueueRepository.load"></a>
 
-Concrete implementations of [`Queue`](#eric_sse.queue.Queue) should wrap here the unexpected exceptions they catch before raising, and
-an [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessagesException) when a pop is requested on an empty queue.
+#### *async* load()
+
+Returns a list of persisted listeners and a dictionary of queues indexed by the ids of those listeners
+
+* **Return type:**
+  *AsyncIterable*[*Tuple*[[*MessageQueueListener*](#eric_sse.listener.MessageQueueListener), [*Queue*](#eric_sse.queue.Queue)]]
+
+<a id="eric_sse.repository.InMemoryMessageQueueRepository.delete"></a>
+
+#### *async* delete(listener_id)
+
+* **Parameters:**
+  **listener_id** (*str*)
+* **Return type:**
+  None
 
 <a id="module-eric_sse.exception"></a>
 
@@ -797,69 +860,79 @@ an [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessagesExce
 
 Raised when trying to fetch from an empty queue
 
-<a id="module-eric_sse.benchmark"></a>
+<a id="eric_sse.exception.RepositoryError"></a>
 
-<a id="benchmarking-tools"></a>
+### *exception* RepositoryError
 
-# Benchmarking tools
+Raised when an unexpected error occurs while trying to fetch messages from a queue.
 
-<a id="eric_sse.benchmark.ListenerWrapper"></a>
+Concrete implementations of `Queue` should wrap here the unexpected exceptions they catch before raising, and
+an [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessagesException) when a pop is requested on an empty queue.
+
+<a id="module-eric_sse.profile"></a>
+
+<a id="profiling-tools"></a>
+
+# Profiling tools
+
+<a id="eric_sse.profile.ListenerWrapper"></a>
 
 ### *class* ListenerWrapper
 
-Bases: [`MessageQueueListener`](#eric_sse.entities.MessageQueueListener)
+Bases: [`MessageQueueListener`](#eric_sse.listener.MessageQueueListener)
 
-Wraps a listener to benchmark its on_message method.
+Wraps a listener to profile its on_message method.
 
-<a id="eric_sse.benchmark.ListenerWrapper.__init__"></a>
+<a id="eric_sse.profile.ListenerWrapper.__init__"></a>
 
-#### \_\_init_\_(listener)
+#### \_\_init_\_(listener, profile_messages=False)
 
 * **Parameters:**
-  **listener** ([*MessageQueueListener*](#eric_sse.entities.MessageQueueListener))
+  * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
+  * **profile_messages** (*bool*)
 
-<a id="eric_sse.benchmark.ListenerWrapper.on_message"></a>
+<a id="eric_sse.profile.ListenerWrapper.on_message"></a>
 
-#### on_message(msg)
+#### *async* on_message(msg)
 
-Performs on_message benchmarking
+Performs on_message profiling
 
 * **Parameters:**
   **msg** ([*MessageContract*](#eric_sse.message.MessageContract))
 * **Return type:**
   None
 
-<a id="eric_sse.benchmark.DataProcessingChannelBenchMark"></a>
+<a id="eric_sse.profile.DataProcessingChannelProfiler"></a>
 
-### *class* DataProcessingChannelBenchMark
+### *class* DataProcessingChannelProfiler
 
 Bases: `object`
 
-<a id="eric_sse.benchmark.DataProcessingChannelBenchMark.__init__"></a>
+<a id="eric_sse.profile.DataProcessingChannelProfiler.__init__"></a>
 
 #### \_\_init_\_(channel)
 
-Wraps a channel to benchmark its process_queue method.
+Wraps a channel to profile its process_queue method.
 
 * **Parameters:**
   **channel** ([*DataProcessingChannel*](#eric_sse.prefabs.DataProcessingChannel))
 
-<a id="eric_sse.benchmark.DataProcessingChannelBenchMark.add_listener"></a>
+<a id="eric_sse.profile.DataProcessingChannelProfiler.add_listener"></a>
 
-#### add_listener(listener)
+#### *async* add_listener(listener)
 
 Adds a listener to the channel after having wrapped it
 
 * **Parameters:**
-  **listener** ([*MessageQueueListener*](#eric_sse.entities.MessageQueueListener))
+  **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
 * **Return type:**
-  [*ListenerWrapper*](#eric_sse.benchmark.ListenerWrapper)
+  [*ListenerWrapper*](#eric_sse.profile.ListenerWrapper)
 
-<a id="eric_sse.benchmark.DataProcessingChannelBenchMark.run"></a>
+<a id="eric_sse.profile.DataProcessingChannelProfiler.run"></a>
 
 #### *async* run(listener)
 
-Runs benchmark
+Runs profile
 
 * **Parameters:**
-  **listener** ([*ListenerWrapper*](#eric_sse.benchmark.ListenerWrapper))
+  **listener** ([*ListenerWrapper*](#eric_sse.profile.ListenerWrapper))
