@@ -143,8 +143,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
 
     async def dispatch_to(self, receiver: MessageQueueListener, msg: MessageContract):
         signed_message = SignedMessage(sender_id=self.id, msg_type=msg.type, msg_payload=msg.payload)
-        channel = self.__channel
-        await channel.dispatch(receiver.id, signed_message)
+        await self.__channel.dispatch(receiver.id, signed_message)
 
     async def on_message(self, msg: SignedMessage) -> None:
         """Executes action corresponding to message's type"""
@@ -158,8 +157,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
             msgs = self.__actions[msg.type](msg)
             for response in msgs:
                 signed_response = SignedMessage(sender_id=self.id, msg_type=response.type, msg_payload=response.payload)
-                channel = self.__channel
-                await channel.dispatch(msg.sender_id, signed_response)
+                await self.__channel.dispatch(msg.sender_id, signed_response)
         except KeyError:
             logger.debug(f'Unknown action {msg.type}')
 
