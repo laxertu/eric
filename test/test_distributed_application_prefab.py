@@ -1,9 +1,8 @@
 from unittest import IsolatedAsyncioTestCase
 
-import pytest
 
 from eric_sse.message import MessageContract, Message
-from eric_sse.prefabs import SSEChannel, SimpleDistributedApplicationListener, DataProcessingChannel
+from eric_sse.prefabs import SimpleDistributedApplicationChannel, SimpleDistributedApplicationListener, DataProcessingChannel
 
 from test.mock.listener import MessageQueueListenerMock
 
@@ -23,8 +22,8 @@ def hello_ack_response(m: MessageContract) -> list[Message]:
 class DistributedListenerTestCase(IsolatedAsyncioTestCase):
 
     @staticmethod
-    async def create_listener(ch: SSEChannel):
-        l = await SimpleDistributedApplicationListener(ch)
+    async def create_listener(ch: SimpleDistributedApplicationChannel):
+        l = SimpleDistributedApplicationListener()
         l.set_action('hello', hello_response)
         l.set_action('hello_ack', hello_ack_response)
         l.start()
@@ -33,7 +32,7 @@ class DistributedListenerTestCase(IsolatedAsyncioTestCase):
 
 
     async def test_application(self):
-        ssc = SSEChannel()
+        ssc = SimpleDistributedApplicationChannel()
 
         alice = await DistributedListenerTestCase.create_listener(ssc)
         bob = await DistributedListenerTestCase.create_listener(ssc)

@@ -107,7 +107,7 @@ class DataProcessingChannel(AbstractChannel):
 class SimpleDistributedApplicationListener(MessageQueueListener):
     """Listener for distributed applications"""
 
-    def __init__(self, channel: AbstractChannel):
+    def __init__(self):
         """
         As listener is registered to channel at init time, you have to await object construction itself:
 
@@ -115,19 +115,15 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
 
         """
         super().__init__()
-        self.__channel = channel
+        self.__channel: AbstractChannel | None = None
         self.__actions: dict[str, Callable[[MessageContract], list[MessageContract]]] = dict()
         self.__internal_actions: dict[str, Callable[[], None]] = {
             'start': self.start,
             'stop': self.stop
         }
 
-    def __await__(self):
-        async def closure():
-            await self.__channel.register_listener(self)
-            return self
-
-        return closure().__await__()
+    def set_channel(self, channel: AbstractChannel):
+        self.__channel = channel
 
     def set_action(self, name: str, action: Callable[[MessageContract], list[MessageContract]]):
         """
@@ -166,3 +162,9 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
                 await channel.dispatch(msg.sender_id, signed_response)
         except KeyError:
             logger.debug(f'Unknown action {msg.type}')
+
+class SimpleDistributedApplicationChannel(SSEChannel):
+
+    async def register_listener(self, listener: SimpleDistributedApplicationListener):
+        listener.set_channel(self)
+        return await super().register_listener(listener)

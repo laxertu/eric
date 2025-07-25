@@ -1,7 +1,7 @@
 import asyncio, logging
 
 from eric_sse.message import Message, MessageContract
-from eric_sse.prefabs import SimpleDistributedApplicationListener, SSEChannel
+from eric_sse.prefabs import SimpleDistributedApplicationListener, SimpleDistributedApplicationChannel
 
 import  eric_sse
 logger  = eric_sse.get_logger()
@@ -34,21 +34,22 @@ def bye_handler(m: MessageContract) -> list[Message]:
     output(m)
     return close_connection_response()
 
-async def create_listener(ch: SSEChannel):
-    l = await SimpleDistributedApplicationListener(ch)
+async def create_listener(ch: SimpleDistributedApplicationChannel):
+    l = SimpleDistributedApplicationListener()
     l.set_action('hello', hello_response)
     l.set_action('hello_ack', hello_ack_response)
     l.set_action('bye', bye_handler)
+    await ch.register_listener(l)
     l.start()
     return l
 
-async def do_stuff(buddy: SimpleDistributedApplicationListener, ssc: SSEChannel):
+async def do_stuff(buddy: SimpleDistributedApplicationListener, ssc: SimpleDistributedApplicationChannel):
     async for _ in ssc.message_stream(buddy):
         ...
 
 
 async def main():
-    ssc = SSEChannel()
+    ssc = SimpleDistributedApplicationChannel()
 
     alice = await create_listener(ssc)
     bob = await create_listener(ssc)
