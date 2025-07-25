@@ -14,16 +14,16 @@ class MessageQueueListener:
         self.id: str = eric_sse.generate_uuid()
         self.__is_running: bool = False
 
+    async def on_message(self, msg: MessageContract) -> None:
+        """Event handler. It executes when a message is delivered to client"""
+        pass
+
     def start(self) -> None:
         self.__is_running = True
-
-    def is_running(self) -> bool:
-        return self.__is_running
 
     def stop(self) -> None:
         self.__is_running = False
 
+    def is_running(self) -> bool:
+        return self.__is_running
 
-    async def on_message(self, msg: MessageContract) -> None:
-        """Event handler. It executes when a message is delivered to client"""
-        pass

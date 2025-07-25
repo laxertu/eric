@@ -336,16 +336,6 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.entities">Channels and listeners</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.ConnectionManager"><code class="docutils literal notranslate"><span class="pre">ConnectionManager</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.ConnectionManager.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.ConnectionManager.add_listener"><code class="docutils literal notranslate"><span class="pre">add_listener()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.ConnectionManager.register_listener"><code class="docutils literal notranslate"><span class="pre">register_listener()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.ConnectionManager.remove_listener"><code class="docutils literal notranslate"><span class="pre">remove_listener()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.ConnectionManager.get_queue"><code class="docutils literal notranslate"><span class="pre">get_queue()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.ConnectionManager.get_listener"><code class="docutils literal notranslate"><span class="pre">get_listener()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.ConnectionManager.get_listeners"><code class="docutils literal notranslate"><span class="pre">get_listeners()</span></code></a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel"><code class="docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.add_listener"><code class="docutils literal notranslate"><span class="pre">add_listener()</span></code></a></li>
@@ -361,11 +351,10 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.listener.MessageQueueListener"><code class="docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.listener.MessageQueueListener.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.listener.MessageQueueListener.start"><code class="docutils literal notranslate"><span class="pre">start()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.listener.MessageQueueListener.is_running"><code class="docutils literal notranslate"><span class="pre">is_running()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.listener.MessageQueueListener.stop"><code class="docutils literal notranslate"><span class="pre">stop()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.listener.MessageQueueListener.on_message"><code class="docutils literal notranslate"><span class="pre">on_message()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.listener.MessageQueueListener.start"><code class="docutils literal notranslate"><span class="pre">start()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.listener.MessageQueueListener.stop"><code class="docutils literal notranslate"><span class="pre">stop()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.listener.MessageQueueListener.is_running"><code class="docutils literal notranslate"><span class="pre">is_running()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -390,6 +379,10 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"><code class="docutils literal notranslate"><span class="pre">on_message()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SimpleDistributedApplicationChannel"><code class="docutils literal notranslate"><span class="pre">SimpleDistributedApplicationChannel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SimpleDistributedApplicationChannel.register_listener"><code class="docutils literal notranslate"><span class="pre">register_listener()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.servers">Prefab servers and clients</a><ul class="visible nav section-nav flex-column">
@@ -403,8 +396,6 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer"><code class="docutils literal notranslate"><span class="pre">SocketServer</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.connect_callback"><code class="docutils literal notranslate"><span class="pre">connect_callback()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.handle_command"><code class="docutils literal notranslate"><span class="pre">handle_command()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.shutdown"><code class="docutils literal notranslate"><span class="pre">shutdown()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.start"><code class="docutils literal notranslate"><span class="pre">start()</span></code></a></li>
@@ -634,92 +625,6 @@ For validation purposes you can override <code class="xref py py-class docutils 
 <section id="module-eric_sse.entities">
 <span id="channels-and-listeners"></span><h1>Channels and listeners<a class="headerlink" href="#module-eric_sse.entities" title="Link to this heading">#</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="eric_sse.entities.ConnectionManager">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConnectionManager</span></span><a class="headerlink" href="#eric_sse.entities.ConnectionManager" title="Link to this definition">#</a></dt>
-<dd><p>Maintains relationships between listeners and queues</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="eric_sse.entities.ConnectionManager.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queues_repository</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.ConnectionManager.__init__" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>queues_repository</strong> (<a class="reference internal" href="#eric_sse.repository.AbstractMessageQueueRepository" title="eric_sse.repository.AbstractMessageQueueRepository"><em>AbstractMessageQueueRepository</em></a>)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eric_sse.entities.ConnectionManager.add_listener">
-<span class="sig-name descname"><span class="pre">add_listener</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.ConnectionManager.add_listener" title="Link to this definition">#</a></dt>
-<dd><p>Add the default listener</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eric_sse.entities.ConnectionManager.register_listener">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">register_listener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.ConnectionManager.register_listener" title="Link to this definition">#</a></dt>
-<dd><p>Adds a listener to channel</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>listener</strong> (<a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a>)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eric_sse.entities.ConnectionManager.remove_listener">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remove_listener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.ConnectionManager.remove_listener" title="Link to this definition">#</a></dt>
-<dd><p>Removes a listener from channel</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>listener_id</strong> (<em>str</em>)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eric_sse.entities.ConnectionManager.get_queue">
-<span class="sig-name descname"><span class="pre">get_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.ConnectionManager.get_queue" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>listener_id</strong> (<em>str</em>)</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#eric_sse.queue.Queue" title="eric_sse.queue.Queue"><em>Queue</em></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eric_sse.entities.ConnectionManager.get_listener">
-<span class="sig-name descname"><span class="pre">get_listener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.ConnectionManager.get_listener" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>listener_id</strong> (<em>str</em>)</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eric_sse.entities.ConnectionManager.get_listeners">
-<span class="sig-name descname"><span class="pre">get_listeners</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.ConnectionManager.get_listeners" title="Link to this definition">#</a></dt>
-<dd><p>Returns a dict mapping listener ids to listeners</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict[str, <a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AbstractChannel</span></span><a class="headerlink" href="#eric_sse.entities.AbstractChannel" title="Link to this definition">#</a></dt>
 <dd><p>Base class for channels.</p>
@@ -877,9 +782,18 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 <dd><p>Base class for listeners.</p>
 <p>Optionally you can override on_message method if you need to inject code at message delivery time.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="eric_sse.listener.MessageQueueListener.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.listener.MessageQueueListener.__init__" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="eric_sse.listener.MessageQueueListener.on_message">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.listener.MessageQueueListener.on_message" title="Link to this definition">#</a></dt>
+<dd><p>Event handler. It executes when a message is delivered to client</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>msg</strong> (<a class="reference internal" href="#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.listener.MessageQueueListener.start">
@@ -887,16 +801,6 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eric_sse.listener.MessageQueueListener.is_running">
-<span class="sig-name descname"><span class="pre">is_running</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.listener.MessageQueueListener.is_running" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -912,15 +816,11 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="eric_sse.listener.MessageQueueListener.on_message">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">on_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.listener.MessageQueueListener.on_message" title="Link to this definition">#</a></dt>
-<dd><p>Event handler. It executes when a message is delivered to client</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>msg</strong> (<a class="reference internal" href="#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>)</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
+<dt class="sig sig-object py" id="eric_sse.listener.MessageQueueListener.is_running">
+<span class="sig-name descname"><span class="pre">is_running</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.listener.MessageQueueListener.is_running" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1016,7 +916,8 @@ Just override <strong>adapt</strong> method to control output returned to client
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.prefabs.DataProcessingChannel.process_queue">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.DataProcessingChannel.process_queue" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Starts a process by creating self.max_workers workers and executing on_message method of listener in parallel.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>listener</strong> (<a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a>)</p>
 </dd>
@@ -1029,7 +930,14 @@ Just override <strong>adapt</strong> method to control output returned to client
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.prefabs.DataProcessingChannel.adapt">
 <span class="sig-name descname"><span class="pre">adapt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.DataProcessingChannel.adapt" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Returns a dictionary in the following format:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;event&quot;</span><span class="p">:</span> <span class="n">message</span> <span class="nb">type</span>
+    <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">message</span> <span class="n">payload</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>msg</strong> (<a class="reference internal" href="#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>)</p>
 </dd>
@@ -1048,16 +956,11 @@ Just override <strong>adapt</strong> method to control output returned to client
 <p>Listener for distributed applications</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.prefabs.SimpleDistributedApplicationListener.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.__init__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.__init__" title="Link to this definition">#</a></dt>
 <dd><p>As listener is registered to channel at init time, you have to await object construction itself:</p>
 <blockquote>
 <div><p>my_listener = <strong>await</strong> SimpleDistributedApplicationListener(my_channel)</p>
 </div></blockquote>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>channel</strong> (<a class="reference internal" href="#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a>)</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -1101,6 +1004,22 @@ Receiving a message with one of these types will fire corresponding action.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.prefabs.SimpleDistributedApplicationChannel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SimpleDistributedApplicationChannel</span></span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationChannel" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eric_sse.prefabs.SSEChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SSEChannel</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.prefabs.SimpleDistributedApplicationChannel.register_listener">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">register_listener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationChannel.register_listener" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>listener</strong> (<a class="reference internal" href="#eric_sse.prefabs.SimpleDistributedApplicationListener" title="eric_sse.prefabs.SimpleDistributedApplicationListener"><em>SimpleDistributedApplicationListener</em></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1204,32 +1123,6 @@ Receiving a message with one of these types will fire corresponding action.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="eric_sse.servers.SocketServer.connect_callback">
-<em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connect_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">writer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.SocketServer.connect_callback" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>reader</strong> (<em>StreamReader</em>)</p></li>
-<li><p><strong>writer</strong> (<em>StreamWriter</em>)</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eric_sse.servers.SocketServer.handle_command">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">handle_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_command</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.SocketServer.handle_command" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>raw_command</strong> (<em>str</em>)</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>AsyncIterable</em>[str]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.servers.SocketServer.shutdown">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shutdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.SocketServer.shutdown" title="Link to this definition">#</a></dt>
 <dd><p>Graceful Shutdown</p>
@@ -1238,12 +1131,13 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.servers.SocketServer.main">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.SocketServer.main" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Starts the server</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.servers.SocketServer.start">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_descriptor_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.SocketServer.start" title="Link to this definition">#</a></dt>
-<dd><p>Shortcut to start a server</p>
+<dd><p>Shortcut to start a server given a file descriptor path</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>file_descriptor_path</strong> (<em>str</em>)</p>
@@ -1497,7 +1391,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <dd><p>Returns a list of persisted listeners and a dictionary of queues indexed by the ids of those listeners</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(list[<a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener">eric_sse.listener.MessageQueueListener</a>], dict[str, <a class="reference internal" href="#eric_sse.queue.Queue" title="eric_sse.queue.Queue">eric_sse.queue.Queue</a>])</p>
+<dd class="field-odd"><p><em>AsyncIterable</em>[<em>Tuple</em>[<a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a>, <a class="reference internal" href="#eric_sse.queue.Queue" title="eric_sse.queue.Queue"><em>Queue</em></a>]]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1554,7 +1448,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <dd><p>Returns a list of persisted listeners and a dictionary of queues indexed by the ids of those listeners</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(list[<a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener">eric_sse.listener.MessageQueueListener</a>], dict[slice(&lt;class ‘str’&gt;, &lt;class ‘eric_sse.queue.Queue’&gt;, None)])</p>
+<dd class="field-odd"><p><em>AsyncIterable</em>[<em>Tuple</em>[<a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a>, <a class="reference internal" href="#eric_sse.queue.Queue" title="eric_sse.queue.Queue"><em>Queue</em></a>]]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1616,10 +1510,13 @@ an <a class="reference internal" href="#eric_sse.exception.NoMessagesException" 
 <p>Wraps a listener to profile its on_message method.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.profile.ListenerWrapper.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.profile.ListenerWrapper.__init__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">profile_messages</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.profile.ListenerWrapper.__init__" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>listener</strong> (<a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a>)</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>listener</strong> (<a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a>)</p></li>
+<li><p><strong>profile_messages</strong> (<em>bool</em>)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -1758,16 +1655,6 @@ an <a class="reference internal" href="#eric_sse.exception.NoMessagesException" 
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.entities">Channels and listeners</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.ConnectionManager"><code class="docutils literal notranslate"><span class="pre">ConnectionManager</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.ConnectionManager.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.ConnectionManager.add_listener"><code class="docutils literal notranslate"><span class="pre">add_listener()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.ConnectionManager.register_listener"><code class="docutils literal notranslate"><span class="pre">register_listener()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.ConnectionManager.remove_listener"><code class="docutils literal notranslate"><span class="pre">remove_listener()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.ConnectionManager.get_queue"><code class="docutils literal notranslate"><span class="pre">get_queue()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.ConnectionManager.get_listener"><code class="docutils literal notranslate"><span class="pre">get_listener()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.ConnectionManager.get_listeners"><code class="docutils literal notranslate"><span class="pre">get_listeners()</span></code></a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel"><code class="docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.add_listener"><code class="docutils literal notranslate"><span class="pre">add_listener()</span></code></a></li>
@@ -1783,11 +1670,10 @@ an <a class="reference internal" href="#eric_sse.exception.NoMessagesException" 
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.listener.MessageQueueListener"><code class="docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.listener.MessageQueueListener.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.listener.MessageQueueListener.start"><code class="docutils literal notranslate"><span class="pre">start()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.listener.MessageQueueListener.is_running"><code class="docutils literal notranslate"><span class="pre">is_running()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.listener.MessageQueueListener.stop"><code class="docutils literal notranslate"><span class="pre">stop()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.listener.MessageQueueListener.on_message"><code class="docutils literal notranslate"><span class="pre">on_message()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.listener.MessageQueueListener.start"><code class="docutils literal notranslate"><span class="pre">start()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.listener.MessageQueueListener.stop"><code class="docutils literal notranslate"><span class="pre">stop()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.listener.MessageQueueListener.is_running"><code class="docutils literal notranslate"><span class="pre">is_running()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -1812,6 +1698,10 @@ an <a class="reference internal" href="#eric_sse.exception.NoMessagesException" 
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"><code class="docutils literal notranslate"><span class="pre">on_message()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SimpleDistributedApplicationChannel"><code class="docutils literal notranslate"><span class="pre">SimpleDistributedApplicationChannel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SimpleDistributedApplicationChannel.register_listener"><code class="docutils literal notranslate"><span class="pre">register_listener()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.servers">Prefab servers and clients</a><ul class="visible nav section-nav flex-column">
@@ -1825,8 +1715,6 @@ an <a class="reference internal" href="#eric_sse.exception.NoMessagesException" 
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer"><code class="docutils literal notranslate"><span class="pre">SocketServer</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.connect_callback"><code class="docutils literal notranslate"><span class="pre">connect_callback()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.handle_command"><code class="docutils literal notranslate"><span class="pre">handle_command()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.shutdown"><code class="docutils literal notranslate"><span class="pre">shutdown()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.start"><code class="docutils literal notranslate"><span class="pre">start()</span></code></a></li>

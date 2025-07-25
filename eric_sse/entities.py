@@ -17,7 +17,7 @@ MESSAGE_TYPE_END_OF_STREAM = '_eric_channel_eof'
 MESSAGE_TYPE_INTERNAL_ERROR = '_eric_error'
 
 
-class ConnectionManager:
+class _ConnectionManager:
     """Maintains relationships between listeners and queues"""
     def __init__(self, queues_repository: AbstractMessageQueueRepository):
         self.__listeners: dict[str: MessageQueueListener] = {}
@@ -86,7 +86,7 @@ class AbstractChannel(ABC):
         self.stream_delay_seconds = stream_delay_seconds
 
         queues_repository = queues_repository if queues_repository else InMemoryMessageQueueRepository()
-        self.__connection_manager: ConnectionManager = ConnectionManager(queues_repository)
+        self.__connection_manager: _ConnectionManager = _ConnectionManager(queues_repository)
 
 
     async def add_listener(self) -> MessageQueueListener:

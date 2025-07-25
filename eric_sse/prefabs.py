@@ -76,6 +76,7 @@ class DataProcessingChannel(AbstractChannel):
         self.executor_class = executor_class
 
     async def process_queue(self, listener: MessageQueueListener) -> AsyncIterable[dict]:
+        """Starts a process by creating self.max_workers workers and executing on_message method of listener in parallel."""
 
         with self.executor_class(max_workers=self.max_workers) as e:
             there_are_pending_messages = True
@@ -99,6 +100,16 @@ class DataProcessingChannel(AbstractChannel):
         return msg
 
     def adapt(self, msg: MessageContract) -> dict:
+        """
+
+        Returns a dictionary in the following format::
+
+            {
+                "event": message type
+                "data": message payload
+            }
+        """
+
         return {
             "event": msg.type,
             "data": msg.payload

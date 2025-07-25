@@ -167,6 +167,7 @@ class SocketServer:
         logger.info("done")
 
     async def main(self):
+        """Starts the server"""
         server = await start_unix_server(SocketServer.connect_callback, path=Path(self.__file_descriptor_path))
         self.__unix_server = server
         addr = server.sockets[0].getsockname()
@@ -179,7 +180,7 @@ class SocketServer:
 
     @staticmethod
     def start(file_descriptor_path: str):
-        """Shortcut to start a server"""
+        """Shortcut to start a server given a file descriptor path"""
         logger.info('starting')
         try:
             server = SocketServer(file_descriptor_path)

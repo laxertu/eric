@@ -319,7 +319,6 @@ document.write(`
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#G"><strong>G</strong></a>
- | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
@@ -340,8 +339,6 @@ document.write(`
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.__init__">__init__() (AbstractChannel method)</a>
 
       <ul>
-        <li><a href="docs.html#eric_sse.entities.ConnectionManager.__init__">(ConnectionManager method)</a>
-</li>
         <li><a href="docs.html#eric_sse.prefabs.DataProcessingChannel.__init__">(DataProcessingChannel method)</a>
 </li>
         <li><a href="docs.html#eric_sse.profile.DataProcessingChannelProfiler.__init__">(DataProcessingChannelProfiler method)</a>
@@ -351,8 +348,6 @@ document.write(`
         <li><a href="docs.html#eric_sse.profile.ListenerWrapper.__init__">(ListenerWrapper method)</a>
 </li>
         <li><a href="docs.html#eric_sse.message.Message.__init__">(Message method)</a>
-</li>
-        <li><a href="docs.html#eric_sse.listener.MessageQueueListener.__init__">(MessageQueueListener method)</a>
 </li>
         <li><a href="docs.html#eric_sse.message.SignedMessage.__init__">(SignedMessage method)</a>
 </li>
@@ -394,8 +389,6 @@ document.write(`
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.add_listener">add_listener() (AbstractChannel method)</a>
 
       <ul>
-        <li><a href="docs.html#eric_sse.entities.ConnectionManager.add_listener">(ConnectionManager method)</a>
-</li>
         <li><a href="docs.html#eric_sse.profile.DataProcessingChannelProfiler.add_listener">(DataProcessingChannelProfiler method)</a>
 </li>
       </ul></li>
@@ -417,18 +410,14 @@ document.write(`
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.servers.SocketServer.connect_callback">connect_callback() (SocketServer static method)</a>
-</li>
-      <li><a href="docs.html#eric_sse.entities.ConnectionManager">ConnectionManager (class in eric_sse.entities)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.repository.AbstractMessageQueueRepository.create">create() (AbstractMessageQueueRepository method)</a>
 
       <ul>
         <li><a href="docs.html#eric_sse.repository.InMemoryMessageQueueRepository.create">(InMemoryMessageQueueRepository method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.clients.SocketClient.create_channel">create_channel() (SocketClient method)</a>
 </li>
   </ul></td>
@@ -549,27 +538,11 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.servers.SSEChannelContainer.get">get() (SSEChannelContainer method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.servers.SSEChannelContainer.get_all_ids">get_all_ids() (SSEChannelContainer method)</a>
 </li>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.get_listener">get_listener() (AbstractChannel method)</a>
-
-      <ul>
-        <li><a href="docs.html#eric_sse.entities.ConnectionManager.get_listener">(ConnectionManager method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.entities.ConnectionManager.get_listeners">get_listeners() (ConnectionManager method)</a>
-</li>
-      <li><a href="docs.html#eric_sse.entities.ConnectionManager.get_queue">get_queue() (ConnectionManager method)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="H">H</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.servers.SocketServer.handle_command">handle_command() (SocketServer static method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -729,21 +702,19 @@ document.write(`
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.register_listener">register_listener() (AbstractChannel method)</a>
 
       <ul>
-        <li><a href="docs.html#eric_sse.entities.ConnectionManager.register_listener">(ConnectionManager method)</a>
+        <li><a href="docs.html#eric_sse.prefabs.SimpleDistributedApplicationChannel.register_listener">(SimpleDistributedApplicationChannel method)</a>
 </li>
       </ul></li>
       <li><a href="docs.html#eric_sse.clients.SocketClient.remove_channel">remove_channel() (SocketClient method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.remove_listener">remove_listener() (AbstractChannel method)</a>
 
       <ul>
-        <li><a href="docs.html#eric_sse.entities.ConnectionManager.remove_listener">(ConnectionManager method)</a>
-</li>
         <li><a href="docs.html#eric_sse.clients.SocketClient.remove_listener">(SocketClient method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.exception.RepositoryError">RepositoryError</a>
 </li>
       <li><a href="docs.html#eric_sse.servers.SSEChannelContainer.rm">rm() (SSEChannelContainer method)</a>
@@ -769,6 +740,8 @@ document.write(`
       <li><a href="docs.html#eric_sse.servers.SocketServer.shutdown">shutdown() (SocketServer method)</a>
 </li>
       <li><a href="docs.html#eric_sse.message.SignedMessage">SignedMessage (class in eric_sse.message)</a>
+</li>
+      <li><a href="docs.html#eric_sse.prefabs.SimpleDistributedApplicationChannel">SimpleDistributedApplicationChannel (class in eric_sse.prefabs)</a>
 </li>
       <li><a href="docs.html#eric_sse.prefabs.SimpleDistributedApplicationListener">SimpleDistributedApplicationListener (class in eric_sse.prefabs)</a>
 </li>
