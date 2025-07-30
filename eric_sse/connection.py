@@ -61,7 +61,7 @@ class ChannelInterface(ABC):
     async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
         ...
 
-class AbstractChannelRepository(ABC):
+class ChannelRepositoryInterface(ABC):
     @abstractmethod
     def load(self) -> Iterable[ChannelInterface]:
         ...
@@ -75,7 +75,7 @@ class AbstractChannelRepository(ABC):
         ...
 
 
-class AbstractConnectionRepository(ABC):
+class ConnectionRepositoryInterface(ABC):
     """
     Abstraction for connections creation
 
@@ -103,7 +103,7 @@ class AbstractConnectionRepository(ABC):
         ...
 
 
-class InMemoryConnectionRepository(AbstractConnectionRepository):
+class InMemoryConnectionRepository(ConnectionRepositoryInterface):
     """
     Default implementation used by :class:`eric_sse.entities.AbstractChannel`
     """

@@ -8,7 +8,7 @@ from eric_sse.exception import InvalidListenerException, NoMessagesException, In
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import MessageContract, Message
 from eric_sse.queue import Queue
-from eric_sse.connection import AbstractConnectionRepository, InMemoryConnectionRepository, Connection, ChannelInterface
+from eric_sse.connection import ConnectionRepositoryInterface, InMemoryConnectionRepository, Connection, ChannelInterface
 
 logger = eric_sse.get_logger()
 
@@ -19,7 +19,7 @@ MESSAGE_TYPE_INTERNAL_ERROR = '_eric_error'
 
 class _ConnectionManager:
     """Maintains relationships between listeners and queues"""
-    def __init__(self, queues_repository: AbstractConnectionRepository):
+    def __init__(self, queues_repository: ConnectionRepositoryInterface):
         self.__listeners: dict[str: MessageQueueListener] = {}
         self.__queues: dict[str: Queue] = {}
         self.__queues_repository = queues_repository
@@ -86,12 +86,12 @@ class AbstractChannel(ChannelInterface):
 
     :param int stream_delay_seconds: Wait time in seconds between message delivery.
 
-    :param eric_sse.connection.AbstractConnectionRepository connections_repository:
+    :param eric_sse.connection.ConnectionRepositoryInterface connections_repository:
     """
     def __init__(
             self,
             stream_delay_seconds: int = 0,
-            connections_repository: AbstractConnectionRepository | None = None
+            connections_repository: ConnectionRepositoryInterface | None = None
     ):
         self.id: str = eric_sse.generate_uuid()
         self.stream_delay_seconds = stream_delay_seconds
