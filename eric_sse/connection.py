@@ -5,8 +5,9 @@ A Redis implementation is available at https://pypi.org/project/eric-redis-queue
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Iterable
+from typing import Iterable, Any, AsyncIterable
 
+from eric_sse.message import MessageContract
 from eric_sse.listener import MessageQueueListener
 from eric_sse.queue import Queue, InMemoryQueue
 
@@ -22,6 +23,63 @@ class Connection:
     listener: MessageQueueListener
     queue: Queue
 
+class ChannelInterface(ABC):
+
+    @abstractmethod
+    def open(self):
+        ...
+
+    @abstractmethod
+    def add_listener(self) -> MessageQueueListener:
+        ...
+
+    @abstractmethod
+    def register_listener(self, listener: MessageQueueListener):
+        ...
+
+    @abstractmethod
+    def remove_listener(self, listener_id: str):
+        ...
+
+    @abstractmethod
+    def deliver_next(self, listener_id: str) -> MessageContract:
+        ...
+
+    @abstractmethod
+    def dispatch(self, listener_id: str, msg: MessageContract):
+        ...
+    @abstractmethod
+    def broadcast(self, msg: MessageContract):
+        ...
+    @abstractmethod
+    def get_listener(self, listener_id: str) -> MessageQueueListener:
+        ...
+
+    @abstractmethod
+    def adapt(self, msg: MessageContract) -> Any:
+        ...
+
+    @abstractmethod
+    async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
+        ...
+
+    @abstractmethod
+    async def watch(self) -> AsyncIterable[Any]:
+        ...
+
+class AbstractChannelRepository(ABC):
+    @abstractmethod
+    def load(self) -> Iterable[ChannelInterface]:
+        ...
+
+    @abstractmethod
+    def persist(self, channel: ChannelInterface):
+        ...
+
+    @abstractmethod
+    def delete(self, channel_id: str):
+        ...
+
 
 class AbstractConnectionRepository(ABC):
     """
@@ -29,6 +87,7 @@ class AbstractConnectionRepository(ABC):
 
     see :class:`eric_sse.entities.AbstractChannel`
     """
+
     @abstractmethod
     def create_queue(self, listener_id: str) -> Queue:
         """Returns a concrete :class:`eric_sse.connection.Connection`"""
