@@ -150,15 +150,27 @@ see [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel)
 
 * **Parameters:**
   * **stream_delay_seconds** (*int*) – Wait time in seconds between message delivery.
-  * **connections_repository** ([*eric_sse.connection.AbstractConnectionRepository*](#eric_sse.connection.AbstractConnectionRepository))
+  * **connections_repository** ([*eric_sse.connection.ConnectionRepositoryInterface*](#eric_sse.connection.ConnectionRepositoryInterface))
 
 <a id="eric_sse.entities.AbstractChannel.__init__"></a>
 
-#### \_\_init_\_(stream_delay_seconds=0, connections_repository=None)
+#### \_\_init_\_(channel_id=None, stream_delay_seconds=0, connections_repository=None)
 
 * **Parameters:**
+  * **channel_id** (*str* *|* *None*)
   * **stream_delay_seconds** (*int*)
-  * **connections_repository** ([*AbstractConnectionRepository*](#eric_sse.connection.AbstractConnectionRepository) *|* *None*)
+  * **connections_repository** ([*ConnectionRepositoryInterface*](#eric_sse.connection.ConnectionRepositoryInterface) *|* *None*)
+
+<a id="eric_sse.entities.AbstractChannel.id"></a>
+
+#### *property* id *: str*
+
+<a id="eric_sse.entities.AbstractChannel.get_listeners_ids"></a>
+
+#### get_listeners_ids()
+
+* **Return type:**
+  list[str]
 
 <a id="eric_sse.entities.AbstractChannel.open"></a>
 
@@ -177,8 +189,20 @@ Add the default listener
 
 #### register_listener(listener)
 
+Registers listener and creates corresponding queue
+
 * **Parameters:**
   **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
+
+<a id="eric_sse.entities.AbstractChannel.register_connection"></a>
+
+#### register_connection(listener, queue)
+
+Registers a Connection with listener
+
+* **Parameters:**
+  * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
+  * **queue** ([*Queue*](#eric_sse.queue.Queue))
 
 <a id="eric_sse.entities.AbstractChannel.remove_listener"></a>
 
@@ -320,6 +344,14 @@ A connection is just a listener and its related message queue
   * **listener** ([*eric_sse.listener.MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
   * **queue** ([*eric_sse.queue.Queue*](#eric_sse.queue.Queue))
 
+<a id="eric_sse.connection.Connection.listener"></a>
+
+#### listener *: [MessageQueueListener](#eric_sse.listener.MessageQueueListener)*
+
+<a id="eric_sse.connection.Connection.queue"></a>
+
+#### queue *: [Queue](#eric_sse.queue.Queue)*
+
 <a id="eric_sse.connection.Connection.__init__"></a>
 
 #### \_\_init_\_(listener, queue)
@@ -330,9 +362,61 @@ A connection is just a listener and its related message queue
 * **Return type:**
   None
 
-<a id="eric_sse.connection.AbstractConnectionRepository"></a>
+<a id="eric_sse.connection.ObjectPersistenceMixin"></a>
 
-### *class* AbstractConnectionRepository
+### *class* ObjectPersistenceMixin
+
+Bases: `ABC`
+
+<a id="eric_sse.connection.ObjectPersistenceMixin.id"></a>
+
+#### *abstract property* id *: str*
+
+Message type
+
+<a id="eric_sse.connection.ObjectPersistenceMixin.value_as_dict"></a>
+
+#### *abstract property* value_as_dict
+
+<a id="eric_sse.connection.ObjectPersistenceMixin.setup_by_dict"></a>
+
+#### *abstract* setup_by_dict(setup)
+
+* **Parameters:**
+  **setup** (*dict*)
+
+<a id="eric_sse.connection.ChannelRepositoryInterface"></a>
+
+### *class* ChannelRepositoryInterface
+
+Bases: `ABC`
+
+<a id="eric_sse.connection.ChannelRepositoryInterface.load"></a>
+
+#### *abstract* load()
+
+Returns an Iterable of all persisted channels
+
+* **Return type:**
+  *Iterable*[[*ObjectPersistenceMixin*](#eric_sse.connection.ObjectPersistenceMixin)]
+
+<a id="eric_sse.connection.ChannelRepositoryInterface.persist"></a>
+
+#### *abstract* persist(channel)
+
+* **Parameters:**
+  **channel** ([*ObjectPersistenceMixin*](#eric_sse.connection.ObjectPersistenceMixin))
+
+<a id="eric_sse.connection.ChannelRepositoryInterface.delete"></a>
+
+#### *abstract* delete(channel_id)
+
+* **Parameters:**
+  **channel_id** (*str*)
+
+<a id="eric_sse.connection.ConnectionRepositoryInterface"></a>
+
+### *class* ConnectionRepositoryInterface
 
 Bases: `ABC`
 
@@ -340,38 +424,36 @@ Abstraction for connections creation
 
 see [`eric_sse.entities.AbstractChannel`](#eric_sse.entities.AbstractChannel)
 
-<a id="eric_sse.connection.AbstractConnectionRepository.create_queue"></a>
+<a id="eric_sse.connection.ConnectionRepositoryInterface.create_queue"></a>
 
 #### *abstract* create_queue(listener_id)
 
-Returns a concrete [`eric_sse.connection.Connection`](#eric_sse.connection.Connection)
+Returns a concrete Queue instance.
 
 * **Parameters:**
   **listener_id** (*str*)
 * **Return type:**
   [*Queue*](#eric_sse.queue.Queue)
 
-<a id="eric_sse.connection.AbstractConnectionRepository.persist"></a>
+<a id="eric_sse.connection.ConnectionRepositoryInterface.persist"></a>
 
 #### *abstract* persist(connection)
-
-Persists a concrete [`eric_sse.connection.Connection`](#eric_sse.connection.Connection)
 
 * **Parameters:**
   **connection** ([*Connection*](#eric_sse.connection.Connection))
 * **Return type:**
   None
 
-<a id="eric_sse.connection.AbstractConnectionRepository.load"></a>
+<a id="eric_sse.connection.ConnectionRepositoryInterface.load"></a>
 
 #### *abstract* load()
 
-Returns an Iterable of all persisted connections [`eric_sse.connection.Connection`](#eric_sse.connection.Connection)
+Returns an Iterable of all persisted connections
 
 * **Return type:**
   *Iterable*[[*Connection*](#eric_sse.connection.Connection)]
 
-<a id="eric_sse.connection.AbstractConnectionRepository.delete"></a>
+<a id="eric_sse.connection.ConnectionRepositoryInterface.delete"></a>
 
 #### *abstract* delete(listener_id)
 
@@ -392,7 +474,7 @@ Removes a persisted [`eric_sse.connection.Connection`](#eric_sse.connection.Conn
 
 ### *class* SSEChannel
 
-Bases: [`AbstractChannel`](#eric_sse.entities.AbstractChannel)
+Bases: [`AbstractChannel`](#eric_sse.entities.AbstractChannel), [`ObjectPersistenceMixin`](#eric_sse.connection.ObjectPersistenceMixin)
 
 SSE streaming channel.
 See [https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
@@ -402,16 +484,17 @@ Currently, ‘id’ field is not supported.
 * **Parameters:**
   * **stream_delay_seconds** (*int*)
   * **retry_timeout_milliseconds** (*int*)
-  * **connections_repository** ([*eric_sse.connection.AbstractConnectionRepository*](#eric_sse.connection.AbstractConnectionRepository))
+  * **connections_repository** ([*eric_sse.connection.ConnectionRepositoryInterface*](#eric_sse.connection.ConnectionRepositoryInterface))
 
 <a id="eric_sse.prefabs.SSEChannel.__init__"></a>
 
-#### \_\_init_\_(stream_delay_seconds=0, retry_timeout_milliseconds=5, connections_repository=None)
+#### \_\_init_\_(channel_id=None, stream_delay_seconds=0, retry_timeout_milliseconds=5, connections_repository=None)
 
 * **Parameters:**
+  * **channel_id** (*str* *|* *None*)
   * **stream_delay_seconds** (*int*)
   * **retry_timeout_milliseconds** (*int*)
-  * **connections_repository** ([*AbstractConnectionRepository*](#eric_sse.connection.AbstractConnectionRepository) *|* *None*)
+  * **connections_repository** ([*ConnectionRepositoryInterface*](#eric_sse.connection.ConnectionRepositoryInterface) *|* *None*)
 
 <a id="eric_sse.prefabs.SSEChannel.payload_adapter"></a>
 
@@ -419,6 +502,27 @@ Currently, ‘id’ field is not supported.
 
 Message payload adapter, defaults to identity (leave as is). It can be used, for example, when working in a 
 context where receiver is responsible for payload deserialization, e.g. Sockets
+
+<a id="eric_sse.prefabs.SSEChannel.value_as_dict"></a>
+
+#### *property* value_as_dict
+
+<a id="eric_sse.prefabs.SSEChannel.setup_by_dict"></a>
+
+#### setup_by_dict(setup)
+
+* **Parameters:**
+  **setup** (*dict*)
+
+<a id="eric_sse.prefabs.SSEChannel.create_from_dict"></a>
+
+#### *static* create_from_dict(params, connection_repository)
+
+* **Parameters:**
+  * **params** (*dict*)
+  * **connection_repository** ([*ConnectionRepositoryInterface*](#eric_sse.connection.ConnectionRepositoryInterface))
+* **Return type:**
+  [*AbstractChannel*](#eric_sse.entities.AbstractChannel)
 
 <a id="eric_sse.prefabs.SSEChannel.adapt"></a>
 
@@ -550,6 +654,8 @@ Bases: [`SSEChannel`](#eric_sse.prefabs.SSEChannel)
 
 #### register_listener(listener)
 
+Registers listener and creates corresponding queue
+
 * **Parameters:**
   **listener** ([*SimpleDistributedApplicationListener*](#eric_sse.prefabs.SimpleDistributedApplicationListener))
 
@@ -559,42 +665,42 @@ Bases: [`SSEChannel`](#eric_sse.prefabs.SSEChannel)
 
 # Prefab servers and clients
 
-<a id="eric_sse.servers.SSEChannelContainer"></a>
+<a id="eric_sse.servers.ChannelContainer"></a>
 
-### *class* SSEChannelContainer
+### *class* ChannelContainer
 
 Helper class for management of multiple SSE channels cases of use.
 
-<a id="eric_sse.servers.SSEChannelContainer.__init__"></a>
+<a id="eric_sse.servers.ChannelContainer.__init__"></a>
 
 #### \_\_init_\_()
 
-<a id="eric_sse.servers.SSEChannelContainer.add"></a>
+<a id="eric_sse.servers.ChannelContainer.register"></a>
 
-#### add(queues_repository=None)
+#### register(channel)
 
 * **Parameters:**
-  **queues_repository** ([*AbstractConnectionRepository*](#eric_sse.connection.AbstractConnectionRepository) *|* *None*)
+  **channel** ([*AbstractChannel*](#eric_sse.entities.AbstractChannel))
 * **Return type:**
-  [*SSEChannel*](#eric_sse.prefabs.SSEChannel)
+  None
 
-<a id="eric_sse.servers.SSEChannelContainer.get"></a>
+<a id="eric_sse.servers.ChannelContainer.get"></a>
 
 #### get(channel_id)
 
 * **Parameters:**
   **channel_id** (*str*)
 * **Return type:**
-  [*SSEChannel*](#eric_sse.prefabs.SSEChannel)
+  [*AbstractChannel*](#eric_sse.entities.AbstractChannel)
 
-<a id="eric_sse.servers.SSEChannelContainer.rm"></a>
+<a id="eric_sse.servers.ChannelContainer.rm"></a>
 
 #### rm(channel_id)
 
 * **Parameters:**
   **channel_id** (*str*)
 
-<a id="eric_sse.servers.SSEChannelContainer.get_all_ids"></a>
+<a id="eric_sse.servers.ChannelContainer.get_all_ids"></a>
 
 #### get_all_ids()
 

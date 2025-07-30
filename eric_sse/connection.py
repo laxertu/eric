@@ -37,53 +37,15 @@ class ObjectPersistenceMixin(ABC):
     def setup_by_dict(self, setup: dict):
         ...
 
-class ChannelInterface(ABC):
-
-    @abstractmethod
-    def open(self):
-        """Do initialization before serving here"""
-        ...
-
-    @abstractmethod
-    def add_listener(self) -> MessageQueueListener:
-        ...
-
-    @abstractmethod
-    def register_connection(self, listener: MessageQueueListener, queue: Queue):
-        ...
-
-    @abstractmethod
-    def remove_listener(self, listener_id: str):
-        ...
-
-    @abstractmethod
-    def dispatch(self, listener_id: str, msg: MessageContract):
-        ...
-
-    @abstractmethod
-    def broadcast(self, msg: MessageContract):
-        ...
-
-    @abstractmethod
-    def get_listener(self, listener_id: str) -> MessageQueueListener:
-        ...
-
-    @abstractmethod
-    def adapt(self, msg: MessageContract) -> Any:
-        ...
-
-    @abstractmethod
-    async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
-        ...
-
 class ChannelRepositoryInterface(ABC):
 
     @abstractmethod
-    def load(self) -> Iterable[ChannelInterface]:
+    def load(self) -> Iterable[ObjectPersistenceMixin]:
+        """Returns an Iterable of all persisted channels"""
         ...
 
     @abstractmethod
-    def persist(self, channel: ChannelInterface):
+    def persist(self, channel: ObjectPersistenceMixin):
         ...
 
     @abstractmethod
@@ -100,17 +62,16 @@ class ConnectionRepositoryInterface(ABC):
 
     @abstractmethod
     def create_queue(self, listener_id: str) -> Queue:
-        """Returns a concrete :class:`eric_sse.connection.Connection`"""
+        """Returns a concrete Queue instance."""
         ...
 
     @abstractmethod
     def persist(self, connection: Connection) -> None:
-        """Persists a concrete :class:`eric_sse.connection.Connection`"""
         ...
 
     @abstractmethod
     def load(self) -> Iterable[Connection]:
-        """Returns an Iterable of all persisted connections :class:`eric_sse.connection.Connection`"""
+        """Returns an Iterable of all persisted connections"""
         ...
 
     @abstractmethod

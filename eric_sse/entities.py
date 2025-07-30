@@ -8,7 +8,7 @@ from eric_sse.exception import InvalidListenerException, NoMessagesException, In
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import MessageContract, Message
 from eric_sse.queue import Queue
-from eric_sse.connection import ConnectionRepositoryInterface, InMemoryConnectionRepository, Connection, ChannelInterface
+from eric_sse.connection import ConnectionRepositoryInterface, InMemoryConnectionRepository, Connection
 
 logger = eric_sse.get_logger()
 
@@ -74,7 +74,7 @@ class _ConnectionManager:
         """Returns a dict mapping listener ids to listeners"""
         return self.__listeners
 
-class AbstractChannel(ChannelInterface):
+class AbstractChannel():
     """
     Base class for channels.
 

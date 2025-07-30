@@ -35,7 +35,8 @@ Channels and listeners
 Channel connections Management
 ==============================
 .. automodule:: eric_sse.connection
-    :members: Connection, AbstractConnectionRepository
+    :members: Connection, ChannelInterface, ObjectPersistenceMixin, ChannelRepositoryInterface, ConnectionRepositoryInterface
+    :undoc-members:
     :member-order: bysource
     :show-inheritance:
 
