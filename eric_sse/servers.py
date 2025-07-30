@@ -30,6 +30,11 @@ class SSEChannelContainer:
         self.__channels[channel.id] = channel
         return channel
 
+    def register(self, channel: SSEChannel) -> None:
+        if channel.id in self.__channels:
+            raise InvalidChannelException(f'Channel with id {channel.id} already exists')
+        self.__channels[channel.id] = channel
+
     def get(self, channel_id: str) -> SSEChannel:
         try:
             return self.__channels[channel_id]
