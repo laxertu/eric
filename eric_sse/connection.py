@@ -5,8 +5,8 @@ A Redis implementation is available at https://pypi.org/project/eric-redis-queue
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Iterable, Any, AsyncIterable
-from eric_sse.message import MessageContract
+from typing import Iterable
+
 from eric_sse.listener import MessageQueueListener
 from eric_sse.queue import Queue, InMemoryQueue
 
