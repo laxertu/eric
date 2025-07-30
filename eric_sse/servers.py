@@ -9,10 +9,10 @@ from pathlib import Path
 from typing import AsyncIterable, Iterable
 
 from eric_sse import get_logger
+from eric_sse.entities import AbstractChannel
 from eric_sse.message import MessageContract, Message
 from eric_sse.exception import InvalidChannelException, InvalidMessageFormat
 from eric_sse.prefabs import SSEChannel
-from eric_sse.connection import ConnectionRepositoryInterface
 
 logger = get_logger()
 
@@ -23,19 +23,13 @@ class SSEChannelContainer:
     def __init__(self):
         self.__channels: dict[str: SSEChannel] = {}
 
-    def add(self, queues_repository: ConnectionRepositoryInterface | None = None) -> SSEChannel:
-        channel = SSEChannel(connections_repository=queues_repository)
-        if channel.id in self.__channels:
-            raise InvalidChannelException(f'Channel with id {channel.id} already exists')
-        self.__channels[channel.id] = channel
-        return channel
 
-    def register(self, channel: SSEChannel) -> None:
+    def register(self, channel: AbstractChannel) -> None:
         if channel.id in self.__channels:
             raise InvalidChannelException(f'Channel with id {channel.id} already exists')
         self.__channels[channel.id] = channel
 
-    def get(self, channel_id: str) -> SSEChannel:
+    def get(self, channel_id: str) -> AbstractChannel:
         try:
             return self.__channels[channel_id]
         except KeyError:
@@ -148,7 +142,8 @@ class SocketServer:
             yield SocketServer.ACK
 
         elif verb == 'c':
-            channel = SocketServer.cc.add()
+            channel = SSEChannel()
+            SocketServer.cc.register(channel)
             yield channel.id
 
         elif verb == 'b':
