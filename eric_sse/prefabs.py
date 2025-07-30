@@ -6,12 +6,12 @@ from eric_sse.entities import AbstractChannel
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
-from eric_sse.connection import ConnectionRepositoryInterface
+from eric_sse.connection import ConnectionRepositoryInterface, ObjectPersistenceMixin
 
 logger = get_logger()
 
 
-class SSEChannel(AbstractChannel):
+class SSEChannel(AbstractChannel, ObjectPersistenceMixin):
     """
     SSE streaming channel.
     See https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
@@ -31,6 +31,7 @@ class SSEChannel(AbstractChannel):
     ):
         super().__init__(stream_delay_seconds=stream_delay_seconds, connections_repository=connections_repository)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
+        self.__connections_repository = connections_repository
 
         self.payload_adapter: (
             Callable)[[dict | list | str | int | float | None], dict | list | str | int | float | None] = lambda x: x
@@ -38,15 +39,20 @@ class SSEChannel(AbstractChannel):
         context where receiver is responsible for payload deserialization, e.g. Sockets"""
 
     @property
-    def key(self) -> str:
-        return self.id
-
-    @property
     def value_as_dict(self):
         return {
             'stream_delay_seconds': self.stream_delay_seconds,
             'retry_timeout_milliseconds': self.retry_timeout_milliseconds,
+            'connection_repository_classname': self.__connections_repository.__class__.__name__,
         }
+
+    def setup_by_dict(self, setup: dict):
+        self.stream_delay_seconds = setup['stream_delay_seconds']
+        self.retry_timeout_milliseconds = setup['retry_timeout_milliseconds']
+
+        connections = self.__connections_repository.load()
+        for connection in connections:
+            self.register_connection(listener=connection.listener, queue=connection.queue)
 
     @staticmethod
     def create_from_dict(params: dict, connection_repository: ConnectionRepositoryInterface) -> AbstractChannel:

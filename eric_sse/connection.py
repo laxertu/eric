@@ -21,6 +21,21 @@ class Connection:
     listener: MessageQueueListener
     queue: Queue
 
+class ObjectPersistenceMixin(ABC):
+    @property
+    @abstractmethod
+    def id(self) -> str:
+        """Message type"""
+        ...
+
+    @property
+    @abstractmethod
+    def value_as_dict(self):
+        ...
+
+    @abstractmethod
+    def setup_by_dict(self, setup: dict):
+        ...
 
 class ChannelInterface(ABC):
 
@@ -33,7 +48,7 @@ class ChannelInterface(ABC):
         ...
 
     @abstractmethod
-    def register_listener(self, listener: MessageQueueListener):
+    def register_connection(self, listener: MessageQueueListener, queue: Queue):
         ...
 
     @abstractmethod
@@ -61,10 +76,6 @@ class ChannelInterface(ABC):
         ...
 
 class ChannelRepositoryInterface(ABC):
-
-    @abstractmethod
-    def create(self) -> ChannelInterface:
-        ...
 
     @abstractmethod
     def load(self) -> Iterable[ChannelInterface]:
@@ -107,6 +118,7 @@ class ConnectionRepositoryInterface(ABC):
         ...
 
 
+
 class InMemoryConnectionRepository(ConnectionRepositoryInterface):
     """
     Default implementation used by :class:`eric_sse.entities.AbstractChannel`
@@ -122,4 +134,3 @@ class InMemoryConnectionRepository(ConnectionRepositoryInterface):
 
     def delete(self, listener_id: str) -> None:
         pass
-

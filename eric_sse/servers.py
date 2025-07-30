@@ -17,11 +17,11 @@ from eric_sse.prefabs import SSEChannel
 logger = get_logger()
 
 
-class SSEChannelContainer:
+class ChannelContainer:
     """Helper class for management of multiple SSE channels cases of use."""
 
     def __init__(self):
-        self.__channels: dict[str: SSEChannel] = {}
+        self.__channels: dict[str: AbstractChannel] = {}
 
 
     def register(self, channel: AbstractChannel) -> None:
@@ -73,7 +73,7 @@ class SocketServer:
 
     See examples
     """
-    cc = SSEChannelContainer()
+    cc = ChannelContainer()
     ACK = 'ack'
 
     def __init__(self, file_descriptor_path: str):

@@ -47,7 +47,6 @@ class _ConnectionManager:
     def register_connection(self, listener: MessageQueueListener, queue: Queue):
         self.__listeners[listener.id] = listener
         self.__queues[listener.id] = queue
-        self.__queues_repository.persist(Connection(listener=listener, queue=self.__queues[listener.id]))
 
 
     def remove_listener(self, listener_id: str):
@@ -93,11 +92,18 @@ class AbstractChannel(ChannelInterface):
             stream_delay_seconds: int = 0,
             connections_repository: ConnectionRepositoryInterface | None = None
     ):
-        self.id: str = eric_sse.generate_uuid()
+        self.__id: str = eric_sse.generate_uuid()
         self.stream_delay_seconds = stream_delay_seconds
 
         connections_repository = connections_repository if connections_repository else InMemoryConnectionRepository()
         self.__connection_manager: _ConnectionManager = _ConnectionManager(connections_repository)
+
+    @property
+    def id(self) -> str:
+        return self.__id
+
+    def get_listeners_ids(self) -> list[str]:
+        return [l.id for l in self.__connection_manager.get_listeners().values()]
 
     def open(self):
         self.__connection_manager.load()
@@ -111,6 +117,9 @@ class AbstractChannel(ChannelInterface):
 
     def register_listener(self, listener: MessageQueueListener):
         return self.__connection_manager.register_listener(listener)
+
+    def register_connection(self, listener: MessageQueueListener, queue: Queue):
+        return self.__connection_manager.register_connection(listener, queue)
 
     def remove_listener(self, listener_id: str):
         self.__connection_manager.remove_listener(listener_id)
