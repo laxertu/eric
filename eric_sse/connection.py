@@ -42,15 +42,13 @@ class ChannelInterface(ABC):
         ...
 
     @abstractmethod
-    def deliver_next(self, listener_id: str) -> MessageContract:
+    def dispatch(self, listener_id: str, msg: MessageContract):
         ...
 
     @abstractmethod
-    def dispatch(self, listener_id: str, msg: MessageContract):
-        ...
-    @abstractmethod
     def broadcast(self, msg: MessageContract):
         ...
+
     @abstractmethod
     def get_listener(self, listener_id: str) -> MessageQueueListener:
         ...
@@ -61,10 +59,6 @@ class ChannelInterface(ABC):
 
     @abstractmethod
     async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
-        ...
-
-    @abstractmethod
-    async def watch(self) -> AsyncIterable[Any]:
         ...
 
 class AbstractChannelRepository(ABC):
