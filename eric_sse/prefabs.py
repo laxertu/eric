@@ -6,12 +6,12 @@ from eric_sse.entities import AbstractChannel
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
-from eric_sse.connection import ConnectionRepositoryInterface, ChannelPersistenceMixin
+from eric_sse.connection import ConnectionRepositoryInterface
 
 logger = get_logger()
 
 
-class SSEChannel(AbstractChannel, ChannelPersistenceMixin):
+class SSEChannel(AbstractChannel):
     """
     SSE streaming channel.
     See https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
@@ -41,11 +41,19 @@ class SSEChannel(AbstractChannel, ChannelPersistenceMixin):
     def key(self) -> str:
         return self.id
 
-    def get_constructor_params(self) -> dict:
+    @property
+    def value_as_dict(self):
         return {
             'stream_delay_seconds': self.stream_delay_seconds,
             'retry_timeout_milliseconds': self.retry_timeout_milliseconds,
         }
+
+    @staticmethod
+    def create_from_dict(params: dict, connection_repository: ConnectionRepositoryInterface) -> AbstractChannel:
+        return SSEChannel(
+            **params,
+            connections_repository=connection_repository
+        )
 
     def adapt(self, msg: MessageContract) -> dict:
         """

@@ -6,11 +6,9 @@ A Redis implementation is available at https://pypi.org/project/eric-redis-queue
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Iterable, Any, AsyncIterable
-
 from eric_sse.message import MessageContract
 from eric_sse.listener import MessageQueueListener
 from eric_sse.queue import Queue, InMemoryQueue
-
 
 @dataclass
 class Connection:
@@ -22,17 +20,6 @@ class Connection:
     """
     listener: MessageQueueListener
     queue: Queue
-
-class ChannelPersistenceMixin(ABC):
-    @property
-    @abstractmethod
-    def key(self) -> str:
-        ...
-
-
-    @abstractmethod
-    def get_constructor_params(self) -> dict:
-        ...
 
 
 class ChannelInterface(ABC):
@@ -135,3 +122,4 @@ class InMemoryConnectionRepository(ConnectionRepositoryInterface):
 
     def delete(self, listener_id: str) -> None:
         pass
+
