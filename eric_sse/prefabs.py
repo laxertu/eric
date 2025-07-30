@@ -6,7 +6,7 @@ from eric_sse.entities import AbstractChannel
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
-from eric_sse.connection import ConnectionRepositoryInterface, ObjectPersistenceMixin
+from eric_sse.persistence import ConnectionRepositoryInterface, ObjectPersistenceMixin
 
 logger = get_logger()
 
@@ -20,7 +20,7 @@ class SSEChannel(AbstractChannel, ObjectPersistenceMixin):
 
     :param int stream_delay_seconds:
     :param int retry_timeout_milliseconds:
-    :param eric_sse.connection.ConnectionRepositoryInterface connections_repository:
+    :param eric_sse.persistence.ConnectionRepositoryInterface connections_repository:
     """
 
     def __init__(

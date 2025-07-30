@@ -8,7 +8,7 @@ from eric_sse.exception import InvalidListenerException, NoMessagesException, In
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import MessageContract, Message
 from eric_sse.queue import Queue
-from eric_sse.connection import ConnectionRepositoryInterface, InMemoryConnectionRepository, Connection
+from eric_sse.persistence import ConnectionRepositoryInterface, InMemoryConnectionRepository, Connection
 
 logger = eric_sse.get_logger()
 
@@ -85,7 +85,7 @@ class AbstractChannel(ABC):
 
     :param int stream_delay_seconds: Wait time in seconds between message delivery.
 
-    :param eric_sse.connection.ConnectionRepositoryInterface connections_repository:
+    :param eric_sse.persistence.ConnectionRepositoryInterface connections_repository:
     """
     def __init__(
             self,
