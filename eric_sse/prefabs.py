@@ -6,12 +6,12 @@ from eric_sse.entities import AbstractChannel
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
-from eric_sse.connection import ConnectionRepositoryInterface
+from eric_sse.connection import ConnectionRepositoryInterface, ChannelPersistenceMixin
 
 logger = get_logger()
 
 
-class SSEChannel(AbstractChannel):
+class SSEChannel(AbstractChannel, ChannelPersistenceMixin):
     """
     SSE streaming channel.
     See https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
@@ -36,6 +36,16 @@ class SSEChannel(AbstractChannel):
             Callable)[[dict | list | str | int | float | None], dict | list | str | int | float | None] = lambda x: x
         """Message payload adapter, defaults to identity (leave as is). It can be used, for example, when working in a 
         context where receiver is responsible for payload deserialization, e.g. Sockets"""
+
+    @property
+    def key(self) -> str:
+        return self.id
+
+    def get_constructor_params(self) -> dict:
+        return {
+            'stream_delay_seconds': self.stream_delay_seconds,
+            'retry_timeout_milliseconds': self.retry_timeout_milliseconds,
+        }
 
     def adapt(self, msg: MessageContract) -> dict:
         """

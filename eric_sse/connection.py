@@ -23,6 +23,18 @@ class Connection:
     listener: MessageQueueListener
     queue: Queue
 
+class ChannelPersistenceMixin(ABC):
+    @property
+    @abstractmethod
+    def key(self) -> str:
+        ...
+
+
+    @abstractmethod
+    def get_constructor_params(self) -> dict:
+        ...
+
+
 class ChannelInterface(ABC):
 
     @abstractmethod
@@ -62,6 +74,11 @@ class ChannelInterface(ABC):
         ...
 
 class ChannelRepositoryInterface(ABC):
+
+    @abstractmethod
+    def create(self) -> ChannelInterface:
+        ...
+
     @abstractmethod
     def load(self) -> Iterable[ChannelInterface]:
         ...
