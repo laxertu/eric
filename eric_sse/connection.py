@@ -37,7 +37,8 @@ class ObjectPersistenceMixin(ABC):
     def setup_by_dict(self, setup: dict):
         ...
 
-class ChannelRepositoryInterface(ABC):
+
+class ObjectRepositoryInterface(ABC):
 
     @abstractmethod
     def load(self) -> Iterable[ObjectPersistenceMixin]:
