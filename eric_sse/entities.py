@@ -74,7 +74,7 @@ class _ConnectionManager:
         """Returns a dict mapping listener ids to listeners"""
         return self.__listeners
 
-class AbstractChannel():
+class AbstractChannel(ABC):
     """
     Base class for channels.
 
@@ -121,7 +121,7 @@ class AbstractChannel():
         return self.__connection_manager.register_listener(listener)
 
     def register_connection(self, listener: MessageQueueListener, queue: Queue):
-        """Registers a Connection with listener"""
+        """Registers a Connection with listener and queue"""
         return self.__connection_manager.register_connection(listener, queue)
 
     def remove_listener(self, listener_id: str):
@@ -168,7 +168,7 @@ class AbstractChannel():
         """
         Entry point for message streaming
 
-        A message with type = 'error' is yeld on invalid listener or channel
+        A message with type = 'error' is yield on invalid listener or channel
         """
 
         async def new_messages():
