@@ -5,13 +5,13 @@ from unittest.mock import MagicMock
 from eric_sse.clients import SocketClient
 from eric_sse.exception import InvalidChannelException
 from eric_sse.prefabs import SSEChannel
-from eric_sse.servers import SocketServer, SSEChannelContainer
+from eric_sse.servers import SocketServer, ChannelContainer
 SOCKET_FILE_DESCRIPTOR_PATH = 'socketserver_e2e_test.sock'
 
 
 class TestChannelContainer(TestCase):
     def test_exceptions(self):
-        sut = SSEChannelContainer()
+        sut = ChannelContainer()
 
         with self.assertRaises(InvalidChannelException):
             sut.rm('fake_channel_id')
@@ -21,7 +21,7 @@ class TestChannelContainer(TestCase):
 
 class TestSocketServer(IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
-        channel_container_mock = MagicMock(SSEChannelContainer)
+        channel_container_mock = MagicMock(ChannelContainer)
         channel_mock = MagicMock(SSEChannel)
         channel_container_mock.get = MagicMock(return_value=channel_mock)
         SocketServer.cc = channel_container_mock
@@ -34,7 +34,7 @@ class TestSocketServer(IsolatedAsyncioTestCase):
 
     async def asyncTearDown(self):
         await self.sut.shutdown()
-        SocketServer.cc = SSEChannelContainer()
+        SocketServer.cc = ChannelContainer()
 
 class SocketServerTestCase(TestSocketServer):
 
