@@ -411,9 +411,9 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer"><code class="docutils literal notranslate"><span class="pre">SocketServer</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.start"><code class="docutils literal notranslate"><span class="pre">start()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.shutdown"><code class="docutils literal notranslate"><span class="pre">shutdown()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.start"><code class="docutils literal notranslate"><span class="pre">start()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.clients.SocketClient"><code class="docutils literal notranslate"><span class="pre">SocketClient</span></code></a><ul class="nav section-nav flex-column">
@@ -486,7 +486,7 @@ document.write(`
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
 <p>Contract class for messages</p>
 <p>A message is just a container of information identified by a type.
-For validation purposes you can override <code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.entities.MessageQueueListener.on_message</span></code></p>
+For validation purposes you can override <a class="reference internal" href="#eric_sse.listener.MessageQueueListener.on_message" title="eric_sse.listener.MessageQueueListener.on_message"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.listener.MessageQueueListener.on_message</span></code></a></p>
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.message.MessageContract.type">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.message.MessageContract.type" title="Link to this definition">#</a></dt>
@@ -1056,7 +1056,7 @@ Just override <strong>adapt</strong> method to control output returned to client
 <span class="sig-name descname"><span class="pre">set_action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationListener.set_action" title="Link to this definition">#</a></dt>
 <dd><p>Hooks a callable to a string key.</p>
 <p>Callables are selected when listener processes the message depending on its type.</p>
-<p>They should return a list of Messages corresponding to response to action requested.</p>
+<p>They should return a list of MessageContract instances corresponding to response to action requested.</p>
 <p>Reserved actions are ‘start’, ‘stop’.
 Receiving a message with one of these types will fire corresponding action.</p>
 <dl class="field-list simple">
@@ -1205,7 +1205,18 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_descriptor_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.SocketServer.__init__" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>file_descriptor_path</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>file_descriptor_path</strong> (<em>str</em>) – See <strong>start</strong> method</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.servers.SocketServer.start">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_descriptor_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.SocketServer.start" title="Link to this definition">#</a></dt>
+<dd><p>Shortcut to start a server given a file descriptor path</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_descriptor_path</strong> (<em>str</em>) – file descriptor path, all understood by <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a> is fine</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1220,17 +1231,6 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <dt class="sig sig-object py" id="eric_sse.servers.SocketServer.main">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.SocketServer.main" title="Link to this definition">#</a></dt>
 <dd><p>Starts the server</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eric_sse.servers.SocketServer.start">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_descriptor_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.SocketServer.start" title="Link to this definition">#</a></dt>
-<dd><p>Shortcut to start a server given a file descriptor path</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>file_descriptor_path</strong> (<em>str</em>) – file descriptor path, all understood by <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a> is fine</p>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>
@@ -1642,9 +1642,9 @@ an <a class="reference internal" href="#eric_sse.exception.NoMessagesException" 
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer"><code class="docutils literal notranslate"><span class="pre">SocketServer</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.start"><code class="docutils literal notranslate"><span class="pre">start()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.shutdown"><code class="docutils literal notranslate"><span class="pre">shutdown()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.servers.SocketServer.start"><code class="docutils literal notranslate"><span class="pre">start()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.clients.SocketClient"><code class="docutils literal notranslate"><span class="pre">SocketClient</span></code></a><ul class="nav section-nav flex-column">

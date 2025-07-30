@@ -21,7 +21,7 @@ Bases: `ABC`
 Contract class for messages
 
 A message is just a container of information identified by a type.
-For validation purposes you can override `eric_sse.entities.MessageQueueListener.on_message`
+For validation purposes you can override [`eric_sse.listener.MessageQueueListener.on_message`](#eric_sse.listener.MessageQueueListener.on_message)
 
 <a id="eric_sse.message.MessageContract.type"></a>
 
@@ -512,7 +512,7 @@ Hooks a callable to a string key.
 
 Callables are selected when listener processes the message depending on its type.
 
-They should return a list of Messages corresponding to response to action requested.
+They should return a list of MessageContract instances corresponding to response to action requested.
 
 Reserved actions are ‘start’, ‘stop’.
 Receiving a message with one of these types will fire corresponding action.
@@ -639,7 +639,16 @@ See examples
 #### \_\_init_\_(file_descriptor_path)
 
 * **Parameters:**
-  **file_descriptor_path** (*str*)
+  **file_descriptor_path** (*str*) – See **start** method
+
+<a id="eric_sse.servers.SocketServer.start"></a>
+
+#### *static* start(file_descriptor_path)
+
+Shortcut to start a server given a file descriptor path
+
+* **Parameters:**
+  **file_descriptor_path** (*str*) – file descriptor path, all understood by [Path](https://docs.python.org/3/library/pathlib.html#pathlib.Path) is fine
 
 <a id="eric_sse.servers.SocketServer.shutdown"></a>
 
@@ -652,15 +661,6 @@ Graceful Shutdown
 #### *async* main()
 
 Starts the server
-
-<a id="eric_sse.servers.SocketServer.start"></a>
-
-#### *static* start(file_descriptor_path)
-
-Shortcut to start a server given a file descriptor path
-
-* **Parameters:**
-  **file_descriptor_path** (*str*) – file descriptor path, all understood by [Path](https://docs.python.org/3/library/pathlib.html#pathlib.Path) is fine
 
 <a id="module-eric_sse.clients"></a>
 

@@ -137,7 +137,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
 
         Callables are selected when listener processes the message depending on its type.
 
-        They should return a list of Messages corresponding to response to action requested.
+        They should return a list of MessageContract instances corresponding to response to action requested.
 
         Reserved actions are 'start', 'stop'.
         Receiving a message with one of these types will fire corresponding action.

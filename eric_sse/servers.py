@@ -78,8 +78,26 @@ class SocketServer:
     ACK = 'ack'
 
     def __init__(self, file_descriptor_path: str):
+        """
+        :param file_descriptor_path: See **start** method
+        """
         self.__file_descriptor_path = file_descriptor_path
         self.__unix_server: asyncio.Server | None = None
+
+
+    @staticmethod
+    def start(file_descriptor_path: str):
+        """
+        Shortcut to start a server given a file descriptor path
+
+        :param file_descriptor_path: file descriptor path, all understood by `Path <https://docs.python.org/3/library/pathlib.html#pathlib.Path>`_ is fine
+        """
+        logger.info('starting')
+        try:
+            server = SocketServer(file_descriptor_path)
+            asyncio.run(server.main())
+        except CancelledError:
+            exit(0)
 
     @staticmethod
     def __parse(json_raw: str) -> (str, str, MessageContract | None, str):
@@ -179,16 +197,3 @@ class SocketServer:
                 server.get_loop().add_signal_handler(sig, lambda: asyncio.ensure_future(self.shutdown()))
             await server.serve_forever()
 
-    @staticmethod
-    def start(file_descriptor_path: str):
-        """
-        Shortcut to start a server given a file descriptor path
-
-        :param file_descriptor_path: file descriptor path, all understood by `Path <https://docs.python.org/3/library/pathlib.html#pathlib.Path>`_ is fine
-        """
-        logger.info('starting')
-        try:
-            server = SocketServer(file_descriptor_path)
-            asyncio.run(server.main())
-        except CancelledError:
-            exit(0)
