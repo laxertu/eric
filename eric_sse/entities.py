@@ -89,10 +89,11 @@ class AbstractChannel(ChannelInterface):
     """
     def __init__(
             self,
+            channel_id: str | None = None,
             stream_delay_seconds: int = 0,
             connections_repository: ConnectionRepositoryInterface | None = None
     ):
-        self.__id: str = eric_sse.generate_uuid()
+        self.__id: str = eric_sse.generate_uuid() if channel_id is None else channel_id
         self.stream_delay_seconds = stream_delay_seconds
 
         connections_repository = connections_repository if connections_repository else InMemoryConnectionRepository()

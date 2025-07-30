@@ -25,11 +25,12 @@ class SSEChannel(AbstractChannel, ObjectPersistenceMixin):
 
     def __init__(
             self,
+            channel_id: str | None = None,
             stream_delay_seconds: int = 0,
             retry_timeout_milliseconds: int = 5,
             connections_repository: ConnectionRepositoryInterface = None
     ):
-        super().__init__(stream_delay_seconds=stream_delay_seconds, connections_repository=connections_repository)
+        super().__init__(channel_id=channel_id, stream_delay_seconds=stream_delay_seconds, connections_repository=connections_repository)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
         self.__connections_repository = connections_repository
 
@@ -41,9 +42,10 @@ class SSEChannel(AbstractChannel, ObjectPersistenceMixin):
     @property
     def value_as_dict(self):
         return {
+            'channel_id': self.id,
             'stream_delay_seconds': self.stream_delay_seconds,
             'retry_timeout_milliseconds': self.retry_timeout_milliseconds,
-            'connection_repository_classname': self.__connections_repository.__class__.__name__,
+            #'connection_repository_classname': self.__connections_repository.__class__.__name__,
         }
 
     def setup_by_dict(self, setup: dict):
