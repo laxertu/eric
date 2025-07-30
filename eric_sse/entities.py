@@ -117,9 +117,11 @@ class AbstractChannel(ChannelInterface):
         return l
 
     def register_listener(self, listener: MessageQueueListener):
+        """Registers listener and creates corresponding queue"""
         return self.__connection_manager.register_listener(listener)
 
     def register_connection(self, listener: MessageQueueListener, queue: Queue):
+        """Registers a Connection with listener"""
         return self.__connection_manager.register_connection(listener, queue)
 
     def remove_listener(self, listener_id: str):

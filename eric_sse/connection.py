@@ -41,6 +41,7 @@ class ChannelInterface(ABC):
 
     @abstractmethod
     def open(self):
+        """Do initialization before serving here"""
         ...
 
     @abstractmethod
