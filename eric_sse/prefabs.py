@@ -6,12 +6,12 @@ from eric_sse.entities import AbstractChannel
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
-from eric_sse.persistence import ConnectionRepositoryInterface, ObjectPersistenceMixin
+from eric_sse.persistence import ConnectionRepositoryInterface, ObjectAsKeyValuePersistenceMixin
 
 logger = get_logger()
 
 
-class SSEChannel(AbstractChannel, ObjectPersistenceMixin):
+class SSEChannel(AbstractChannel, ObjectAsKeyValuePersistenceMixin):
     """
     SSE streaming channel.
     See https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
@@ -40,7 +40,11 @@ class SSEChannel(AbstractChannel, ObjectPersistenceMixin):
         context where receiver is responsible for payload deserialization, e.g. Sockets"""
 
     @property
-    def value_as_dict(self):
+    def kv_key(self) -> str:
+        return self.id
+
+    @property
+    def kv_value_as_dict(self):
         return {
             'channel_id': self.id,
             'stream_delay_seconds': self.stream_delay_seconds,

@@ -21,16 +21,16 @@ class Connection:
     listener: MessageQueueListener
     queue: Queue
 
-class ObjectPersistenceMixin(ABC):
+class ObjectAsKeyValuePersistenceMixin(ABC):
     @property
     @abstractmethod
-    def id(self) -> str:
+    def kv_key(self) -> str:
         """Message type"""
         ...
 
     @property
     @abstractmethod
-    def value_as_dict(self):
+    def kv_value_as_dict(self):
         ...
 
     @abstractmethod
@@ -41,12 +41,12 @@ class ObjectPersistenceMixin(ABC):
 class ObjectRepositoryInterface(ABC):
 
     @abstractmethod
-    def load(self) -> Iterable[ObjectPersistenceMixin]:
+    def load(self) -> Iterable[ObjectAsKeyValuePersistenceMixin]:
         """Returns an Iterable of all persisted channels"""
         ...
 
     @abstractmethod
-    def persist(self, channel: ObjectPersistenceMixin):
+    def persist(self, channel: ObjectAsKeyValuePersistenceMixin):
         ...
 
     @abstractmethod
