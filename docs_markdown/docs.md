@@ -371,7 +371,6 @@ you need to implement the following interfaces:
 
 * [`eric_sse.persistence.PersistableQueue`](#eric_sse.persistence.PersistableQueue)
 * [`eric_sse.persistence.ConnectionRepositoryInterface`](#eric_sse.persistence.ConnectionRepositoryInterface)
-* [`eric_sse.persistence.ChannelRepositoryInterface`](#eric_sse.persistence.ChannelRepositoryInterface)
 * A **Redis** concrete implementation of interfaces is available at [https://pypi.org/project/eric-redis-queues/](https://pypi.org/project/eric-redis-queues/)
 
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin"></a>

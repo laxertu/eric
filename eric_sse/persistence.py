@@ -7,7 +7,6 @@ you need to implement the following interfaces:
 
 * :class:`eric_sse.persistence.PersistableQueue`
 * :class:`eric_sse.persistence.ConnectionRepositoryInterface`
-* :class:`eric_sse.persistence.ChannelRepositoryInterface`
 
 
 * A **Redis** concrete implementation of interfaces is available at https://pypi.org/project/eric-redis-queues/
