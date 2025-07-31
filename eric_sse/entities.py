@@ -20,7 +20,8 @@ MESSAGE_TYPE_INTERNAL_ERROR = '_eric_error'
 
 class _ConnectionManager:
     """Maintains relationships between listeners and queues"""
-    def __init__(self, queues_repository: ConnectionRepositoryInterface):
+    def __init__(self, channel_id: str, queues_repository: ConnectionRepositoryInterface):
+        self.__channel_id = channel_id
         self.__listeners: dict[str: MessageQueueListener] = {}
         self.__queues: dict[str: Queue] = {}
         self.__queues_repository = queues_repository
@@ -39,7 +40,10 @@ class _ConnectionManager:
     def register_listener(self, listener: MessageQueueListener):
         self.__listeners[listener.id] = listener
         self.__queues[listener.id] = self.__queues_repository.create_queue(listener_id=listener.id)
-        self.__queues_repository.persist(Connection(listener=listener, queue=self.__queues[listener.id]))
+        self.__queues_repository.persist(
+            channel_id=self.__channel_id,
+            connection=Connection(listener=listener, queue=self.__queues[listener.id])
+        )
 
     def register_connection(self, listener: MessageQueueListener, queue: Queue):
         self.__listeners[listener.id] = listener
@@ -91,7 +95,7 @@ class AbstractChannel(ABC):
         self.stream_delay_seconds = stream_delay_seconds
 
         connections_repository = connections_repository if connections_repository else InMemoryConnectionRepository()
-        self.__connection_manager: _ConnectionManager = _ConnectionManager(connections_repository)
+        self.__connection_manager: _ConnectionManager = _ConnectionManager(channel_id, connections_repository)
 
     @property
     def id(self) -> str:

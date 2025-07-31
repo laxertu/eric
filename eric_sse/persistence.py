@@ -41,6 +41,10 @@ class ObjectRepositoryInterface(ABC):
     def delete(self, channel_id: str):
         ...
 
+    @abstractmethod
+    def delete_listener(self, channel_id: str, listener_id: str) -> None:
+        ...
+
 
 class ConnectionRepositoryInterface(ABC):
     """
@@ -55,7 +59,7 @@ class ConnectionRepositoryInterface(ABC):
         ...
 
     @abstractmethod
-    def persist(self, connection: Connection) -> None:
+    def persist(self, channel_id: str, connection: Connection) -> None:
         ...
 
     @abstractmethod
@@ -68,7 +72,7 @@ class ConnectionRepositoryInterface(ABC):
         ...
 
     @abstractmethod
-    def delete(self, listener_id: str) -> None:
+    def delete(self, channel_id: str, listener_id: str) -> None:
         """Removes a persisted :class:`eric_sse.connection.Connection` given its correspondant listener id"""
         ...
 
@@ -81,7 +85,7 @@ class InMemoryConnectionRepository(ConnectionRepositoryInterface):
     def create_queue(self, listener_id: str) -> Queue:
         return InMemoryQueue()
 
-    def persist(self, connection: Connection) -> None:
+    def persist(self, channel_id: str, connection: Connection) -> None:
         pass
 
     def load_all(self) ->  Iterable[Connection]:
@@ -90,5 +94,5 @@ class InMemoryConnectionRepository(ConnectionRepositoryInterface):
     def load(self, channel_id: str) -> Iterable[Connection]:
         pass
 
-    def delete(self, listener_id: str) -> None:
+    def delete(self, channel_id: str, listener_id: str) -> None:
         pass
