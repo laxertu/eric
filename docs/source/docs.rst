@@ -31,11 +31,10 @@ Channels and listeners
     :exclude-members: __init__
     :member-order: bysource
 
-
-Channel connections Management
-==============================
-.. automodule:: eric_sse.connection
-    :members: Connection, ChannelInterface, ObjectPersistenceMixin, ChannelRepositoryInterface, ConnectionRepositoryInterface
+Persistence
+===========
+.. automodule:: eric_sse.persistence
+    :members: Connection, ObjectPersistenceMixin, ObjectRepositoryInterface, ConnectionRepositoryInterface
     :undoc-members:
     :member-order: bysource
     :show-inheritance:

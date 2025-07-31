@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from typing import Iterable
 
 from eric_sse.listener import MessageQueueListener
-from eric_sse.queue import Queue, InMemoryQueue
+from eric_sse.queues import Queue, InMemoryQueue
 
 @dataclass
 class Connection:
@@ -16,7 +16,7 @@ class Connection:
     A connection is just a listener and its related message queue
 
     :param eric_sse.listener.MessageQueueListener listener:
-    :param eric_sse.queue.Queue queue:
+    :param eric_sse.queues.Queue queue:
     """
     listener: MessageQueueListener
     queue: Queue

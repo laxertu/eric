@@ -150,7 +150,7 @@ see [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel)
 
 * **Parameters:**
   * **stream_delay_seconds** (*int*) – Wait time in seconds between message delivery.
-  * **connections_repository** ([*eric_sse.connection.ConnectionRepositoryInterface*](#eric_sse.connection.ConnectionRepositoryInterface))
+  * **connections_repository** ([*eric_sse.persistence.ConnectionRepositoryInterface*](#eric_sse.persistence.ConnectionRepositoryInterface))
 
 <a id="eric_sse.entities.AbstractChannel.__init__"></a>
 
@@ -159,7 +159,7 @@ see [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel)
 * **Parameters:**
   * **channel_id** (*str* *|* *None*)
   * **stream_delay_seconds** (*int*)
-  * **connections_repository** ([*ConnectionRepositoryInterface*](#eric_sse.connection.ConnectionRepositoryInterface) *|* *None*)
+  * **connections_repository** ([*ConnectionRepositoryInterface*](#eric_sse.persistence.ConnectionRepositoryInterface) *|* *None*)
 
 <a id="eric_sse.entities.AbstractChannel.id"></a>
 
@@ -198,7 +198,7 @@ Registers listener and creates corresponding queue
 
 #### register_connection(listener, queue)
 
-Registers a Connection with listener
+Registers a Connection with listener and queue
 
 * **Parameters:**
   * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
@@ -267,7 +267,7 @@ Enqueue a message to all listeners
 
 Entry point for message streaming
 
-A message with type = ‘error’ is yeld on invalid listener or channel
+A message with type = ‘error’ is yield on invalid listener or channel
 
 * **Parameters:**
   **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
@@ -323,16 +323,16 @@ Event handler. It executes when a message is delivered to client
 * **Return type:**
   bool
 
-<a id="module-eric_sse.connection"></a>
+<a id="module-eric_sse.persistence"></a>
 
-<a id="channel-connections-management"></a>
+<a id="persistence"></a>
 
-# Channel connections Management
+# Persistence
 
 This module is intended to those who want to create their own persistence layer.
 A Redis implementation is available at [https://pypi.org/project/eric-redis-queues/](https://pypi.org/project/eric-redis-queues/)
 
-<a id="eric_sse.connection.Connection"></a>
+<a id="eric_sse.persistence.Connection"></a>
 
 ### *class* Connection
 
@@ -344,15 +344,15 @@ A connection is just a listener and its related message queue
   * **listener** ([*eric_sse.listener.MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
   * **queue** ([*eric_sse.queue.Queue*](#eric_sse.queue.Queue))
 
-<a id="eric_sse.connection.Connection.listener"></a>
+<a id="eric_sse.persistence.Connection.listener"></a>
 
 #### listener *: [MessageQueueListener](#eric_sse.listener.MessageQueueListener)*
 
-<a id="eric_sse.connection.Connection.queue"></a>
+<a id="eric_sse.persistence.Connection.queue"></a>
 
 #### queue *: [Queue](#eric_sse.queue.Queue)*
 
-<a id="eric_sse.connection.Connection.__init__"></a>
+<a id="eric_sse.persistence.Connection.__init__"></a>
 
 #### \_\_init_\_(listener, queue)
 
@@ -362,59 +362,59 @@ A connection is just a listener and its related message queue
 * **Return type:**
   None
 
-<a id="eric_sse.connection.ObjectPersistenceMixin"></a>
+<a id="eric_sse.persistence.ObjectPersistenceMixin"></a>
 
 ### *class* ObjectPersistenceMixin
 
 Bases: `ABC`
 
-<a id="eric_sse.connection.ObjectPersistenceMixin.id"></a>
+<a id="eric_sse.persistence.ObjectPersistenceMixin.id"></a>
 
 #### *abstract property* id *: str*
 
 Message type
 
-<a id="eric_sse.connection.ObjectPersistenceMixin.value_as_dict"></a>
+<a id="eric_sse.persistence.ObjectPersistenceMixin.value_as_dict"></a>
 
 #### *abstract property* value_as_dict
 
-<a id="eric_sse.connection.ObjectPersistenceMixin.setup_by_dict"></a>
+<a id="eric_sse.persistence.ObjectPersistenceMixin.setup_by_dict"></a>
 
 #### *abstract* setup_by_dict(setup)
 
 * **Parameters:**
   **setup** (*dict*)
 
-<a id="eric_sse.connection.ChannelRepositoryInterface"></a>
+<a id="eric_sse.persistence.ObjectRepositoryInterface"></a>
 
-### *class* ChannelRepositoryInterface
+### *class* ObjectRepositoryInterface
 
 Bases: `ABC`
 
-<a id="eric_sse.connection.ChannelRepositoryInterface.load"></a>
+<a id="eric_sse.persistence.ObjectRepositoryInterface.load"></a>
 
 #### *abstract* load()
 
 Returns an Iterable of all persisted channels
 
 * **Return type:**
-  *Iterable*[[*ObjectPersistenceMixin*](#eric_sse.connection.ObjectPersistenceMixin)]
+  *Iterable*[[*ObjectPersistenceMixin*](#eric_sse.persistence.ObjectPersistenceMixin)]
 
-<a id="eric_sse.connection.ChannelRepositoryInterface.persist"></a>
+<a id="eric_sse.persistence.ObjectRepositoryInterface.persist"></a>
 
 #### *abstract* persist(channel)
 
 * **Parameters:**
-  **channel** ([*ObjectPersistenceMixin*](#eric_sse.connection.ObjectPersistenceMixin))
+  **channel** ([*ObjectPersistenceMixin*](#eric_sse.persistence.ObjectPersistenceMixin))
 
-<a id="eric_sse.connection.ChannelRepositoryInterface.delete"></a>
+<a id="eric_sse.persistence.ObjectRepositoryInterface.delete"></a>
 
 #### *abstract* delete(channel_id)
 
 * **Parameters:**
   **channel_id** (*str*)
 
-<a id="eric_sse.connection.ConnectionRepositoryInterface"></a>
+<a id="eric_sse.persistence.ConnectionRepositoryInterface"></a>
 
 ### *class* ConnectionRepositoryInterface
 
@@ -424,7 +424,7 @@ Abstraction for connections creation
 
 see [`eric_sse.entities.AbstractChannel`](#eric_sse.entities.AbstractChannel)
 
-<a id="eric_sse.connection.ConnectionRepositoryInterface.create_queue"></a>
+<a id="eric_sse.persistence.ConnectionRepositoryInterface.create_queue"></a>
 
 #### *abstract* create_queue(listener_id)
 
@@ -435,29 +435,29 @@ Returns a concrete Queue instance.
 * **Return type:**
   [*Queue*](#eric_sse.queue.Queue)
 
-<a id="eric_sse.connection.ConnectionRepositoryInterface.persist"></a>
+<a id="eric_sse.persistence.ConnectionRepositoryInterface.persist"></a>
 
 #### *abstract* persist(connection)
 
 * **Parameters:**
-  **connection** ([*Connection*](#eric_sse.connection.Connection))
+  **connection** ([*Connection*](#eric_sse.persistence.Connection))
 * **Return type:**
   None
 
-<a id="eric_sse.connection.ConnectionRepositoryInterface.load"></a>
+<a id="eric_sse.persistence.ConnectionRepositoryInterface.load"></a>
 
 #### *abstract* load()
 
 Returns an Iterable of all persisted connections
 
 * **Return type:**
-  *Iterable*[[*Connection*](#eric_sse.connection.Connection)]
+  *Iterable*[[*Connection*](#eric_sse.persistence.Connection)]
 
-<a id="eric_sse.connection.ConnectionRepositoryInterface.delete"></a>
+<a id="eric_sse.persistence.ConnectionRepositoryInterface.delete"></a>
 
 #### *abstract* delete(listener_id)
 
-Removes a persisted [`eric_sse.connection.Connection`](#eric_sse.connection.Connection) given its correspondant listener id
+Removes a persisted `eric_sse.connection.Connection` given its correspondant listener id
 
 * **Parameters:**
   **listener_id** (*str*)
@@ -474,7 +474,7 @@ Removes a persisted [`eric_sse.connection.Connection`](#eric_sse.connection.Conn
 
 ### *class* SSEChannel
 
-Bases: [`AbstractChannel`](#eric_sse.entities.AbstractChannel), [`ObjectPersistenceMixin`](#eric_sse.connection.ObjectPersistenceMixin)
+Bases: [`AbstractChannel`](#eric_sse.entities.AbstractChannel), [`ObjectPersistenceMixin`](#eric_sse.persistence.ObjectPersistenceMixin)
 
 SSE streaming channel.
 See [https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
@@ -484,7 +484,7 @@ Currently, ‘id’ field is not supported.
 * **Parameters:**
   * **stream_delay_seconds** (*int*)
   * **retry_timeout_milliseconds** (*int*)
-  * **connections_repository** ([*eric_sse.connection.ConnectionRepositoryInterface*](#eric_sse.connection.ConnectionRepositoryInterface))
+  * **connections_repository** ([*eric_sse.persistence.ConnectionRepositoryInterface*](#eric_sse.persistence.ConnectionRepositoryInterface))
 
 <a id="eric_sse.prefabs.SSEChannel.__init__"></a>
 
@@ -494,7 +494,7 @@ Currently, ‘id’ field is not supported.
   * **channel_id** (*str* *|* *None*)
   * **stream_delay_seconds** (*int*)
   * **retry_timeout_milliseconds** (*int*)
-  * **connections_repository** ([*ConnectionRepositoryInterface*](#eric_sse.connection.ConnectionRepositoryInterface) *|* *None*)
+  * **connections_repository** ([*ConnectionRepositoryInterface*](#eric_sse.persistence.ConnectionRepositoryInterface) *|* *None*)
 
 <a id="eric_sse.prefabs.SSEChannel.payload_adapter"></a>
 
@@ -520,7 +520,7 @@ context where receiver is responsible for payload deserialization, e.g. Sockets
 
 * **Parameters:**
   * **params** (*dict*)
-  * **connection_repository** ([*ConnectionRepositoryInterface*](#eric_sse.connection.ConnectionRepositoryInterface))
+  * **connection_repository** ([*ConnectionRepositoryInterface*](#eric_sse.persistence.ConnectionRepositoryInterface))
 * **Return type:**
   [*AbstractChannel*](#eric_sse.entities.AbstractChannel)
 

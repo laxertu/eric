@@ -342,7 +342,7 @@ document.write(`
       <ul>
         <li><a href="docs.html#eric_sse.servers.ChannelContainer.__init__">(ChannelContainer method)</a>
 </li>
-        <li><a href="docs.html#eric_sse.connection.Connection.__init__">(Connection method)</a>
+        <li><a href="docs.html#eric_sse.persistence.Connection.__init__">(Connection method)</a>
 </li>
         <li><a href="docs.html#eric_sse.prefabs.DataProcessingChannel.__init__">(DataProcessingChannel method)</a>
 </li>
@@ -409,19 +409,17 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.servers.ChannelContainer">ChannelContainer (class in eric_sse.servers)</a>
 </li>
-      <li><a href="docs.html#eric_sse.connection.ChannelRepositoryInterface">ChannelRepositoryInterface (class in eric_sse.connection)</a>
+      <li><a href="docs.html#eric_sse.persistence.Connection">Connection (class in eric_sse.persistence)</a>
 </li>
-      <li><a href="docs.html#eric_sse.connection.Connection">Connection (class in eric_sse.connection)</a>
+      <li><a href="docs.html#eric_sse.persistence.ConnectionRepositoryInterface">ConnectionRepositoryInterface (class in eric_sse.persistence)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.connection.ConnectionRepositoryInterface">ConnectionRepositoryInterface (class in eric_sse.connection)</a>
-</li>
       <li><a href="docs.html#eric_sse.clients.SocketClient.create_channel">create_channel() (SocketClient method)</a>
 </li>
       <li><a href="docs.html#eric_sse.prefabs.SSEChannel.create_from_dict">create_from_dict() (SSEChannel static method)</a>
 </li>
-      <li><a href="docs.html#eric_sse.connection.ConnectionRepositoryInterface.create_queue">create_queue() (ConnectionRepositoryInterface method)</a>
+      <li><a href="docs.html#eric_sse.persistence.ConnectionRepositoryInterface.create_queue">create_queue() (ConnectionRepositoryInterface method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -433,10 +431,10 @@ document.write(`
 </li>
       <li><a href="docs.html#eric_sse.profile.DataProcessingChannelProfiler">DataProcessingChannelProfiler (class in eric_sse.profile)</a>
 </li>
-      <li><a href="docs.html#eric_sse.connection.ChannelRepositoryInterface.delete">delete() (ChannelRepositoryInterface method)</a>
+      <li><a href="docs.html#eric_sse.persistence.ConnectionRepositoryInterface.delete">delete() (ConnectionRepositoryInterface method)</a>
 
       <ul>
-        <li><a href="docs.html#eric_sse.connection.ConnectionRepositoryInterface.delete">(ConnectionRepositoryInterface method)</a>
+        <li><a href="docs.html#eric_sse.persistence.ObjectRepositoryInterface.delete">(ObjectRepositoryInterface method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -465,13 +463,6 @@ document.write(`
 </li>
       </ul></li>
       <li>
-    eric_sse.connection
-
-      <ul>
-        <li><a href="docs.html#module-eric_sse.connection">module</a>
-</li>
-      </ul></li>
-      <li>
     eric_sse.entities
 
       <ul>
@@ -492,13 +483,20 @@ document.write(`
         <li><a href="docs.html#module-eric_sse.listener">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     eric_sse.message
 
       <ul>
         <li><a href="docs.html#module-eric_sse.message">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    eric_sse.persistence
+
+      <ul>
+        <li><a href="docs.html#module-eric_sse.persistence">module</a>
 </li>
       </ul></li>
       <li>
@@ -554,7 +552,7 @@ document.write(`
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.id">id (AbstractChannel property)</a>
 
       <ul>
-        <li><a href="docs.html#eric_sse.connection.ObjectPersistenceMixin.id">(ObjectPersistenceMixin property)</a>
+        <li><a href="docs.html#eric_sse.persistence.ObjectPersistenceMixin.id">(ObjectPersistenceMixin property)</a>
 </li>
         <li><a href="docs.html#eric_sse.message.UniqueMessage.id">(UniqueMessage property)</a>
 </li>
@@ -575,16 +573,16 @@ document.write(`
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.connection.Connection.listener">listener (Connection attribute)</a>
+      <li><a href="docs.html#eric_sse.persistence.Connection.listener">listener (Connection attribute)</a>
 </li>
       <li><a href="docs.html#eric_sse.profile.ListenerWrapper">ListenerWrapper (class in eric_sse.profile)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.connection.ChannelRepositoryInterface.load">load() (ChannelRepositoryInterface method)</a>
+      <li><a href="docs.html#eric_sse.persistence.ConnectionRepositoryInterface.load">load() (ConnectionRepositoryInterface method)</a>
 
       <ul>
-        <li><a href="docs.html#eric_sse.connection.ConnectionRepositoryInterface.load">(ConnectionRepositoryInterface method)</a>
+        <li><a href="docs.html#eric_sse.persistence.ObjectRepositoryInterface.load">(ObjectRepositoryInterface method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -609,8 +607,6 @@ document.write(`
       <ul>
         <li><a href="docs.html#module-eric_sse.clients">eric_sse.clients</a>
 </li>
-        <li><a href="docs.html#module-eric_sse.connection">eric_sse.connection</a>
-</li>
         <li><a href="docs.html#module-eric_sse.entities">eric_sse.entities</a>
 </li>
         <li><a href="docs.html#module-eric_sse.exception">eric_sse.exception</a>
@@ -618,6 +614,8 @@ document.write(`
         <li><a href="docs.html#module-eric_sse.listener">eric_sse.listener</a>
 </li>
         <li><a href="docs.html#module-eric_sse.message">eric_sse.message</a>
+</li>
+        <li><a href="docs.html#module-eric_sse.persistence">eric_sse.persistence</a>
 </li>
         <li><a href="docs.html#module-eric_sse.prefabs">eric_sse.prefabs</a>
 </li>
@@ -642,7 +640,9 @@ document.write(`
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.connection.ObjectPersistenceMixin">ObjectPersistenceMixin (class in eric_sse.connection)</a>
+      <li><a href="docs.html#eric_sse.persistence.ObjectPersistenceMixin">ObjectPersistenceMixin (class in eric_sse.persistence)</a>
+</li>
+      <li><a href="docs.html#eric_sse.persistence.ObjectRepositoryInterface">ObjectRepositoryInterface (class in eric_sse.persistence)</a>
 </li>
       <li><a href="docs.html#eric_sse.profile.ListenerWrapper.on_message">on_message() (ListenerWrapper method)</a>
 
@@ -674,10 +674,10 @@ document.write(`
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.connection.ChannelRepositoryInterface.persist">persist() (ChannelRepositoryInterface method)</a>
+      <li><a href="docs.html#eric_sse.persistence.ConnectionRepositoryInterface.persist">persist() (ConnectionRepositoryInterface method)</a>
 
       <ul>
-        <li><a href="docs.html#eric_sse.connection.ConnectionRepositoryInterface.persist">(ConnectionRepositoryInterface method)</a>
+        <li><a href="docs.html#eric_sse.persistence.ObjectRepositoryInterface.persist">(ObjectRepositoryInterface method)</a>
 </li>
       </ul></li>
       <li><a href="docs.html#eric_sse.queue.Queue.pop">pop() (Queue method)</a>
@@ -696,7 +696,7 @@ document.write(`
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.connection.Connection.queue">queue (Connection attribute)</a>
+      <li><a href="docs.html#eric_sse.persistence.Connection.queue">queue (Connection attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -750,7 +750,7 @@ document.write(`
       </ul></li>
       <li><a href="docs.html#eric_sse.prefabs.SimpleDistributedApplicationListener.set_action">set_action() (SimpleDistributedApplicationListener method)</a>
 </li>
-      <li><a href="docs.html#eric_sse.connection.ObjectPersistenceMixin.setup_by_dict">setup_by_dict() (ObjectPersistenceMixin method)</a>
+      <li><a href="docs.html#eric_sse.persistence.ObjectPersistenceMixin.setup_by_dict">setup_by_dict() (ObjectPersistenceMixin method)</a>
 
       <ul>
         <li><a href="docs.html#eric_sse.prefabs.SSEChannel.setup_by_dict">(SSEChannel method)</a>
@@ -810,7 +810,7 @@ document.write(`
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.connection.ObjectPersistenceMixin.value_as_dict">value_as_dict (ObjectPersistenceMixin property)</a>
+      <li><a href="docs.html#eric_sse.persistence.ObjectPersistenceMixin.value_as_dict">value_as_dict (ObjectPersistenceMixin property)</a>
 
       <ul>
         <li><a href="docs.html#eric_sse.prefabs.SSEChannel.value_as_dict">(SSEChannel property)</a>
