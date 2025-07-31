@@ -37,6 +37,18 @@ Channels and listeners
 
 Persistence
 ===========
+
+**Channels**
+
+.. image:: _static/persistence-layer-channels.png
+   :scale: 50 %
+
+**Connections**
+
+.. image:: _static/persistence-layer-connections.png
+   :scale: 50 %
+
+
 .. automodule:: eric_sse.persistence
     :members: ObjectAsKeyValuePersistenceMixin, ObjectRepositoryInterface, ConnectionRepositoryInterface
     :undoc-members:

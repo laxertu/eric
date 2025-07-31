@@ -349,11 +349,19 @@ Event handler. It executes when a message is delivered to client
 * **Return type:**
   bool
 
-<a id="module-eric_sse.persistence"></a>
-
 <a id="persistence"></a>
 
 # Persistence
+
+**Channels**
+
+![image](_static/persistence-layer-channels.png)
+
+**Connections**
+
+![image](_static/persistence-layer-connections.png)
+
+<a id="module-eric_sse.persistence"></a>
 
 This module is intended to those who want to create their own persistence layer.
 A Redis implementation is available at [https://pypi.org/project/eric-redis-queues/](https://pypi.org/project/eric-redis-queues/)

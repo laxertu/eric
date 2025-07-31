@@ -367,7 +367,7 @@ document.write(`
 </li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.persistence">Persistence</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#persistence">Persistence</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin"><code class="docutils literal notranslate"><span class="pre">ObjectAsKeyValuePersistenceMixin</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_key"><code class="docutils literal notranslate"><span class="pre">kv_key</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_value_as_dict"><code class="docutils literal notranslate"><span class="pre">kv_value_as_dict</span></code></a></li>
@@ -906,9 +906,15 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 </dd></dl>
 
 </section>
-<section id="module-eric_sse.persistence">
-<span id="persistence"></span><h1>Persistence<a class="headerlink" href="#module-eric_sse.persistence" title="Link to this heading">#</a></h1>
-<p>This module is intended to those who want to create their own persistence layer.
+<section id="persistence">
+<h1>Persistence<a class="headerlink" href="#persistence" title="Link to this heading">#</a></h1>
+<p><strong>Channels</strong></p>
+<a class="reference internal image-reference" href="_images/persistence-layer-channels.png"><img alt="_images/persistence-layer-channels.png" src="_images/persistence-layer-channels.png" style="width: 440.0px; height: 380.0px;" />
+</a>
+<p><strong>Connections</strong></p>
+<a class="reference internal image-reference" href="_images/persistence-layer-connections.png"><img alt="_images/persistence-layer-connections.png" src="_images/persistence-layer-connections.png" style="width: 468.0px; height: 292.0px;" />
+</a>
+<p id="module-eric_sse.persistence">This module is intended to those who want to create their own persistence layer.
 A Redis implementation is available at <a class="reference external" href="https://pypi.org/project/eric-redis-queues/">https://pypi.org/project/eric-redis-queues/</a></p>
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin">
@@ -1777,7 +1783,7 @@ an <a class="reference internal" href="#eric_sse.exception.NoMessagesException" 
 </li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.persistence">Persistence</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#persistence">Persistence</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin"><code class="docutils literal notranslate"><span class="pre">ObjectAsKeyValuePersistenceMixin</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_key"><code class="docutils literal notranslate"><span class="pre">kv_key</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_value_as_dict"><code class="docutils literal notranslate"><span class="pre">kv_value_as_dict</span></code></a></li>
