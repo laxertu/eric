@@ -44,12 +44,11 @@ class SSEChannel(AbstractChannel, ObjectAsKeyValuePersistenceMixin):
         return self.id
 
     @property
-    def kv_value_as_dict(self):
+    def kv_value_as_dict(self) -> dict:
         return {
             'channel_id': self.id,
             'stream_delay_seconds': self.stream_delay_seconds,
             'retry_timeout_milliseconds': self.retry_timeout_milliseconds,
-            #'connection_repository_classname': self.__connections_repository.__class__.__name__,
         }
 
     def setup_by_dict(self, setup: dict):

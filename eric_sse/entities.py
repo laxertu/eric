@@ -54,7 +54,7 @@ class _ConnectionManager:
         del self.__queues[listener_id]
         del self.__listeners[listener_id]
 
-        self.__queues_repository.delete(listener_id)
+        self.__queues_repository.delete(channel_id=self.__channel_id, listener_id=listener_id)
 
     def get_queue(self, listener_id: str) -> Queue:
         try:

@@ -11,14 +11,17 @@ from eric_sse.queues import Queue, InMemoryQueue
 
 
 class ObjectAsKeyValuePersistenceMixin(ABC):
+    """Adds KV persistence support."""
     @property
     @abstractmethod
     def kv_key(self) -> str:
+        """The key to use when persisting object"""
         ...
 
     @property
     @abstractmethod
-    def kv_value_as_dict(self):
+    def kv_value_as_dict(self) -> dict:
+        """Returns value that will be persisted as a dictionary."""
         ...
 
     @abstractmethod
