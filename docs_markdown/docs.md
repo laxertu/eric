@@ -167,7 +167,7 @@ A connection is just a listener and its related message queue
 
 Base class for channels.
 
-Provides functionalities for listeners and message delivery management.
+Provides functionalities for listeners and message delivery management. Channel needs to be started by calling to **open()** method.
 
 `eric_sse.queue.InMemoryMessageQueueFactory` is the default implementation used for queues_factory
 see [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel)
@@ -189,22 +189,39 @@ see [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel)
 
 #### *property* id *: str*
 
-<a id="eric_sse.entities.AbstractChannel.get_listeners_ids"></a>
-
-#### get_listeners_ids()
-
-* **Return type:**
-  list[str]
-
 <a id="eric_sse.entities.AbstractChannel.open"></a>
 
 #### open()
+
+Starts service
+
+<a id="eric_sse.entities.AbstractChannel.adapt"></a>
+
+#### *abstract* adapt(msg)
+
+* **Parameters:**
+  **msg** ([*MessageContract*](#eric_sse.message.MessageContract))
+* **Return type:**
+  *Any*
+
+<a id="eric_sse.entities.AbstractChannel.message_stream"></a>
+
+#### *async* message_stream(listener)
+
+Entry point for message streaming
+
+A message with type = ‘error’ is yield on invalid listener
+
+* **Parameters:**
+  **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
+* **Return type:**
+  *AsyncIterable*[*Any*]
 
 <a id="eric_sse.entities.AbstractChannel.add_listener"></a>
 
 #### add_listener()
 
-Add the default listener
+Add the default listener and creates corresponding queue
 
 * **Return type:**
   [*MessageQueueListener*](#eric_sse.listener.MessageQueueListener)
@@ -276,34 +293,19 @@ Enqueue a message to all listeners
 * **Return type:**
   [*MessageQueueListener*](#eric_sse.listener.MessageQueueListener)
 
-<a id="eric_sse.entities.AbstractChannel.adapt"></a>
-
-#### *abstract* adapt(msg)
-
-* **Parameters:**
-  **msg** ([*MessageContract*](#eric_sse.message.MessageContract))
-* **Return type:**
-  *Any*
-
-<a id="eric_sse.entities.AbstractChannel.message_stream"></a>
-
-#### *async* message_stream(listener)
-
-Entry point for message streaming
-
-A message with type = ‘error’ is yield on invalid listener or channel
-
-* **Parameters:**
-  **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
-* **Return type:**
-  *AsyncIterable*[*Any*]
-
 <a id="eric_sse.entities.AbstractChannel.watch"></a>
 
 #### *async* watch()
 
 * **Return type:**
   *AsyncIterable*[*Any*]
+
+<a id="eric_sse.entities.AbstractChannel.get_listeners_ids"></a>
+
+#### get_listeners_ids()
+
+* **Return type:**
+  list[str]
 
 <a id="module-eric_sse.listener"></a>
 

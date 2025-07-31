@@ -76,7 +76,7 @@ class AbstractChannel(ABC):
     """
     Base class for channels.
 
-    Provides functionalities for listeners and message delivery management.
+    Provides functionalities for listeners and message delivery management. Channel needs to be started by calling to **open()** method.
 
     :class:`eric_sse.queue.InMemoryMessageQueueFactory` is the default implementation used for queues_factory
     see :class:`eric_sse.prefabs.SSEChannel`
@@ -101,15 +101,54 @@ class AbstractChannel(ABC):
     def id(self) -> str:
         return self.__id
 
-    def get_listeners_ids(self) -> list[str]:
-        return [l.id for l in self.__connection_manager.get_listeners().values()]
-
     def open(self):
+        """Starts service"""
         self.__connection_manager.load()
 
 
+    @abstractmethod
+    def adapt(self, msg: MessageContract) -> Any:
+        ...
+
+    async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
+        """
+        Entry point for message streaming
+
+        A message with type = 'error' is yield on invalid listener
+        """
+
+        async def new_messages():
+            try:
+                result = self.deliver_next(listener.id)
+                yield result
+            except NoMessagesException:
+                ...
+
+        async def event_generator() -> AsyncIterable[dict]:
+
+            while True:
+                # If client closes connection, stop sending events
+                if not listener.is_running():
+                    logger.debug("Listener stopped. Exiting")
+                    break
+
+                try:
+                    async for message in new_messages():
+                        yield self.adapt(message)
+
+                    await asyncio.sleep(self.stream_delay_seconds)
+                except (InvalidListenerException, InvalidChannelException) as e:
+                    yield self.adapt(Message(msg_type='error', msg_payload=e))
+                except Exception as e:
+                    logger.debug(traceback.format_exc())
+                    logger.error(e)
+                    yield self.adapt(Message(msg_type='error'))
+
+        async for event in event_generator():
+            yield event
+
     def add_listener(self) -> MessageQueueListener:
-        """Add the default listener"""
+        """Add the default listener and creates corresponding queue"""
         l = MessageQueueListener()
         self.register_listener(l)
         return l
@@ -158,49 +197,11 @@ class AbstractChannel(ABC):
     def get_listener(self, listener_id: str) -> MessageQueueListener:
         return self.__connection_manager.get_listener(listener_id)
 
-    @abstractmethod
-    def adapt(self, msg: MessageContract) -> Any:
-        ...
-
-    async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
-        """
-        Entry point for message streaming
-
-        A message with type = 'error' is yield on invalid listener or channel
-        """
-
-        async def new_messages():
-            try:
-                result = self.deliver_next(listener.id)
-                yield result
-            except NoMessagesException:
-                ...
-
-        async def event_generator() -> AsyncIterable[dict]:
-
-            while True:
-                # If client closes connection, stop sending events
-                if not listener.is_running():
-                    logger.debug("Listener stopped. Exiting")
-                    break
-
-                try:
-                    async for message in new_messages():
-                        yield self.adapt(message)
-
-                    await asyncio.sleep(self.stream_delay_seconds)
-                except (InvalidListenerException, InvalidChannelException) as e:
-                    yield self.adapt(Message(msg_type='error', msg_payload=e))
-                except Exception as e:
-                    logger.debug(traceback.format_exc())
-                    logger.error(e)
-                    yield self.adapt(Message(msg_type='error'))
-
-        async for event in event_generator():
-            yield event
-
     async def watch(self) -> AsyncIterable[Any]:
         # TODO tests
         listener = self.add_listener()
         listener.start()
         return self.message_stream(listener)
+
+    def get_listeners_ids(self) -> list[str]:
+        return [l.id for l in self.__connection_manager.get_listeners().values()]
