@@ -380,6 +380,8 @@ Returns value that will be persisted as a dictionary.
 
 #### *abstract* setup_by_dict(setup)
 
+Does de necessary setup of object given its persisted values
+
 * **Parameters:**
   **setup** (*dict*)
 
@@ -393,34 +395,24 @@ Bases: `ABC`
 
 #### *abstract* load()
 
-Returns an Iterable of all persisted channels
+Returns an Iterable of all persisted objects of correspondant concrete implementation.
 
 * **Return type:**
   *Iterable*[[*ObjectAsKeyValuePersistenceMixin*](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin)]
 
 <a id="eric_sse.persistence.ObjectRepositoryInterface.persist"></a>
 
-#### *abstract* persist(channel)
+#### *abstract* persist(persistable)
 
 * **Parameters:**
-  **channel** ([*ObjectAsKeyValuePersistenceMixin*](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin))
+  **persistable** ([*ObjectAsKeyValuePersistenceMixin*](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin))
 
 <a id="eric_sse.persistence.ObjectRepositoryInterface.delete"></a>
 
-#### *abstract* delete(channel_id)
+#### *abstract* delete(key)
 
 * **Parameters:**
-  **channel_id** (*str*)
-
-<a id="eric_sse.persistence.ObjectRepositoryInterface.delete_listener"></a>
-
-#### *abstract* delete_listener(channel_id, listener_id)
-
-* **Parameters:**
-  * **channel_id** (*str*)
-  * **listener_id** (*str*)
-* **Return type:**
-  None
+  **key** (*str*)
 
 <a id="eric_sse.persistence.ConnectionRepositoryInterface"></a>
 
@@ -539,6 +531,8 @@ Returns value that will be persisted as a dictionary.
 <a id="eric_sse.prefabs.SSEChannel.setup_by_dict"></a>
 
 #### setup_by_dict(setup)
+
+Does de necessary setup of object given its persisted values
 
 * **Parameters:**
   **setup** (*dict*)
