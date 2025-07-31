@@ -113,7 +113,7 @@ class InMemoryConnectionRepository(ConnectionRepositoryInterface):
         return []
 
     def load(self, channel_id: str) -> Iterable[Connection]:
-        pass
+        return []
 
     def delete(self, channel_id: str, listener_id: str) -> None:
         pass
