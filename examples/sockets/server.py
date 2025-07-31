@@ -6,12 +6,15 @@ from eric_sse.servers import SocketServer
 from eric_sse.prefabs import SSEChannel
 from examples.sockets import SOCKET_FILE_DESCRIPTOR_PATH
 
+from eric_sse import get_logger
+
+logger = get_logger()
 
 class ExampleServerListener(MessageQueueListener):
 
     def on_message(self, msg: Message) -> None:
         super().on_message(msg)
-        print(f"Received '{msg.payload}'")
+        logger.info(f"Received '{msg.payload}'")
 
 
 async def main():
@@ -19,7 +22,14 @@ async def main():
     channel = SSEChannel()
     server.cc.register(channel)
 
-    print(f"Test an example delivery on an hello world with 'python sender.py {channel.id}'")
+    listener = ExampleServerListener()
+    channel.register_listener(listener)
+
+    print(f"Test an example delivery on an hello world with:")
+    print("")
+    print(f'python sender.py {channel.id}')
+    print(f'python receiver.py {channel.id} {listener.id}')
+    print("")
     await server.main()
 
 
