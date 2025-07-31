@@ -413,16 +413,20 @@ document.write(`
 </li>
       <li><a href="docs.html#eric_sse.connection.Connection">Connection (class in eric_sse.connection)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.persistence.ConnectionRepositoryInterface">ConnectionRepositoryInterface (class in eric_sse.persistence)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.clients.SocketClient.create_channel">create_channel() (SocketClient method)</a>
 </li>
       <li><a href="docs.html#eric_sse.prefabs.SSEChannel.create_from_dict">create_from_dict() (SSEChannel static method)</a>
 </li>
       <li><a href="docs.html#eric_sse.persistence.ConnectionRepositoryInterface.create_queue">create_queue() (ConnectionRepositoryInterface method)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.persistence.InMemoryConnectionRepository.create_queue">(InMemoryConnectionRepository method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -436,6 +440,8 @@ document.write(`
       <li><a href="docs.html#eric_sse.persistence.ConnectionRepositoryInterface.delete">delete() (ConnectionRepositoryInterface method)</a>
 
       <ul>
+        <li><a href="docs.html#eric_sse.persistence.InMemoryConnectionRepository.delete">(InMemoryConnectionRepository method)</a>
+</li>
         <li><a href="docs.html#eric_sse.persistence.ObjectRepositoryInterface.delete">(ObjectRepositoryInterface method)</a>
 </li>
       </ul></li>
@@ -566,10 +572,12 @@ document.write(`
         <li><a href="docs.html#eric_sse.message.UniqueMessage.id">(UniqueMessage property)</a>
 </li>
       </ul></li>
-      <li><a href="docs.html#eric_sse.exception.InvalidChannelException">InvalidChannelException</a>
+      <li><a href="docs.html#eric_sse.persistence.InMemoryConnectionRepository">InMemoryConnectionRepository (class in eric_sse.persistence)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.exception.InvalidChannelException">InvalidChannelException</a>
+</li>
       <li><a href="docs.html#eric_sse.exception.InvalidListenerException">InvalidListenerException</a>
 </li>
       <li><a href="docs.html#eric_sse.exception.InvalidMessageFormat">InvalidMessageFormat</a>
@@ -607,13 +615,19 @@ document.write(`
       <li><a href="docs.html#eric_sse.persistence.ConnectionRepositoryInterface.load">load() (ConnectionRepositoryInterface method)</a>
 
       <ul>
+        <li><a href="docs.html#eric_sse.persistence.InMemoryConnectionRepository.load">(InMemoryConnectionRepository method)</a>
+</li>
         <li><a href="docs.html#eric_sse.persistence.ObjectRepositoryInterface.load">(ObjectRepositoryInterface method)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.persistence.ConnectionRepositoryInterface.load_all">load_all() (ConnectionRepositoryInterface method)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.persistence.InMemoryConnectionRepository.load_all">(InMemoryConnectionRepository method)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -706,6 +720,8 @@ document.write(`
       <li><a href="docs.html#eric_sse.persistence.ConnectionRepositoryInterface.persist">persist() (ConnectionRepositoryInterface method)</a>
 
       <ul>
+        <li><a href="docs.html#eric_sse.persistence.InMemoryConnectionRepository.persist">(InMemoryConnectionRepository method)</a>
+</li>
         <li><a href="docs.html#eric_sse.persistence.ObjectRepositoryInterface.persist">(ObjectRepositoryInterface method)</a>
 </li>
       </ul></li>

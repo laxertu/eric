@@ -49,7 +49,7 @@ Persistence
    :scale: 50 %
 
 .. automodule:: eric_sse.persistence
-    :members: ObjectAsKeyValuePersistenceMixin, ChannelRepositoryInterface, ObjectRepositoryInterface, ConnectionRepositoryInterface, PersistableQueue
+    :members: InMemoryConnectionRepository, ObjectAsKeyValuePersistenceMixin, ChannelRepositoryInterface, ObjectRepositoryInterface, ConnectionRepositoryInterface, PersistableQueue
     :undoc-members:
     :member-order: bysource
     :show-inheritance:

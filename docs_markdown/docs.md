@@ -169,7 +169,7 @@ Base class for channels.
 
 Provides functionalities for listeners and message delivery management. Channel needs to be started by calling to **open()** method.
 
-`eric_sse.queue.InMemoryMessageQueueFactory` is the default implementation used for queues_factory
+[`eric_sse.persistence.InMemoryConnectionRepository`](#eric_sse.persistence.InMemoryConnectionRepository) is the default implementation used for queues_factory
 see [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel)
 
 * **Parameters:**
@@ -512,6 +512,67 @@ Returns an Iterable of all persisted connections of a given channel
 <a id="eric_sse.persistence.ConnectionRepositoryInterface.delete"></a>
 
 #### *abstract* delete(channel_id, listener_id)
+
+Removes a persisted [`eric_sse.connection.Connection`](#eric_sse.connection.Connection) given its correspondant listener id
+
+* **Parameters:**
+  * **channel_id** (*str*)
+  * **listener_id** (*str*)
+* **Return type:**
+  None
+
+<a id="eric_sse.persistence.InMemoryConnectionRepository"></a>
+
+### *class* InMemoryConnectionRepository
+
+Bases: [`ConnectionRepositoryInterface`](#eric_sse.persistence.ConnectionRepositoryInterface)
+
+Default implementation used by [`eric_sse.entities.AbstractChannel`](#eric_sse.entities.AbstractChannel)
+
+<a id="eric_sse.persistence.InMemoryConnectionRepository.create_queue"></a>
+
+#### create_queue(listener_id)
+
+Returns a concrete Queue instance.
+
+* **Parameters:**
+  **listener_id** (*str*)
+* **Return type:**
+  [*Queue*](#eric_sse.queues.Queue)
+
+<a id="eric_sse.persistence.InMemoryConnectionRepository.persist"></a>
+
+#### persist(channel_id, connection)
+
+* **Parameters:**
+  * **channel_id** (*str*)
+  * **connection** ([*Connection*](#eric_sse.connection.Connection))
+* **Return type:**
+  None
+
+<a id="eric_sse.persistence.InMemoryConnectionRepository.load_all"></a>
+
+#### load_all()
+
+Returns an Iterable of all persisted connections
+
+* **Return type:**
+  *Iterable*[[*Connection*](#eric_sse.connection.Connection)]
+
+<a id="eric_sse.persistence.InMemoryConnectionRepository.load"></a>
+
+#### load(channel_id)
+
+Returns an Iterable of all persisted connections of a given channel
+
+* **Parameters:**
+  **channel_id** (*str*)
+* **Return type:**
+  *Iterable*[[*Connection*](#eric_sse.connection.Connection)]
+
+<a id="eric_sse.persistence.InMemoryConnectionRepository.delete"></a>
+
+#### delete(channel_id, listener_id)
 
 Removes a persisted [`eric_sse.connection.Connection`](#eric_sse.connection.Connection) given its correspondant listener id
 

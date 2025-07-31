@@ -393,6 +393,14 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ConnectionRepositoryInterface.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.InMemoryConnectionRepository"><code class="docutils literal notranslate"><span class="pre">InMemoryConnectionRepository</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.InMemoryConnectionRepository.create_queue"><code class="docutils literal notranslate"><span class="pre">create_queue()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.InMemoryConnectionRepository.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.InMemoryConnectionRepository.load_all"><code class="docutils literal notranslate"><span class="pre">load_all()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.InMemoryConnectionRepository.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.InMemoryConnectionRepository.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.prefabs">Prefab channels and listeners</a><ul class="visible nav section-nav flex-column">
@@ -675,7 +683,7 @@ For validation purposes you can override <a class="reference internal" href="#er
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AbstractChannel</span></span><a class="headerlink" href="#eric_sse.entities.AbstractChannel" title="Link to this definition">#</a></dt>
 <dd><p>Base class for channels.</p>
 <p>Provides functionalities for listeners and message delivery management. Channel needs to be started by calling to <strong>open()</strong> method.</p>
-<p><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.queue.InMemoryMessageQueueFactory</span></code> is the default implementation used for queues_factory
+<p><a class="reference internal" href="#eric_sse.persistence.InMemoryConnectionRepository" title="eric_sse.persistence.InMemoryConnectionRepository"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.persistence.InMemoryConnectionRepository</span></code></a> is the default implementation used for queues_factory
 see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eric_sse.prefabs.SSEChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.prefabs.SSEChannel</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1089,6 +1097,85 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.persistence.ConnectionRepositoryInterface.delete">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listener_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.persistence.ConnectionRepositoryInterface.delete" title="Link to this definition">#</a></dt>
+<dd><p>Removes a persisted <a class="reference internal" href="#eric_sse.connection.Connection" title="eric_sse.connection.Connection"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.connection.Connection</span></code></a> given its correspondant listener id</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<em>str</em>)</p></li>
+<li><p><strong>listener_id</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.persistence.InMemoryConnectionRepository">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">InMemoryConnectionRepository</span></span><a class="headerlink" href="#eric_sse.persistence.InMemoryConnectionRepository" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eric_sse.persistence.ConnectionRepositoryInterface" title="eric_sse.persistence.ConnectionRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectionRepositoryInterface</span></code></a></p>
+<p>Default implementation used by <a class="reference internal" href="#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.entities.AbstractChannel</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.persistence.InMemoryConnectionRepository.create_queue">
+<span class="sig-name descname"><span class="pre">create_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.persistence.InMemoryConnectionRepository.create_queue" title="Link to this definition">#</a></dt>
+<dd><p>Returns a concrete Queue instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>listener_id</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#eric_sse.queues.Queue" title="eric_sse.queues.Queue"><em>Queue</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.persistence.InMemoryConnectionRepository.persist">
+<span class="sig-name descname"><span class="pre">persist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.persistence.InMemoryConnectionRepository.persist" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<em>str</em>)</p></li>
+<li><p><strong>connection</strong> (<a class="reference internal" href="#eric_sse.connection.Connection" title="eric_sse.connection.Connection"><em>Connection</em></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.persistence.InMemoryConnectionRepository.load_all">
+<span class="sig-name descname"><span class="pre">load_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.persistence.InMemoryConnectionRepository.load_all" title="Link to this definition">#</a></dt>
+<dd><p>Returns an Iterable of all persisted connections</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>Iterable</em>[<a class="reference internal" href="#eric_sse.connection.Connection" title="eric_sse.connection.Connection"><em>Connection</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.persistence.InMemoryConnectionRepository.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.persistence.InMemoryConnectionRepository.load" title="Link to this definition">#</a></dt>
+<dd><p>Returns an Iterable of all persisted connections of a given channel</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel_id</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Iterable</em>[<a class="reference internal" href="#eric_sse.connection.Connection" title="eric_sse.connection.Connection"><em>Connection</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.persistence.InMemoryConnectionRepository.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listener_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.persistence.InMemoryConnectionRepository.delete" title="Link to this definition">#</a></dt>
 <dd><p>Removes a persisted <a class="reference internal" href="#eric_sse.connection.Connection" title="eric_sse.connection.Connection"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.connection.Connection</span></code></a> given its correspondant listener id</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1849,6 +1936,14 @@ an <a class="reference internal" href="#eric_sse.exception.NoMessagesException" 
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ConnectionRepositoryInterface.load_all"><code class="docutils literal notranslate"><span class="pre">load_all()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ConnectionRepositoryInterface.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ConnectionRepositoryInterface.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.InMemoryConnectionRepository"><code class="docutils literal notranslate"><span class="pre">InMemoryConnectionRepository</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.InMemoryConnectionRepository.create_queue"><code class="docutils literal notranslate"><span class="pre">create_queue()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.InMemoryConnectionRepository.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.InMemoryConnectionRepository.load_all"><code class="docutils literal notranslate"><span class="pre">load_all()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.InMemoryConnectionRepository.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.InMemoryConnectionRepository.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
 </ul>
 </li>
 </ul>

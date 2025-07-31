@@ -78,7 +78,7 @@ class AbstractChannel(ABC):
 
     Provides functionalities for listeners and message delivery management. Channel needs to be started by calling to **open()** method.
 
-    :class:`eric_sse.queue.InMemoryMessageQueueFactory` is the default implementation used for queues_factory
+    :class:`eric_sse.persistence.InMemoryConnectionRepository` is the default implementation used for queues_factory
     see :class:`eric_sse.prefabs.SSEChannel`
 
     :param int stream_delay_seconds: Wait time in seconds between message delivery.
