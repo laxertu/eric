@@ -18,7 +18,7 @@ logger = get_logger()
 
 
 class ChannelContainer:
-    """Helper class for management of multiple SSE channels cases of use."""
+    """Helper class for management of multiple channels cases of use."""
 
     def __init__(self):
         self.__channels: dict[str: AbstractChannel] = {}
