@@ -31,15 +31,11 @@ class _ConnectionManager:
             self.__queues[c.listener.id] = c.queue
 
     def add_listener(self) -> MessageQueueListener:
-        """Add the default listener"""
         l = MessageQueueListener()
         self.register_listener(l)
         return l
 
     def register_listener(self, listener: MessageQueueListener):
-        """
-        Adds a listener to channel
-        """
         self.__listeners[listener.id] = listener
         self.__queues[listener.id] = self.__queues_repository.create_queue(listener_id=listener.id)
         self.__queues_repository.persist(Connection(listener=listener, queue=self.__queues[listener.id]))
@@ -50,9 +46,6 @@ class _ConnectionManager:
 
 
     def remove_listener(self, listener_id: str):
-        """
-        Removes a listener from channel
-        """
         del self.__queues[listener_id]
         del self.__listeners[listener_id]
 
