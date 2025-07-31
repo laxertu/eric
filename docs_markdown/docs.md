@@ -131,6 +131,30 @@ Message plus sender id
 
 Returns the id of the listener that sent the message
 
+<a id="module-eric_sse.connection"></a>
+
+<a id="eric_sse.connection.Connection"></a>
+
+### *class* Connection
+
+Bases: `object`
+
+A connection is just a listener and its related message queue
+
+* **Parameters:**
+  * **listener** ([*eric_sse.listener.MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
+  * **queue** ([*eric_sse.queues.Queue*](#eric_sse.queues.Queue))
+
+<a id="eric_sse.connection.Connection.__init__"></a>
+
+#### \_\_init_\_(listener, queue)
+
+* **Parameters:**
+  * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
+  * **queue** ([*Queue*](#eric_sse.queues.Queue))
+* **Return type:**
+  None
+
 <a id="module-eric_sse.entities"></a>
 
 <a id="channels-and-listeners"></a>
@@ -202,7 +226,7 @@ Registers a Connection with listener and queue
 
 * **Parameters:**
   * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
-  * **queue** ([*Queue*](#eric_sse.queue.Queue))
+  * **queue** ([*Queue*](#eric_sse.queues.Queue))
 
 <a id="eric_sse.entities.AbstractChannel.remove_listener"></a>
 
@@ -332,53 +356,27 @@ Event handler. It executes when a message is delivered to client
 This module is intended to those who want to create their own persistence layer.
 A Redis implementation is available at [https://pypi.org/project/eric-redis-queues/](https://pypi.org/project/eric-redis-queues/)
 
-<a id="eric_sse.persistence.Connection"></a>
+<a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin"></a>
 
-### *class* Connection
-
-Bases: `object`
-
-A connection is just a listener and its related message queue
-
-* **Parameters:**
-  * **listener** ([*eric_sse.listener.MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
-  * **queue** ([*eric_sse.queue.Queue*](#eric_sse.queue.Queue))
-
-<a id="eric_sse.persistence.Connection.listener"></a>
-
-#### listener *: [MessageQueueListener](#eric_sse.listener.MessageQueueListener)*
-
-<a id="eric_sse.persistence.Connection.queue"></a>
-
-#### queue *: [Queue](#eric_sse.queue.Queue)*
-
-<a id="eric_sse.persistence.Connection.__init__"></a>
-
-#### \_\_init_\_(listener, queue)
-
-* **Parameters:**
-  * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
-  * **queue** ([*Queue*](#eric_sse.queue.Queue))
-* **Return type:**
-  None
-
-<a id="eric_sse.persistence.ObjectPersistenceMixin"></a>
-
-### *class* ObjectPersistenceMixin
+### *class* ObjectAsKeyValuePersistenceMixin
 
 Bases: `ABC`
 
-<a id="eric_sse.persistence.ObjectPersistenceMixin.id"></a>
+Adds KV persistence support.
 
-#### *abstract property* id *: str*
+<a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_key"></a>
 
-Message type
+#### *abstract property* kv_key *: str*
 
-<a id="eric_sse.persistence.ObjectPersistenceMixin.value_as_dict"></a>
+The key to use when persisting object
 
-#### *abstract property* value_as_dict
+<a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_value_as_dict"></a>
 
-<a id="eric_sse.persistence.ObjectPersistenceMixin.setup_by_dict"></a>
+#### *abstract property* kv_value_as_dict *: dict*
+
+Returns value that will be persisted as a dictionary.
+
+<a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.setup_by_dict"></a>
 
 #### *abstract* setup_by_dict(setup)
 
@@ -398,14 +396,14 @@ Bases: `ABC`
 Returns an Iterable of all persisted channels
 
 * **Return type:**
-  *Iterable*[[*ObjectPersistenceMixin*](#eric_sse.persistence.ObjectPersistenceMixin)]
+  *Iterable*[[*ObjectAsKeyValuePersistenceMixin*](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin)]
 
 <a id="eric_sse.persistence.ObjectRepositoryInterface.persist"></a>
 
 #### *abstract* persist(channel)
 
 * **Parameters:**
-  **channel** ([*ObjectPersistenceMixin*](#eric_sse.persistence.ObjectPersistenceMixin))
+  **channel** ([*ObjectAsKeyValuePersistenceMixin*](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin))
 
 <a id="eric_sse.persistence.ObjectRepositoryInterface.delete"></a>
 
@@ -413,6 +411,16 @@ Returns an Iterable of all persisted channels
 
 * **Parameters:**
   **channel_id** (*str*)
+
+<a id="eric_sse.persistence.ObjectRepositoryInterface.delete_listener"></a>
+
+#### *abstract* delete_listener(channel_id, listener_id)
+
+* **Parameters:**
+  * **channel_id** (*str*)
+  * **listener_id** (*str*)
+* **Return type:**
+  None
 
 <a id="eric_sse.persistence.ConnectionRepositoryInterface"></a>
 
@@ -433,34 +441,47 @@ Returns a concrete Queue instance.
 * **Parameters:**
   **listener_id** (*str*)
 * **Return type:**
-  [*Queue*](#eric_sse.queue.Queue)
+  [*Queue*](#eric_sse.queues.Queue)
 
 <a id="eric_sse.persistence.ConnectionRepositoryInterface.persist"></a>
 
-#### *abstract* persist(connection)
+#### *abstract* persist(channel_id, connection)
 
 * **Parameters:**
-  **connection** ([*Connection*](#eric_sse.persistence.Connection))
+  * **channel_id** (*str*)
+  * **connection** ([*Connection*](#eric_sse.connection.Connection))
 * **Return type:**
   None
 
-<a id="eric_sse.persistence.ConnectionRepositoryInterface.load"></a>
+<a id="eric_sse.persistence.ConnectionRepositoryInterface.load_all"></a>
 
-#### *abstract* load()
+#### *abstract* load_all()
 
 Returns an Iterable of all persisted connections
 
 * **Return type:**
-  *Iterable*[[*Connection*](#eric_sse.persistence.Connection)]
+  *Iterable*[[*Connection*](#eric_sse.connection.Connection)]
+
+<a id="eric_sse.persistence.ConnectionRepositoryInterface.load"></a>
+
+#### *abstract* load(channel_id)
+
+Returns an Iterable of all persisted connections of a given channel
+
+* **Parameters:**
+  **channel_id** (*str*)
+* **Return type:**
+  *Iterable*[[*Connection*](#eric_sse.connection.Connection)]
 
 <a id="eric_sse.persistence.ConnectionRepositoryInterface.delete"></a>
 
-#### *abstract* delete(listener_id)
+#### *abstract* delete(channel_id, listener_id)
 
-Removes a persisted `eric_sse.connection.Connection` given its correspondant listener id
+Removes a persisted [`eric_sse.connection.Connection`](#eric_sse.connection.Connection) given its correspondant listener id
 
 * **Parameters:**
-  **listener_id** (*str*)
+  * **channel_id** (*str*)
+  * **listener_id** (*str*)
 * **Return type:**
   None
 
@@ -474,7 +495,7 @@ Removes a persisted `eric_sse.connection.Connection` given its correspondant lis
 
 ### *class* SSEChannel
 
-Bases: [`AbstractChannel`](#eric_sse.entities.AbstractChannel), [`ObjectPersistenceMixin`](#eric_sse.persistence.ObjectPersistenceMixin)
+Bases: [`AbstractChannel`](#eric_sse.entities.AbstractChannel), [`ObjectAsKeyValuePersistenceMixin`](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin)
 
 SSE streaming channel.
 See [https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
@@ -503,9 +524,17 @@ Currently, ‘id’ field is not supported.
 Message payload adapter, defaults to identity (leave as is). It can be used, for example, when working in a 
 context where receiver is responsible for payload deserialization, e.g. Sockets
 
-<a id="eric_sse.prefabs.SSEChannel.value_as_dict"></a>
+<a id="eric_sse.prefabs.SSEChannel.kv_key"></a>
 
-#### *property* value_as_dict
+#### *property* kv_key *: str*
+
+The key to use when persisting object
+
+<a id="eric_sse.prefabs.SSEChannel.kv_value_as_dict"></a>
+
+#### *property* kv_value_as_dict *: dict*
+
+Returns value that will be persisted as a dictionary.
 
 <a id="eric_sse.prefabs.SSEChannel.setup_by_dict"></a>
 
@@ -669,7 +698,7 @@ Registers listener and creates corresponding queue
 
 ### *class* ChannelContainer
 
-Helper class for management of multiple SSE channels cases of use.
+Helper class for management of multiple channels cases of use.
 
 <a id="eric_sse.servers.ChannelContainer.__init__"></a>
 
@@ -849,13 +878,13 @@ see [`eric_sse.servers.SocketServer`](#eric_sse.servers.SocketServer)
 * **Parameters:**
   **channel_id** (*str*)
 
-<a id="module-eric_sse.queue"></a>
+<a id="module-eric_sse.queues"></a>
 
 <a id="queues"></a>
 
 # Queues
 
-<a id="eric_sse.queue.Queue"></a>
+<a id="eric_sse.queues.Queue"></a>
 
 ### *class* Queue
 
@@ -863,7 +892,7 @@ Bases: `ABC`
 
 Abstract base class for queues (FIFO)
 
-<a id="eric_sse.queue.Queue.pop"></a>
+<a id="eric_sse.queues.Queue.pop"></a>
 
 #### *abstract* pop()
 
@@ -874,7 +903,7 @@ Raises a [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessag
 * **Return type:**
   [*MessageContract*](#eric_sse.message.MessageContract)
 
-<a id="eric_sse.queue.Queue.push"></a>
+<a id="eric_sse.queues.Queue.push"></a>
 
 #### *abstract* push(message)
 

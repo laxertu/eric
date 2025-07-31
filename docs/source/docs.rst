@@ -15,6 +15,10 @@ Entities
     :members:
     :show-inheritance:
     :member-order: bysource
+.. automodule:: eric_sse.connection
+    :members:
+    :show-inheritance:
+    :member-order: bysource
 
 
 
@@ -34,7 +38,7 @@ Channels and listeners
 Persistence
 ===========
 .. automodule:: eric_sse.persistence
-    :members: Connection, ObjectPersistenceMixin, ObjectRepositoryInterface, ConnectionRepositoryInterface
+    :members: ObjectAsKeyValuePersistenceMixin, ObjectRepositoryInterface, ConnectionRepositoryInterface
     :undoc-members:
     :member-order: bysource
     :show-inheritance:
@@ -64,7 +68,7 @@ Prefab servers and clients
 
 Queues
 ======
-.. automodule:: eric_sse.queue
+.. automodule:: eric_sse.queues
     :undoc-members:
     :members: Queue
     :member-order: bysource
