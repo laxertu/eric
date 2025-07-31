@@ -25,7 +25,6 @@ class ObjectAsKeyValuePersistenceMixin(ABC):
     @property
     @abstractmethod
     def kv_key(self) -> str:
-        """Message type"""
         ...
 
     @property
