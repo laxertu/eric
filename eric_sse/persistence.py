@@ -26,6 +26,7 @@ class ObjectAsKeyValuePersistenceMixin(ABC):
 
     @abstractmethod
     def setup_by_dict(self, setup: dict):
+        """Does de necessary setup of object given its persisted values"""
         ...
 
 
@@ -33,21 +34,23 @@ class ObjectRepositoryInterface(ABC):
 
     @abstractmethod
     def load(self) -> Iterable[ObjectAsKeyValuePersistenceMixin]:
-        """Returns an Iterable of all persisted channels"""
+        """Returns an Iterable of all persisted objects of correspondant concrete implementation."""
         ...
 
     @abstractmethod
-    def persist(self, channel: ObjectAsKeyValuePersistenceMixin):
+    def persist(self, persistable: ObjectAsKeyValuePersistenceMixin):
         ...
 
     @abstractmethod
-    def delete(self, channel_id: str):
+    def delete(self, key: str):
         ...
+
+
+class ChannelRepositoryInterface(ObjectRepositoryInterface):
 
     @abstractmethod
     def delete_listener(self, channel_id: str, listener_id: str) -> None:
         ...
-
 
 class ConnectionRepositoryInterface(ABC):
     """
