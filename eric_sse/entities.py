@@ -28,7 +28,7 @@ class _ConnectionManager:
 
 
     def load(self):
-        for c in self.__queues_repository.load_all():
+        for c in self.__queues_repository.load(self.__channel_id):
             self.__listeners[c.listener.id] = c.listener
             self.__queues[c.listener.id] = c.queue
 
@@ -92,10 +92,11 @@ class AbstractChannel(ABC):
             connections_repository: ConnectionRepositoryInterface | None = None
     ):
         self.__id: str = eric_sse.generate_uuid() if channel_id is None else channel_id
+        assert self.__id is not None
         self.stream_delay_seconds = stream_delay_seconds
 
         connections_repository = connections_repository if connections_repository else InMemoryConnectionRepository()
-        self.__connection_manager: _ConnectionManager = _ConnectionManager(channel_id, connections_repository)
+        self.__connection_manager: _ConnectionManager = _ConnectionManager(self.__id, connections_repository)
 
     @property
     def id(self) -> str:
