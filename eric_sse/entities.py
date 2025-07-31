@@ -27,7 +27,7 @@ class _ConnectionManager:
 
 
     def load(self):
-        for c in self.__queues_repository.load():
+        for c in self.__queues_repository.load_all():
             self.__listeners[c.listener.id] = c.listener
             self.__queues[c.listener.id] = c.queue
 

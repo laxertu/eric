@@ -59,8 +59,12 @@ class ConnectionRepositoryInterface(ABC):
         ...
 
     @abstractmethod
-    def load(self) -> Iterable[Connection]:
+    def load_all(self) -> Iterable[Connection]:
         """Returns an Iterable of all persisted connections"""
+        ...
+    @abstractmethod
+    def load(self, channel_id: str) -> Iterable[Connection]:
+        """Returns an Iterable of all persisted connections of a given channel"""
         ...
 
     @abstractmethod
@@ -80,8 +84,11 @@ class InMemoryConnectionRepository(ConnectionRepositoryInterface):
     def persist(self, connection: Connection) -> None:
         pass
 
-    def load(self) ->  Iterable[Connection]:
+    def load_all(self) ->  Iterable[Connection]:
         return []
+
+    def load(self, channel_id: str) -> Iterable[Connection]:
+        pass
 
     def delete(self, listener_id: str) -> None:
         pass
