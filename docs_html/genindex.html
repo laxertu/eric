@@ -15,28 +15,25 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!--
-    this give us a css class that will be invisible only if js is disabled
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
   
-  <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
@@ -47,7 +44,6 @@
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -63,8 +59,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -72,6 +79,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -79,8 +87,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -98,8 +106,7 @@
       
         
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -129,15 +136,20 @@
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button></div>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="docs.html">Overview</a></li>
+
 
 
 
@@ -155,14 +167,9 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
-      <div class="sidebar-primary-item">
-<div id="ethical-ad-placement"
-      class="flat"
-      data-ea-publisher="readthedocs"
-      data-ea-type="readthedocs-sidebar"
-      data-ea-manual="true">
-</div></div>
   </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -258,16 +265,24 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-</button>
+  </button>
+`);
+</script>
 
 </div></div>
       
@@ -304,8 +319,8 @@
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#G"><strong>G</strong></a>
- | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
@@ -325,15 +340,17 @@
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.__init__">__init__() (AbstractChannel method)</a>
 
       <ul>
+        <li><a href="docs.html#eric_sse.servers.ChannelContainer.__init__">(ChannelContainer method)</a>
+</li>
+        <li><a href="docs.html#eric_sse.connection.Connection.__init__">(Connection method)</a>
+</li>
         <li><a href="docs.html#eric_sse.prefabs.DataProcessingChannel.__init__">(DataProcessingChannel method)</a>
 </li>
-        <li><a href="docs.html#eric_sse.benchmark.DataProcessingChannelBenchMark.__init__">(DataProcessingChannelBenchMark method)</a>
+        <li><a href="docs.html#eric_sse.profile.DataProcessingChannelProfiler.__init__">(DataProcessingChannelProfiler method)</a>
 </li>
-        <li><a href="docs.html#eric_sse.benchmark.ListenerWrapper.__init__">(ListenerWrapper method)</a>
+        <li><a href="docs.html#eric_sse.profile.ListenerWrapper.__init__">(ListenerWrapper method)</a>
 </li>
         <li><a href="docs.html#eric_sse.message.Message.__init__">(Message method)</a>
-</li>
-        <li><a href="docs.html#eric_sse.entities.MessageQueueListener.__init__">(MessageQueueListener method)</a>
 </li>
         <li><a href="docs.html#eric_sse.message.SignedMessage.__init__">(SignedMessage method)</a>
 </li>
@@ -344,8 +361,6 @@
         <li><a href="docs.html#eric_sse.servers.SocketServer.__init__">(SocketServer method)</a>
 </li>
         <li><a href="docs.html#eric_sse.prefabs.SSEChannel.__init__">(SSEChannel method)</a>
-</li>
-        <li><a href="docs.html#eric_sse.servers.SSEChannelContainer.__init__">(SSEChannelContainer method)</a>
 </li>
         <li><a href="docs.html#eric_sse.message.UniqueMessage.__init__">(UniqueMessage method)</a>
 </li>
@@ -358,8 +373,6 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel">AbstractChannel (class in eric_sse.entities)</a>
 </li>
-      <li><a href="docs.html#eric_sse.queue.AbstractMessageQueueFactory">AbstractMessageQueueFactory (class in eric_sse.queue)</a>
-</li>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.adapt">adapt() (AbstractChannel method)</a>
 
       <ul>
@@ -370,12 +383,10 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.servers.SSEChannelContainer.add">add() (SSEChannelContainer method)</a>
-</li>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.add_listener">add_listener() (AbstractChannel method)</a>
 
       <ul>
-        <li><a href="docs.html#eric_sse.benchmark.DataProcessingChannelBenchMark.add_listener">(DataProcessingChannelBenchMark method)</a>
+        <li><a href="docs.html#eric_sse.profile.DataProcessingChannelProfiler.add_listener">(DataProcessingChannelProfiler method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -396,17 +407,21 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.servers.SocketServer.connect_callback">connect_callback() (SocketServer static method)</a>
+      <li><a href="docs.html#eric_sse.servers.ChannelContainer">ChannelContainer (class in eric_sse.servers)</a>
 </li>
-      <li><a href="docs.html#eric_sse.queue.AbstractMessageQueueFactory.create">create() (AbstractMessageQueueFactory method)</a>
-
-      <ul>
-        <li><a href="docs.html#eric_sse.queue.InMemoryMessageQueueFactory.create">(InMemoryMessageQueueFactory method)</a>
+      <li><a href="docs.html#eric_sse.persistence.ChannelRepositoryInterface">ChannelRepositoryInterface (class in eric_sse.persistence)</a>
 </li>
-      </ul></li>
+      <li><a href="docs.html#eric_sse.connection.Connection">Connection (class in eric_sse.connection)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.persistence.ConnectionRepositoryInterface">ConnectionRepositoryInterface (class in eric_sse.persistence)</a>
+</li>
       <li><a href="docs.html#eric_sse.clients.SocketClient.create_channel">create_channel() (SocketClient method)</a>
+</li>
+      <li><a href="docs.html#eric_sse.prefabs.SSEChannel.create_from_dict">create_from_dict() (SSEChannel static method)</a>
+</li>
+      <li><a href="docs.html#eric_sse.persistence.ConnectionRepositoryInterface.create_queue">create_queue() (ConnectionRepositoryInterface method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -416,12 +431,18 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.prefabs.DataProcessingChannel">DataProcessingChannel (class in eric_sse.prefabs)</a>
 </li>
-      <li><a href="docs.html#eric_sse.benchmark.DataProcessingChannelBenchMark">DataProcessingChannelBenchMark (class in eric_sse.benchmark)</a>
+      <li><a href="docs.html#eric_sse.profile.DataProcessingChannelProfiler">DataProcessingChannelProfiler (class in eric_sse.profile)</a>
 </li>
-      <li><a href="docs.html#eric_sse.queue.Queue.delete">delete() (Queue method)</a>
+      <li><a href="docs.html#eric_sse.persistence.ConnectionRepositoryInterface.delete">delete() (ConnectionRepositoryInterface method)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.persistence.ObjectRepositoryInterface.delete">(ObjectRepositoryInterface method)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.persistence.ChannelRepositoryInterface.delete_listener">delete_listener() (ChannelRepositoryInterface method)</a>
+</li>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.deliver_next">deliver_next() (AbstractChannel method)</a>
 </li>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.dispatch">dispatch() (AbstractChannel method)</a>
@@ -439,17 +460,17 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li>
-    eric_sse.benchmark
-
-      <ul>
-        <li><a href="docs.html#module-eric_sse.benchmark">module</a>
-</li>
-      </ul></li>
-      <li>
     eric_sse.clients
 
       <ul>
         <li><a href="docs.html#module-eric_sse.clients">module</a>
+</li>
+      </ul></li>
+      <li>
+    eric_sse.connection
+
+      <ul>
+        <li><a href="docs.html#module-eric_sse.connection">module</a>
 </li>
       </ul></li>
       <li>
@@ -466,13 +487,27 @@
         <li><a href="docs.html#module-eric_sse.exception">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    eric_sse.listener
+
+      <ul>
+        <li><a href="docs.html#module-eric_sse.listener">module</a>
+</li>
+      </ul></li>
       <li>
     eric_sse.message
 
       <ul>
         <li><a href="docs.html#module-eric_sse.message">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    eric_sse.persistence
+
+      <ul>
+        <li><a href="docs.html#module-eric_sse.persistence">module</a>
 </li>
       </ul></li>
       <li>
@@ -483,10 +518,17 @@
 </li>
       </ul></li>
       <li>
-    eric_sse.queue
+    eric_sse.profile
 
       <ul>
-        <li><a href="docs.html#module-eric_sse.queue">module</a>
+        <li><a href="docs.html#module-eric_sse.profile">module</a>
+</li>
+      </ul></li>
+      <li>
+    eric_sse.queues
+
+      <ul>
+        <li><a href="docs.html#module-eric_sse.queues">module</a>
 </li>
       </ul></li>
       <li>
@@ -502,21 +544,15 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.servers.SSEChannelContainer.get">get() (SSEChannelContainer method)</a>
+      <li><a href="docs.html#eric_sse.servers.ChannelContainer.get">get() (ChannelContainer method)</a>
+</li>
+      <li><a href="docs.html#eric_sse.servers.ChannelContainer.get_all_ids">get_all_ids() (ChannelContainer method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.servers.SSEChannelContainer.get_all_ids">get_all_ids() (SSEChannelContainer method)</a>
-</li>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.get_listener">get_listener() (AbstractChannel method)</a>
 </li>
-  </ul></td>
-</tr></table>
-
-<h2 id="H">H</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.servers.SocketServer.handle_command">handle_command() (SocketServer static method)</a>
+      <li><a href="docs.html#eric_sse.entities.AbstractChannel.get_listeners_ids">get_listeners_ids() (AbstractChannel method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -524,10 +560,12 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.message.UniqueMessage.id">id (UniqueMessage property)</a>
+      <li><a href="docs.html#eric_sse.entities.AbstractChannel.id">id (AbstractChannel property)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.message.UniqueMessage.id">(UniqueMessage property)</a>
 </li>
-      <li><a href="docs.html#eric_sse.queue.InMemoryMessageQueueFactory">InMemoryMessageQueueFactory (class in eric_sse.queue)</a>
-</li>
+      </ul></li>
       <li><a href="docs.html#eric_sse.exception.InvalidChannelException">InvalidChannelException</a>
 </li>
   </ul></td>
@@ -536,17 +574,45 @@
 </li>
       <li><a href="docs.html#eric_sse.exception.InvalidMessageFormat">InvalidMessageFormat</a>
 </li>
-      <li><a href="docs.html#eric_sse.entities.MessageQueueListener.is_running">is_running() (MessageQueueListener method)</a>
+      <li><a href="docs.html#eric_sse.listener.MessageQueueListener.is_running">is_running() (MessageQueueListener method)</a>
 </li>
-      <li><a href="docs.html#eric_sse.entities.MessageQueueListener.is_running_sync">is_running_sync() (MessageQueueListener method)</a>
+  </ul></td>
+</tr></table>
+
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_key">kv_key (ObjectAsKeyValuePersistenceMixin property)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.prefabs.SSEChannel.kv_key">(SSEChannel property)</a>
 </li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_value_as_dict">kv_value_as_dict (ObjectAsKeyValuePersistenceMixin property)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.prefabs.SSEChannel.kv_value_as_dict">(SSEChannel property)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.benchmark.ListenerWrapper">ListenerWrapper (class in eric_sse.benchmark)</a>
+      <li><a href="docs.html#eric_sse.profile.ListenerWrapper">ListenerWrapper (class in eric_sse.profile)</a>
+</li>
+      <li><a href="docs.html#eric_sse.persistence.ConnectionRepositoryInterface.load">load() (ConnectionRepositoryInterface method)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.persistence.ObjectRepositoryInterface.load">(ObjectRepositoryInterface method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.persistence.ConnectionRepositoryInterface.load_all">load_all() (ConnectionRepositoryInterface method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -562,25 +628,31 @@
 </li>
       <li><a href="docs.html#eric_sse.message.MessageContract">MessageContract (class in eric_sse.message)</a>
 </li>
-      <li><a href="docs.html#eric_sse.entities.MessageQueueListener">MessageQueueListener (class in eric_sse.entities)</a>
+      <li><a href="docs.html#eric_sse.listener.MessageQueueListener">MessageQueueListener (class in eric_sse.listener)</a>
 </li>
       <li>
     module
 
       <ul>
-        <li><a href="docs.html#module-eric_sse.benchmark">eric_sse.benchmark</a>
-</li>
         <li><a href="docs.html#module-eric_sse.clients">eric_sse.clients</a>
+</li>
+        <li><a href="docs.html#module-eric_sse.connection">eric_sse.connection</a>
 </li>
         <li><a href="docs.html#module-eric_sse.entities">eric_sse.entities</a>
 </li>
         <li><a href="docs.html#module-eric_sse.exception">eric_sse.exception</a>
 </li>
+        <li><a href="docs.html#module-eric_sse.listener">eric_sse.listener</a>
+</li>
         <li><a href="docs.html#module-eric_sse.message">eric_sse.message</a>
+</li>
+        <li><a href="docs.html#module-eric_sse.persistence">eric_sse.persistence</a>
 </li>
         <li><a href="docs.html#module-eric_sse.prefabs">eric_sse.prefabs</a>
 </li>
-        <li><a href="docs.html#module-eric_sse.queue">eric_sse.queue</a>
+        <li><a href="docs.html#module-eric_sse.profile">eric_sse.profile</a>
+</li>
+        <li><a href="docs.html#module-eric_sse.queues">eric_sse.queues</a>
 </li>
         <li><a href="docs.html#module-eric_sse.servers">eric_sse.servers</a>
 </li>
@@ -594,23 +666,27 @@
       <li><a href="docs.html#eric_sse.exception.NoMessagesException">NoMessagesException</a>
 </li>
   </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.entities.AbstractChannel.notify_end">notify_end() (AbstractChannel method)</a>
-</li>
-  </ul></td>
 </tr></table>
 
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.benchmark.ListenerWrapper.on_message">on_message() (ListenerWrapper method)</a>
+      <li><a href="docs.html#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin">ObjectAsKeyValuePersistenceMixin (class in eric_sse.persistence)</a>
+</li>
+      <li><a href="docs.html#eric_sse.persistence.ObjectRepositoryInterface">ObjectRepositoryInterface (class in eric_sse.persistence)</a>
+</li>
+      <li><a href="docs.html#eric_sse.profile.ListenerWrapper.on_message">on_message() (ListenerWrapper method)</a>
 
       <ul>
-        <li><a href="docs.html#eric_sse.entities.MessageQueueListener.on_message">(MessageQueueListener method)</a>
+        <li><a href="docs.html#eric_sse.listener.MessageQueueListener.on_message">(MessageQueueListener method)</a>
 </li>
         <li><a href="docs.html#eric_sse.prefabs.SimpleDistributedApplicationListener.on_message">(SimpleDistributedApplicationListener method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.entities.AbstractChannel.open">open() (AbstractChannel method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -625,15 +701,23 @@
         <li><a href="docs.html#eric_sse.message.UniqueMessage.payload">(UniqueMessage property)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.prefabs.SSEChannel.payload_adapter">payload_adapter (SSEChannel attribute)</a>
 </li>
-      <li><a href="docs.html#eric_sse.queue.Queue.pop">pop() (Queue method)</a>
+      <li><a href="docs.html#eric_sse.persistence.ConnectionRepositoryInterface.persist">persist() (ConnectionRepositoryInterface method)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.persistence.ObjectRepositoryInterface.persist">(ObjectRepositoryInterface method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.persistence.PersistableQueue">PersistableQueue (class in eric_sse.persistence)</a>
+</li>
+      <li><a href="docs.html#eric_sse.queues.Queue.pop">pop() (Queue method)</a>
 </li>
       <li><a href="docs.html#eric_sse.prefabs.DataProcessingChannel.process_queue">process_queue() (DataProcessingChannel method)</a>
 </li>
-      <li><a href="docs.html#eric_sse.queue.Queue.push">push() (Queue method)</a>
+      <li><a href="docs.html#eric_sse.queues.Queue.push">push() (Queue method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -641,7 +725,7 @@
 <h2 id="Q">Q</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.queue.Queue">Queue (class in eric_sse.queue)</a>
+      <li><a href="docs.html#eric_sse.queues.Queue">Queue (class in eric_sse.queues)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -649,10 +733,22 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.clients.SocketClient.register">register() (SocketClient method)</a>
+      <li><a href="docs.html#eric_sse.servers.ChannelContainer.register">register() (ChannelContainer method)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.clients.SocketClient.register">(SocketClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="docs.html#eric_sse.entities.AbstractChannel.register_connection">register_connection() (AbstractChannel method)</a>
 </li>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.register_listener">register_listener() (AbstractChannel method)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.prefabs.SimpleDistributedApplicationChannel.register_listener">(SimpleDistributedApplicationChannel method)</a>
 </li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.clients.SocketClient.remove_channel">remove_channel() (SocketClient method)</a>
 </li>
       <li><a href="docs.html#eric_sse.entities.AbstractChannel.remove_listener">remove_listener() (AbstractChannel method)</a>
@@ -661,15 +757,11 @@
         <li><a href="docs.html#eric_sse.clients.SocketClient.remove_listener">(SocketClient method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="docs.html#eric_sse.prefabs.SimpleDistributedApplicationListener.remove_sync">remove_sync() (SimpleDistributedApplicationListener method)</a>
+      <li><a href="docs.html#eric_sse.exception.RepositoryError">RepositoryError</a>
 </li>
-      <li><a href="docs.html#eric_sse.queue.RepositoryError">RepositoryError</a>
+      <li><a href="docs.html#eric_sse.servers.ChannelContainer.rm">rm() (ChannelContainer method)</a>
 </li>
-      <li><a href="docs.html#eric_sse.servers.SSEChannelContainer.rm">rm() (SSEChannelContainer method)</a>
-</li>
-      <li><a href="docs.html#eric_sse.benchmark.DataProcessingChannelBenchMark.run">run() (DataProcessingChannelBenchMark method)</a>
+      <li><a href="docs.html#eric_sse.profile.DataProcessingChannelProfiler.run">run() (DataProcessingChannelProfiler method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -687,33 +779,35 @@
       </ul></li>
       <li><a href="docs.html#eric_sse.prefabs.SimpleDistributedApplicationListener.set_action">set_action() (SimpleDistributedApplicationListener method)</a>
 </li>
+      <li><a href="docs.html#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.setup_by_dict">setup_by_dict() (ObjectAsKeyValuePersistenceMixin method)</a>
+
+      <ul>
+        <li><a href="docs.html#eric_sse.prefabs.SSEChannel.setup_by_dict">(SSEChannel method)</a>
+</li>
+      </ul></li>
       <li><a href="docs.html#eric_sse.servers.SocketServer.shutdown">shutdown() (SocketServer method)</a>
 </li>
       <li><a href="docs.html#eric_sse.message.SignedMessage">SignedMessage (class in eric_sse.message)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="docs.html#eric_sse.prefabs.SimpleDistributedApplicationChannel">SimpleDistributedApplicationChannel (class in eric_sse.prefabs)</a>
 </li>
       <li><a href="docs.html#eric_sse.prefabs.SimpleDistributedApplicationListener">SimpleDistributedApplicationListener (class in eric_sse.prefabs)</a>
 </li>
       <li><a href="docs.html#eric_sse.clients.SocketClient">SocketClient (class in eric_sse.clients)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="docs.html#eric_sse.servers.SocketServer">SocketServer (class in eric_sse.servers)</a>
 </li>
       <li><a href="docs.html#eric_sse.prefabs.SSEChannel">SSEChannel (class in eric_sse.prefabs)</a>
 </li>
-      <li><a href="docs.html#eric_sse.servers.SSEChannelContainer">SSEChannelContainer (class in eric_sse.servers)</a>
-</li>
-      <li><a href="docs.html#eric_sse.entities.MessageQueueListener.start">start() (MessageQueueListener method)</a>
+      <li><a href="docs.html#eric_sse.listener.MessageQueueListener.start">start() (MessageQueueListener method)</a>
 
       <ul>
         <li><a href="docs.html#eric_sse.servers.SocketServer.start">(SocketServer static method)</a>
 </li>
       </ul></li>
-      <li><a href="docs.html#eric_sse.entities.MessageQueueListener.start_sync">start_sync() (MessageQueueListener method)</a>
-</li>
-      <li><a href="docs.html#eric_sse.entities.MessageQueueListener.stop">stop() (MessageQueueListener method)</a>
-</li>
-      <li><a href="docs.html#eric_sse.entities.MessageQueueListener.stop_sync">stop_sync() (MessageQueueListener method)</a>
+      <li><a href="docs.html#eric_sse.listener.MessageQueueListener.stop">stop() (MessageQueueListener method)</a>
 </li>
       <li><a href="docs.html#eric_sse.clients.SocketClient.stream">stream() (SocketClient method)</a>
 </li>
@@ -805,8 +899,8 @@ By Luca Stretti
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

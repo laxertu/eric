@@ -1,6 +1,6 @@
 import time
 
-from eric_sse.entities import MessageQueueListener
+from eric_sse.listener import MessageQueueListener
 from eric_sse.message import MessageContract
 from eric_sse.prefabs import DataProcessingChannel
 from eric_sse import get_logger
@@ -8,23 +8,26 @@ from eric_sse import get_logger
 logger = get_logger()
 
 class ListenerWrapper(MessageQueueListener):
-    """Wraps a listener to benchmark its on_message method."""
+    """Wraps a listener to profile its on_message method."""
 
-    def __init__(self, listener: MessageQueueListener):
+    def __init__(self, listener: MessageQueueListener, profile_messages: bool = False):
         super().__init__()
         self.listener = listener
+        self.profile_messages = profile_messages
 
     def on_message(self, msg: MessageContract) -> None:
-        """Performs on_message benchmarking"""
+        """Performs on_message profiling"""
         start = time.time()
         self.listener.on_message(msg)
-        logger.info(f"[BENCHMARK][MESSAGE] processing time: {time.time() - start}")
+
+        if self.profile_messages:
+            logger.info(f"[PROFILER][MESSAGE] processing time: {time.time() - start}")
 
 
-class DataProcessingChannelBenchMark:
+class DataProcessingChannelProfiler:
 
     def __init__(self, channel: DataProcessingChannel):
-        """Wraps a channel to benchmark its process_queue method."""
+        """Wraps a channel to profile its process_queue method."""
         self.channel = channel
 
     def add_listener(self, listener: MessageQueueListener) -> ListenerWrapper:
@@ -34,9 +37,9 @@ class DataProcessingChannelBenchMark:
         return wrapper
 
     async def run(self, listener: ListenerWrapper):
-        """Runs benchmark"""
+        """Runs profile"""
         start = time.time()
         async for _ in self.channel.process_queue(listener):
             pass
-        logger.info(f"[BENCHMARK][QUEUE] processing time: {time.time() - start}")
+        logger.info(f"[PROFILER][QUEUE] processing time: {time.time() - start}")
 

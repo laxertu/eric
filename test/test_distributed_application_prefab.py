@@ -1,7 +1,8 @@
 from unittest import IsolatedAsyncioTestCase
 
+
 from eric_sse.message import MessageContract, Message
-from eric_sse.prefabs import SSEChannel, SimpleDistributedApplicationListener, DataProcessingChannel
+from eric_sse.prefabs import SimpleDistributedApplicationChannel, SimpleDistributedApplicationListener, DataProcessingChannel
 
 from test.mock.listener import MessageQueueListenerMock
 
@@ -21,19 +22,21 @@ def hello_ack_response(m: MessageContract) -> list[Message]:
 class DistributedListenerTestCase(IsolatedAsyncioTestCase):
 
     @staticmethod
-    def create_listener(ch: SSEChannel):
-        l = SimpleDistributedApplicationListener(ch)
+    async def create_listener(ch: SimpleDistributedApplicationChannel):
+        l = SimpleDistributedApplicationListener()
         l.set_action('hello', hello_response)
         l.set_action('hello_ack', hello_ack_response)
-        l.start_sync()
+        l.start()
+        ch.register_listener(l)
         return l
 
 
     async def test_application(self):
-        ssc = SSEChannel()
+        ssc = SimpleDistributedApplicationChannel()
 
-        alice = DistributedListenerTestCase.create_listener(ssc)
-        bob = DistributedListenerTestCase.create_listener(ssc)
+        alice = await DistributedListenerTestCase.create_listener(ssc)
+        bob = await DistributedListenerTestCase.create_listener(ssc)
+
 
         # Bob says hello to Alice
         bob.dispatch_to(alice, Message(msg_type='hello', msg_payload='hello!'))
@@ -57,6 +60,6 @@ class DataProcessingChannelTestCase(IsolatedAsyncioTestCase):
         channel.dispatch(listener.id, Message(msg_type='test2'))
         channel.dispatch(listener.id, Message(msg_type='test3'))
 
-        await listener.start()
+        listener.start()
         types = {m['event'] async for m in channel.process_queue(listener)}
         self.assertEqual({'test1', 'test2', 'test3'}, types)

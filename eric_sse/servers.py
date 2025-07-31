@@ -1,6 +1,7 @@
 import asyncio
 import json
 import signal
+
 from asyncio import StreamReader, StreamWriter, start_unix_server
 from asyncio.exceptions import CancelledError
 from os import linesep
@@ -8,28 +9,27 @@ from pathlib import Path
 from typing import AsyncIterable, Iterable
 
 from eric_sse import get_logger
+from eric_sse.entities import AbstractChannel
 from eric_sse.message import MessageContract, Message
 from eric_sse.exception import InvalidChannelException, InvalidMessageFormat
 from eric_sse.prefabs import SSEChannel
-from eric_sse.queue import AbstractMessageQueueFactory
 
 logger = get_logger()
 
 
-class SSEChannelContainer:
-    """Helper class for management of multiple SSE channels cases of use."""
+class ChannelContainer:
+    """Helper class for management of multiple channels cases of use."""
 
     def __init__(self):
-        self.__channels: dict[str: SSEChannel] = {}
+        self.__channels: dict[str: AbstractChannel] = {}
 
-    def add(self, queues_factory: AbstractMessageQueueFactory | None = None) -> SSEChannel:
-        channel = SSEChannel(queues_factory=queues_factory)
+
+    def register(self, channel: AbstractChannel) -> None:
         if channel.id in self.__channels:
             raise InvalidChannelException(f'Channel with id {channel.id} already exists')
         self.__channels[channel.id] = channel
-        return channel
 
-    def get(self, channel_id: str) -> SSEChannel:
+    def get(self, channel_id: str) -> AbstractChannel:
         try:
             return self.__channels[channel_id]
         except KeyError:
@@ -73,12 +73,30 @@ class SocketServer:
 
     See examples
     """
-    cc = SSEChannelContainer()
+    cc = ChannelContainer()
     ACK = 'ack'
 
     def __init__(self, file_descriptor_path: str):
+        """
+        :param file_descriptor_path: See **start** method
+        """
         self.__file_descriptor_path = file_descriptor_path
         self.__unix_server: asyncio.Server | None = None
+
+
+    @staticmethod
+    def start(file_descriptor_path: str):
+        """
+        Shortcut to start a server given a file descriptor path
+
+        :param file_descriptor_path: file descriptor path, all understood by `Path <https://docs.python.org/3/library/pathlib.html#pathlib.Path>`_ is fine
+        """
+        logger.info('starting')
+        try:
+            server = SocketServer(file_descriptor_path)
+            asyncio.run(server.main())
+        except CancelledError:
+            exit(0)
 
     @staticmethod
     def __parse(json_raw: str) -> (str, str, MessageContract | None, str):
@@ -124,7 +142,8 @@ class SocketServer:
             yield SocketServer.ACK
 
         elif verb == 'c':
-            channel = SocketServer.cc.add()
+            channel = SSEChannel()
+            SocketServer.cc.register(channel)
             yield channel.id
 
         elif verb == 'b':
@@ -136,7 +155,7 @@ class SocketServer:
             yield l.id
 
         elif verb == 'rl':
-            SocketServer.cc.get(channel_id).remove_listener(l_id=receiver_id)
+            SocketServer.cc.get(channel_id).remove_listener(listener_id=receiver_id)
             yield SocketServer.ACK
 
         elif verb == 'rc':
@@ -147,8 +166,8 @@ class SocketServer:
             logger.info(f"Started listener {receiver_id} on {channel_id}")
             channel = SocketServer.cc.get(channel_id)
             listener = channel.get_listener(receiver_id)
-            await listener.start()
-            async for m in await channel.message_stream(listener):
+            listener.start()
+            async for m in channel.message_stream(listener):
                 yield f'{json.dumps(m)}{linesep}'
 
         elif verb == 'w':
@@ -167,6 +186,7 @@ class SocketServer:
         logger.info("done")
 
     async def main(self):
+        """Starts the server"""
         server = await start_unix_server(SocketServer.connect_callback, path=Path(self.__file_descriptor_path))
         self.__unix_server = server
         addr = server.sockets[0].getsockname()
@@ -177,12 +197,3 @@ class SocketServer:
                 server.get_loop().add_signal_handler(sig, lambda: asyncio.ensure_future(self.shutdown()))
             await server.serve_forever()
 
-    @staticmethod
-    def start(file_descriptor_path: str):
-        """Shortcut to start a server"""
-        logger.info('starting')
-        try:
-            server = SocketServer(file_descriptor_path)
-            asyncio.run(server.main())
-        except CancelledError:
-            exit(0)

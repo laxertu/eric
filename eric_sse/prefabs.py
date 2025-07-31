@@ -1,16 +1,17 @@
-from asyncio import as_completed as as_completed_future, get_running_loop
+import asyncio
 from concurrent.futures import ThreadPoolExecutor, Executor
 from typing import Callable, AsyncIterable
 from eric_sse import get_logger
-from eric_sse.entities import AbstractChannel, MessageQueueListener
+from eric_sse.entities import AbstractChannel
+from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
-from eric_sse.queue import AbstractMessageQueueFactory
+from eric_sse.persistence import ConnectionRepositoryInterface, ObjectAsKeyValuePersistenceMixin
 
 logger = get_logger()
 
 
-class SSEChannel(AbstractChannel):
+class SSEChannel(AbstractChannel, ObjectAsKeyValuePersistenceMixin):
     """
     SSE streaming channel.
     See https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
@@ -19,22 +20,51 @@ class SSEChannel(AbstractChannel):
 
     :param int stream_delay_seconds:
     :param int retry_timeout_milliseconds:
-    :param eric_sse.queue.AbstractMessageQueueFactory queues_factory:
+    :param eric_sse.persistence.ConnectionRepositoryInterface connections_repository:
     """
 
     def __init__(
             self,
+            channel_id: str | None = None,
             stream_delay_seconds: int = 0,
             retry_timeout_milliseconds: int = 5,
-            queues_factory: AbstractMessageQueueFactory = None
+            connections_repository: ConnectionRepositoryInterface = None
     ):
-        super().__init__(stream_delay_seconds=stream_delay_seconds, queues_factory=queues_factory)
+        super().__init__(channel_id=channel_id, stream_delay_seconds=stream_delay_seconds, connections_repository=connections_repository)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
+        self.__connections_repository = connections_repository
 
         self.payload_adapter: (
             Callable)[[dict | list | str | int | float | None], dict | list | str | int | float | None] = lambda x: x
         """Message payload adapter, defaults to identity (leave as is). It can be used, for example, when working in a 
         context where receiver is responsible for payload deserialization, e.g. Sockets"""
+
+    @property
+    def kv_key(self) -> str:
+        return self.id
+
+    @property
+    def kv_value_as_dict(self) -> dict:
+        return {
+            'channel_id': self.id,
+            'stream_delay_seconds': self.stream_delay_seconds,
+            'retry_timeout_milliseconds': self.retry_timeout_milliseconds,
+        }
+
+    def setup_by_dict(self, setup: dict):
+        self.stream_delay_seconds = setup['stream_delay_seconds']
+        self.retry_timeout_milliseconds = setup['retry_timeout_milliseconds']
+
+        connections = self.__connections_repository.load_all()
+        for connection in connections:
+            self.register_connection(listener=connection.listener, queue=connection.queue)
+
+    @staticmethod
+    def create_from_dict(params: dict, connection_repository: ConnectionRepositoryInterface) -> AbstractChannel:
+        return SSEChannel(
+            **params,
+            connections_repository=connection_repository
+        )
 
     def adapt(self, msg: MessageContract) -> dict:
         """
@@ -59,7 +89,7 @@ class DataProcessingChannel(AbstractChannel):
     """
     Channel intended for concurrent processing of data.
 
-    Relies on `concurrent.futures.ThreadPoolExecutor <https://docs.python.org/3/library/concurrent.futures.html#threadpoolexecutor>`_.
+    Relies on `concurrent.futures.Executor <https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Executor>`_.
     Just override **adapt** method to control output returned to clients
 
     MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.  
@@ -69,29 +99,30 @@ class DataProcessingChannel(AbstractChannel):
         """
         :param max_workers: Num of workers to use
         :param stream_delay_seconds: Can be used to limit response rate of streaming. Only applies to message_stream calls.
+        :param executor_class: The constructor of some Executor class. Defaults to  `ThreadPoolExecutor  <https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.ThreadPoolExecutor>`_.
         """
         super().__init__(stream_delay_seconds=stream_delay_seconds)
         self.max_workers = max_workers
         self.executor_class = executor_class
 
     async def process_queue(self, listener: MessageQueueListener) -> AsyncIterable[dict]:
+        """Performs queue processing of a given listener, returns an AsyncIterable of dictionaries containing message process result. See **adapt** method"""
 
         with self.executor_class(max_workers=self.max_workers) as e:
             there_are_pending_messages = True
             tasks = []
-            loop = get_running_loop()
+            loop = asyncio.get_running_loop()
             while there_are_pending_messages:
                 try:
                     msg = self._get_queue(listener_id=listener.id).pop()
-                    tasks.append(loop.run_in_executor(e, self._invoke_callback_and_return, listener.on_message, msg))
+                    tasks.append(loop.run_in_executor(e, DataProcessingChannel._invoke_callback_and_return, listener.on_message, msg))
 
                 except NoMessagesException:
                     there_are_pending_messages = False
 
-            for task_dome in as_completed_future(tasks):
+            for task_dome in asyncio.as_completed(tasks):
                 task_result = await task_dome
                 yield self.adapt(task_result)
-
 
     @staticmethod
     def _invoke_callback_and_return(callback: Callable[[MessageContract], None], msg: MessageContract):
@@ -99,25 +130,35 @@ class DataProcessingChannel(AbstractChannel):
         return msg
 
     def adapt(self, msg: MessageContract) -> dict:
+        """
+
+        Returns a dictionary in the following format::
+
+            {
+                "event": message type
+                "data": message payload
+            }
+        """
+
         return {
             "event": msg.type,
             "data": msg.payload
         }
 
-
 class SimpleDistributedApplicationListener(MessageQueueListener):
     """Listener for distributed applications"""
 
-    def __init__(self, channel: AbstractChannel):
+    def __init__(self):
         super().__init__()
-        self.__channel = channel
+        self.__channel: AbstractChannel | None = None
         self.__actions: dict[str, Callable[[MessageContract], list[MessageContract]]] = dict()
         self.__internal_actions: dict[str, Callable[[], None]] = {
-            'start': self.start_sync,
-            'stop': self.stop_sync,
-            'remove': self.remove_sync
+            'start': self.start,
+            'stop': self.stop
         }
-        channel.register_listener(self)
+
+    def set_channel(self, channel: AbstractChannel):
+        self.__channel = channel
 
     def set_action(self, name: str, action: Callable[[MessageContract], list[MessageContract]]):
         """
@@ -125,9 +166,9 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
 
         Callables are selected when listener processes the message depending on its type.
 
-        They should return a list of Messages corresponding to response to action requested.
+        They should return a list of MessageContract instances corresponding to response to action requested.
 
-        Reserved actions are 'start', 'stop', 'remove'.
+        Reserved actions are 'start', 'stop'.
         Receiving a message with one of these types will fire corresponding action.
 
         """
@@ -155,7 +196,8 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         except KeyError:
             logger.debug(f'Unknown action {msg.type}')
 
-    def remove_sync(self):
-        """Stop and unregister"""
-        self.stop_sync()
-        self.__channel.remove_listener(self.id)
+class SimpleDistributedApplicationChannel(SSEChannel):
+
+    def register_listener(self, listener: SimpleDistributedApplicationListener):
+        listener.set_channel(self)
+        super().register_listener(listener)

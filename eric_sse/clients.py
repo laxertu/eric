@@ -75,12 +75,10 @@ class SocketClient:
             'v': 'rl',
             'c': channel_id,
             'r': listener_id
-        }
-        )
+        })
 
     async def remove_channel(self, channel_id: str):
         return await self.send_payload({
             'v': 'rc',
             'c': channel_id
-        }
-        )
+        })

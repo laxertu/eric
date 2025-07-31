@@ -2,6 +2,15 @@
 
 # Changelog
 
+1.0.0
+
+* Rework of persistence layer support. Factories of queues have been replaced with connections repositories
+* Moved MessageQueueListener to a separate module
+* Removed \_sync methods form MessageQueueListener
+* Moved RepositoryError to exception module
+* Prefabs dependencies were updated accordingly
+* Benchmark module renamed to profile
+
 0.7.9
 
 * Channel and listener id generation now relies on uuid4
