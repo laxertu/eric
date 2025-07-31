@@ -364,7 +364,15 @@ Event handler. It executes when a message is delivered to client
 <a id="module-eric_sse.persistence"></a>
 
 This module is intended to those who want to create their own persistence layer.
-A Redis implementation is available at [https://pypi.org/project/eric-redis-queues/](https://pypi.org/project/eric-redis-queues/)
+
+**Writing a custom persistence layer**
+
+you need to implement the following interfaces:
+
+* [`eric_sse.persistence.PersistableQueue`](#eric_sse.persistence.PersistableQueue)
+* [`eric_sse.persistence.ConnectionRepositoryInterface`](#eric_sse.persistence.ConnectionRepositoryInterface)
+* [`eric_sse.persistence.ChannelRepositoryInterface`](#eric_sse.persistence.ChannelRepositoryInterface)
+* A **Redis** concrete implementation of interfaces is available at [https://pypi.org/project/eric-redis-queues/](https://pypi.org/project/eric-redis-queues/)
 
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin"></a>
 
@@ -395,6 +403,14 @@ Does de necessary setup of object given its persisted values
 * **Parameters:**
   **setup** (*dict*)
 
+<a id="eric_sse.persistence.PersistableQueue"></a>
+
+### *class* PersistableQueue
+
+Bases: [`Queue`](#eric_sse.queues.Queue), [`ObjectAsKeyValuePersistenceMixin`](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin), `ABC`
+
+Concrete implementations of methods should perform in **Queues** ones their I/O operations, and define in **ObjectAsKeyValuePersistenceMixin** ones their correspondant persistence strategy
+
 <a id="eric_sse.persistence.ObjectRepositoryInterface"></a>
 
 ### *class* ObjectRepositoryInterface
@@ -423,6 +439,22 @@ Returns an Iterable of all persisted objects of correspondant concrete implement
 
 * **Parameters:**
   **key** (*str*)
+
+<a id="eric_sse.persistence.ChannelRepositoryInterface"></a>
+
+### *class* ChannelRepositoryInterface
+
+Bases: [`ObjectRepositoryInterface`](#eric_sse.persistence.ObjectRepositoryInterface)
+
+<a id="eric_sse.persistence.ChannelRepositoryInterface.delete_listener"></a>
+
+#### *abstract* delete_listener(channel_id, listener_id)
+
+* **Parameters:**
+  * **channel_id** (*str*)
+  * **listener_id** (*str*)
+* **Return type:**
+  None
 
 <a id="eric_sse.persistence.ConnectionRepositoryInterface"></a>
 
@@ -896,7 +928,7 @@ see [`eric_sse.servers.SocketServer`](#eric_sse.servers.SocketServer)
 
 Bases: `ABC`
 
-Abstract base class for queues (FIFO)
+Abstract base class for queues (FIFO).
 
 <a id="eric_sse.queues.Queue.pop"></a>
 

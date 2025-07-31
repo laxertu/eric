@@ -6,7 +6,7 @@ from eric_sse.exception import NoMessagesException, RepositoryError
 
 
 class Queue(ABC):
-    """Abstract base class for queues (FIFO)"""
+    """Abstract base class for queues (FIFO)."""
     @abstractmethod
     def pop(self) -> MessageContract:
         """

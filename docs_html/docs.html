@@ -374,10 +374,15 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.setup_by_dict"><code class="docutils literal notranslate"><span class="pre">setup_by_dict()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.PersistableQueue"><code class="docutils literal notranslate"><span class="pre">PersistableQueue</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectRepositoryInterface"><code class="docutils literal notranslate"><span class="pre">ObjectRepositoryInterface</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectRepositoryInterface.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectRepositoryInterface.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectRepositoryInterface.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ChannelRepositoryInterface"><code class="docutils literal notranslate"><span class="pre">ChannelRepositoryInterface</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ChannelRepositoryInterface.delete_listener"><code class="docutils literal notranslate"><span class="pre">delete_listener()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ConnectionRepositoryInterface"><code class="docutils literal notranslate"><span class="pre">ConnectionRepositoryInterface</span></code></a><ul class="nav section-nav flex-column">
@@ -914,8 +919,15 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 <p><strong>Connections</strong></p>
 <a class="reference internal image-reference" href="_images/persistence-layer-connections.png"><img alt="_images/persistence-layer-connections.png" src="_images/persistence-layer-connections.png" style="width: 468.0px; height: 292.0px;" />
 </a>
-<p id="module-eric_sse.persistence">This module is intended to those who want to create their own persistence layer.
-A Redis implementation is available at <a class="reference external" href="https://pypi.org/project/eric-redis-queues/">https://pypi.org/project/eric-redis-queues/</a></p>
+<p id="module-eric_sse.persistence">This module is intended to those who want to create their own persistence layer.</p>
+<p><strong>Writing a custom persistence layer</strong></p>
+<p>you need to implement the following interfaces:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#eric_sse.persistence.PersistableQueue" title="eric_sse.persistence.PersistableQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.persistence.PersistableQueue</span></code></a></p></li>
+<li><p><a class="reference internal" href="#eric_sse.persistence.ConnectionRepositoryInterface" title="eric_sse.persistence.ConnectionRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.persistence.ConnectionRepositoryInterface</span></code></a></p></li>
+<li><p><a class="reference internal" href="#eric_sse.persistence.ChannelRepositoryInterface" title="eric_sse.persistence.ChannelRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.persistence.ChannelRepositoryInterface</span></code></a></p></li>
+<li><p>A <strong>Redis</strong> concrete implementation of interfaces is available at <a class="reference external" href="https://pypi.org/project/eric-redis-queues/">https://pypi.org/project/eric-redis-queues/</a></p></li>
+</ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ObjectAsKeyValuePersistenceMixin</span></span><a class="headerlink" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin" title="Link to this definition">#</a></dt>
@@ -944,6 +956,13 @@ A Redis implementation is available at <a class="reference external" href="https
 </dl>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.persistence.PersistableQueue">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PersistableQueue</span></span><a class="headerlink" href="#eric_sse.persistence.PersistableQueue" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eric_sse.queues.Queue" title="eric_sse.queues.Queue"><code class="xref py py-class docutils literal notranslate"><span class="pre">Queue</span></code></a>, <a class="reference internal" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin" title="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectAsKeyValuePersistenceMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Concrete implementations of methods should perform in <strong>Queues</strong> ones their I/O operations, and define in <strong>ObjectAsKeyValuePersistenceMixin</strong> ones their correspondant persistence strategy</p>
 </dd></dl>
 
 <dl class="py class">
@@ -977,6 +996,28 @@ A Redis implementation is available at <a class="reference external" href="https
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>key</strong> (<em>str</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.persistence.ChannelRepositoryInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ChannelRepositoryInterface</span></span><a class="headerlink" href="#eric_sse.persistence.ChannelRepositoryInterface" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eric_sse.persistence.ObjectRepositoryInterface" title="eric_sse.persistence.ObjectRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectRepositoryInterface</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.persistence.ChannelRepositoryInterface.delete_listener">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_listener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listener_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.persistence.ChannelRepositoryInterface.delete_listener" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<em>str</em>)</p></li>
+<li><p><strong>listener_id</strong> (<em>str</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1538,7 +1579,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <dt class="sig sig-object py" id="eric_sse.queues.Queue">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Queue</span></span><a class="headerlink" href="#eric_sse.queues.Queue" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
-<p>Abstract base class for queues (FIFO)</p>
+<p>Abstract base class for queues (FIFO).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.queues.Queue.pop">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.queues.Queue.pop" title="Link to this definition">#</a></dt>
@@ -1791,10 +1832,15 @@ an <a class="reference internal" href="#eric_sse.exception.NoMessagesException" 
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.setup_by_dict"><code class="docutils literal notranslate"><span class="pre">setup_by_dict()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.PersistableQueue"><code class="docutils literal notranslate"><span class="pre">PersistableQueue</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectRepositoryInterface"><code class="docutils literal notranslate"><span class="pre">ObjectRepositoryInterface</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectRepositoryInterface.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectRepositoryInterface.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectRepositoryInterface.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ChannelRepositoryInterface"><code class="docutils literal notranslate"><span class="pre">ChannelRepositoryInterface</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ChannelRepositoryInterface.delete_listener"><code class="docutils literal notranslate"><span class="pre">delete_listener()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ConnectionRepositoryInterface"><code class="docutils literal notranslate"><span class="pre">ConnectionRepositoryInterface</span></code></a><ul class="nav section-nav flex-column">

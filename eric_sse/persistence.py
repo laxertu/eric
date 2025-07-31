@@ -1,6 +1,16 @@
 """
 This module is intended to those who want to create their own persistence layer.
-A Redis implementation is available at https://pypi.org/project/eric-redis-queues/
+
+**Writing a custom persistence layer**
+
+you need to implement the following interfaces:
+
+* :class:`eric_sse.persistence.PersistableQueue`
+* :class:`eric_sse.persistence.ConnectionRepositoryInterface`
+* :class:`eric_sse.persistence.ChannelRepositoryInterface`
+
+
+* A **Redis** concrete implementation of interfaces is available at https://pypi.org/project/eric-redis-queues/
 """
 
 from abc import ABC, abstractmethod
@@ -29,6 +39,9 @@ class ObjectAsKeyValuePersistenceMixin(ABC):
         """Does de necessary setup of object given its persisted values"""
         ...
 
+class PersistableQueue(Queue, ObjectAsKeyValuePersistenceMixin, ABC):
+    """Concrete implementations of methods should perform in **Queues** ones their I/O operations, and define in **ObjectAsKeyValuePersistenceMixin** ones their correspondant persistence strategy"""
+    ...
 
 class ObjectRepositoryInterface(ABC):
 
