@@ -48,7 +48,6 @@ Persistence
 .. image:: _static/persistence-layer-connections.png
    :scale: 50 %
 
-
 .. automodule:: eric_sse.persistence
     :members: ObjectAsKeyValuePersistenceMixin, ObjectRepositoryInterface, ConnectionRepositoryInterface
     :undoc-members:

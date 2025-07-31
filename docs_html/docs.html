@@ -987,7 +987,8 @@ A Redis implementation is available at <a class="reference external" href="https
 <dt class="sig sig-object py" id="eric_sse.persistence.ConnectionRepositoryInterface">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConnectionRepositoryInterface</span></span><a class="headerlink" href="#eric_sse.persistence.ConnectionRepositoryInterface" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
-<p>Abstraction for connections creation</p>
+<p>Abstraction for connections creation.</p>
+<p>It exposes methods to be used by ChannelRepositoryInterface implementations for connections loading.</p>
 <p>see <a class="reference internal" href="#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.entities.AbstractChannel</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.persistence.ConnectionRepositoryInterface.create_queue">

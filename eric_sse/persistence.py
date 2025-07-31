@@ -54,7 +54,9 @@ class ChannelRepositoryInterface(ObjectRepositoryInterface):
 
 class ConnectionRepositoryInterface(ABC):
     """
-    Abstraction for connections creation
+    Abstraction for connections creation.
+
+    It exposes methods to be used by ChannelRepositoryInterface implementations for connections loading.
 
     see :class:`eric_sse.entities.AbstractChannel`
     """

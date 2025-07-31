@@ -430,7 +430,9 @@ Returns an Iterable of all persisted objects of correspondant concrete implement
 
 Bases: `ABC`
 
-Abstraction for connections creation
+Abstraction for connections creation.
+
+It exposes methods to be used by ChannelRepositoryInterface implementations for connections loading.
 
 see [`eric_sse.entities.AbstractChannel`](#eric_sse.entities.AbstractChannel)
 
