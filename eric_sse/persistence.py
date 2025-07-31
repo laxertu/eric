@@ -4,22 +4,11 @@ A Redis implementation is available at https://pypi.org/project/eric-redis-queue
 """
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 from typing import Iterable
 
-from eric_sse.listener import MessageQueueListener
+from eric_sse.connection import Connection
 from eric_sse.queues import Queue, InMemoryQueue
 
-@dataclass
-class Connection:
-    """
-    A connection is just a listener and its related message queue
-
-    :param eric_sse.listener.MessageQueueListener listener:
-    :param eric_sse.queues.Queue queue:
-    """
-    listener: MessageQueueListener
-    queue: Queue
 
 class ObjectAsKeyValuePersistenceMixin(ABC):
     @property

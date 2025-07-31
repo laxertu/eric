@@ -8,7 +8,8 @@ from eric_sse.exception import InvalidListenerException, NoMessagesException, In
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import MessageContract, Message
 from eric_sse.queues import Queue
-from eric_sse.persistence import ConnectionRepositoryInterface, InMemoryConnectionRepository, Connection
+from eric_sse.persistence import ConnectionRepositoryInterface, InMemoryConnectionRepository
+from eric_sse.connection import Connection
 
 logger = eric_sse.get_logger()
 
