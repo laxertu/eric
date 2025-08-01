@@ -1,15 +1,24 @@
 """
-This module is intended to those who want to create their own persistence layer.
+This module is intended to those who want to create their own persistence layer
+
+A **Redis** concrete implementation of interfaces is available at  `eric-redis-queues package source <https://github.com/laxertu/eric-redis-queues/blob/master/eric_redis_queues/__init__.py>`_.
 
 **Writing a custom persistence layer**
 
-you need to implement the following interfaces:
+You need to implement the following interfaces:
+
+**Channels**
+
+* :class:`eric_sse.persistence.ChannelRepositoryInterface`
+
+* You'll need to define a channel that implements :class:`eric_sse.persistence.ObjectAsKeyValuePersistenceMixin` if :class:`eric_sse.prefabs.SSEChannel` do not suit with your requirements
+
+
+**Connections**
 
 * :class:`eric_sse.persistence.PersistableQueue`
 * :class:`eric_sse.persistence.ConnectionRepositoryInterface`
 
-
-* A **Redis** concrete implementation of interfaces is available at  `eric-redis-queues package source <https://github.com/laxertu/eric-redis-queues/blob/master/eric_redis_queues/__init__.py>`_.
 """
 
 from abc import ABC, abstractmethod

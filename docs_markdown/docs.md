@@ -363,15 +363,23 @@ Event handler. It executes when a message is delivered to client
 
 <a id="module-eric_sse.persistence"></a>
 
-This module is intended to those who want to create their own persistence layer.
+This module is intended to those who want to create their own persistence layer
+
+A **Redis** concrete implementation of interfaces is available at  [eric-redis-queues package source](https://github.com/laxertu/eric-redis-queues/blob/master/eric_redis_queues/__init__.py).
 
 **Writing a custom persistence layer**
 
-you need to implement the following interfaces:
+You need to implement the following interfaces:
+
+**Channels**
+
+* [`eric_sse.persistence.ChannelRepositoryInterface`](#eric_sse.persistence.ChannelRepositoryInterface)
+* You’ll need to define a channel that implements [`eric_sse.persistence.ObjectAsKeyValuePersistenceMixin`](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin) if [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel) do not suit with your requirements
+
+**Connections**
 
 * [`eric_sse.persistence.PersistableQueue`](#eric_sse.persistence.PersistableQueue)
 * [`eric_sse.persistence.ConnectionRepositoryInterface`](#eric_sse.persistence.ConnectionRepositoryInterface)
-* A **Redis** concrete implementation of interfaces is available at  [eric-redis-queues package source](https://github.com/laxertu/eric-redis-queues/blob/master/eric_redis_queues/__init__.py).
 
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin"></a>
 
