@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.4.0
+
+* Minor: updated AbstractChannel and SSEChannel constructor params order
+
 1.3.0.1
 
 * Fixed SimpleDistributedApplicationListener.register_listener signature

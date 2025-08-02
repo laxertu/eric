@@ -25,10 +25,10 @@ class SSEChannel(AbstractChannel, ObjectAsKeyValuePersistenceMixin):
 
     def __init__(
             self,
-            channel_id: str | None = None,
             stream_delay_seconds: int = 0,
             retry_timeout_milliseconds: int = 5,
-            connections_repository: ConnectionRepositoryInterface = None
+            connections_repository: ConnectionRepositoryInterface = None,
+            channel_id: str | None = None
     ):
         super().__init__(channel_id=channel_id, stream_delay_seconds=stream_delay_seconds, connections_repository=connections_repository)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds

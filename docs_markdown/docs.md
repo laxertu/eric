@@ -181,12 +181,12 @@ see [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel)
 
 <a id="eric_sse.entities.AbstractChannel.__init__"></a>
 
-#### \_\_init_\_(channel_id=None, stream_delay_seconds=0, connections_repository=None)
+#### \_\_init_\_(stream_delay_seconds=0, connections_repository=None, channel_id=None)
 
 * **Parameters:**
-  * **channel_id** (*str* *|* *None*)
   * **stream_delay_seconds** (*int*)
   * **connections_repository** ([*ConnectionRepositoryInterface*](#eric_sse.persistence.ConnectionRepositoryInterface) *|* *None*)
+  * **channel_id** (*str* *|* *None*)
 
 <a id="eric_sse.entities.AbstractChannel.load_persisted_data"></a>
 
@@ -666,13 +666,13 @@ Currently, ‘id’ field is not supported.
 
 <a id="eric_sse.prefabs.SSEChannel.__init__"></a>
 
-#### \_\_init_\_(channel_id=None, stream_delay_seconds=0, retry_timeout_milliseconds=5, connections_repository=None)
+#### \_\_init_\_(stream_delay_seconds=0, retry_timeout_milliseconds=5, connections_repository=None, channel_id=None)
 
 * **Parameters:**
-  * **channel_id** (*str* *|* *None*)
   * **stream_delay_seconds** (*int*)
   * **retry_timeout_milliseconds** (*int*)
   * **connections_repository** ([*ConnectionRepositoryInterface*](#eric_sse.persistence.ConnectionRepositoryInterface) *|* *None*)
+  * **channel_id** (*str* *|* *None*)
 
 <a id="eric_sse.prefabs.SSEChannel.payload_adapter"></a>
 

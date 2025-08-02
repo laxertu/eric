@@ -89,9 +89,9 @@ class AbstractChannel(ABC):
     """
     def __init__(
             self,
-            channel_id: str | None = None,
             stream_delay_seconds: int = 0,
-            connections_repository: ConnectionRepositoryInterface | None = None
+            connections_repository: ConnectionRepositoryInterface | None = None,
+            channel_id: str | None = None
     ):
         self.__id: str = eric_sse.generate_uuid() if channel_id is None else channel_id
         assert self.__id is not None
