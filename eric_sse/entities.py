@@ -84,8 +84,8 @@ class AbstractChannel(ABC):
     see :class:`eric_sse.prefabs.SSEChannel`
 
     :param int stream_delay_seconds: Wait time in seconds between message delivery.
-
     :param eric_sse.persistence.ConnectionRepositoryInterface connections_repository:
+    :param str channel_id: Optionally sets the channel id. **IMPORTANT** by using this parameter, client is responsible for guaranteeing channel id uniqueness
     """
     def __init__(
             self,
@@ -110,6 +110,7 @@ class AbstractChannel(ABC):
 
     @property
     def id(self) -> str:
+        """Unique identifier for this channel, it can be set by **channel_id** constructor parameter"""
         return self.__id
 
 

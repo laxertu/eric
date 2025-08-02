@@ -177,6 +177,7 @@ see [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel)
 * **Parameters:**
   * **stream_delay_seconds** (*int*) – Wait time in seconds between message delivery.
   * **connections_repository** ([*eric_sse.persistence.ConnectionRepositoryInterface*](#eric_sse.persistence.ConnectionRepositoryInterface))
+  * **channel_id** (*str*) – Optionally sets the channel id. **IMPORTANT** by using this parameter, client is responsible for guaranteeing channel id uniqueness
 
 <a id="eric_sse.entities.AbstractChannel.__init__"></a>
 
@@ -198,6 +199,8 @@ see [`eric_sse.persistence.ConnectionRepositoryInterface`](#eric_sse.persistence
 <a id="eric_sse.entities.AbstractChannel.id"></a>
 
 #### *property* id *: str*
+
+Unique identifier for this channel, it can be set by **channel_id** constructor parameter
 
 <a id="eric_sse.entities.AbstractChannel.adapt"></a>
 
