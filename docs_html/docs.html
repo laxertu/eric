@@ -958,10 +958,6 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 <li><p><a class="reference internal" href="#eric_sse.persistence.PersistableQueue" title="eric_sse.persistence.PersistableQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.persistence.PersistableQueue</span></code></a></p></li>
 <li><p><a class="reference internal" href="#eric_sse.persistence.ConnectionRepositoryInterface" title="eric_sse.persistence.ConnectionRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.persistence.ConnectionRepositoryInterface</span></code></a></p></li>
 </ul>
-<p><strong>Listeners</strong></p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#eric_sse.persistence.PersistableListener" title="eric_sse.persistence.PersistableListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.persistence.PersistableListener</span></code></a></p></li>
-</ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ObjectAsKeyValuePersistenceMixin</span></span><a class="headerlink" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin" title="Link to this definition">#</a></dt>
@@ -1003,6 +999,7 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 <dt class="sig sig-object py" id="eric_sse.persistence.PersistableListener">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PersistableListener</span></span><a class="headerlink" href="#eric_sse.persistence.PersistableListener" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a>, <a class="reference internal" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin" title="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectAsKeyValuePersistenceMixin</span></code></a></p>
+<p>Gives KV persistence support to MessageQueueListener.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.persistence.PersistableListener.kv_key">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kv_key</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.persistence.PersistableListener.kv_key" title="Link to this definition">#</a></dt>

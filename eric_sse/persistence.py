@@ -20,13 +20,6 @@ In some of them, just **PersistableQueue**, **ChannelRepositoryInterface** and *
 
 * :class:`eric_sse.persistence.PersistableQueue`
 * :class:`eric_sse.persistence.ConnectionRepositoryInterface`
-
-**Listeners**
-
-* :class:`eric_sse.persistence.PersistableListener`
-
-
-
 """
 
 from abc import ABC, abstractmethod
@@ -62,7 +55,7 @@ class PersistableQueue(Queue, ObjectAsKeyValuePersistenceMixin, ABC):
     ...
 
 class PersistableListener(MessageQueueListener, ObjectAsKeyValuePersistenceMixin):
-
+    """Gives KV persistence support to MessageQueueListener."""
     @property
     def kv_key(self) -> str:
         return self.id

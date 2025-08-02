@@ -392,10 +392,6 @@ In some of them, just **PersistableQueue**, **ChannelRepositoryInterface** and *
 * [`eric_sse.persistence.PersistableQueue`](#eric_sse.persistence.PersistableQueue)
 * [`eric_sse.persistence.ConnectionRepositoryInterface`](#eric_sse.persistence.ConnectionRepositoryInterface)
 
-**Listeners**
-
-* [`eric_sse.persistence.PersistableListener`](#eric_sse.persistence.PersistableListener)
-
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin"></a>
 
 ### *class* ObjectAsKeyValuePersistenceMixin
@@ -438,6 +434,8 @@ Concrete implementations of methods should perform in **Queues** ones their I/O 
 ### *class* PersistableListener
 
 Bases: [`MessageQueueListener`](#eric_sse.listener.MessageQueueListener), [`ObjectAsKeyValuePersistenceMixin`](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin)
+
+Gives KV persistence support to MessageQueueListener.
 
 <a id="eric_sse.persistence.PersistableListener.kv_key"></a>
 
