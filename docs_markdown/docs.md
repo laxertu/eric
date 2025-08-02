@@ -483,6 +483,8 @@ Bases: [`ObjectAsKeyValuePersistenceMixin`](#eric_sse.persistence.ObjectAsKeyVal
 
 Bases: `ABC`
 
+Every exception raised by concrete implementations show be wrapped around a [`eric_sse.exception.RepositoryError`](#eric_sse.exception.RepositoryError)
+
 <a id="eric_sse.persistence.ObjectRepositoryInterface.load"></a>
 
 #### *abstract* load()
@@ -1097,7 +1099,7 @@ Raised when trying to fetch from an empty queue
 
 Raised when an unexpected error occurs while trying to fetch messages from a queue.
 
-Concrete implementations of `Queue` should wrap here the unexpected exceptions they catch before raising, and
+Concrete implementations of [`eric_sse.persistence.ObjectRepositoryInterface`](#eric_sse.persistence.ObjectRepositoryInterface) should wrap here the unexpected exceptions they catch before raising, and
 an [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessagesException) when a pop is requested on an empty queue.
 
 <a id="module-eric_sse.profile"></a>

@@ -74,6 +74,8 @@ class PersistableChannel(ObjectAsKeyValuePersistenceMixin, ABC):
     ...
 
 class ObjectRepositoryInterface(ABC):
+    """Every exception raised by concrete implementations show be wrapped around a :class:`eric_sse.exception.RepositoryError`
+    """
 
     @abstractmethod
     def load(self) -> Iterable[ObjectAsKeyValuePersistenceMixin]:
