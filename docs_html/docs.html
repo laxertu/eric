@@ -342,8 +342,8 @@ document.write(`
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.entities">Channels and listeners</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel"><code class="docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.load_persisted_data"><code class="docutils literal notranslate"><span class="pre">load_persisted_data()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.id"><code class="docutils literal notranslate"><span class="pre">id</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.open"><code class="docutils literal notranslate"><span class="pre">open()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.adapt"><code class="docutils literal notranslate"><span class="pre">adapt()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.message_stream"><code class="docutils literal notranslate"><span class="pre">message_stream()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.add_listener"><code class="docutils literal notranslate"><span class="pre">add_listener()</span></code></a></li>
@@ -693,7 +693,7 @@ For validation purposes you can override <a class="reference internal" href="#er
 <dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AbstractChannel</span></span><a class="headerlink" href="#eric_sse.entities.AbstractChannel" title="Link to this definition">#</a></dt>
 <dd><p>Base class for channels.</p>
-<p>Provides functionalities for listeners and message delivery management. Channel needs to be started by calling to <strong>open()</strong> method.</p>
+<p>Provides functionalities for listeners and message delivery management. Channel needs to be started by calling to <strong>load_persisted_data()</strong> method.</p>
 <p><a class="reference internal" href="#eric_sse.persistence.InMemoryConnectionRepository" title="eric_sse.persistence.InMemoryConnectionRepository"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.persistence.InMemoryConnectionRepository</span></code></a> is the default implementation used for queues_factory
 see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eric_sse.prefabs.SSEChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.prefabs.SSEChannel</span></code></a></p>
 <dl class="field-list simple">
@@ -718,16 +718,16 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.load_persisted_data">
+<span class="sig-name descname"><span class="pre">load_persisted_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.load_persisted_data" title="Link to this definition">#</a></dt>
+<dd><p>Starts service</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.id">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.entities.AbstractChannel.id" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.open">
-<span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.open" title="Link to this definition">#</a></dt>
-<dd><p>Starts service</p>
-</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.adapt">
@@ -771,7 +771,7 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.register_listener">
 <span class="sig-name descname"><span class="pre">register_listener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.register_listener" title="Link to this definition">#</a></dt>
-<dd><p>Registers listener and creates corresponding queue</p>
+<dd><p>Registers listener and creates corresponding queue with persistence support</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>listener</strong> (<a class="reference internal" href="#eric_sse.persistence.PersistableListener" title="eric_sse.persistence.PersistableListener"><em>PersistableListener</em></a>)</p>
@@ -782,7 +782,7 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.register_connection">
 <span class="sig-name descname"><span class="pre">register_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.register_connection" title="Link to this definition">#</a></dt>
-<dd><p>Registers a Connection with listener and queue</p>
+<dd><p>Registers a Connection with listener and queue without persistence</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1483,7 +1483,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.prefabs.SimpleDistributedApplicationChannel.register_listener">
 <span class="sig-name descname"><span class="pre">register_listener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationChannel.register_listener" title="Link to this definition">#</a></dt>
-<dd><p>Registers listener and creates corresponding queue</p>
+<dd><p>Registers listener and creates corresponding queue with persistence support</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>listener</strong> (<a class="reference internal" href="#eric_sse.prefabs.SimpleDistributedApplicationListener" title="eric_sse.prefabs.SimpleDistributedApplicationListener"><em>SimpleDistributedApplicationListener</em></a>)</p>
@@ -1952,8 +1952,8 @@ an <a class="reference internal" href="#eric_sse.exception.NoMessagesException" 
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.entities">Channels and listeners</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel"><code class="docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.load_persisted_data"><code class="docutils literal notranslate"><span class="pre">load_persisted_data()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.id"><code class="docutils literal notranslate"><span class="pre">id</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.open"><code class="docutils literal notranslate"><span class="pre">open()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.adapt"><code class="docutils literal notranslate"><span class="pre">adapt()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.message_stream"><code class="docutils literal notranslate"><span class="pre">message_stream()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.add_listener"><code class="docutils literal notranslate"><span class="pre">add_listener()</span></code></a></li>

@@ -1,5 +1,10 @@
 Changelog
 =========
+1.3.0
+
+* BREAKING AbstractChannel.open renamed to load_persisted_data
+* Fixed examples
+
 1.2.0
 
 * BREAKING register_listener now accepts a PersistableListener

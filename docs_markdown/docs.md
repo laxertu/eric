@@ -167,7 +167,7 @@ A connection is just a listener and its related message queue
 
 Base class for channels.
 
-Provides functionalities for listeners and message delivery management. Channel needs to be started by calling to **open()** method.
+Provides functionalities for listeners and message delivery management. Channel needs to be started by calling to **load_persisted_data()** method.
 
 [`eric_sse.persistence.InMemoryConnectionRepository`](#eric_sse.persistence.InMemoryConnectionRepository) is the default implementation used for queues_factory
 see [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel)
@@ -185,15 +185,15 @@ see [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel)
   * **stream_delay_seconds** (*int*)
   * **connections_repository** ([*ConnectionRepositoryInterface*](#eric_sse.persistence.ConnectionRepositoryInterface) *|* *None*)
 
+<a id="eric_sse.entities.AbstractChannel.load_persisted_data"></a>
+
+#### load_persisted_data()
+
+Starts service
+
 <a id="eric_sse.entities.AbstractChannel.id"></a>
 
 #### *property* id *: str*
-
-<a id="eric_sse.entities.AbstractChannel.open"></a>
-
-#### open()
-
-Starts service
 
 <a id="eric_sse.entities.AbstractChannel.adapt"></a>
 
@@ -230,7 +230,7 @@ Add the default listener and creates corresponding queue
 
 #### register_listener(listener)
 
-Registers listener and creates corresponding queue
+Registers listener and creates corresponding queue with persistence support
 
 * **Parameters:**
   **listener** ([*PersistableListener*](#eric_sse.persistence.PersistableListener))
@@ -239,7 +239,7 @@ Registers listener and creates corresponding queue
 
 #### register_connection(listener, queue)
 
-Registers a Connection with listener and queue
+Registers a Connection with listener and queue without persistence
 
 * **Parameters:**
   * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
@@ -834,7 +834,7 @@ Bases: [`SSEChannel`](#eric_sse.prefabs.SSEChannel)
 
 #### register_listener(listener)
 
-Registers listener and creates corresponding queue
+Registers listener and creates corresponding queue with persistence support
 
 * **Parameters:**
   **listener** ([*SimpleDistributedApplicationListener*](#eric_sse.prefabs.SimpleDistributedApplicationListener))
