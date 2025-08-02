@@ -582,7 +582,7 @@ Returns an Iterable of all persisted connections of a given channel
 
 #### *abstract* delete(channel_id, listener_id)
 
-Removes a persisted `eric_sse.connection.PersistableConnection` given its correspondant listener id
+Removes a persisted [`PersistableConnection`](#eric_sse.persistence.PersistableConnection) given its correspondant listener id
 
 * **Parameters:**
   * **channel_id** (*str*)
@@ -643,7 +643,7 @@ Returns an Iterable of all persisted connections of a given channel
 
 #### delete(channel_id, listener_id)
 
-Removes a persisted `eric_sse.connection.PersistableConnection` given its correspondant listener id
+Removes a persisted [`PersistableConnection`](#eric_sse.persistence.PersistableConnection) given its correspondant listener id
 
 * **Parameters:**
   * **channel_id** (*str*)

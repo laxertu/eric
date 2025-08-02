@@ -131,7 +131,7 @@ class ConnectionRepositoryInterface(ABC):
 
     @abstractmethod
     def delete(self, channel_id: str, listener_id: str) -> None:
-        """Removes a persisted :class:`eric_sse.connection.PersistableConnection` given its correspondant listener id"""
+        """Removes a persisted :class:`~eric_sse.persistence.PersistableConnection` given its correspondant listener id"""
         ...
 
 
