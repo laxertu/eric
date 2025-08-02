@@ -171,7 +171,7 @@ Provides functionalities for listeners and message delivery management.
 
 **Important** When using persistence layer you have to call to **load_persisted_data()** method just after object creation.
 
-[`eric_sse.persistence.InMemoryConnectionRepository`](#eric_sse.persistence.InMemoryConnectionRepository) is the default implementation used for queues_factory
+[`eric_sse.persistence.InMemoryConnectionRepository`](#eric_sse.persistence.InMemoryConnectionRepository) is the default implementation used for connections_repository
 see [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel)
 
 * **Parameters:**

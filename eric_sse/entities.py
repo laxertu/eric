@@ -80,7 +80,7 @@ class AbstractChannel(ABC):
 
     **Important** When using persistence layer you have to call to **load_persisted_data()** method just after object creation.
 
-    :class:`eric_sse.persistence.InMemoryConnectionRepository` is the default implementation used for queues_factory
+    :class:`eric_sse.persistence.InMemoryConnectionRepository` is the default implementation used for connections_repository
     see :class:`eric_sse.prefabs.SSEChannel`
 
     :param int stream_delay_seconds: Wait time in seconds between message delivery.
