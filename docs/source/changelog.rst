@@ -1,5 +1,10 @@
 Changelog
 =========
+
+1.3.0.1
+
+* Fixed SimpleDistributedApplicationListener.register_listener signature
+
 1.3.0
 
 * BREAKING AbstractChannel.open renamed to load_persisted_data

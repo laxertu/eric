@@ -6,7 +6,7 @@ from eric_sse.entities import AbstractChannel
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
-from eric_sse.persistence import ConnectionRepositoryInterface, ObjectAsKeyValuePersistenceMixin
+from eric_sse.persistence import ConnectionRepositoryInterface, ObjectAsKeyValuePersistenceMixin, PersistableListener
 
 logger = get_logger()
 
@@ -145,7 +145,7 @@ class DataProcessingChannel(AbstractChannel):
             "data": msg.payload
         }
 
-class SimpleDistributedApplicationListener(MessageQueueListener):
+class SimpleDistributedApplicationListener(PersistableListener):
     """Listener for distributed applications"""
 
     def __init__(self):
