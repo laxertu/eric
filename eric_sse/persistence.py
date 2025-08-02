@@ -70,6 +70,9 @@ class PersistableConnection(Connection):
     listener: PersistableListener
     queue: PersistableQueue
 
+class PersistableChannel(ObjectAsKeyValuePersistenceMixin, ABC):
+    ...
+
 class ObjectRepositoryInterface(ABC):
 
     @abstractmethod

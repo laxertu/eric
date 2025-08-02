@@ -6,12 +6,12 @@ from eric_sse.entities import AbstractChannel
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
-from eric_sse.persistence import ConnectionRepositoryInterface, ObjectAsKeyValuePersistenceMixin, PersistableListener
+from eric_sse.persistence import ConnectionRepositoryInterface, PersistableChannel, PersistableListener
 
 logger = get_logger()
 
 
-class SSEChannel(AbstractChannel, ObjectAsKeyValuePersistenceMixin):
+class SSEChannel(AbstractChannel, PersistableChannel):
     """
     SSE streaming channel.
     See https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format
