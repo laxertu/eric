@@ -310,6 +310,17 @@ document.write(`
                   
   <section id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
+<p>1.1.0</p>
+<p>Full persistence support</p>
+<ul class="simple">
+<li><p>added PersistableListener</p></li>
+<li><p>added PersistableConnection</p></li>
+</ul>
+<p><strong>BREAKING</strong></p>
+<ul class="simple">
+<li><p>updated ConnectionRepositoryInterface’s persistence methods, now they accept and return ConnectionRepositoryInterface instances</p></li>
+<li><p>AbstractChannel’s add_listener and register listener now accept PersistableListener instances</p></li>
+</ul>
 <p>1.0.0</p>
 <ul class="simple">
 <li><p>Rework of persistence layer support. Factories of queues have been replaced with connections repositories</p></li>
