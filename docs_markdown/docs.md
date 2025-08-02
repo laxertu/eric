@@ -787,7 +787,7 @@ Returns a dictionary in the following format:
 
 ### *class* SimpleDistributedApplicationListener
 
-Bases: [`MessageQueueListener`](#eric_sse.listener.MessageQueueListener)
+Bases: [`PersistableListener`](#eric_sse.persistence.PersistableListener)
 
 Listener for distributed applications
 
