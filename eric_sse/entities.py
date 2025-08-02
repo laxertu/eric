@@ -150,11 +150,11 @@ class AbstractChannel(ABC):
 
     def add_listener(self) -> MessageQueueListener:
         """Add the default listener and creates corresponding queue"""
-        l = MessageQueueListener()
+        l = PersistableListener()
         self.register_listener(l)
         return l
 
-    def register_listener(self, listener: MessageQueueListener):
+    def register_listener(self, listener: PersistableListener):
         """Registers listener and creates corresponding queue"""
         return self.__connection_manager.register_listener(listener)
 
