@@ -1110,7 +1110,8 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.persistence.ConnectionRepositoryInterface.create_queue">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.persistence.ConnectionRepositoryInterface.create_queue" title="Link to this definition">#</a></dt>
-<dd><p>Returns a concrete Queue instance.</p>
+<dd><p>Returns a concrete Queue instance.
+:param listener_id: Corresponding listener id</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>listener_id</strong> (<em>str</em>)</p>
@@ -1189,7 +1190,8 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.persistence.InMemoryConnectionRepository.create_queue">
 <span class="sig-name descname"><span class="pre">create_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.persistence.InMemoryConnectionRepository.create_queue" title="Link to this definition">#</a></dt>
-<dd><p>Returns a concrete Queue instance.</p>
+<dd><p>Returns a concrete Queue instance.
+:param listener_id: Corresponding listener id</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>listener_id</strong> (<em>str</em>)</p>

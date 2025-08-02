@@ -103,7 +103,10 @@ class ConnectionRepositoryInterface(ABC):
 
     @abstractmethod
     def create_queue(self, listener_id: str) -> Queue:
-        """Returns a concrete Queue instance."""
+        """
+        Returns a concrete Queue instance.
+        :param listener_id: Corresponding listener id
+        """
         ...
 
     @abstractmethod

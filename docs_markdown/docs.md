@@ -533,6 +533,7 @@ see [`eric_sse.entities.AbstractChannel`](#eric_sse.entities.AbstractChannel)
 #### *abstract* create_queue(listener_id)
 
 Returns a concrete Queue instance.
+:param listener_id: Corresponding listener id
 
 * **Parameters:**
   **listener_id** (*str*)
@@ -594,6 +595,7 @@ Default implementation used by [`eric_sse.entities.AbstractChannel`](#eric_sse.e
 #### create_queue(listener_id)
 
 Returns a concrete Queue instance.
+:param listener_id: Corresponding listener id
 
 * **Parameters:**
   **listener_id** (*str*)
