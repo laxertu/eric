@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.4.0
+1.4.1
 
 * Minor: updated AbstractChannel and SSEChannel constructor params order
 
