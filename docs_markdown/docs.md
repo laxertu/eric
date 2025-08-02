@@ -203,6 +203,8 @@ see [`eric_sse.persistence.ConnectionRepositoryInterface`](#eric_sse.persistence
 
 #### *abstract* adapt(msg)
 
+Models output of channel streams
+
 * **Parameters:**
   **msg** ([*MessageContract*](#eric_sse.message.MessageContract))
 * **Return type:**

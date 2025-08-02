@@ -115,6 +115,7 @@ class AbstractChannel(ABC):
 
     @abstractmethod
     def adapt(self, msg: MessageContract) -> Any:
+        """Models output of channel streams"""
         ...
 
     async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
