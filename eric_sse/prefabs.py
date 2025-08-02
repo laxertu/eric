@@ -59,12 +59,6 @@ class SSEChannel(AbstractChannel, PersistableChannel):
         for connection in connections:
             self.register_connection(listener=connection.listener, queue=connection.queue)
 
-    @staticmethod
-    def create_from_dict(params: dict, connection_repository: ConnectionRepositoryInterface) -> AbstractChannel:
-        return SSEChannel(
-            **params,
-            connections_repository=connection_repository
-        )
 
     def adapt(self, msg: MessageContract) -> dict:
         """
