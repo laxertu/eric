@@ -191,7 +191,9 @@ see [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel)
 
 #### load_persisted_data()
 
-Starts service
+Loads persisted Connections
+
+see [`eric_sse.persistence.ConnectionRepositoryInterface`](#eric_sse.persistence.ConnectionRepositoryInterface)
 
 <a id="eric_sse.entities.AbstractChannel.id"></a>
 

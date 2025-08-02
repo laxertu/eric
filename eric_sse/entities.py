@@ -101,7 +101,11 @@ class AbstractChannel(ABC):
         self.__connection_manager: _ConnectionManager = _ConnectionManager(self.__id, connections_repository)
 
     def load_persisted_data(self):
-        """Starts service"""
+        """
+        Loads persisted Connections
+
+        see :class:`eric_sse.persistence.ConnectionRepositoryInterface`
+        """
         self.__connection_manager.load()
 
     @property
