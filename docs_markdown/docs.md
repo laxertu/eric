@@ -471,6 +471,12 @@ Bases: [`Connection`](#eric_sse.connection.Connection)
 
 #### queue *: [PersistableQueue](#eric_sse.persistence.PersistableQueue)*
 
+<a id="eric_sse.persistence.PersistableChannel"></a>
+
+### *class* PersistableChannel
+
+Bases: [`ObjectAsKeyValuePersistenceMixin`](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin), `ABC`
+
 <a id="eric_sse.persistence.ObjectRepositoryInterface"></a>
 
 ### *class* ObjectRepositoryInterface
@@ -652,7 +658,7 @@ Removes a persisted `eric_sse.connection.PersistableConnection` given its corres
 
 ### *class* SSEChannel
 
-Bases: [`AbstractChannel`](#eric_sse.entities.AbstractChannel), [`ObjectAsKeyValuePersistenceMixin`](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin)
+Bases: [`AbstractChannel`](#eric_sse.entities.AbstractChannel), [`PersistableChannel`](#eric_sse.persistence.PersistableChannel)
 
 SSE streaming channel.
 See [https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)

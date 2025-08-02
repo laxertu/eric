@@ -386,6 +386,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.PersistableConnection.queue"><code class="docutils literal notranslate"><span class="pre">queue</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.PersistableChannel"><code class="docutils literal notranslate"><span class="pre">PersistableChannel</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectRepositoryInterface"><code class="docutils literal notranslate"><span class="pre">ObjectRepositoryInterface</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectRepositoryInterface.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectRepositoryInterface.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
@@ -1042,6 +1043,12 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.persistence.PersistableChannel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PersistableChannel</span></span><a class="headerlink" href="#eric_sse.persistence.PersistableChannel" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin" title="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectAsKeyValuePersistenceMixin</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.persistence.ObjectRepositoryInterface">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ObjectRepositoryInterface</span></span><a class="headerlink" href="#eric_sse.persistence.ObjectRepositoryInterface" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
@@ -1266,7 +1273,7 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.prefabs.SSEChannel">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SSEChannel</span></span><a class="headerlink" href="#eric_sse.prefabs.SSEChannel" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a>, <a class="reference internal" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin" title="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin"><code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectAsKeyValuePersistenceMixin</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a>, <a class="reference internal" href="#eric_sse.persistence.PersistableChannel" title="eric_sse.persistence.PersistableChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PersistableChannel</span></code></a></p>
 <p>SSE streaming channel.
 See <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format">https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format</a></p>
 <p>Currently, ‘id’ field is not supported.</p>
@@ -1999,6 +2006,7 @@ an <a class="reference internal" href="#eric_sse.exception.NoMessagesException" 
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.PersistableConnection.queue"><code class="docutils literal notranslate"><span class="pre">queue</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.PersistableChannel"><code class="docutils literal notranslate"><span class="pre">PersistableChannel</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectRepositoryInterface"><code class="docutils literal notranslate"><span class="pre">ObjectRepositoryInterface</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectRepositoryInterface.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectRepositoryInterface.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
