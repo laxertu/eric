@@ -708,16 +708,6 @@ Does de necessary setup of object given its persisted values
 * **Parameters:**
   **setup** (*dict*)
 
-<a id="eric_sse.prefabs.SSEChannel.create_from_dict"></a>
-
-#### *static* create_from_dict(params, connection_repository)
-
-* **Parameters:**
-  * **params** (*dict*)
-  * **connection_repository** ([*ConnectionRepositoryInterface*](#eric_sse.persistence.ConnectionRepositoryInterface))
-* **Return type:**
-  [*AbstractChannel*](#eric_sse.entities.AbstractChannel)
-
 <a id="eric_sse.prefabs.SSEChannel.adapt"></a>
 
 #### adapt(msg)

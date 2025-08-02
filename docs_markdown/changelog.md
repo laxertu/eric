@@ -2,6 +2,10 @@
 
 # Changelog
 
+1.5.1
+
+* Minor: removed SSEChannel.create_from_dict
+
 1.4.1
 
 * Minor: updated AbstractChannel and SSEChannel constructor params order
