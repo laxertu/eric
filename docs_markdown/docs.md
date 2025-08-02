@@ -383,7 +383,7 @@ You’ll need to implement the following interfaces:
 **Channels**
 
 * [`eric_sse.persistence.ChannelRepositoryInterface`](#eric_sse.persistence.ChannelRepositoryInterface)
-* You’ll need to define a channel that implements [`eric_sse.persistence.ObjectAsKeyValuePersistenceMixin`](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin) if [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel) do not suit with your requirements
+* You’ll need to define a channel that implements [`eric_sse.persistence.PersistableChannel`](#eric_sse.persistence.PersistableChannel) if [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel) do not suit with your requirements
 * For **MessageQueueListener** support you can extend or directly use [`eric_sse.persistence.PersistableListener`](#eric_sse.persistence.PersistableListener).
 
 **Connections**

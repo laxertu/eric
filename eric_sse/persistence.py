@@ -11,7 +11,7 @@ You'll need to implement the following interfaces:
 
 * :class:`eric_sse.persistence.ChannelRepositoryInterface`
 
-* You'll need to define a channel that implements :class:`eric_sse.persistence.ObjectAsKeyValuePersistenceMixin` if :class:`eric_sse.prefabs.SSEChannel` do not suit with your requirements
+* You'll need to define a channel that implements :class:`eric_sse.persistence.PersistableChannel` if :class:`eric_sse.prefabs.SSEChannel` do not suit with your requirements
 * For **MessageQueueListener** support you can extend or directly use :class:`eric_sse.persistence.PersistableListener`.
 
 **Connections**
