@@ -2,6 +2,10 @@
 
 # Changelog
 
+1.2.0
+
+* BREAKING register_listener now accepts a PersistableListener
+
 1.1.0
 
 Full persistence support

@@ -233,7 +233,7 @@ Add the default listener and creates corresponding queue
 Registers listener and creates corresponding queue
 
 * **Parameters:**
-  **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
+  **listener** ([*PersistableListener*](#eric_sse.persistence.PersistableListener))
 
 <a id="eric_sse.entities.AbstractChannel.register_connection"></a>
 
