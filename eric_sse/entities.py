@@ -76,7 +76,7 @@ class AbstractChannel(ABC):
     """
     Base class for channels.
 
-    Provides functionalities for listeners and message delivery management. Channel needs to be started by calling to **open()** method.
+    Provides functionalities for listeners and message delivery management. Channel needs to be started by calling to **load_persisted_data()** method.
 
     :class:`eric_sse.persistence.InMemoryConnectionRepository` is the default implementation used for queues_factory
     see :class:`eric_sse.prefabs.SSEChannel`
@@ -98,13 +98,13 @@ class AbstractChannel(ABC):
         connections_repository = connections_repository if connections_repository else InMemoryConnectionRepository()
         self.__connection_manager: _ConnectionManager = _ConnectionManager(self.__id, connections_repository)
 
+    def load_persisted_data(self):
+        """Starts service"""
+        self.__connection_manager.load()
+
     @property
     def id(self) -> str:
         return self.__id
-
-    def open(self):
-        """Starts service"""
-        self.__connection_manager.load()
 
 
     @abstractmethod
@@ -155,11 +155,13 @@ class AbstractChannel(ABC):
         return l
 
     def register_listener(self, listener: PersistableListener):
-        """Registers listener and creates corresponding queue"""
+        """
+        Registers listener and creates corresponding queue with persistence support
+        """
         return self.__connection_manager.register_listener(listener)
 
     def register_connection(self, listener: MessageQueueListener, queue: Queue):
-        """Registers a Connection with listener and queue"""
+        """Registers a Connection with listener and queue without persistence"""
         return self.__connection_manager.register_connection(listener, queue)
 
     def remove_listener(self, listener_id: str):
