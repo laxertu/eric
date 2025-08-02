@@ -105,7 +105,8 @@ class ConnectionRepositoryInterface(ABC):
     def create_queue(self, listener_id: str) -> Queue:
         """
         Returns a concrete Queue instance.
-        :param listener_id: Corresponding listener id
+
+        :param str listener_id: Corresponding listener id
         """
         ...
 
