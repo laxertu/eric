@@ -76,7 +76,9 @@ class AbstractChannel(ABC):
     """
     Base class for channels.
 
-    Provides functionalities for listeners and message delivery management. Channel needs to be started by calling to **load_persisted_data()** method.
+    Provides functionalities for listeners and message delivery management.
+
+    **Important** When using persistence layer you have to call to **load_persisted_data()** method just after object creation.
 
     :class:`eric_sse.persistence.InMemoryConnectionRepository` is the default implementation used for queues_factory
     see :class:`eric_sse.prefabs.SSEChannel`
