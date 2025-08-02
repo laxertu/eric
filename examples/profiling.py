@@ -1,4 +1,5 @@
 import sys, asyncio
+import time
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from random import uniform
 
@@ -11,12 +12,12 @@ from eric_sse import get_logger
 logger = get_logger()
 
 class IOBoundProcessListener(MessageQueueListener):
-    async def on_message(self, msg: Message) -> None:
-        await asyncio.sleep(0.2)
+    def on_message(self, msg: Message) -> None:
+        time.sleep(0.2)
         logger.debug(f"Received {msg.type}: {msg.payload}")
 
 class CPUBoundProcessListener(MessageQueueListener):
-    async def on_message(self, msg: Message) -> None:
+    def on_message(self, msg: Message) -> None:
         for i in range(0, 100):
             x = uniform(0, 1)
 
