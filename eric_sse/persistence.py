@@ -9,15 +9,15 @@ You'll need to implement the following interfaces:
 
 **Channels**
 
-* :class:`eric_sse.persistence.ChannelRepositoryInterface`
+* :class:`~eric_sse.persistence.ChannelRepositoryInterface`
 
-* You'll need to define a channel that implements :class:`eric_sse.persistence.PersistableChannel` if :class:`eric_sse.prefabs.SSEChannel` do not suit with your requirements
-* For **MessageQueueListener** support you can extend or directly use :class:`eric_sse.persistence.PersistableListener`.
+* You'll need to define a channel that implements :class:`~eric_sse.persistence.PersistableChannel` if :class:`~eric_sse.prefabs.SSEChannel` do not suit with your requirements
+* For **MessageQueueListener** support you can extend or directly use :class:`~eric_sse.persistence.PersistableListener`.
 
 **Connections**
 
-* :class:`eric_sse.persistence.PersistableQueue`
-* :class:`eric_sse.persistence.ConnectionRepositoryInterface`
+* :class:`~eric_sse.persistence.PersistableQueue`
+* :class:`~eric_sse.persistence.ConnectionRepositoryInterface`
 """
 
 from abc import ABC, abstractmethod
@@ -74,7 +74,7 @@ class PersistableChannel(ObjectAsKeyValuePersistenceMixin, ABC):
     ...
 
 class ObjectRepositoryInterface(ABC):
-    """Every exception raised by concrete implementations show be wrapped inside a :class:`eric_sse.exception.RepositoryError`
+    """Every exception raised by concrete implementations show be wrapped inside a :class:`~eric_sse.exception.RepositoryError`
     """
 
     @abstractmethod
@@ -103,7 +103,7 @@ class ConnectionRepositoryInterface(ABC):
 
     It exposes methods to be used by ChannelRepositoryInterface implementations for connections loading.
 
-    see :class:`eric_sse.entities.AbstractChannel`
+    see :class:`~eric_sse.entities.AbstractChannel`
     """
 
     @abstractmethod
@@ -138,7 +138,7 @@ class ConnectionRepositoryInterface(ABC):
 
 class InMemoryConnectionRepository(ConnectionRepositoryInterface):
     """
-    Default implementation used by :class:`eric_sse.entities.AbstractChannel`
+    Default implementation used by :class:`~eric_sse.entities.AbstractChannel`
     """
     def create_queue(self, listener_id: str) -> Queue:
         return InMemoryQueue()

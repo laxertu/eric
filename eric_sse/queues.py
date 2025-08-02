@@ -12,7 +12,7 @@ class Queue(ABC):
         """
         Next message from the queue.
 
-        Raises a :class:`eric_sse.exception.NoMessagesException` if the queue is empty.
+        Raises a :class:`~eric_sse.exception.NoMessagesException` if the queue is empty.
         """
         ...
 

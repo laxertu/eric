@@ -21,7 +21,7 @@ Bases: `ABC`
 Contract class for messages
 
 A message is just a container of information identified by a type.
-For validation purposes you can override [`eric_sse.listener.MessageQueueListener.on_message`](#eric_sse.listener.MessageQueueListener.on_message)
+For validation purposes you can override its [`on_message()`](#eric_sse.listener.MessageQueueListener.on_message) method.
 
 <a id="eric_sse.message.MessageContract.type"></a>
 
@@ -142,8 +142,8 @@ Bases: `object`
 A connection is just a listener and its related message queue
 
 * **Parameters:**
-  * **listener** ([*eric_sse.listener.MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
-  * **queue** ([*eric_sse.queues.Queue*](#eric_sse.queues.Queue))
+  * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
+  * **queue** ([*Queue*](#eric_sse.queues.Queue))
 
 <a id="eric_sse.connection.Connection.__init__"></a>
 
@@ -171,12 +171,13 @@ Provides functionalities for listeners and message delivery management.
 
 **Important** When using persistence layer you have to call to **load_persisted_data()** method just after object creation.
 
-[`eric_sse.persistence.InMemoryConnectionRepository`](#eric_sse.persistence.InMemoryConnectionRepository) is the default implementation used for connections_repository
-see [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel)
+[`InMemoryConnectionRepository`](#eric_sse.persistence.InMemoryConnectionRepository) is the default implementation used for **connections_repository** parameter.
+
+see [`SSEChannel`](#eric_sse.prefabs.SSEChannel)
 
 * **Parameters:**
   * **stream_delay_seconds** (*int*) – Wait time in seconds between message delivery.
-  * **connections_repository** ([*eric_sse.persistence.ConnectionRepositoryInterface*](#eric_sse.persistence.ConnectionRepositoryInterface))
+  * **connections_repository** ([*ConnectionRepositoryInterface*](#eric_sse.persistence.ConnectionRepositoryInterface))
   * **channel_id** (*str*) – Optionally sets the channel id. **IMPORTANT** by using this parameter, client is responsible for guaranteeing channel id uniqueness
 
 <a id="eric_sse.entities.AbstractChannel.__init__"></a>
@@ -194,7 +195,7 @@ see [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel)
 
 Loads persisted Connections
 
-see [`eric_sse.persistence.ConnectionRepositoryInterface`](#eric_sse.persistence.ConnectionRepositoryInterface)
+see [`ConnectionRepositoryInterface`](#eric_sse.persistence.ConnectionRepositoryInterface)
 
 <a id="eric_sse.entities.AbstractChannel.id"></a>
 
@@ -382,14 +383,14 @@ You’ll need to implement the following interfaces:
 
 **Channels**
 
-* [`eric_sse.persistence.ChannelRepositoryInterface`](#eric_sse.persistence.ChannelRepositoryInterface)
-* You’ll need to define a channel that implements [`eric_sse.persistence.PersistableChannel`](#eric_sse.persistence.PersistableChannel) if [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel) do not suit with your requirements
-* For **MessageQueueListener** support you can extend or directly use [`eric_sse.persistence.PersistableListener`](#eric_sse.persistence.PersistableListener).
+* [`ChannelRepositoryInterface`](#eric_sse.persistence.ChannelRepositoryInterface)
+* You’ll need to define a channel that implements [`PersistableChannel`](#eric_sse.persistence.PersistableChannel) if [`SSEChannel`](#eric_sse.prefabs.SSEChannel) do not suit with your requirements
+* For **MessageQueueListener** support you can extend or directly use [`PersistableListener`](#eric_sse.persistence.PersistableListener).
 
 **Connections**
 
-* [`eric_sse.persistence.PersistableQueue`](#eric_sse.persistence.PersistableQueue)
-* [`eric_sse.persistence.ConnectionRepositoryInterface`](#eric_sse.persistence.ConnectionRepositoryInterface)
+* [`PersistableQueue`](#eric_sse.persistence.PersistableQueue)
+* [`ConnectionRepositoryInterface`](#eric_sse.persistence.ConnectionRepositoryInterface)
 
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin"></a>
 
@@ -483,7 +484,7 @@ Bases: [`ObjectAsKeyValuePersistenceMixin`](#eric_sse.persistence.ObjectAsKeyVal
 
 Bases: `ABC`
 
-Every exception raised by concrete implementations show be wrapped inside a [`eric_sse.exception.RepositoryError`](#eric_sse.exception.RepositoryError)
+Every exception raised by concrete implementations show be wrapped inside a [`RepositoryError`](#eric_sse.exception.RepositoryError)
 
 <a id="eric_sse.persistence.ObjectRepositoryInterface.load"></a>
 
@@ -534,7 +535,7 @@ Abstraction for connections creation.
 
 It exposes methods to be used by ChannelRepositoryInterface implementations for connections loading.
 
-see [`eric_sse.entities.AbstractChannel`](#eric_sse.entities.AbstractChannel)
+see [`AbstractChannel`](#eric_sse.entities.AbstractChannel)
 
 <a id="eric_sse.persistence.ConnectionRepositoryInterface.create_queue"></a>
 
@@ -595,7 +596,7 @@ Removes a persisted `eric_sse.connection.PersistableConnection` given its corres
 
 Bases: [`ConnectionRepositoryInterface`](#eric_sse.persistence.ConnectionRepositoryInterface)
 
-Default implementation used by [`eric_sse.entities.AbstractChannel`](#eric_sse.entities.AbstractChannel)
+Default implementation used by [`AbstractChannel`](#eric_sse.entities.AbstractChannel)
 
 <a id="eric_sse.persistence.InMemoryConnectionRepository.create_queue"></a>
 
@@ -663,14 +664,14 @@ Removes a persisted `eric_sse.connection.PersistableConnection` given its corres
 Bases: [`AbstractChannel`](#eric_sse.entities.AbstractChannel), [`PersistableChannel`](#eric_sse.persistence.PersistableChannel)
 
 SSE streaming channel.
-See [https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
+See [Mozilla docs](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
 
 Currently, ‘id’ field is not supported.
 
 * **Parameters:**
   * **stream_delay_seconds** (*int*)
   * **retry_timeout_milliseconds** (*int*)
-  * **connections_repository** ([*eric_sse.persistence.ConnectionRepositoryInterface*](#eric_sse.persistence.ConnectionRepositoryInterface))
+  * **connections_repository** ([*ConnectionRepositoryInterface*](#eric_sse.persistence.ConnectionRepositoryInterface))
 
 <a id="eric_sse.prefabs.SSEChannel.__init__"></a>
 
@@ -975,7 +976,7 @@ A little facade to interact with SocketServer
 
 Send an arbitrary payload to a socket
 
-see [`eric_sse.servers.SocketServer`](#eric_sse.servers.SocketServer)
+see [`SocketServer`](#eric_sse.servers.SocketServer)
 
 * **Parameters:**
   **payload** (*dict*)
@@ -1055,7 +1056,7 @@ Abstract base class for queues (FIFO).
 
 Next message from the queue.
 
-Raises a [`eric_sse.exception.NoMessagesException`](#eric_sse.exception.NoMessagesException) if the queue is empty.
+Raises a [`NoMessagesException`](#eric_sse.exception.NoMessagesException) if the queue is empty.
 
 * **Return type:**
   [*MessageContract*](#eric_sse.message.MessageContract)
@@ -1099,7 +1100,7 @@ Raised when trying to fetch from an empty queue
 
 Raised when an unexpected error occurs while trying to fetch messages from a queue.
 
-Concrete implementations of [`eric_sse.persistence.ObjectRepositoryInterface`](#eric_sse.persistence.ObjectRepositoryInterface) should wrap here the unexpected exceptions they catch before raising.
+Concrete implementations of [`ObjectRepositoryInterface`](#eric_sse.persistence.ObjectRepositoryInterface) should wrap here the unexpected exceptions they catch before raising.
 
 <a id="module-eric_sse.profile"></a>
 

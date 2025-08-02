@@ -9,8 +9,8 @@ class Connection:
     """
     A connection is just a listener and its related message queue
 
-    :param eric_sse.listener.MessageQueueListener listener:
-    :param eric_sse.queues.Queue queue:
+    :param ~eric_sse.listener.MessageQueueListener listener:
+    :param ~eric_sse.queues.Queue queue:
     """
     listener: MessageQueueListener
     queue: Queue

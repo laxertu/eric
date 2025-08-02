@@ -80,11 +80,12 @@ class AbstractChannel(ABC):
 
     **Important** When using persistence layer you have to call to **load_persisted_data()** method just after object creation.
 
-    :class:`eric_sse.persistence.InMemoryConnectionRepository` is the default implementation used for connections_repository
-    see :class:`eric_sse.prefabs.SSEChannel`
+    :class:`~eric_sse.persistence.InMemoryConnectionRepository` is the default implementation used for **connections_repository** parameter.
+
+    see :class:`~eric_sse.prefabs.SSEChannel`
 
     :param int stream_delay_seconds: Wait time in seconds between message delivery.
-    :param eric_sse.persistence.ConnectionRepositoryInterface connections_repository:
+    :param ~eric_sse.persistence.ConnectionRepositoryInterface connections_repository:
     :param str channel_id: Optionally sets the channel id. **IMPORTANT** by using this parameter, client is responsible for guaranteeing channel id uniqueness
     """
     def __init__(
@@ -104,7 +105,7 @@ class AbstractChannel(ABC):
         """
         Loads persisted Connections
 
-        see :class:`eric_sse.persistence.ConnectionRepositoryInterface`
+        see :class:`~eric_sse.persistence.ConnectionRepositoryInterface`
         """
         self.__connection_manager.load()
 

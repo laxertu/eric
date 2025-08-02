@@ -530,7 +530,7 @@ document.write(`
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
 <p>Contract class for messages</p>
 <p>A message is just a container of information identified by a type.
-For validation purposes you can override <a class="reference internal" href="#eric_sse.listener.MessageQueueListener.on_message" title="eric_sse.listener.MessageQueueListener.on_message"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.listener.MessageQueueListener.on_message</span></code></a></p>
+For validation purposes you can override its <a class="reference internal" href="#eric_sse.listener.MessageQueueListener.on_message" title="eric_sse.listener.MessageQueueListener.on_message"><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_message()</span></code></a> method.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.message.MessageContract.type">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.message.MessageContract.type" title="Link to this definition">#</a></dt>
@@ -663,8 +663,8 @@ For validation purposes you can override <a class="reference internal" href="#er
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>listener</strong> (<a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>eric_sse.listener.MessageQueueListener</em></a>)</p></li>
-<li><p><strong>queue</strong> (<a class="reference internal" href="#eric_sse.queues.Queue" title="eric_sse.queues.Queue"><em>eric_sse.queues.Queue</em></a>)</p></li>
+<li><p><strong>listener</strong> (<a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a>)</p></li>
+<li><p><strong>queue</strong> (<a class="reference internal" href="#eric_sse.queues.Queue" title="eric_sse.queues.Queue"><em>Queue</em></a>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -695,13 +695,13 @@ For validation purposes you can override <a class="reference internal" href="#er
 <dd><p>Base class for channels.</p>
 <p>Provides functionalities for listeners and message delivery management.</p>
 <p><strong>Important</strong> When using persistence layer you have to call to <strong>load_persisted_data()</strong> method just after object creation.</p>
-<p><a class="reference internal" href="#eric_sse.persistence.InMemoryConnectionRepository" title="eric_sse.persistence.InMemoryConnectionRepository"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.persistence.InMemoryConnectionRepository</span></code></a> is the default implementation used for connections_repository
-see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eric_sse.prefabs.SSEChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.prefabs.SSEChannel</span></code></a></p>
+<p><a class="reference internal" href="#eric_sse.persistence.InMemoryConnectionRepository" title="eric_sse.persistence.InMemoryConnectionRepository"><code class="xref py py-class docutils literal notranslate"><span class="pre">InMemoryConnectionRepository</span></code></a> is the default implementation used for <strong>connections_repository</strong> parameter.</p>
+<p>see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eric_sse.prefabs.SSEChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SSEChannel</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>stream_delay_seconds</strong> (<em>int</em>) – Wait time in seconds between message delivery.</p></li>
-<li><p><strong>connections_repository</strong> (<a class="reference internal" href="#eric_sse.persistence.ConnectionRepositoryInterface" title="eric_sse.persistence.ConnectionRepositoryInterface"><em>eric_sse.persistence.ConnectionRepositoryInterface</em></a>)</p></li>
+<li><p><strong>connections_repository</strong> (<a class="reference internal" href="#eric_sse.persistence.ConnectionRepositoryInterface" title="eric_sse.persistence.ConnectionRepositoryInterface"><em>ConnectionRepositoryInterface</em></a>)</p></li>
 <li><p><strong>channel_id</strong> (<em>str</em>) – Optionally sets the channel id. <strong>IMPORTANT</strong> by using this parameter, client is responsible for guaranteeing channel id uniqueness</p></li>
 </ul>
 </dd>
@@ -724,7 +724,7 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 <dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.load_persisted_data">
 <span class="sig-name descname"><span class="pre">load_persisted_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.load_persisted_data" title="Link to this definition">#</a></dt>
 <dd><p>Loads persisted Connections</p>
-<p>see <a class="reference internal" href="#eric_sse.persistence.ConnectionRepositoryInterface" title="eric_sse.persistence.ConnectionRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.persistence.ConnectionRepositoryInterface</span></code></a></p>
+<p>see <a class="reference internal" href="#eric_sse.persistence.ConnectionRepositoryInterface" title="eric_sse.persistence.ConnectionRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectionRepositoryInterface</span></code></a></p>
 </dd></dl>
 
 <dl class="py property">
@@ -949,14 +949,14 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 <p>You’ll need to implement the following interfaces:</p>
 <p><strong>Channels</strong></p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#eric_sse.persistence.ChannelRepositoryInterface" title="eric_sse.persistence.ChannelRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.persistence.ChannelRepositoryInterface</span></code></a></p></li>
-<li><p>You’ll need to define a channel that implements <a class="reference internal" href="#eric_sse.persistence.PersistableChannel" title="eric_sse.persistence.PersistableChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.persistence.PersistableChannel</span></code></a> if <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eric_sse.prefabs.SSEChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.prefabs.SSEChannel</span></code></a> do not suit with your requirements</p></li>
-<li><p>For <strong>MessageQueueListener</strong> support you can extend or directly use <a class="reference internal" href="#eric_sse.persistence.PersistableListener" title="eric_sse.persistence.PersistableListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.persistence.PersistableListener</span></code></a>.</p></li>
+<li><p><a class="reference internal" href="#eric_sse.persistence.ChannelRepositoryInterface" title="eric_sse.persistence.ChannelRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelRepositoryInterface</span></code></a></p></li>
+<li><p>You’ll need to define a channel that implements <a class="reference internal" href="#eric_sse.persistence.PersistableChannel" title="eric_sse.persistence.PersistableChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PersistableChannel</span></code></a> if <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eric_sse.prefabs.SSEChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SSEChannel</span></code></a> do not suit with your requirements</p></li>
+<li><p>For <strong>MessageQueueListener</strong> support you can extend or directly use <a class="reference internal" href="#eric_sse.persistence.PersistableListener" title="eric_sse.persistence.PersistableListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">PersistableListener</span></code></a>.</p></li>
 </ul>
 <p><strong>Connections</strong></p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#eric_sse.persistence.PersistableQueue" title="eric_sse.persistence.PersistableQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.persistence.PersistableQueue</span></code></a></p></li>
-<li><p><a class="reference internal" href="#eric_sse.persistence.ConnectionRepositoryInterface" title="eric_sse.persistence.ConnectionRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.persistence.ConnectionRepositoryInterface</span></code></a></p></li>
+<li><p><a class="reference internal" href="#eric_sse.persistence.PersistableQueue" title="eric_sse.persistence.PersistableQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">PersistableQueue</span></code></a></p></li>
+<li><p><a class="reference internal" href="#eric_sse.persistence.ConnectionRepositoryInterface" title="eric_sse.persistence.ConnectionRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectionRepositoryInterface</span></code></a></p></li>
 </ul>
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin">
@@ -1051,7 +1051,7 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 <dt class="sig sig-object py" id="eric_sse.persistence.ObjectRepositoryInterface">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ObjectRepositoryInterface</span></span><a class="headerlink" href="#eric_sse.persistence.ObjectRepositoryInterface" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
-<p>Every exception raised by concrete implementations show be wrapped inside a <a class="reference internal" href="#eric_sse.exception.RepositoryError" title="eric_sse.exception.RepositoryError"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.exception.RepositoryError</span></code></a></p>
+<p>Every exception raised by concrete implementations show be wrapped inside a <a class="reference internal" href="#eric_sse.exception.RepositoryError" title="eric_sse.exception.RepositoryError"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepositoryError</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.persistence.ObjectRepositoryInterface.load">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.persistence.ObjectRepositoryInterface.load" title="Link to this definition">#</a></dt>
@@ -1113,7 +1113,7 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
 <p>Abstraction for connections creation.</p>
 <p>It exposes methods to be used by ChannelRepositoryInterface implementations for connections loading.</p>
-<p>see <a class="reference internal" href="#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.entities.AbstractChannel</span></code></a></p>
+<p>see <a class="reference internal" href="#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.persistence.ConnectionRepositoryInterface.create_queue">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.persistence.ConnectionRepositoryInterface.create_queue" title="Link to this definition">#</a></dt>
@@ -1192,7 +1192,7 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 <dt class="sig sig-object py" id="eric_sse.persistence.InMemoryConnectionRepository">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">InMemoryConnectionRepository</span></span><a class="headerlink" href="#eric_sse.persistence.InMemoryConnectionRepository" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#eric_sse.persistence.ConnectionRepositoryInterface" title="eric_sse.persistence.ConnectionRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectionRepositoryInterface</span></code></a></p>
-<p>Default implementation used by <a class="reference internal" href="#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.entities.AbstractChannel</span></code></a></p>
+<p>Default implementation used by <a class="reference internal" href="#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.persistence.InMemoryConnectionRepository.create_queue">
 <span class="sig-name descname"><span class="pre">create_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.persistence.InMemoryConnectionRepository.create_queue" title="Link to this definition">#</a></dt>
@@ -1275,14 +1275,14 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SSEChannel</span></span><a class="headerlink" href="#eric_sse.prefabs.SSEChannel" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a>, <a class="reference internal" href="#eric_sse.persistence.PersistableChannel" title="eric_sse.persistence.PersistableChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PersistableChannel</span></code></a></p>
 <p>SSE streaming channel.
-See <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format">https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format</a></p>
+See <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format">Mozilla docs</a></p>
 <p>Currently, ‘id’ field is not supported.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>stream_delay_seconds</strong> (<em>int</em>)</p></li>
 <li><p><strong>retry_timeout_milliseconds</strong> (<em>int</em>)</p></li>
-<li><p><strong>connections_repository</strong> (<a class="reference internal" href="#eric_sse.persistence.ConnectionRepositoryInterface" title="eric_sse.persistence.ConnectionRepositoryInterface"><em>eric_sse.persistence.ConnectionRepositoryInterface</em></a>)</p></li>
+<li><p><strong>connections_repository</strong> (<a class="reference internal" href="#eric_sse.persistence.ConnectionRepositoryInterface" title="eric_sse.persistence.ConnectionRepositoryInterface"><em>ConnectionRepositoryInterface</em></a>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -1626,7 +1626,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <dt class="sig sig-object py" id="eric_sse.clients.SocketClient.send_payload">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">send_payload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.clients.SocketClient.send_payload" title="Link to this definition">#</a></dt>
 <dd><p>Send an arbitrary payload to a socket</p>
-<p>see <a class="reference internal" href="#eric_sse.servers.SocketServer" title="eric_sse.servers.SocketServer"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.servers.SocketServer</span></code></a></p>
+<p>see <a class="reference internal" href="#eric_sse.servers.SocketServer" title="eric_sse.servers.SocketServer"><code class="xref py py-class docutils literal notranslate"><span class="pre">SocketServer</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>payload</strong> (<em>dict</em>)</p>
@@ -1730,7 +1730,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <dt class="sig sig-object py" id="eric_sse.queues.Queue.pop">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.queues.Queue.pop" title="Link to this definition">#</a></dt>
 <dd><p>Next message from the queue.</p>
-<p>Raises a <a class="reference internal" href="#eric_sse.exception.NoMessagesException" title="eric_sse.exception.NoMessagesException"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.exception.NoMessagesException</span></code></a> if the queue is empty.</p>
+<p>Raises a <a class="reference internal" href="#eric_sse.exception.NoMessagesException" title="eric_sse.exception.NoMessagesException"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoMessagesException</span></code></a> if the queue is empty.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a></p>
@@ -1781,7 +1781,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <dt class="sig sig-object py" id="eric_sse.exception.RepositoryError">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RepositoryError</span></span><a class="headerlink" href="#eric_sse.exception.RepositoryError" title="Link to this definition">#</a></dt>
 <dd><p>Raised when an unexpected error occurs while trying to fetch messages from a queue.</p>
-<p>Concrete implementations of <a class="reference internal" href="#eric_sse.persistence.ObjectRepositoryInterface" title="eric_sse.persistence.ObjectRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.persistence.ObjectRepositoryInterface</span></code></a> should wrap here the unexpected exceptions they catch before raising.</p>
+<p>Concrete implementations of <a class="reference internal" href="#eric_sse.persistence.ObjectRepositoryInterface" title="eric_sse.persistence.ObjectRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectRepositoryInterface</span></code></a> should wrap here the unexpected exceptions they catch before raising.</p>
 </dd></dl>
 
 </section>

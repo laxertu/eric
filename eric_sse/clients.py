@@ -15,7 +15,7 @@ class SocketClient:
         """
         Send an arbitrary payload to a socket
 
-        see :class:`eric_sse.servers.SocketServer`
+        see :class:`~eric_sse.servers.SocketServer`
         """
         r, w = await open_unix_connection(self.__descriptor_path)
         w.write(json.dumps(payload).encode())
