@@ -418,6 +418,47 @@ Bases: [`Queue`](#eric_sse.queues.Queue), [`ObjectAsKeyValuePersistenceMixin`](#
 
 Concrete implementations of methods should perform in **Queues** ones their I/O operations, and define in **ObjectAsKeyValuePersistenceMixin** ones their correspondant persistence strategy
 
+<a id="eric_sse.persistence.PersistableListener"></a>
+
+### *class* PersistableListener
+
+Bases: [`MessageQueueListener`](#eric_sse.listener.MessageQueueListener), [`ObjectAsKeyValuePersistenceMixin`](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin)
+
+<a id="eric_sse.persistence.PersistableListener.kv_key"></a>
+
+#### *property* kv_key *: str*
+
+The key to use when persisting object
+
+<a id="eric_sse.persistence.PersistableListener.kv_value_as_dict"></a>
+
+#### *property* kv_value_as_dict *: dict*
+
+Returns value that will be persisted as a dictionary.
+
+<a id="eric_sse.persistence.PersistableListener.setup_by_dict"></a>
+
+#### setup_by_dict(setup)
+
+Does de necessary setup of object given its persisted values
+
+* **Parameters:**
+  **setup** (*dict*)
+
+<a id="eric_sse.persistence.PersistableConnection"></a>
+
+### *class* PersistableConnection
+
+Bases: [`Connection`](#eric_sse.connection.Connection)
+
+<a id="eric_sse.persistence.PersistableConnection.listener"></a>
+
+#### listener *: [PersistableListener](#eric_sse.persistence.PersistableListener)*
+
+<a id="eric_sse.persistence.PersistableConnection.queue"></a>
+
+#### queue *: [PersistableQueue](#eric_sse.persistence.PersistableQueue)*
+
 <a id="eric_sse.persistence.ObjectRepositoryInterface"></a>
 
 ### *class* ObjectRepositoryInterface
@@ -492,7 +533,7 @@ Returns a concrete Queue instance.
 
 * **Parameters:**
   * **channel_id** (*str*)
-  * **connection** (*PersistableConnection*)
+  * **connection** ([*PersistableConnection*](#eric_sse.persistence.PersistableConnection))
 * **Return type:**
   None
 
@@ -503,7 +544,7 @@ Returns a concrete Queue instance.
 Returns an Iterable of all persisted connections
 
 * **Return type:**
-  *Iterable*[*PersistableConnection*]
+  *Iterable*[[*PersistableConnection*](#eric_sse.persistence.PersistableConnection)]
 
 <a id="eric_sse.persistence.ConnectionRepositoryInterface.load"></a>
 
@@ -514,7 +555,7 @@ Returns an Iterable of all persisted connections of a given channel
 * **Parameters:**
   **channel_id** (*str*)
 * **Return type:**
-  *Iterable*[*PersistableConnection*]
+  *Iterable*[[*PersistableConnection*](#eric_sse.persistence.PersistableConnection)]
 
 <a id="eric_sse.persistence.ConnectionRepositoryInterface.delete"></a>
 
