@@ -941,7 +941,7 @@ see <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eri
 <p id="module-eric_sse.persistence">This module is intended to those who want to create their own persistence layer</p>
 <p>A <strong>Redis</strong> concrete implementation of interfaces is available at  <a class="reference external" href="https://github.com/laxertu/eric-redis-queues/blob/master/eric_redis_queues/__init__.py">eric-redis-queues package source</a>.</p>
 <p><strong>Writing a custom persistence layer</strong></p>
-<p>You’ll need to implement one or more of the following interfaces depending on your use case, as some of the participants may not need to be persisted, e.g. MessageQueueListener Base class.</p>
+<p>You’ll need to implement one or more of the following interfaces depending on your use case, as some of the participants may not need to be persisted, e.g. MessageQueueListener Base class, or InMemoryQueue.</p>
 <p><strong>Channels</strong></p>
 <ul class="simple">
 <li><p><a class="reference internal" href="#eric_sse.persistence.ChannelRepositoryInterface" title="eric_sse.persistence.ChannelRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">eric_sse.persistence.ChannelRepositoryInterface</span></code></a></p></li>
