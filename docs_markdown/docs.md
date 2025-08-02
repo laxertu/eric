@@ -483,7 +483,7 @@ Bases: [`ObjectAsKeyValuePersistenceMixin`](#eric_sse.persistence.ObjectAsKeyVal
 
 Bases: `ABC`
 
-Every exception raised by concrete implementations show be wrapped around a [`eric_sse.exception.RepositoryError`](#eric_sse.exception.RepositoryError)
+Every exception raised by concrete implementations show be wrapped inside a [`eric_sse.exception.RepositoryError`](#eric_sse.exception.RepositoryError)
 
 <a id="eric_sse.persistence.ObjectRepositoryInterface.load"></a>
 
