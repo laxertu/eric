@@ -369,7 +369,7 @@ A **Redis** concrete implementation of interfaces is available at  [eric-redis-q
 
 **Writing a custom persistence layer**
 
-You need to implement the following interfaces:
+You’ll need to implement one or more of the following interfaces depending on your use case, as some of the participants may not need to be persisted, e.g. MessageQueueListener Base class.
 
 **Channels**
 
@@ -380,6 +380,10 @@ You need to implement the following interfaces:
 
 * [`eric_sse.persistence.PersistableQueue`](#eric_sse.persistence.PersistableQueue)
 * [`eric_sse.persistence.ConnectionRepositoryInterface`](#eric_sse.persistence.ConnectionRepositoryInterface)
+
+**Listeners**
+
+* [`eric_sse.persistence.PersistableListener`](#eric_sse.persistence.PersistableListener)
 
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin"></a>
 
