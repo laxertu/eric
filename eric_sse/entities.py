@@ -8,8 +8,8 @@ from eric_sse.exception import InvalidListenerException, NoMessagesException, In
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import MessageContract, Message
 from eric_sse.queues import Queue
-from eric_sse.persistence import ConnectionRepositoryInterface, InMemoryConnectionRepository
-from eric_sse.connection import Connection
+from eric_sse.persistence import (ConnectionRepositoryInterface, InMemoryConnectionRepository,
+                                  PersistableListener, PersistableConnection)
 
 logger = eric_sse.get_logger()
 
@@ -32,18 +32,18 @@ class _ConnectionManager:
             self.__listeners[c.listener.id] = c.listener
             self.__queues[c.listener.id] = c.queue
 
-    def add_listener(self) -> MessageQueueListener:
-        l = MessageQueueListener()
+    def add_listener(self) -> PersistableListener:
+        l = PersistableListener()
         self.register_listener(l)
         return l
 
-    def register_listener(self, listener: MessageQueueListener):
+    def register_listener(self, listener: PersistableListener):
+
+        queue = self.__queues_repository.create_queue(listener.id)
+
         self.__listeners[listener.id] = listener
-        self.__queues[listener.id] = self.__queues_repository.create_queue(listener_id=listener.id)
-        self.__queues_repository.persist(
-            channel_id=self.__channel_id,
-            connection=Connection(listener=listener, queue=self.__queues[listener.id])
-        )
+        self.__queues[listener.id] = queue
+        self.__queues_repository.persist(self.__channel_id, PersistableConnection(listener=listener, queue=queue))
 
     def register_connection(self, listener: MessageQueueListener, queue: Queue):
         self.__listeners[listener.id] = listener

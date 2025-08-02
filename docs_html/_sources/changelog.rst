@@ -1,5 +1,18 @@
 Changelog
 =========
+1.1.0
+
+Full persistence support
+
+* added PersistableListener
+* added PersistableConnection
+
+
+**BREAKING**
+
+* updated ConnectionRepositoryInterface's persistence methods, now they accept and return ConnectionRepositoryInterface instances
+* AbstractChannel's add_listener and register listener now accept PersistableListener instances
+
 1.0.0
 
 * Rework of persistence layer support. Factories of queues have been replaced with connections repositories

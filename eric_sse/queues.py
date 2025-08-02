@@ -21,6 +21,7 @@ class Queue(ABC):
         ...
 
 class InMemoryQueue(Queue):
+
     def __init__(self):
         self.__messages: list[MessageContract] = []
         self.__queue: SimpleQueue = SimpleQueue()

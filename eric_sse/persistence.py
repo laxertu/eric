@@ -25,6 +25,7 @@ from abc import ABC, abstractmethod
 from typing import Iterable
 
 from eric_sse.connection import Connection
+from eric_sse.listener import MessageQueueListener
 from eric_sse.queues import Queue, InMemoryQueue
 
 
@@ -47,9 +48,28 @@ class ObjectAsKeyValuePersistenceMixin(ABC):
         """Does de necessary setup of object given its persisted values"""
         ...
 
+
 class PersistableQueue(Queue, ObjectAsKeyValuePersistenceMixin, ABC):
     """Concrete implementations of methods should perform in **Queues** ones their I/O operations, and define in **ObjectAsKeyValuePersistenceMixin** ones their correspondant persistence strategy"""
     ...
+
+class PersistableListener(MessageQueueListener, ObjectAsKeyValuePersistenceMixin):
+
+    @property
+    def kv_key(self) -> str:
+        return self.id
+
+    @property
+    def kv_value_as_dict(self) -> dict:
+        return {}
+
+    def setup_by_dict(self, setup: dict):
+        pass
+
+
+class PersistableConnection(Connection):
+    listener: PersistableListener
+    queue: PersistableQueue
 
 class ObjectRepositoryInterface(ABC):
 
@@ -88,21 +108,22 @@ class ConnectionRepositoryInterface(ABC):
         ...
 
     @abstractmethod
-    def persist(self, channel_id: str, connection: Connection) -> None:
+    def persist(self, channel_id: str, connection: PersistableConnection) -> None:
         ...
 
     @abstractmethod
-    def load_all(self) -> Iterable[Connection]:
+    def load_all(self) -> Iterable[PersistableConnection]:
         """Returns an Iterable of all persisted connections"""
         ...
+
     @abstractmethod
-    def load(self, channel_id: str) -> Iterable[Connection]:
+    def load(self, channel_id: str) -> Iterable[PersistableConnection]:
         """Returns an Iterable of all persisted connections of a given channel"""
         ...
 
     @abstractmethod
     def delete(self, channel_id: str, listener_id: str) -> None:
-        """Removes a persisted :class:`eric_sse.connection.Connection` given its correspondant listener id"""
+        """Removes a persisted :class:`eric_sse.connection.PersistableConnection` given its correspondant listener id"""
         ...
 
 
