@@ -167,7 +167,9 @@ A connection is just a listener and its related message queue
 
 Base class for channels.
 
-Provides functionalities for listeners and message delivery management. Channel needs to be started by calling to **load_persisted_data()** method.
+Provides functionalities for listeners and message delivery management.
+
+**Important** When using persistence layer you have to call to **load_persisted_data()** method just after object creation.
 
 [`eric_sse.persistence.InMemoryConnectionRepository`](#eric_sse.persistence.InMemoryConnectionRepository) is the default implementation used for queues_factory
 see [`eric_sse.prefabs.SSEChannel`](#eric_sse.prefabs.SSEChannel)
