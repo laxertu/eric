@@ -378,7 +378,7 @@ A **Redis** concrete implementation of interfaces is available at  [eric-redis-q
 
 **Writing a custom persistence layer**
 
-You’ll need to implement the following interfaces depending on your use case.
+You’ll need to implement the following interfaces:
 
 **Channels**
 
