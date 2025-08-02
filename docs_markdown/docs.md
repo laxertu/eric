@@ -720,7 +720,7 @@ Returns:
 {
     "event": "message type",
     "retry": "channel time out",
-    "data": "original payload (by default)"
+    "data": "original payload (if not modified by payload adapter)"
 }
 ```
 
