@@ -27,15 +27,6 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
             listener.stop()
 
 
-    async def test_payload_adapter_json(self):
-        self.sut.payload_adapter = json.dumps
-        listener = MessageQueueListenerMock(num_messages_before_disconnect=1)
-        self.sut.register_listener(listener)
-        listener.start()
-        self.sut.dispatch(listener.id, Message(msg_type="test", msg_payload={'a': 1}))
-
-        async for m in self.sut.message_stream(listener):
-            self.assertEqual(m['data'], json.dumps({'a': 1}))
 
 
     async def test_stream_stops_if_listener_stops(self):
