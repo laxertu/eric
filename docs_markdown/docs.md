@@ -668,11 +668,6 @@ See [Mozilla docs](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_
 
 Currently, ‘id’ field is not supported.
 
-* **Parameters:**
-  * **stream_delay_seconds** (*int*)
-  * **retry_timeout_milliseconds** (*int*)
-  * **connections_repository** ([*ConnectionRepositoryInterface*](#eric_sse.persistence.ConnectionRepositoryInterface))
-
 <a id="eric_sse.prefabs.SSEChannel.__init__"></a>
 
 #### \_\_init_\_(stream_delay_seconds=0, retry_timeout_milliseconds=5, connections_repository=None, channel_id=None)

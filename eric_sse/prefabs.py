@@ -17,10 +17,6 @@ class SSEChannel(AbstractChannel, PersistableChannel):
     See `Mozilla docs <https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format>`_
 
     Currently, 'id' field is not supported.
-
-    :param int stream_delay_seconds:
-    :param int retry_timeout_milliseconds:
-    :param ~eric_sse.persistence.ConnectionRepositoryInterface connections_repository:
     """
 
     def __init__(
