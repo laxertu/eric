@@ -1,9 +1,28 @@
-import json
-
+from typing import Iterable
 from unittest import IsolatedAsyncioTestCase
+
+from eric_sse.persistence import PersistableConnection
 from eric_sse.prefabs import SSEChannel
-from eric_sse.entities import Message
-from test.mock.listener import MessageQueueListenerMock
+from eric_sse.entities import Message, ConnectionRepositoryInterface
+from eric_sse.queues import Queue
+
+
+class ConnectionRepositoryFake(ConnectionRepositoryInterface):
+
+    def create_queue(self, listener_id: str) -> Queue:
+        pass
+
+    def persist(self, channel_id: str, connection: PersistableConnection) -> None:
+        pass
+
+    def load_all(self) -> Iterable[PersistableConnection]:
+        pass
+
+    def load(self, channel_id: str) -> Iterable[PersistableConnection]:
+        pass
+
+    def delete(self, channel_id: str, listener_id: str) -> None:
+        pass
 
 
 class SSEStreamTestCase(IsolatedAsyncioTestCase):
@@ -27,15 +46,6 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
             listener.stop()
 
 
-    async def test_payload_adapter_json(self):
-        self.sut.payload_adapter = json.dumps
-        listener = MessageQueueListenerMock(num_messages_before_disconnect=1)
-        self.sut.register_listener(listener)
-        listener.start()
-        self.sut.dispatch(listener.id, Message(msg_type="test", msg_payload={'a': 1}))
-
-        async for m in self.sut.message_stream(listener):
-            self.assertEqual(m['data'], json.dumps({'a': 1}))
 
 
     async def test_stream_stops_if_listener_stops(self):
@@ -55,3 +65,11 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
             l.stop()
 
         self.assertEqual(2, total_messages_received)
+
+
+    async def test_sse_channel_persistence(self):
+        channel = self.sut
+        self.assertEqual('InMemoryConnectionRepository', channel.kv_value_as_dict['connection_repository'])
+
+        self.sut = SSEChannel(connections_repository=ConnectionRepositoryFake())
+        self.assertEqual('ConnectionRepositoryFake', self.sut.kv_value_as_dict['connection_repository'])

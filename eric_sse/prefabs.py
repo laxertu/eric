@@ -28,12 +28,7 @@ class SSEChannel(AbstractChannel, PersistableChannel):
     ):
         super().__init__(channel_id=channel_id, stream_delay_seconds=stream_delay_seconds, connections_repository=connections_repository)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
-        self.__connections_repository = connections_repository
 
-        self.payload_adapter: (
-            Callable)[[dict | list | str | int | float | None], dict | list | str | int | float | None] = lambda x: x
-        """Message payload adapter, defaults to identity (leave as is). It can be used, for example, when working in a 
-        context where receiver is responsible for payload deserialization, e.g. Sockets"""
 
     @property
     def kv_key(self) -> str:
@@ -45,13 +40,14 @@ class SSEChannel(AbstractChannel, PersistableChannel):
             'channel_id': self.id,
             'stream_delay_seconds': self.stream_delay_seconds,
             'retry_timeout_milliseconds': self.retry_timeout_milliseconds,
+            'connection_repository': type(self._connections_repository).__name__
         }
 
     def setup_by_dict(self, setup: dict):
         self.stream_delay_seconds = setup['stream_delay_seconds']
         self.retry_timeout_milliseconds = setup['retry_timeout_milliseconds']
 
-        connections = self.__connections_repository.load_all()
+        connections = self._connections_repository.load_all()
         for connection in connections:
             self.register_connection(listener=connection.listener, queue=connection.queue)
 
@@ -65,13 +61,13 @@ class SSEChannel(AbstractChannel, PersistableChannel):
             {
                 "event": "message type",
                 "retry": "channel time out",
-                "data": "original payload (if not modified by payload adapter)"
+                "data": "original payload"
             }
         """
         return {
             "event": msg.type,
             "retry": self.retry_timeout_milliseconds,
-            "data": self.payload_adapter(msg.payload)
+            "data": msg.payload
         }
 
 

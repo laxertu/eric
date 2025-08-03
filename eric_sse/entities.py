@@ -98,7 +98,7 @@ class AbstractChannel(ABC):
         assert self.__id is not None
         self.stream_delay_seconds = stream_delay_seconds
 
-        connections_repository = connections_repository if connections_repository else InMemoryConnectionRepository()
+        self._connections_repository = connections_repository = connections_repository if connections_repository else InMemoryConnectionRepository()
         self.__connection_manager: _ConnectionManager = _ConnectionManager(self.__id, connections_repository)
 
     def load_persisted_data(self):
