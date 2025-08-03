@@ -1,5 +1,4 @@
 import asyncio
-import importlib
 from concurrent.futures import ThreadPoolExecutor, Executor
 from typing import Callable, AsyncIterable
 from eric_sse import get_logger
