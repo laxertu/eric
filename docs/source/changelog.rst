@@ -1,8 +1,10 @@
 Changelog
 =========
 
-1.5.1
+1.5.2
 
+* BREAKING: removed SSEChannel.payload_adapter
+* Added connection repository class name to SSEChannel set of values in persistence.
 * Minor: removed SSEChannel.create_from_dict
 
 1.4.1
