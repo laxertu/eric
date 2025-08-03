@@ -28,7 +28,6 @@ class SSEChannel(AbstractChannel, PersistableChannel):
     ):
         super().__init__(channel_id=channel_id, stream_delay_seconds=stream_delay_seconds, connections_repository=connections_repository)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
-        self.__connections_repository = connections_repository
 
 
     @property
@@ -41,6 +40,7 @@ class SSEChannel(AbstractChannel, PersistableChannel):
             'channel_id': self.id,
             'stream_delay_seconds': self.stream_delay_seconds,
             'retry_timeout_milliseconds': self.retry_timeout_milliseconds,
+            'connection_repository': type(self._connections_repository).__name__
         }
 
     def setup_by_dict(self, setup: dict):
