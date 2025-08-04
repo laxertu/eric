@@ -967,6 +967,9 @@ For validation purposes you can override its <a class="reference internal" href=
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ObjectAsKeyValuePersistenceMixin</span></span><a class="headerlink" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
 <p>Adds KV persistence support.</p>
+<p>By implementing this abstract mixin should be possible to persist every object that is not directly
+serializable by pickle, for example, if your Queues implementation wraps some incompatible dependency, e.g. a Redis client.</p>
+<p>For this reason, the idea is that dict values should be serializable by pickle too.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_key">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kv_key</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_key" title="Link to this definition">#</a></dt>

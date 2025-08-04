@@ -30,7 +30,15 @@ from eric_sse.queues import Queue, InMemoryQueue
 
 
 class ObjectAsKeyValuePersistenceMixin(ABC):
-    """Adds KV persistence support."""
+    """
+    Adds KV persistence support.
+
+    By implementing this abstract mixin should be possible to persist every object that is not directly
+    serializable by pickle, for example, if your Queues implementation wraps some incompatible dependency, e.g. a Redis client.
+
+    For this reason, the idea is that dict values should be serializable by pickle too.
+
+    """
     @property
     @abstractmethod
     def kv_key(self) -> str:
