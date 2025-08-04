@@ -2,8 +2,15 @@
 
 # Changelog
 
-1.5.1
+1.5.3
 
+* Added kv_constructor_params_as_dict and kv_class_absolute_path to ObjectAsKeyValuePersistenceMixin
+* FIX: SimpleDistributedApplicationListener now extends MessageQueueListener
+
+1.5.2
+
+* BREAKING: removed SSEChannel.payload_adapter
+* Added connection repository class name to SSEChannel set of values in persistence.
 * Minor: removed SSEChannel.create_from_dict
 
 1.4.1

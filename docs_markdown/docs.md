@@ -416,10 +416,22 @@ Returns value that will be persisted as a dictionary.
 
 #### *abstract* setup_by_dict(setup)
 
-Does de necessary setup of object given its persisted values
+Does de necessary post-creation setup of object given its persisted values
 
 * **Parameters:**
   **setup** (*dict*)
+
+<a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_class_absolute_path"></a>
+
+#### *property* kv_class_absolute_path *: str*
+
+Returns class full path as string
+
+<a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_constructor_params_as_dict"></a>
+
+#### *abstract property* kv_constructor_params_as_dict *: dict*
+
+Class constructor parameters as dict
 
 <a id="eric_sse.persistence.PersistableQueue"></a>
 
@@ -453,10 +465,16 @@ Returns value that will be persisted as a dictionary.
 
 #### setup_by_dict(setup)
 
-Does de necessary setup of object given its persisted values
+Does de necessary post-creation setup of object given its persisted values
 
 * **Parameters:**
   **setup** (*dict*)
+
+<a id="eric_sse.persistence.PersistableListener.kv_constructor_params_as_dict"></a>
+
+#### *property* kv_constructor_params_as_dict *: dict*
+
+Class constructor parameters as dict
 
 <a id="eric_sse.persistence.PersistableConnection"></a>
 
@@ -678,13 +696,6 @@ Currently, ‘id’ field is not supported.
   * **connections_repository** ([*ConnectionRepositoryInterface*](#eric_sse.persistence.ConnectionRepositoryInterface) *|* *None*)
   * **channel_id** (*str* *|* *None*)
 
-<a id="eric_sse.prefabs.SSEChannel.payload_adapter"></a>
-
-#### payload_adapter *: Callable[[dict | list | str | int | float | None], dict | list | str | int | float | None]*
-
-Message payload adapter, defaults to identity (leave as is). It can be used, for example, when working in a 
-context where receiver is responsible for payload deserialization, e.g. Sockets
-
 <a id="eric_sse.prefabs.SSEChannel.kv_key"></a>
 
 #### *property* kv_key *: str*
@@ -697,11 +708,17 @@ The key to use when persisting object
 
 Returns value that will be persisted as a dictionary.
 
+<a id="eric_sse.prefabs.SSEChannel.kv_constructor_params_as_dict"></a>
+
+#### *property* kv_constructor_params_as_dict *: dict*
+
+Class constructor parameters as dict
+
 <a id="eric_sse.prefabs.SSEChannel.setup_by_dict"></a>
 
 #### setup_by_dict(setup)
 
-Does de necessary setup of object given its persisted values
+Does de necessary post-creation setup of object given its persisted values
 
 * **Parameters:**
   **setup** (*dict*)
@@ -718,7 +735,7 @@ Returns:
 {
     "event": "message type",
     "retry": "channel time out",
-    "data": "original payload (if not modified by payload adapter)"
+    "data": "original payload"
 }
 ```
 
@@ -782,7 +799,7 @@ Returns a dictionary in the following format:
 
 ### *class* SimpleDistributedApplicationListener
 
-Bases: [`PersistableListener`](#eric_sse.persistence.PersistableListener)
+Bases: [`MessageQueueListener`](#eric_sse.listener.MessageQueueListener)
 
 Listener for distributed applications
 

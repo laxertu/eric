@@ -372,6 +372,8 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_key"><code class="docutils literal notranslate"><span class="pre">kv_key</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_value_as_dict"><code class="docutils literal notranslate"><span class="pre">kv_value_as_dict</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.setup_by_dict"><code class="docutils literal notranslate"><span class="pre">setup_by_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_class_absolute_path"><code class="docutils literal notranslate"><span class="pre">kv_class_absolute_path</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_constructor_params_as_dict"><code class="docutils literal notranslate"><span class="pre">kv_constructor_params_as_dict</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.PersistableQueue"><code class="docutils literal notranslate"><span class="pre">PersistableQueue</span></code></a></li>
@@ -379,6 +381,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.PersistableListener.kv_key"><code class="docutils literal notranslate"><span class="pre">kv_key</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.PersistableListener.kv_value_as_dict"><code class="docutils literal notranslate"><span class="pre">kv_value_as_dict</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.PersistableListener.setup_by_dict"><code class="docutils literal notranslate"><span class="pre">setup_by_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.PersistableListener.kv_constructor_params_as_dict"><code class="docutils literal notranslate"><span class="pre">kv_constructor_params_as_dict</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.PersistableConnection"><code class="docutils literal notranslate"><span class="pre">PersistableConnection</span></code></a><ul class="nav section-nav flex-column">
@@ -418,9 +421,9 @@ document.write(`
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.prefabs">Prefab channels and listeners</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SSEChannel"><code class="docutils literal notranslate"><span class="pre">SSEChannel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SSEChannel.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SSEChannel.payload_adapter"><code class="docutils literal notranslate"><span class="pre">payload_adapter</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SSEChannel.kv_key"><code class="docutils literal notranslate"><span class="pre">kv_key</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SSEChannel.kv_value_as_dict"><code class="docutils literal notranslate"><span class="pre">kv_value_as_dict</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SSEChannel.kv_constructor_params_as_dict"><code class="docutils literal notranslate"><span class="pre">kv_constructor_params_as_dict</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SSEChannel.setup_by_dict"><code class="docutils literal notranslate"><span class="pre">setup_by_dict()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SSEChannel.adapt"><code class="docutils literal notranslate"><span class="pre">adapt()</span></code></a></li>
 </ul>
@@ -978,12 +981,24 @@ For validation purposes you can override its <a class="reference internal" href=
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.setup_by_dict">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setup_by_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">setup</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.setup_by_dict" title="Link to this definition">#</a></dt>
-<dd><p>Does de necessary setup of object given its persisted values</p>
+<dd><p>Does de necessary post-creation setup of object given its persisted values</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>setup</strong> (<em>dict</em>)</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_class_absolute_path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kv_class_absolute_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_class_absolute_path" title="Link to this definition">#</a></dt>
+<dd><p>Returns class full path as string</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_constructor_params_as_dict">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kv_constructor_params_as_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_constructor_params_as_dict" title="Link to this definition">#</a></dt>
+<dd><p>Class constructor parameters as dict</p>
 </dd></dl>
 
 </dd></dl>
@@ -1015,12 +1030,18 @@ For validation purposes you can override its <a class="reference internal" href=
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.persistence.PersistableListener.setup_by_dict">
 <span class="sig-name descname"><span class="pre">setup_by_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">setup</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.persistence.PersistableListener.setup_by_dict" title="Link to this definition">#</a></dt>
-<dd><p>Does de necessary setup of object given its persisted values</p>
+<dd><p>Does de necessary post-creation setup of object given its persisted values</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>setup</strong> (<em>dict</em>)</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.persistence.PersistableListener.kv_constructor_params_as_dict">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kv_constructor_params_as_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#eric_sse.persistence.PersistableListener.kv_constructor_params_as_dict" title="Link to this definition">#</a></dt>
+<dd><p>Class constructor parameters as dict</p>
 </dd></dl>
 
 </dd></dl>
@@ -1292,13 +1313,6 @@ See <a class="reference external" href="https://developer.mozilla.org/en-US/docs
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="eric_sse.prefabs.SSEChannel.payload_adapter">
-<span class="sig-name descname"><span class="pre">payload_adapter</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#eric_sse.prefabs.SSEChannel.payload_adapter" title="Link to this definition">#</a></dt>
-<dd><p>Message payload adapter, defaults to identity (leave as is). It can be used, for example, when working in a 
-context where receiver is responsible for payload deserialization, e.g. Sockets</p>
-</dd></dl>
-
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.prefabs.SSEChannel.kv_key">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kv_key</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.prefabs.SSEChannel.kv_key" title="Link to this definition">#</a></dt>
@@ -1311,10 +1325,16 @@ context where receiver is responsible for payload deserialization, e.g. Sockets<
 <dd><p>Returns value that will be persisted as a dictionary.</p>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.prefabs.SSEChannel.kv_constructor_params_as_dict">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kv_constructor_params_as_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#eric_sse.prefabs.SSEChannel.kv_constructor_params_as_dict" title="Link to this definition">#</a></dt>
+<dd><p>Class constructor parameters as dict</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.prefabs.SSEChannel.setup_by_dict">
 <span class="sig-name descname"><span class="pre">setup_by_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">setup</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.SSEChannel.setup_by_dict" title="Link to this definition">#</a></dt>
-<dd><p>Does de necessary setup of object given its persisted values</p>
+<dd><p>Does de necessary post-creation setup of object given its persisted values</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>setup</strong> (<em>dict</em>)</p>
@@ -1330,7 +1350,7 @@ context where receiver is responsible for payload deserialization, e.g. Sockets<
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
     <span class="s2">&quot;event&quot;</span><span class="p">:</span> <span class="s2">&quot;message type&quot;</span><span class="p">,</span>
     <span class="s2">&quot;retry&quot;</span><span class="p">:</span> <span class="s2">&quot;channel time out&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="s2">&quot;original payload (if not modified by payload adapter)&quot;</span>
+    <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="s2">&quot;original payload&quot;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1407,7 +1427,7 @@ Just override <strong>adapt</strong> method to control output returned to client
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.prefabs.SimpleDistributedApplicationListener">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SimpleDistributedApplicationListener</span></span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationListener" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#eric_sse.persistence.PersistableListener" title="eric_sse.persistence.PersistableListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">PersistableListener</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a></p>
 <p>Listener for distributed applications</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.prefabs.SimpleDistributedApplicationListener.__init__">
@@ -1966,6 +1986,8 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_key"><code class="docutils literal notranslate"><span class="pre">kv_key</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_value_as_dict"><code class="docutils literal notranslate"><span class="pre">kv_value_as_dict</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.setup_by_dict"><code class="docutils literal notranslate"><span class="pre">setup_by_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_class_absolute_path"><code class="docutils literal notranslate"><span class="pre">kv_class_absolute_path</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_constructor_params_as_dict"><code class="docutils literal notranslate"><span class="pre">kv_constructor_params_as_dict</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.PersistableQueue"><code class="docutils literal notranslate"><span class="pre">PersistableQueue</span></code></a></li>
@@ -1973,6 +1995,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.PersistableListener.kv_key"><code class="docutils literal notranslate"><span class="pre">kv_key</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.PersistableListener.kv_value_as_dict"><code class="docutils literal notranslate"><span class="pre">kv_value_as_dict</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.PersistableListener.setup_by_dict"><code class="docutils literal notranslate"><span class="pre">setup_by_dict()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.PersistableListener.kv_constructor_params_as_dict"><code class="docutils literal notranslate"><span class="pre">kv_constructor_params_as_dict</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.PersistableConnection"><code class="docutils literal notranslate"><span class="pre">PersistableConnection</span></code></a><ul class="nav section-nav flex-column">
@@ -2012,9 +2035,9 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.prefabs">Prefab channels and listeners</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SSEChannel"><code class="docutils literal notranslate"><span class="pre">SSEChannel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SSEChannel.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SSEChannel.payload_adapter"><code class="docutils literal notranslate"><span class="pre">payload_adapter</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SSEChannel.kv_key"><code class="docutils literal notranslate"><span class="pre">kv_key</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SSEChannel.kv_value_as_dict"><code class="docutils literal notranslate"><span class="pre">kv_value_as_dict</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SSEChannel.kv_constructor_params_as_dict"><code class="docutils literal notranslate"><span class="pre">kv_constructor_params_as_dict</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SSEChannel.setup_by_dict"><code class="docutils literal notranslate"><span class="pre">setup_by_dict()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.prefabs.SSEChannel.adapt"><code class="docutils literal notranslate"><span class="pre">adapt()</span></code></a></li>
 </ul>
