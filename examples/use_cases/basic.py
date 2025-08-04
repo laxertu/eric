@@ -1,6 +1,7 @@
 """
 The simplest possible use of the library. Here unique dependency with persistence module is ChannelRepositoryInterface
 """
+from asyncio import run
 from typing import Iterable
 
 from eric_sse.entities import AbstractChannel
@@ -15,6 +16,8 @@ class FakeChannelRepo(ChannelRepositoryInterface):
 
     def __init__(self):
         self.__channel_container = ChannelContainer()
+        self.__channel_container.register(SSEChannel())
+        self.__channel_container.register(SSEChannel())
 
 
     def delete_listener(self, ch_id: str, listener_id: str) -> None:
@@ -22,7 +25,6 @@ class FakeChannelRepo(ChannelRepositoryInterface):
 
     def load(self) -> Iterable[AbstractChannel]:
         for c in self.__channel_container.get_all_ids():
-            print(c)
             yield self.__channel_container.get(c)
 
     def persist(self, persistable: SSEChannel):
@@ -48,16 +50,36 @@ def create_channel() -> str:
 
     return channel.id
 
+def subscribe(ch_id: str) -> str:
+    l = channel_container.get(ch_id).add_listener()
+    return l.id
+
 def broadcast(target_channel_id: str, message_type: str):
     channel_container.get(target_channel_id).broadcast(Message(msg_type=message_type))
 
-# Client interaction
+# Clients interaction
 channel_id = create_channel()
+receiver_id = subscribe(channel_id)
+
+print(f'Created Channel id: {channel_id}')
+print(channel_container.get_all_ids())
 broadcast(channel_id, 'test')
+broadcast(channel_id, 'stop')
 
 
+async def main():
+    for ch_id in channel_container.get_all_ids():
+        channel = channel_container.get(ch_id)
+        print(f'Streaming channel {ch_id}')
+        for l_id in channel.get_listeners_ids():
+            listener = channel.get_listener(l_id)
+            listener.start()
+            async for message in channel.message_stream(listener):
+                print(f'Message: {message["event"]}')
+                if message["event"] == 'stop':
+                    break
 
-
-
+if __name__ == '__main__':
+    run(main())
 
 
