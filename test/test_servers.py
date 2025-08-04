@@ -19,6 +19,17 @@ class TestChannelContainer(TestCase):
         with self.assertRaises(InvalidChannelException):
             sut.get('fake_channel_id')
 
+    def test_register_iterable(self):
+        sut = ChannelContainer()
+        ch_1 = SSEChannel()
+        ch_2 = SSEChannel()
+
+        sut.register_iterable([ch_1, ch_2])
+
+        self.assertIs(ch_1, sut.get(ch_1.id))
+        self.assertIs(ch_2, sut.get(ch_2.id))
+
+
 class TestSocketServer(IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
         channel_container_mock = MagicMock(ChannelContainer)

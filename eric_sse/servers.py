@@ -29,6 +29,12 @@ class ChannelContainer:
             raise InvalidChannelException(f'Channel with id {channel.id} already exists')
         self.__channels[channel.id] = channel
 
+    def register_iterable(self, channels: Iterable[AbstractChannel]) -> None:
+        registered_ids = set(self.get_all_ids())
+
+        for channel in [c for c in channels if c.id not in registered_ids]:
+            self.register(channel)
+
     def get(self, channel_id: str) -> AbstractChannel:
         try:
             return self.__channels[channel_id]
