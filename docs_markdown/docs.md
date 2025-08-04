@@ -405,6 +405,8 @@ serializable by pickle, for example, if your Queues implementation wraps some in
 
 For this reason, the idea is that dict values should be serializable by pickle too.
 
+see [`importlib_create_instance()`](#eric_sse.persistence.importlib_create_instance)
+
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_key"></a>
 
 #### *abstract property* kv_key *: str*
@@ -440,14 +442,16 @@ Class constructor parameters as dict
 
 <a id="eric_sse.persistence.importlib_create_instance"></a>
 
-### importlib_create_instance(persistable)
+### importlib_create_instance(class_full_path, constructor_params, setup_values)
 
 Creates a persistable class instance given a persisted value
 
 * **Parameters:**
-  **persistable** ([*ObjectAsKeyValuePersistenceMixin*](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin))
+  * **class_full_path** (*str*)
+  * **constructor_params** (*dict*)
+  * **setup_values** (*dict*)
 * **Return type:**
-  *Any*
+  [*ObjectAsKeyValuePersistenceMixin*](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin)
 
 <a id="eric_sse.persistence.PersistableQueue"></a>
 
