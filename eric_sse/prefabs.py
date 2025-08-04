@@ -40,7 +40,7 @@ class SSEChannel(AbstractChannel, PersistableChannel):
             'channel_id': self.id,
             'stream_delay_seconds': self.stream_delay_seconds,
             'retry_timeout_milliseconds': self.retry_timeout_milliseconds,
-            'connection_repository': type(self._connections_repository).__name__
+            'connections_repository': type(self._connections_repository).__name__
         }
 
     def setup_by_dict(self, setup: dict):

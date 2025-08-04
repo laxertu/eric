@@ -69,7 +69,7 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
 
     async def test_sse_channel_persistence(self):
         channel = self.sut
-        self.assertEqual('InMemoryConnectionRepository', channel.kv_value_as_dict['connection_repository'])
+        self.assertEqual('InMemoryConnectionRepository', channel.kv_value_as_dict['connections_repository'])
 
         self.sut = SSEChannel(connections_repository=ConnectionRepositoryFake())
-        self.assertEqual('ConnectionRepositoryFake', self.sut.kv_value_as_dict['connection_repository'])
+        self.assertEqual('ConnectionRepositoryFake', self.sut.kv_value_as_dict['connections_repository'])
