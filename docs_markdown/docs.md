@@ -433,6 +433,17 @@ Returns class full path as string
 
 Class constructor parameters as dict
 
+<a id="eric_sse.persistence.importlib_create_instance"></a>
+
+### importlib_create_instance(persistable)
+
+Creates persistable class instance given a persisted value
+
+* **Parameters:**
+  **persistable** ([*ObjectAsKeyValuePersistenceMixin*](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin))
+* **Return type:**
+  *Any*
+
 <a id="eric_sse.persistence.PersistableQueue"></a>
 
 ### *class* PersistableQueue
