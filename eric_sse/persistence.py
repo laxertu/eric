@@ -70,7 +70,11 @@ class ObjectAsKeyValuePersistenceMixin(ABC):
 
 
 def importlib_create_instance(class_full_path: str, constructor_params: dict, setup_values: dict) -> ObjectAsKeyValuePersistenceMixin:
-    """Creates a persistable class instance given a persisted value"""
+    """
+    Creates a persistable class instance given a persisted value and executes its setup_by_dict method
+
+    see :func:`~eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.setup_by_dict`
+    """
     path_parts = class_full_path.split('.')
     module = '.'.join(path_parts[:-1])
     klass = path_parts[-1]

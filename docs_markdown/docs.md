@@ -444,7 +444,9 @@ Class constructor parameters as dict
 
 ### importlib_create_instance(class_full_path, constructor_params, setup_values)
 
-Creates a persistable class instance given a persisted value
+Creates a persistable class instance given a persisted value and executes its setup_by_dict method
+
+see [`setup_by_dict()`](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.setup_by_dict)
 
 * **Parameters:**
   * **class_full_path** (*str*)

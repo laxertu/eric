@@ -1011,7 +1011,8 @@ serializable by pickle, for example, if your Queues implementation wraps some in
 <dl class="py function">
 <dt class="sig sig-object py" id="eric_sse.persistence.importlib_create_instance">
 <span class="sig-name descname"><span class="pre">importlib_create_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">class_full_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constructor_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setup_values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.persistence.importlib_create_instance" title="Link to this definition">#</a></dt>
-<dd><p>Creates a persistable class instance given a persisted value</p>
+<dd><p>Creates a persistable class instance given a persisted value and executes its setup_by_dict method</p>
+<p>see <a class="reference internal" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.setup_by_dict" title="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.setup_by_dict"><code class="xref py py-func docutils literal notranslate"><span class="pre">setup_by_dict()</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
