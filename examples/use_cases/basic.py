@@ -1,5 +1,8 @@
 """
-The simplest possible use of the library. Here unique dependency with persistence module is ChannelRepositoryInterface
+The simplest possible use of the library. Here unique dependency with persistence module is ChannelRepositoryInterface.
+The rest of participants are from classed shipped from the library.
+
+The following is a fake application with a in memory channel repository that just support channel creation and broadcasting
 """
 from asyncio import run
 from typing import Iterable
@@ -11,8 +14,8 @@ from eric_sse.servers import ChannelContainer
 
 from eric_sse.persistence import ChannelRepositoryInterface
 
-
 class FakeChannelRepo(ChannelRepositoryInterface):
+    """Fake repository"""
 
     def __init__(self):
         self.__channel_container = ChannelContainer()
@@ -59,15 +62,15 @@ def broadcast(target_channel_id: str, message_type: str):
 
 # Clients interaction
 channel_id = create_channel()
-receiver_id = subscribe(channel_id)
+subscriber_id = subscribe(channel_id)
 
-print(f'Created Channel id: {channel_id}')
-print(channel_container.get_all_ids())
 broadcast(channel_id, 'test')
 broadcast(channel_id, 'stop')
 
 
 async def main():
+    print(f"Starting streaming for all channels and listeners, we expect some output from {channel_id}")
+    print("")
     for ch_id in channel_container.get_all_ids():
         channel = channel_container.get(ch_id)
         print(f'Streaming channel {ch_id}')
@@ -78,6 +81,8 @@ async def main():
                 print(f'Message: {message["event"]}')
                 if message["event"] == 'stop':
                     break
+        print('done')
+        print('')
 
 if __name__ == '__main__':
     run(main())
