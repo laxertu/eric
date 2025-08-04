@@ -905,6 +905,15 @@ Helper class for management of multiple channels cases of use.
 * **Return type:**
   None
 
+<a id="eric_sse.servers.ChannelContainer.register_iterable"></a>
+
+#### register_iterable(channels)
+
+* **Parameters:**
+  **channels** (*Iterable* *[*[*AbstractChannel*](#eric_sse.entities.AbstractChannel) *]*)
+* **Return type:**
+  None
+
 <a id="eric_sse.servers.ChannelContainer.get"></a>
 
 #### get(channel_id)
