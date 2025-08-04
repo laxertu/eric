@@ -45,7 +45,7 @@ class ObjectAsKeyValuePersistenceMixin(ABC):
 
     @abstractmethod
     def setup_by_dict(self, setup: dict):
-        """Does de necessary post-creation setup of object given its persisted values"""
+        """Does necessary post-creation setup of object given its persisted values"""
         ...
 
     @property

@@ -416,7 +416,7 @@ Returns value that will be persisted as a dictionary.
 
 #### *abstract* setup_by_dict(setup)
 
-Does de necessary post-creation setup of object given its persisted values
+Does necessary post-creation setup of object given its persisted values
 
 * **Parameters:**
   **setup** (*dict*)
@@ -465,7 +465,7 @@ Returns value that will be persisted as a dictionary.
 
 #### setup_by_dict(setup)
 
-Does de necessary post-creation setup of object given its persisted values
+Does necessary post-creation setup of object given its persisted values
 
 * **Parameters:**
   **setup** (*dict*)
@@ -718,7 +718,7 @@ Class constructor parameters as dict
 
 #### setup_by_dict(setup)
 
-Does de necessary post-creation setup of object given its persisted values
+Does necessary post-creation setup of object given its persisted values
 
 * **Parameters:**
   **setup** (*dict*)
