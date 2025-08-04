@@ -2,7 +2,7 @@
 The simplest possible use of the library. Here unique dependency with persistence module is with ChannelRepositoryInterface.
 The rest of participants are from classes shipped from the library.
 
-The following is a fake application with a in memory channel repository that just support channel creation and broadcasting
+The following is a fake application with a in memory channel repository, and that just support channel creation and broadcasting
 """
 from asyncio import run
 from typing import Iterable
