@@ -7,6 +7,7 @@ from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
 from eric_sse.persistence import ConnectionRepositoryInterface, PersistableChannel, PersistableListener
+from eric_sse.queues import InMemoryQueue
 
 logger = get_logger()
 
@@ -196,4 +197,4 @@ class SimpleDistributedApplicationChannel(SSEChannel):
 
     def register_listener(self, listener: SimpleDistributedApplicationListener):
         listener.set_channel(self)
-        super().register_listener(listener)
+        super().register_connection(listener, InMemoryQueue())
