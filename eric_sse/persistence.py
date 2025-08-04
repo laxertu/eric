@@ -67,7 +67,10 @@ def importlib_create_instance(persistable: ObjectAsKeyValuePersistenceMixin) -> 
     klass = path_parts[-1]
 
     module_object = import_module(module)
-    return getattr(module_object, klass)(persistable.kv_constructor_params_as_dict)
+    obj: ObjectAsKeyValuePersistenceMixin = getattr(module_object, klass)(persistable.kv_constructor_params_as_dict)
+    obj.setup_by_dict(persistable.kv_value_as_dict)
+
+    return obj
 
 
 class PersistableQueue(Queue, ObjectAsKeyValuePersistenceMixin, ABC):
