@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.5.3
+
+* Added kv_constructor_params_as_dict and kv_class_absolute_path to ObjectAsKeyValuePersistenceMixin
+* FIX: SimpleDistributedApplicationListener now extends MessageQueueListener
+
 1.5.2
 
 * BREAKING: removed SSEChannel.payload_adapter

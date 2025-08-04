@@ -21,7 +21,8 @@ You'll need to implement the following interfaces:
 """
 
 from abc import ABC, abstractmethod
-from typing import Iterable
+from typing import Iterable, Any
+from importlib import import_module
 
 from eric_sse.connection import Connection
 from eric_sse.listener import MessageQueueListener
@@ -44,8 +45,28 @@ class ObjectAsKeyValuePersistenceMixin(ABC):
 
     @abstractmethod
     def setup_by_dict(self, setup: dict):
-        """Does de necessary setup of object given its persisted values"""
+        """Does de necessary post-creation setup of object given its persisted values"""
         ...
+
+    @property
+    def kv_class_absolute_path(self) -> str:
+        """Returns class full path as string"""
+        return f'{self.__module__}.{type(self).__name__}'
+
+    @property
+    @abstractmethod
+    def kv_constructor_params_as_dict(self) -> dict:
+        """Class constructor parameters as dict"""
+        ...
+
+
+def importlib_create_instance(persistable: ObjectAsKeyValuePersistenceMixin) -> Any:
+    path_parts = persistable.kv_class_absolute_path.split('.')
+    module = '.'.join(path_parts[:-1])
+    klass = path_parts[-1]
+
+    module_object = import_module(module)
+    return getattr(module_object, klass)(persistable.kv_constructor_params_as_dict)
 
 
 class PersistableQueue(Queue, ObjectAsKeyValuePersistenceMixin, ABC):
@@ -64,6 +85,10 @@ class PersistableListener(MessageQueueListener, ObjectAsKeyValuePersistenceMixin
 
     def setup_by_dict(self, setup: dict):
         pass
+
+    @property
+    def kv_constructor_params_as_dict(self) -> dict:
+        return {}
 
 
 class PersistableConnection(Connection):

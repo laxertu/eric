@@ -37,10 +37,20 @@ class SSEChannel(AbstractChannel, PersistableChannel):
     @property
     def kv_value_as_dict(self) -> dict:
         return {
-            'channel_id': self.id,
             'stream_delay_seconds': self.stream_delay_seconds,
             'retry_timeout_milliseconds': self.retry_timeout_milliseconds,
-            'connections_repository': type(self._connections_repository).__name__
+            'connections_repository':
+                f'{self._connections_repository.__module__}.{type(self._connections_repository).__name__}',
+            'channel_id': self.id
+        }
+
+    @property
+    def kv_constructor_params_as_dict(self) -> dict:
+        return {
+            'stream_delay_seconds': self.stream_delay_seconds,
+            'retry_timeout_milliseconds': self.retry_timeout_milliseconds,
+            'connections_repository': self._connections_repository,
+            'channel_id': self.id,
         }
 
     def setup_by_dict(self, setup: dict):
@@ -131,7 +141,7 @@ class DataProcessingChannel(AbstractChannel):
             "data": msg.payload
         }
 
-class SimpleDistributedApplicationListener(PersistableListener):
+class SimpleDistributedApplicationListener(MessageQueueListener):
     """Listener for distributed applications"""
 
     def __init__(self):

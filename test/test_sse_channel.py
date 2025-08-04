@@ -1,7 +1,6 @@
 from typing import Iterable
 from unittest import IsolatedAsyncioTestCase
-
-from eric_sse.persistence import PersistableConnection
+from eric_sse.persistence import PersistableConnection, importlib_create_instance
 from eric_sse.prefabs import SSEChannel
 from eric_sse.entities import Message, ConnectionRepositoryInterface
 from eric_sse.queues import Queue
@@ -46,7 +45,8 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
             listener.stop()
 
 
-
+    def test_persistable_behavior(self):
+        self.assertEqual('eric_sse.prefabs.SSEChannel', self.sut.kv_class_absolute_path)
 
     async def test_stream_stops_if_listener_stops(self):
         l = self.sut.add_listener()
@@ -69,7 +69,12 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
 
     async def test_sse_channel_persistence(self):
         channel = self.sut
-        self.assertEqual('InMemoryConnectionRepository', channel.kv_value_as_dict['connections_repository'])
+        self.assertEqual('eric_sse.persistence.InMemoryConnectionRepository', channel.kv_value_as_dict['connections_repository'])
 
         self.sut = SSEChannel(connections_repository=ConnectionRepositoryFake())
-        self.assertEqual('ConnectionRepositoryFake', self.sut.kv_value_as_dict['connections_repository'])
+        self.assertEqual('test.test_sse_channel.ConnectionRepositoryFake', self.sut.kv_value_as_dict['connections_repository'])
+
+        sut_2 = importlib_create_instance(channel)
+        self.assertIs(type(sut_2), SSEChannel)
+
+
