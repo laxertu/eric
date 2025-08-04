@@ -1,3 +1,4 @@
+from copyreg import constructor
 from typing import Iterable
 from unittest import IsolatedAsyncioTestCase
 from eric_sse.persistence import PersistableConnection, importlib_create_instance
@@ -81,4 +82,14 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
         )
         self.assertIs(type(sut_2), SSEChannel)
 
-
+    def test_parameters_are_maintained(self):
+        sut = SSEChannel(
+            stream_delay_seconds=3,
+            retry_timeout_milliseconds=27,
+            connections_repository=ConnectionRepositoryFake(),
+            channel_id='test',
+        )
+        constructor_params = sut.kv_constructor_params_as_dict
+        self.assertEqual(3, constructor_params['stream_delay_seconds'])
+        self.assertEqual(27, constructor_params['retry_timeout_milliseconds'])
+        self.assertEqual('test', constructor_params['channel_id'])
