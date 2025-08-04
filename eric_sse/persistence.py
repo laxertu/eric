@@ -61,7 +61,7 @@ class ObjectAsKeyValuePersistenceMixin(ABC):
 
 
 def importlib_create_instance(persistable: ObjectAsKeyValuePersistenceMixin) -> Any:
-    """Creates persistable class instance given a persisted value"""
+    """Creates a persistable class instance given a persisted value"""
     path_parts = persistable.kv_class_absolute_path.split('.')
     module = '.'.join(path_parts[:-1])
     klass = path_parts[-1]

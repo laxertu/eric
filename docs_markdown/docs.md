@@ -437,7 +437,7 @@ Class constructor parameters as dict
 
 ### importlib_create_instance(persistable)
 
-Creates persistable class instance given a persisted value
+Creates a persistable class instance given a persisted value
 
 * **Parameters:**
   **persistable** ([*ObjectAsKeyValuePersistenceMixin*](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin))
