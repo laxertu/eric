@@ -74,7 +74,11 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
         self.sut = SSEChannel(connections_repository=ConnectionRepositoryFake())
         self.assertEqual('test.test_sse_channel.ConnectionRepositoryFake', self.sut.kv_value_as_dict['connections_repository'])
 
-        sut_2 = importlib_create_instance(channel)
+        sut_2 = importlib_create_instance(
+            class_full_path=channel.kv_class_absolute_path,
+            constructor_params=channel.kv_constructor_params_as_dict,
+            setup_values=channel.kv_value_as_dict
+        )
         self.assertIs(type(sut_2), SSEChannel)
 
 

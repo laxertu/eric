@@ -38,6 +38,7 @@ class ObjectAsKeyValuePersistenceMixin(ABC):
 
     For this reason, the idea is that dict values should be serializable by pickle too.
 
+    see :func:`~eric_sse.persistence.importlib_create_instance`
     """
     @property
     @abstractmethod
@@ -68,15 +69,15 @@ class ObjectAsKeyValuePersistenceMixin(ABC):
         ...
 
 
-def importlib_create_instance(persistable: ObjectAsKeyValuePersistenceMixin) -> Any:
+def importlib_create_instance(class_full_path: str, constructor_params: dict, setup_values: dict) -> ObjectAsKeyValuePersistenceMixin:
     """Creates a persistable class instance given a persisted value"""
-    path_parts = persistable.kv_class_absolute_path.split('.')
+    path_parts = class_full_path.split('.')
     module = '.'.join(path_parts[:-1])
     klass = path_parts[-1]
 
     module_object = import_module(module)
-    obj: ObjectAsKeyValuePersistenceMixin = getattr(module_object, klass)(persistable.kv_constructor_params_as_dict)
-    obj.setup_by_dict(persistable.kv_value_as_dict)
+    obj: ObjectAsKeyValuePersistenceMixin = getattr(module_object, klass)(constructor_params)
+    obj.setup_by_dict(setup_values)
 
     return obj
 
