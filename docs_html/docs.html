@@ -398,6 +398,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ChannelRepositoryInterface"><code class="docutils literal notranslate"><span class="pre">ChannelRepositoryInterface</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ChannelRepositoryInterface.get_channel"><code class="docutils literal notranslate"><span class="pre">get_channel()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ChannelRepositoryInterface.delete_listener"><code class="docutils literal notranslate"><span class="pre">delete_listener()</span></code></a></li>
 </ul>
 </li>
@@ -1136,6 +1137,19 @@ serializable by pickle, for example, if your Queues implementation wraps some in
 <dt class="sig sig-object py" id="eric_sse.persistence.ChannelRepositoryInterface">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ChannelRepositoryInterface</span></span><a class="headerlink" href="#eric_sse.persistence.ChannelRepositoryInterface" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#eric_sse.persistence.ObjectRepositoryInterface" title="eric_sse.persistence.ObjectRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectRepositoryInterface</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.persistence.ChannelRepositoryInterface.get_channel">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_channel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.persistence.ChannelRepositoryInterface.get_channel" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel_id</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#eric_sse.persistence.PersistableChannel" title="eric_sse.persistence.PersistableChannel"><em>PersistableChannel</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.persistence.ChannelRepositoryInterface.delete_listener">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_listener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listener_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.persistence.ChannelRepositoryInterface.delete_listener" title="Link to this definition">#</a></dt>
@@ -2051,6 +2065,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ChannelRepositoryInterface"><code class="docutils literal notranslate"><span class="pre">ChannelRepositoryInterface</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ChannelRepositoryInterface.get_channel"><code class="docutils literal notranslate"><span class="pre">get_channel()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ChannelRepositoryInterface.delete_listener"><code class="docutils literal notranslate"><span class="pre">delete_listener()</span></code></a></li>
 </ul>
 </li>

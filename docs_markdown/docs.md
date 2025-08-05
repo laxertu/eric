@@ -557,6 +557,15 @@ Returns an Iterable of all persisted objects of correspondant concrete implement
 
 Bases: [`ObjectRepositoryInterface`](#eric_sse.persistence.ObjectRepositoryInterface)
 
+<a id="eric_sse.persistence.ChannelRepositoryInterface.get_channel"></a>
+
+#### *abstract* get_channel(channel_id)
+
+* **Parameters:**
+  **channel_id** (*str*)
+* **Return type:**
+  [*PersistableChannel*](#eric_sse.persistence.PersistableChannel)
+
 <a id="eric_sse.persistence.ChannelRepositoryInterface.delete_listener"></a>
 
 #### *abstract* delete_listener(channel_id, listener_id)

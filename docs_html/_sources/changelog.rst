@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.5.5
+
+Added get_channel method to ChannelRepositoryInterface
+
 1.5.4
 
 Removed eric-redis-queues as optional dependency
