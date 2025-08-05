@@ -30,7 +30,7 @@ class Cache:
         return [k for k in self.__channels.keys()]
 
 
-class FakeChannelRepo(ChannelRepositoryInterface):
+class PersistenceLayerRepositoryImplementation(ChannelRepositoryInterface):
     """Fake repository with two channels"""
 
     def __init__(self):
@@ -58,7 +58,7 @@ class FakeChannelRepo(ChannelRepositoryInterface):
 
 class Application:
     def __init__(self):
-        self.__channels_repository = FakeChannelRepo()
+        self.__channels_repository = PersistenceLayerRepositoryImplementation()
 
     def create_channel(self) -> SSEChannel:
         channel = SSEChannel()
