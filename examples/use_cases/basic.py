@@ -12,7 +12,7 @@ from eric_sse.message import Message
 
 from eric_sse.persistence import ChannelRepositoryInterface
 
-class Cache:
+class SSEChannelContainer:
     def __init__(self):
         self.__channels: dict[str, SSEChannel] = {}
 
@@ -30,39 +30,32 @@ class Cache:
 
 
 class PersistenceLayerRepositoryImplementation(ChannelRepositoryInterface):
-    """Fake repository with two channels"""
+    """Fake repository"""
 
     def __init__(self):
-        self.__cache = Cache()
-        self.persist(SSEChannel())
-        self.persist(SSEChannel())
+        self.__repository = SSEChannelContainer()
 
     def persist(self, persistable: SSEChannel):
-        self.__cache.set(persistable)
+        self.__repository.set(persistable)
 
     def load(self) -> Iterable[SSEChannel]:
-        for c in self.__cache.get_all_ids():
-            yield self.__cache.get(c)
+        for c in self.__repository.get_all_ids():
+            yield self.__repository.get(c)
 
     def delete_listener(self, ch_id: str, listener_id: str) -> None:
-        channel = self.__cache.get(ch_id)
+        channel = self.__repository.get(ch_id)
         channel.remove_listener(listener_id)
         self.persist(channel)
 
     def delete(self, key: str):
-        self.__cache.rm(key)
+        self.__repository.rm(key)
 
     def get_channel(self, channel_id: str) -> SSEChannel:
-        return self.__cache.get(channel_id)
+        return self.__repository.get(channel_id)
 
 class Application:
     def __init__(self):
-        self.__cache = Cache()
         self.__channels_repository = PersistenceLayerRepositoryImplementation()
-
-    def boot(self):
-        for channel in self.__channels_repository.load():
-            self.__cache.set(channel)
 
     def create_channel(self) -> SSEChannel:
         channel = SSEChannel()
@@ -72,6 +65,7 @@ class Application:
     def subscribe(self, channel_id: str) -> str:
         channel = self.__channels_repository.get_channel(channel_id)
         l = channel.add_listener()
+        self.__channels_repository.persist(channel)
         return l.id
 
     def broadcast(self, target_channel_id: str, message_type: str):
@@ -92,10 +86,10 @@ app = Application()
 
 # Clients interaction
 
-# Some client creates a channel
+## Some client creates a channel
 my_channel = app.create_channel()
 
-# Later on, some other client makes a subscription
+## Later on, some other client makes a subscription
 my_subscriber_id = app.subscribe(my_channel.id)
 
 app.broadcast(my_channel.id, 'test')
