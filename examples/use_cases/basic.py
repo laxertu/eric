@@ -10,15 +10,25 @@ from typing import Iterable
 from eric_sse.entities import AbstractChannel
 from eric_sse.prefabs import SSEChannel
 from eric_sse.message import Message
-from eric_sse.servers import ChannelContainer
 
 from eric_sse.persistence import ChannelRepositoryInterface
 
-class Cache(ChannelContainer):
-    def update(self, channel: SSEChannel):
-        if channel.id in self.get_all_ids():
-            self.rm(channel.id)
-        self.register(channel)
+class Cache:
+    def __init__(self):
+        self.__channels: dict[str, SSEChannel] = {}
+
+    def set(self, channel: SSEChannel) -> None:
+        self.__channels[channel.id] = channel
+
+    def get(self, channel_id: str) -> SSEChannel:
+        return self.__channels[channel_id]
+
+    def rm(self, channel_id: str):
+        del self.__channels[channel_id]
+
+    def get_all_ids(self) -> Iterable[str]:
+        return [k for k in self.__channels.keys()]
+
 
 class FakeChannelRepo(ChannelRepositoryInterface):
     """Fake repository with two channels"""
@@ -29,15 +39,16 @@ class FakeChannelRepo(ChannelRepositoryInterface):
         self.persist(SSEChannel())
 
     def persist(self, persistable: SSEChannel):
-        self.__cache.update(persistable)
+        self.__cache.set(persistable)
 
     def load(self) -> Iterable[AbstractChannel]:
         for c in self.__cache.get_all_ids():
             yield self.__cache.get(c)
 
     def delete_listener(self, ch_id: str, listener_id: str) -> None:
-        self.__cache.get(ch_id).remove_listener(listener_id)
-
+        channel = self.__cache.get(ch_id)
+        channel.remove_listener(listener_id)
+        self.persist(channel)
 
     def delete(self, key: str):
         self.__cache.rm(key)
