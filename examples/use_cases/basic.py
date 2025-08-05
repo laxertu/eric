@@ -1,5 +1,5 @@
 """
-The simplest possible use of the library. Here unique dependency with persistence module is with ChannelRepositoryInterface.
+The simplest possible use of the persistence layer. Here unique dependency with persistence module is with ChannelRepositoryInterface.
 The rest of participants are from classes shipped from the library.
 
 The following is a fake application with a in memory channel repository, and that just support channel creation and broadcasting
