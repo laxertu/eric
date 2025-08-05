@@ -16,7 +16,7 @@ from eric_sse.persistence import ChannelRepositoryInterface
 
 class Cache(ChannelContainer):
     def update(self, channel: SSEChannel):
-        if channel.id in set(self.get_all_ids()):
+        if channel.id in self.get_all_ids():
             self.rm(channel.id)
         self.register(channel)
 
