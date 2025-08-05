@@ -14,23 +14,29 @@ from eric_sse.servers import ChannelContainer
 
 from eric_sse.persistence import ChannelRepositoryInterface
 
+class Cache(ChannelContainer):
+    def update(self, channel: SSEChannel):
+        if channel.id in set(self.get_all_ids()):
+            self.rm(channel.id)
+            self.register(channel)
+
 class FakeChannelRepo(ChannelRepositoryInterface):
     """Fake repository with two channels"""
 
     def __init__(self):
-        self.__channel_container = ChannelContainer()
+        self.__cache = Cache()
         self.persist(SSEChannel())
         self.persist(SSEChannel())
 
     def persist(self, persistable: SSEChannel):
-        self.__channel_container.register(persistable)
+        self.__cache.update(persistable)
 
     def load(self) -> Iterable[AbstractChannel]:
-        for c in self.__channel_container.get_all_ids():
-            yield self.__channel_container.get(c)
+        for c in self.__cache.get_all_ids():
+            yield self.__cache.get(c)
 
     def delete_listener(self, ch_id: str, listener_id: str) -> None:
-        self.__channel_container.get(ch_id).remove_listener(listener_id)
+        self.__cache.get(ch_id).remove_listener(listener_id)
 
 
     def delete(self, key: str):
