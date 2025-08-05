@@ -18,7 +18,7 @@ class Cache(ChannelContainer):
     def update(self, channel: SSEChannel):
         if channel.id in set(self.get_all_ids()):
             self.rm(channel.id)
-            self.register(channel)
+        self.register(channel)
 
 class FakeChannelRepo(ChannelRepositoryInterface):
     """Fake repository with two channels"""
@@ -42,22 +42,17 @@ class FakeChannelRepo(ChannelRepositoryInterface):
     def delete(self, key: str):
         self.__cache.rm(key)
 
+    def get_channel(self, channel_id: str) -> AbstractChannel:
+        return self.__cache.get(channel_id)
+
 class Application:
     def __init__(self):
-        self.__persisted_channels_repository = FakeChannelRepo()
-        self.__loaded_channels = ChannelContainer()
+        self.__channels_repository = FakeChannelRepo()
 
-    def boot(self):
-        self.__loaded_channels.register_iterable(self.__persisted_channels_repository.load())
 
     def create_channel(self) -> SSEChannel:
         channel = SSEChannel()
-
-        # Add to real-time service
-        self.__loaded_channels.register(channel)
-        # Save channel
-        self.__persisted_channels_repository.persist(channel)
-
+        self.__channels_repository.persist(channel)
         return channel
 
     def subscribe(self, channel: SSEChannel) -> str:
@@ -65,7 +60,7 @@ class Application:
         return l.id
 
     def broadcast(self, target_channel_id: str, message_type: str):
-        self.__loaded_channels.get(target_channel_id).broadcast(Message(msg_type=message_type))
+        self.__channels_repository.get_channel(target_channel_id).broadcast(Message(msg_type=message_type))
 
 
 async def process_subscriber_messages():
@@ -78,7 +73,6 @@ async def process_subscriber_messages():
 
 # Service bootstrap.
 app = Application()
-app.boot()
 
 # Clients interaction
 my_channel = app.create_channel()
