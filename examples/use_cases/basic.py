@@ -69,6 +69,7 @@ async def process_subscriber_messages():
     async for message in my_channel.message_stream(listener):
         print(f'Message: {message["event"]}')
         if message["event"] == 'stop':
+            listener.stop()
             break
 
 # Service bootstrap.
