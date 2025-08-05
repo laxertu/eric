@@ -1,6 +1,8 @@
 Changelog
 =========
+
 1.5.4
+
 Removed eric-redis-queues as optional dependency
 
 1.5.3
