@@ -23,7 +23,7 @@ You'll need to implement the following interfaces:
 """
 
 from abc import ABC, abstractmethod
-from typing import Iterable, Any
+from typing import Iterable
 from importlib import import_module
 
 from eric_sse.connection import Connection
@@ -136,6 +136,10 @@ class ObjectRepositoryInterface(ABC):
 
 
 class ChannelRepositoryInterface(ObjectRepositoryInterface):
+
+    @abstractmethod
+    def get_channel(self, channel_id: str) -> PersistableChannel:
+        ...
 
     @abstractmethod
     def delete_listener(self, channel_id: str, listener_id: str) -> None:

@@ -7,7 +7,6 @@ The following is a fake application with an in memory channel repository, and th
 from asyncio import run
 from typing import Iterable
 
-from eric_sse.entities import AbstractChannel
 from eric_sse.prefabs import SSEChannel
 from eric_sse.message import Message
 
@@ -41,7 +40,7 @@ class PersistenceLayerRepositoryImplementation(ChannelRepositoryInterface):
     def persist(self, persistable: SSEChannel):
         self.__cache.set(persistable)
 
-    def load(self) -> Iterable[AbstractChannel]:
+    def load(self) -> Iterable[SSEChannel]:
         for c in self.__cache.get_all_ids():
             yield self.__cache.get(c)
 
@@ -53,12 +52,17 @@ class PersistenceLayerRepositoryImplementation(ChannelRepositoryInterface):
     def delete(self, key: str):
         self.__cache.rm(key)
 
-    def get_channel(self, channel_id: str) -> AbstractChannel:
+    def get_channel(self, channel_id: str) -> SSEChannel:
         return self.__cache.get(channel_id)
 
 class Application:
     def __init__(self):
+        self.__cache = Cache()
         self.__channels_repository = PersistenceLayerRepositoryImplementation()
+
+    def boot(self):
+        for channel in self.__channels_repository.load():
+            self.__cache.set(channel)
 
     def create_channel(self) -> SSEChannel:
         channel = SSEChannel()
