@@ -21,12 +21,11 @@ pip install eric-sse
 *Possible applications*
 
 * Message delivery mechanisms based on SSE
-* Message queue processing (logging, etc)
-* See [https://github.com/laxertu/eric-api](https://github.com/laxertu/eric-api)
+* Message queue processing (logging, ETL, http based notification systems, etc)
 
 *Documentation*
 
-* Home [https://laxertu.github.io/eric](https://laxertu.github.io/eric)
+* Overview https://laxertu.github.io/eric/docs.html
 
 
 *Trivia*
