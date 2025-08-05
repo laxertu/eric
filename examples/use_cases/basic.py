@@ -15,76 +15,74 @@ from eric_sse.servers import ChannelContainer
 from eric_sse.persistence import ChannelRepositoryInterface
 
 class FakeChannelRepo(ChannelRepositoryInterface):
-    """Fake repository"""
+    """Fake repository with two channels"""
 
     def __init__(self):
         self.__channel_container = ChannelContainer()
-        self.__channel_container.register(SSEChannel())
-        self.__channel_container.register(SSEChannel())
+        self.persist(SSEChannel())
+        self.persist(SSEChannel())
 
-
-    def delete_listener(self, ch_id: str, listener_id: str) -> None:
-        self.__channel_container.get(ch_id).remove_listener(listener_id)
+    def persist(self, persistable: SSEChannel):
+        self.__channel_container.register(persistable)
 
     def load(self) -> Iterable[AbstractChannel]:
         for c in self.__channel_container.get_all_ids():
             yield self.__channel_container.get(c)
 
-    def persist(self, persistable: SSEChannel):
-        self.__channel_container.register(persistable)
+    def delete_listener(self, ch_id: str, listener_id: str) -> None:
+        self.__channel_container.get(ch_id).remove_listener(listener_id)
+
 
     def delete(self, key: str):
         pass
 
+class Application:
+    def __init__(self):
+        self.__persisted_channels_repository = FakeChannelRepo()
+        self.__loaded_channels = ChannelContainer()
+
+    def boot(self):
+        self.__loaded_channels.register_iterable(self.__persisted_channels_repository.load())
+
+    def create_channel(self) -> SSEChannel:
+        channel = SSEChannel()
+
+        # Add to real-time service
+        self.__loaded_channels.register(channel)
+        # Save channel
+        self.__persisted_channels_repository.persist(channel)
+
+        return channel
+
+    def subscribe(self, channel: SSEChannel) -> str:
+        l = channel.add_listener()
+        return l.id
+
+    def broadcast(self, target_channel_id: str, message_type: str):
+        self.__loaded_channels.get(target_channel_id).broadcast(Message(msg_type=message_type))
+
+
+async def process_subscriber_messages():
+    listener = my_channel.get_listener(subscriber_id)
+    listener.start()
+    async for message in my_channel.message_stream(listener):
+        print(f'Message: {message["event"]}')
+        if message["event"] == 'stop':
+            break
 
 # Service bootstrap.
-channel_container = ChannelContainer()
-channel_repository = FakeChannelRepo()
-channel_container.register_iterable(channel_repository.load())
-
-# Application controllers
-def create_channel() -> str:
-    channel = SSEChannel()
-
-    # Add to real-time service
-    channel_container.register(channel)
-    # Save channel
-    channel_repository.persist(channel)
-
-    return channel.id
-
-def subscribe(ch_id: str) -> str:
-    l = channel_container.get(ch_id).add_listener()
-    return l.id
-
-def broadcast(target_channel_id: str, message_type: str):
-    channel_container.get(target_channel_id).broadcast(Message(msg_type=message_type))
+app = Application()
+app.boot()
 
 # Clients interaction
-channel_id = create_channel()
-subscriber_id = subscribe(channel_id)
+my_channel = app.create_channel()
+subscriber_id = app.subscribe(my_channel)
 
-broadcast(channel_id, 'test')
-broadcast(channel_id, 'stop')
+app.broadcast(my_channel.id, 'test')
+app.broadcast(my_channel.id, 'stop')
 
-
-async def main():
-    print(f"Starting streaming for all channels and listeners, we expect some output from {channel_id}")
-    print("")
-    for ch_id in channel_container.get_all_ids():
-        channel = channel_container.get(ch_id)
-        print(f'Streaming channel {ch_id}')
-        for l_id in channel.get_listeners_ids():
-            listener = channel.get_listener(l_id)
-            listener.start()
-            async for message in channel.message_stream(listener):
-                print(f'Message: {message["event"]}')
-                if message["event"] == 'stop':
-                    break
-        print('done')
-        print('')
 
 if __name__ == '__main__':
-    run(main())
+    run(process_subscriber_messages())
 
 
