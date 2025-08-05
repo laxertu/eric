@@ -86,7 +86,7 @@ my_subscriber_id = app.subscribe(my_channel.id)
 app.broadcast(my_channel.id, 'test')
 app.broadcast(my_channel.id, 'stop')
 
-
+# Subscriber starts a connection
 if __name__ == '__main__':
     run(process_subscriber_messages(my_subscriber_id))
 
