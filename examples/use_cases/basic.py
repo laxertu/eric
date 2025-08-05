@@ -49,13 +49,13 @@ class Application:
     def __init__(self):
         self.__channels_repository = FakeChannelRepo()
 
-
     def create_channel(self) -> SSEChannel:
         channel = SSEChannel()
         self.__channels_repository.persist(channel)
         return channel
 
-    def subscribe(self, channel: SSEChannel) -> str:
+    def subscribe(self, channel_id: str) -> str:
+        channel = self.__channels_repository.get_channel(channel_id)
         l = channel.add_listener()
         return l.id
 
@@ -63,7 +63,7 @@ class Application:
         self.__channels_repository.get_channel(target_channel_id).broadcast(Message(msg_type=message_type))
 
 
-async def process_subscriber_messages():
+async def process_subscriber_messages(subscriber_id: str):
     listener = my_channel.get_listener(subscriber_id)
     listener.start()
     async for message in my_channel.message_stream(listener):
@@ -76,14 +76,18 @@ async def process_subscriber_messages():
 app = Application()
 
 # Clients interaction
+
+# Some client creates a channel
 my_channel = app.create_channel()
-subscriber_id = app.subscribe(my_channel)
+
+# Later on, some other client makes a subscription
+my_subscriber_id = app.subscribe(my_channel.id)
 
 app.broadcast(my_channel.id, 'test')
 app.broadcast(my_channel.id, 'stop')
 
 
 if __name__ == '__main__':
-    run(process_subscriber_messages())
+    run(process_subscriber_messages(my_subscriber_id))
 
 
