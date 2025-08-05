@@ -2,6 +2,9 @@
 
 # Changelog
 
+1.5.4
+Removed eric-redis-queues as optional dependency
+
 1.5.3
 
 * Added kv_constructor_params_as_dict and kv_class_absolute_path to ObjectAsKeyValuePersistenceMixin
