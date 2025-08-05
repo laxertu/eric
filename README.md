@@ -8,7 +8,8 @@ pip install eric-sse
 
 *Related packages*
 
-* https://pypi.org/project/eric-redis-queues/
+* https://pypi.org/project/eric-redis-queues/ Redis integration
+* https://pypi.org/project/eric-api/ FastApi microservice
 
 *Features*
 
