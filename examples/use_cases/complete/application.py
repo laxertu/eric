@@ -1,3 +1,5 @@
+from typing import AsyncIterable
+
 from eric_sse.message import MessageContract
 from eric_sse.persistence import PersistableQueue
 from eric_sse.prefabs import SSEChannel
@@ -55,7 +57,6 @@ class ForecastQueue(PersistableQueue):
         }
 
 class Application:
-    """Here you can expose whatever, for example channel creation"""
     def __init__(self):
         self.repository = ForecastChannelRepository()
 
@@ -63,3 +64,13 @@ class Application:
         channel = ForecastChannel()
         self.repository.persist(channel)
         return channel
+
+    def notify(self, channel_id: str, forecast: Forecast):
+        self.repository.get_channel(channel_id).notify(forecast)
+
+    async def listen(self, channel_id: str) -> AsyncIterable[ForecastNotification]:
+        channel = self.repository.get_channel(channel_id)
+        listener = channel.add_listener()
+        return self.repository.get_channel(channel_id).message_stream(listener=listener)
+
+
