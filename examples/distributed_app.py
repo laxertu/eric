@@ -1,3 +1,6 @@
+"""
+In this example two listeners, Alice and Bob, have a "conversation" using a SimpleDistributedApplicationChannel
+"""
 import asyncio
 
 from eric_sse.message import Message, MessageContract
@@ -11,12 +14,14 @@ def output(m:MessageContract):
     print(m.payload)
 
 def hello_response(m: MessageContract) -> list[Message]:
+    """Replies to hellos messages with same text plus an exclamation"""
     output(m)
     return [
         Message(msg_type='hello_ack', msg_payload=f'{m.payload}!')
     ]
 
 def hello_ack_response(m: MessageContract) -> list[Message]:
+    """Replies with what user indicates in command line, here you can follow up talking or quit"""
     output(m)
     try:
         next_message = input('Say something [CTRL-C to quit]: ')
