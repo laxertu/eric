@@ -71,6 +71,7 @@ class Application:
     async def listen(self, channel_id: str) -> AsyncIterable[ForecastNotification]:
         channel = self.repository.get_channel(channel_id)
         listener = channel.add_listener()
-        return self.repository.get_channel(channel_id).message_stream(listener=listener)
+        listener.start()
+        return channel.message_stream(listener=listener)
 
 
