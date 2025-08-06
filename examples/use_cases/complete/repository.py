@@ -5,7 +5,7 @@ from eric_sse.persistence import ChannelRepositoryInterface, PersistableListener
 from eric_sse.exception import RepositoryError, InvalidChannelException
 
 from eric_sse.queues import Queue, InMemoryQueue
-from .application import ForecastChannel
+from .model import ForecastChannel
 
 
 class DatabaseException(Exception):
@@ -72,14 +72,11 @@ class ForecastChannelRepository(ChannelRepositoryInterface):
 
     def get_channel(self, channel_id: str) -> ForecastChannel:
         try:
-            row = self.__db.get(channel_id)
-            channel = ForecastChannel(
-                stream_delay_seconds=row['stream_delay_seconds'],
-                retry_timeout_milliseconds=row['retry_timeout_milliseconds'],
-                connections_repository=ForecastsNotificationRepository(),
-                channel_id=row['channel_id']
-            )
-            channel.setup_by_dict(row['setup_params'])
+            constructor_params = self.__db.get(channel_id)['constructor_params']
+            setup_params = self.__db.get(channel_id)['setup_params']
+            channel = ForecastChannel(**constructor_params)
+
+            channel.setup_by_dict(setup_params)
 
             return channel
         except RowNotFoundException:
