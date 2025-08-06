@@ -12,46 +12,29 @@ from eric_sse.message import Message
 
 from eric_sse.persistence import ChannelRepositoryInterface
 
-class SSEChannelContainer:
-    def __init__(self):
-        self.__channels: dict[str, SSEChannel] = {}
-
-    def set(self, channel: SSEChannel) -> None:
-        self.__channels[channel.id] = channel
-
-    def get(self, channel_id: str) -> SSEChannel:
-        return self.__channels[channel_id]
-
-    def rm(self, channel_id: str):
-        del self.__channels[channel_id]
-
-    def get_all_ids(self) -> Iterable[str]:
-        return [k for k in self.__channels.keys()]
-
-
 class PersistenceLayerRepositoryImplementation(ChannelRepositoryInterface):
     """Fake repository"""
 
     def __init__(self):
-        self.__repository = SSEChannelContainer()
+        self.__channels: dict[str, SSEChannel] = {}
 
-    def persist(self, persistable: SSEChannel):
-        self.__repository.set(persistable)
+    def persist(self, channel: SSEChannel):
+        self.__channels[channel.id] = channel
 
     def load(self) -> Iterable[SSEChannel]:
-        for c in self.__repository.get_all_ids():
-            yield self.__repository.get(c)
+        for c in self.__channels.keys():
+            yield self.__channels.get(c)
 
     def delete_listener(self, ch_id: str, listener_id: str) -> None:
-        channel = self.__repository.get(ch_id)
+        channel = self.__channels.get(ch_id)
         channel.remove_listener(listener_id)
         self.persist(channel)
 
-    def delete(self, key: str):
-        self.__repository.rm(key)
+    def delete(self, channel_id: str):
+        del self.__channels[channel_id]
 
     def get_channel(self, channel_id: str) -> SSEChannel:
-        return self.__repository.get(channel_id)
+        return self.__channels.get(channel_id)
 
 class Application:
     def __init__(self):
