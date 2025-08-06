@@ -4,8 +4,8 @@ from eric_sse.persistence import ChannelRepositoryInterface, PersistableListener
     ConnectionRepositoryInterface, PersistableConnection
 from eric_sse.exception import RepositoryError, InvalidChannelException
 
-from eric_sse.queues import Queue, InMemoryQueue
-from .model import ForecastChannel
+from eric_sse.queues import Queue
+from .model import ForecastChannel, ForecastQueue
 
 
 class DatabaseException(Exception):
@@ -46,10 +46,13 @@ class ForecastsNotificationRepository(ConnectionRepositoryInterface):
         self.__db = connections_database
 
     def create_queue(self, listener_id: str) -> Queue:
-        return InMemoryQueue()
+        return ForecastQueue(consumer_id=listener_id)
 
     def persist(self, channel_id: str, connection: PersistableConnection) -> None:
-        self.__db.upsert(channel_id, {})
+        self.__db.upsert(
+            channel_id,
+            {'listener': connection.listener.kv_value_as_dict, 'queue': connection.queue.kv_value_as_dict}
+        )
 
     def load_all(self) -> Iterable[PersistableConnection]:
         for key, value in self.__db.get_all():
