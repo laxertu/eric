@@ -60,7 +60,6 @@ class ForecastsNotificationRepository(ConnectionRepositoryInterface):
 
 
     def load(self, channel_id: str) -> Iterable[PersistableConnection]:
-        print("loca")
         pass
 
     def delete(self, channel_id: str, listener_id: str) -> None:
