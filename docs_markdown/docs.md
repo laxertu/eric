@@ -1166,7 +1166,7 @@ Concrete implementations of [`ObjectRepositoryInterface`](#eric_sse.persistence.
 
 ### *class* ListenerWrapper
 
-Bases: [`MessageQueueListener`](#eric_sse.listener.MessageQueueListener)
+Bases: [`PersistableListener`](#eric_sse.persistence.PersistableListener)
 
 Wraps a listener to profile its on_message method.
 
