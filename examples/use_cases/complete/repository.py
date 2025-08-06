@@ -1,11 +1,12 @@
 from typing import Iterable
 
+from eric_sse.message import MessageContract
 from eric_sse.persistence import ChannelRepositoryInterface, PersistableListener, ObjectAsKeyValuePersistenceMixin, \
-    ConnectionRepositoryInterface, PersistableConnection
-from eric_sse.exception import RepositoryError, InvalidChannelException
+    ConnectionRepositoryInterface, PersistableConnection, PersistableQueue
+from eric_sse.exception import RepositoryError, InvalidChannelException, NoMessagesException
 
 from eric_sse.queues import Queue
-from .model import ForecastChannel, ForecastQueue
+from .model import ForecastChannel
 
 
 class DatabaseException(Exception):
@@ -38,6 +39,7 @@ class _DataBase:
 
 channels_database = _DataBase()
 connections_database = _DataBase()
+notifications_database = _DataBase()
 
 # Integration
 
@@ -112,3 +114,45 @@ class ForecastChannelRepository(ChannelRepositoryInterface):
             self.__db.delete(key)
         except DatabaseException as e:
             raise RepositoryError(e) from e
+
+
+class ForecastQueue(PersistableQueue):
+
+    def __init__(self, consumer_id: str):
+        self.__db = notifications_database
+        self.__listener_id = consumer_id
+
+    def pop(self) -> MessageContract:
+        try:
+            return self.__db.get(self.__listener_id).pop(0)
+        except KeyError:
+            raise NoMessagesException
+
+
+    def push(self, message: MessageContract) -> None:
+        try:
+            data = self.__db.get(self.__listener_id)
+        except RowNotFoundException:
+            data = []
+        data.append(message)
+        self.__db.upsert(self.__listener_id, data)
+
+    @property
+    def kv_key(self) -> str:
+        return self.__listener_id
+
+    @property
+    def kv_value_as_dict(self) -> dict:
+        return {
+            'consumer_id': self.__listener_id,
+        }
+
+    def setup_by_dict(self, setup: dict):
+        self.__db = notifications_database
+        self.__listener_id = setup['consumer_id']
+
+    @property
+    def kv_constructor_params_as_dict(self) -> dict:
+        return {
+            'consumer_id': self.__listener_id,
+        }
