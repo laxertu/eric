@@ -3,11 +3,12 @@ import time
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import MessageContract
 from eric_sse.prefabs import DataProcessingChannel
+from eric_sse.persistence import PersistableListener
 from eric_sse import get_logger
 
 logger = get_logger()
 
-class ListenerWrapper(MessageQueueListener):
+class ListenerWrapper(PersistableListener):
     """Wraps a listener to profile its on_message method."""
 
     def __init__(self, listener: MessageQueueListener, profile_messages: bool = False):
