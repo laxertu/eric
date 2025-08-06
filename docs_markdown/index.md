@@ -24,6 +24,7 @@
 
 * Home [https://github.com/laxertu/eric](https://github.com/laxertu/eric)
 * Examples [https://github.com/laxertu/eric/tree/master/examples](https://github.com/laxertu/eric/tree/master/examples)
+* Api service definition: [https://github.com/laxertu/eric-api/blob/master/eric_api.py](https://github.com/laxertu/eric-api/blob/master/eric_api.py)
 
 *Trivia*
 

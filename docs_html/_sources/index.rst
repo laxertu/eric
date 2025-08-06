@@ -33,6 +33,7 @@ The lightweight library for async messaging nobody expects.
 
 * Home https://github.com/laxertu/eric
 * Examples https://github.com/laxertu/eric/tree/master/examples
+* Api service definition: https://github.com/laxertu/eric-api/blob/master/eric_api.py
 
 
 *Trivia*

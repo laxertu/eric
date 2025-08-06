@@ -1,5 +1,5 @@
-Overview
-========
+Reference
+=========
 
 .. image:: _static/overview.png
    :scale: 50 %

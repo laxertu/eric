@@ -25,7 +25,9 @@ pip install eric-sse
 
 *Documentation*
 
-* Overview https://laxertu.github.io/eric/docs.html
+* Reference https://laxertu.github.io/eric/docs.html
+* A good example of usage is eric api service definition: https://github.com/laxertu/eric-api/blob/master/eric_api.py
+* Some more example about other usages of the library: https://github.com/laxertu/eric/tree/master/examples
 
 
 *Trivia*
