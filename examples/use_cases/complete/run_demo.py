@@ -14,12 +14,13 @@ async def main():
     c.notify(Forecast(temperature=2.34))
 
     l.start()
-    print("Starting streaming press CTRL-C to quit")
-    try:
-        async for m in c.message_stream(l):
-            print(m)
-    except KeyboardInterrupt:
-        exit(0)
+    received = 0
+    async for m in c.message_stream(l):
+        print(m)
+        received += 1
+        if received == 3:
+            break
+
 
 if __name__ == '__main__':
     asyncio.run(main())
