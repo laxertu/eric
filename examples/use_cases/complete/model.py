@@ -24,7 +24,6 @@ class ForecastNotification(MessageContract):
 
 class ForecastChannel(SSEChannel):
 
-
     @property
     def kv_constructor_params_as_dict(self) -> dict:
         """we are just interested to SSE service settings"""

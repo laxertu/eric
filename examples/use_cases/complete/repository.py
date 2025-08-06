@@ -36,11 +36,14 @@ class _DataBase:
     def delete(self, key: str) -> None:
         del self.__rows[key]
 
+channels_database = _DataBase()
+connections_database = _DataBase()
+
 # Integration
 
 class ForecastsNotificationRepository(ConnectionRepositoryInterface):
     def __init__(self) -> None:
-        self.__db = _DataBase()
+        self.__db = connections_database
 
     def create_queue(self, listener_id: str) -> Queue:
         return InMemoryQueue()
@@ -65,14 +68,13 @@ class ForecastsNotificationRepository(ConnectionRepositoryInterface):
 
 class ForecastChannelRepository(ChannelRepositoryInterface):
     def __init__(self):
-        self.__db = _DataBase()
+        self.__db = channels_database
 
     def get_channel(self, channel_id: str) -> ForecastChannel:
         try:
             constructor_params = self.__db.get(channel_id)['constructor_params']
             setup_params = self.__db.get(channel_id)['setup_params']
-            channel = ForecastChannel(**constructor_params)
-
+            channel = ForecastChannel(**constructor_params, connections_repository=ForecastsNotificationRepository())
             channel.setup_by_dict(setup_params)
 
             return channel
