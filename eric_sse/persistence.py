@@ -29,6 +29,7 @@ from importlib import import_module
 from eric_sse.connection import Connection
 from eric_sse.listener import MessageQueueListener
 from eric_sse.queues import Queue, InMemoryQueue
+from eric_sse.exception import RepositoryError
 
 
 class ObjectAsKeyValuePersistenceMixin(ABC):
@@ -100,10 +101,18 @@ class PersistableListener(MessageQueueListener, ObjectAsKeyValuePersistenceMixin
 
     @property
     def kv_value_as_dict(self) -> dict:
-        return {}
+        return {
+            'id': self.id,
+            'is_running': self.is_running()
+        }
 
     def setup_by_dict(self, setup: dict):
-        pass
+        try:
+            self.id = setup['id']
+            if setup.get('is_running', False):
+                self.start()
+        except KeyError:
+            raise RepositoryError(f'Invalid setup: {setup}')
 
     @property
     def kv_constructor_params_as_dict(self) -> dict:
