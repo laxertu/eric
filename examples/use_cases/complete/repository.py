@@ -14,9 +14,6 @@ class DatabaseException(Exception):
 class RowNotFoundException(Exception):
     pass
 
-class ForecastRepositoryImplementation(PersistableListener):
-    pass
-
 # Internals
 class _DataBase:
     def __init__(self):
