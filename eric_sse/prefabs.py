@@ -58,7 +58,7 @@ class SSEChannel(AbstractChannel, PersistableChannel):
         self.stream_delay_seconds = setup['stream_delay_seconds']
         self.retry_timeout_milliseconds = setup['retry_timeout_milliseconds']
 
-        connections = self._connections_repository.load_all()
+        connections = self._connections_repository.load(self.id)
         for connection in connections:
             self.register_connection(listener=connection.listener, queue=connection.queue)
 
