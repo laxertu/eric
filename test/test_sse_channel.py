@@ -1,13 +1,6 @@
 from unittest import IsolatedAsyncioTestCase
-from eric_sse.persistence import importlib_create_instance
 from eric_sse.prefabs import SSEChannel
 from eric_sse.entities import Message
-
-from eric_sse.persistence import InMemoryConnectionRepository
-
-
-class ConnectionRepositoryFake(InMemoryConnectionRepository):
-    pass
 
 
 class SSEStreamTestCase(IsolatedAsyncioTestCase):
