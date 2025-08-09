@@ -58,7 +58,7 @@ class ObjectAsKeyValuePersistenceMixin(ABC):
         ...
 
     @abstractmethod
-    def setup_by_dict(self, setup: dict):
+    def kv_setup_by_dict(self, setup: dict):
         """Does necessary post-creation setup of object given its persisted values"""
         ...
 
@@ -86,7 +86,7 @@ def importlib_create_instance(class_full_path: str, constructor_params: dict, se
 
     module_object = import_module(module)
     obj: ObjectAsKeyValuePersistenceMixin = getattr(module_object, klass)(constructor_params)
-    obj.setup_by_dict(setup_values)
+    obj.kv_setup_by_dict(setup_values)
 
     return obj
 
@@ -108,7 +108,7 @@ class PersistableListener(MessageQueueListener, ObjectAsKeyValuePersistenceMixin
             'is_running': self.is_running()
         }
 
-    def setup_by_dict(self, setup: dict):
+    def kv_setup_by_dict(self, setup: dict):
         try:
             self.id = setup['id']
             if setup.get('is_running', False):
