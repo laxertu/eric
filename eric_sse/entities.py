@@ -1,7 +1,7 @@
 import asyncio
 import traceback
 from abc import ABC, abstractmethod
-from typing import AsyncIterable, Any
+from typing import AsyncIterable, Any, Iterable
 
 import eric_sse
 from eric_sse.exception import InvalidListenerException, NoMessagesException, InvalidChannelException
@@ -9,7 +9,8 @@ from eric_sse.listener import MessageQueueListener
 from eric_sse.message import MessageContract, Message
 from eric_sse.queues import Queue, InMemoryQueue
 from eric_sse.persistence import (ConnectionRepositoryInterface, InMemoryConnectionRepository,
-                                  PersistableListener, PersistableConnection)
+                                  PersistableListener, PersistableConnection, ChannelRepositoryInterface,
+                                  PersistableChannel, ItemNotFound, ObjectAsKeyValuePersistenceMixin)
 
 logger = eric_sse.get_logger()
 
@@ -184,3 +185,28 @@ class AbstractChannel(ABC):
 
     def get_listeners_ids(self) -> list[str]:
         return [l.id for l in self.__connection_manager.get_listeners().values()]
+
+
+class InMemoryChannelRepositoryMixin(ChannelRepositoryInterface, ABC):
+
+    channels: dict[str, PersistableChannel] = {}
+
+    def __init__(self, connections_repository: ConnectionRepositoryInterface):
+        self.__connections_repository: ConnectionRepositoryInterface = connections_repository
+
+
+    def load_all(self) -> Iterable[ObjectAsKeyValuePersistenceMixin]:
+        for channel in InMemoryChannelRepositoryMixin.channels.values():
+            yield channel
+
+    def load_one(self, key: str) -> ObjectAsKeyValuePersistenceMixin:
+        try:
+            return InMemoryChannelRepositoryMixin.channels[key]
+        except KeyError:
+            raise ItemNotFound(key)
+
+    def persist(self, persistable: PersistableChannel):
+        InMemoryChannelRepositoryMixin.channels[persistable.kv_key] = persistable
+
+    def delete(self, key: str):
+        del InMemoryChannelRepositoryMixin.channels[key]

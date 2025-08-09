@@ -3,7 +3,7 @@ from abc import ABC
 from concurrent.futures import ThreadPoolExecutor, Executor
 from typing import Callable, AsyncIterable, Iterable
 from eric_sse import get_logger
-from eric_sse.entities import AbstractChannel
+from eric_sse.entities import AbstractChannel, InMemoryChannelRepositoryMixin
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException, InvalidChannelException
@@ -74,10 +74,7 @@ class SSEChannel(AbstractChannel, PersistableChannel):
             "data": msg.payload
         }
 
-class SSEChannelRepository(ChannelRepositoryInterface, ABC):
-
-    def __init__(self, connections_repository: ConnectionRepositoryInterface):
-        self.__connections_repository = connections_repository
+class SSEInMemoryChannelRepository(InMemoryChannelRepositoryMixin, ABC):
 
     def get_channel(self, channel_id: str) -> SSEChannel:
         try:

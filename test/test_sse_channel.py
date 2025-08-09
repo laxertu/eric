@@ -1,5 +1,7 @@
-from unittest import IsolatedAsyncioTestCase
-from eric_sse.prefabs import SSEChannel
+from unittest import IsolatedAsyncioTestCase, TestCase
+
+from eric_sse.persistence import InMemoryConnectionRepository
+from eric_sse.prefabs import SSEChannel, SSEInMemoryChannelRepository
 from eric_sse.entities import Message
 
 
@@ -57,3 +59,15 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
         self.assertEqual(3, constructor_params['stream_delay_seconds'])
         self.assertEqual(27, constructor_params['retry_timeout_milliseconds'])
         self.assertEqual('test', constructor_params['channel_id'])
+
+class SSEChannelInMemoryPersistenceTestCase(TestCase):
+
+    def setUp(self):
+        self.sut = SSEInMemoryChannelRepository(InMemoryConnectionRepository())
+
+    def test_crud(self):
+        repo = self.sut
+        channel = SSEChannel()
+        repo.persist(channel)
+        channel_loaded = repo.get_channel(channel_id=channel.id)
+        self.assertEqual(channel.id, channel_loaded.id)

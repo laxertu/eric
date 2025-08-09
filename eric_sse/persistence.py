@@ -126,7 +126,7 @@ class PersistableConnection(Connection):
     queue: PersistableQueue
 
 class PersistableChannel(ObjectAsKeyValuePersistenceMixin, ABC):
-    ...
+        ...
 
 class ObjectRepositoryInterface(ABC):
     """Every exception raised by concrete implementations show be wrapped inside a :class:`~eric_sse.exception.RepositoryError`
@@ -220,5 +220,3 @@ class InMemoryConnectionRepository(ConnectionRepositoryInterface):
     def delete(self, channel_id: str, listener_id: str) -> None:
         del InMemoryConnectionRepository.connections[channel_id]
 
-class InMemoryChannelRepository(ChannelRepositoryInterface, ABC):
-    ...
