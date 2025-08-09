@@ -31,6 +31,8 @@ from eric_sse.listener import MessageQueueListener
 from eric_sse.queues import Queue, InMemoryQueue
 from eric_sse.exception import RepositoryError
 
+class ItemNotFound(Exception):
+    pass
 
 class ObjectAsKeyValuePersistenceMixin(ABC):
     """
@@ -131,7 +133,7 @@ class ObjectRepositoryInterface(ABC):
     """
 
     @abstractmethod
-    def load(self) -> Iterable[ObjectAsKeyValuePersistenceMixin]:
+    def load_all(self) -> Iterable[ObjectAsKeyValuePersistenceMixin]:
         """Returns an Iterable of all persisted objects of correspondant concrete implementation."""
         ...
 
@@ -159,9 +161,9 @@ class ConnectionRepositoryInterface(ABC):
     """
 
     @abstractmethod
-    def create_connection(self, listener_id: str) -> PersistableConnection:
+    def create_connection(self) -> PersistableConnection:
         """
-        Returns a concrete Queue instance.
+        Returns a PersistableConnection instance.
 
         :param str listener_id: Corresponding listener id
         """
@@ -197,18 +199,26 @@ class QueueRepositoryInterface(ObjectRepositoryInterface, ABC):
 
 
 class InMemoryConnectionRepository(ConnectionRepositoryInterface):
+
+    connections: dict[str, list[Connection]] = {}
     """
     Default implementation used by :class:`~eric_sse.entities.AbstractChannel`
     """
 
-    def create_connection(self, listener_id: str) -> PersistableConnection:
+    def create_connection(self) -> PersistableConnection:
         return PersistableConnection(listener=MessageQueueListener(), queue=InMemoryQueue())
 
     def persist(self, channel_id: str, connection: Connection) -> None:
-        pass
+        InMemoryConnectionRepository.connections[channel_id] = [connection]
 
     def load(self, channel_id: str) -> Iterable[Connection]:
-        return []
+        try:
+            return InMemoryConnectionRepository.connections[channel_id]
+        except KeyError:
+            raise ItemNotFound(f'Invalid channel: {channel_id}')
 
     def delete(self, channel_id: str, listener_id: str) -> None:
-        pass
+        del InMemoryConnectionRepository.connections[channel_id]
+
+class InMemoryChannelRepository(ChannelRepositoryInterface, ABC):
+    ...

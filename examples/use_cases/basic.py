@@ -10,7 +10,8 @@ from typing import Iterable
 from eric_sse.prefabs import SSEChannel
 from eric_sse.message import Message
 
-from eric_sse.persistence import ChannelRepositoryInterface
+from eric_sse.persistence import ChannelRepositoryInterface, ObjectAsKeyValuePersistenceMixin, ItemNotFound
+
 
 class PersistenceLayerRepositoryImplementation(ChannelRepositoryInterface):
     """Fake repository"""
@@ -21,7 +22,13 @@ class PersistenceLayerRepositoryImplementation(ChannelRepositoryInterface):
     def persist(self, channel: SSEChannel):
         self.__channels[channel.id] = channel
 
-    def load(self) -> Iterable[SSEChannel]:
+    def load_one(self, key: str) -> ObjectAsKeyValuePersistenceMixin:
+        try:
+            return self.__channels[key]
+        except KeyError:
+            raise ItemNotFound(key)
+
+    def load_all(self) -> Iterable[SSEChannel]:
         for c in self.__channels.keys():
             yield self.__channels.get(c)
 

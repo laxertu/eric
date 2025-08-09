@@ -1,12 +1,13 @@
 import asyncio
 from concurrent.futures import ThreadPoolExecutor, Executor
-from typing import Callable, AsyncIterable
+from typing import Callable, AsyncIterable, Iterable
 from eric_sse import get_logger
 from eric_sse.entities import AbstractChannel
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
-from eric_sse.persistence import ConnectionRepositoryInterface, PersistableChannel, PersistableListener
+from eric_sse.persistence import ConnectionRepositoryInterface, PersistableChannel, PersistableListener, \
+    ChannelRepositoryInterface, ObjectAsKeyValuePersistenceMixin
 from eric_sse.queues import InMemoryQueue
 
 logger = get_logger()
