@@ -1,28 +1,13 @@
-from copyreg import constructor
-from typing import Iterable
 from unittest import IsolatedAsyncioTestCase
-from eric_sse.persistence import PersistableConnection, importlib_create_instance
+from eric_sse.persistence import importlib_create_instance
 from eric_sse.prefabs import SSEChannel
-from eric_sse.entities import Message, ConnectionRepositoryInterface
-from eric_sse.queues import Queue
+from eric_sse.entities import Message
+
+from eric_sse.persistence import InMemoryConnectionRepository
 
 
-class ConnectionRepositoryFake(ConnectionRepositoryInterface):
-
-    def create_queue(self, listener_id: str) -> Queue:
-        pass
-
-    def persist(self, channel_id: str, connection: PersistableConnection) -> None:
-        pass
-
-    def load_all(self) -> Iterable[PersistableConnection]:
-        pass
-
-    def load(self, channel_id: str) -> Iterable[PersistableConnection]:
-        pass
-
-    def delete(self, channel_id: str, listener_id: str) -> None:
-        pass
+class ConnectionRepositoryFake(InMemoryConnectionRepository):
+    pass
 
 
 class SSEStreamTestCase(IsolatedAsyncioTestCase):
@@ -68,25 +53,11 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
         self.assertEqual(2, total_messages_received)
 
 
-    async def test_sse_channel_persistence(self):
-        channel = self.sut
-        self.assertEqual('eric_sse.persistence.InMemoryConnectionRepository', channel.kv_value_as_dict['connections_repository'])
-
-        self.sut = SSEChannel(connections_repository=ConnectionRepositoryFake())
-        self.assertEqual('test.test_sse_channel.ConnectionRepositoryFake', self.sut.kv_value_as_dict['connections_repository'])
-
-        sut_2 = importlib_create_instance(
-            class_full_path=channel.kv_class_absolute_path,
-            constructor_params=channel.kv_constructor_params_as_dict,
-            setup_values=channel.kv_value_as_dict
-        )
-        self.assertIs(type(sut_2), SSEChannel)
 
     def test_parameters_are_maintained(self):
         sut = SSEChannel(
             stream_delay_seconds=3,
             retry_timeout_milliseconds=27,
-            connections_repository=ConnectionRepositoryFake(),
             channel_id='test',
         )
         constructor_params = sut.kv_constructor_params_as_dict

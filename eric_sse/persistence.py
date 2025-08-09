@@ -136,6 +136,10 @@ class ObjectRepositoryInterface(ABC):
         ...
 
     @abstractmethod
+    def load_one(self, key: str) -> ObjectAsKeyValuePersistenceMixin:
+        ...
+
+    @abstractmethod
     def persist(self, persistable: ObjectAsKeyValuePersistenceMixin):
         ...
 
@@ -144,15 +148,6 @@ class ObjectRepositoryInterface(ABC):
         ...
 
 
-class ChannelRepositoryInterface(ObjectRepositoryInterface):
-
-    @abstractmethod
-    def get_channel(self, channel_id: str) -> PersistableChannel:
-        ...
-
-    @abstractmethod
-    def delete_listener(self, channel_id: str, listener_id: str) -> None:
-        ...
 
 class ConnectionRepositoryInterface(ABC):
     """
@@ -164,7 +159,7 @@ class ConnectionRepositoryInterface(ABC):
     """
 
     @abstractmethod
-    def create_queue(self, listener_id: str) -> Queue:
+    def create_connection(self, listener_id: str) -> PersistableConnection:
         """
         Returns a concrete Queue instance.
 
@@ -174,11 +169,6 @@ class ConnectionRepositoryInterface(ABC):
 
     @abstractmethod
     def persist(self, channel_id: str, connection: PersistableConnection) -> None:
-        ...
-
-    @abstractmethod
-    def load_all(self) -> Iterable[PersistableConnection]:
-        """Returns an Iterable of all persisted connections"""
         ...
 
     @abstractmethod
@@ -192,19 +182,30 @@ class ConnectionRepositoryInterface(ABC):
         ...
 
 
+class ChannelRepositoryInterface(ObjectRepositoryInterface):
+    @abstractmethod
+    def __init__(self, connections_repository: ConnectionRepositoryInterface):
+        ...
+
+    @abstractmethod
+    def get_channel(self, channel_id: str) -> PersistableChannel:
+        ...
+
+
+class QueueRepositoryInterface(ObjectRepositoryInterface, ABC):
+    ...
+
 
 class InMemoryConnectionRepository(ConnectionRepositoryInterface):
     """
     Default implementation used by :class:`~eric_sse.entities.AbstractChannel`
     """
-    def create_queue(self, listener_id: str) -> Queue:
-        return InMemoryQueue()
+
+    def create_connection(self, listener_id: str) -> PersistableConnection:
+        return PersistableConnection(listener=MessageQueueListener(), queue=InMemoryQueue())
 
     def persist(self, channel_id: str, connection: Connection) -> None:
         pass
-
-    def load_all(self) ->  Iterable[Connection]:
-        return []
 
     def load(self, channel_id: str) -> Iterable[Connection]:
         return []

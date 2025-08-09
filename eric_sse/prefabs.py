@@ -24,10 +24,9 @@ class SSEChannel(AbstractChannel, PersistableChannel):
             self,
             stream_delay_seconds: int = 0,
             retry_timeout_milliseconds: int = 5,
-            connections_repository: ConnectionRepositoryInterface = None,
             channel_id: str | None = None
     ):
-        super().__init__(channel_id=channel_id, stream_delay_seconds=stream_delay_seconds, connections_repository=connections_repository)
+        super().__init__(channel_id=channel_id, stream_delay_seconds=stream_delay_seconds)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
 
 
@@ -40,8 +39,6 @@ class SSEChannel(AbstractChannel, PersistableChannel):
         return {
             'stream_delay_seconds': self.stream_delay_seconds,
             'retry_timeout_milliseconds': self.retry_timeout_milliseconds,
-            'connections_repository':
-                f'{self._connections_repository.__module__}.{type(self._connections_repository).__name__}',
             'channel_id': self.id
         }
 
@@ -50,18 +47,12 @@ class SSEChannel(AbstractChannel, PersistableChannel):
         return {
             'stream_delay_seconds': self.stream_delay_seconds,
             'retry_timeout_milliseconds': self.retry_timeout_milliseconds,
-            'connections_repository': self._connections_repository,
             'channel_id': self.id,
         }
 
     def setup_by_dict(self, setup: dict):
         self.stream_delay_seconds = setup['stream_delay_seconds']
         self.retry_timeout_milliseconds = setup['retry_timeout_milliseconds']
-
-        connections = self._connections_repository.load(self.id)
-        for connection in connections:
-            self.register_connection(listener=connection.listener, queue=connection.queue)
-
 
     def adapt(self, msg: MessageContract) -> dict:
         """
