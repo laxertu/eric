@@ -8,8 +8,8 @@ from eric_sse.exception import InvalidListenerException, NoMessagesException, In
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import MessageContract, Message
 from eric_sse.queues import Queue, InMemoryQueue
-from eric_sse.persistence import (ConnectionRepositoryInterface, InMemoryConnectionRepository,
-                                  PersistableListener, PersistableConnection, ChannelRepositoryInterface,
+from eric_sse.persistence import (ConnectionRepositoryInterface,
+                                  PersistableListener, ChannelRepositoryInterface,
                                   PersistableChannel, ItemNotFound, ObjectAsKeyValuePersistenceMixin)
 
 logger = eric_sse.get_logger()
@@ -25,11 +25,6 @@ class _ConnectionManager:
         self.__channel_id = channel_id
         self.__listeners: dict[str: MessageQueueListener] = {}
         self.__queues: dict[str: Queue] = {}
-
-
-    def add_listener(self) -> PersistableListener:
-        l = PersistableListener()
-        return l
 
     def register_connection(self, listener: MessageQueueListener, queue: Queue):
         self.__listeners[listener.id] = listener
@@ -69,7 +64,6 @@ class AbstractChannel(ABC):
     see :class:`~eric_sse.prefabs.SSEChannel`
 
     :param int stream_delay_seconds: Wait time in seconds between message delivery.
-    :param ~eric_sse.persistence.ConnectionRepositoryInterface connections_repository:
     :param str channel_id: Optionally sets the channel id. **IMPORTANT** by using this parameter, client is responsible for guaranteeing channel id uniqueness
     """
     def __init__(

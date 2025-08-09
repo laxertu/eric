@@ -164,8 +164,6 @@ class ConnectionRepositoryInterface(ABC):
     def create_connection(self) -> PersistableConnection:
         """
         Returns a PersistableConnection instance.
-
-        :param str listener_id: Corresponding listener id
         """
         ...
 
@@ -185,9 +183,6 @@ class ConnectionRepositoryInterface(ABC):
 
 
 class ChannelRepositoryInterface(ObjectRepositoryInterface):
-    @abstractmethod
-    def __init__(self, connections_repository: ConnectionRepositoryInterface):
-        ...
 
     @abstractmethod
     def get_channel(self, channel_id: str) -> PersistableChannel:
