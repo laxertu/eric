@@ -8,14 +8,14 @@ class TestPersistence(TestCase):
         listener = PersistableListener()
 
         listener_clone = PersistableListener()
-        listener_clone.kv_setup_by_dict(listener.kv_value_as_dict)
+        listener_clone.kv_setup_by_dict(listener.kv_setup_values_as_dict)
 
         self.assertEqual(listener.id, listener_clone.id)
         self.assertFalse(listener.is_running())
         listener.start()
 
         listener_clone = PersistableListener()
-        listener_clone.kv_setup_by_dict(listener.kv_value_as_dict)
+        listener_clone.kv_setup_by_dict(listener.kv_setup_values_as_dict)
         self.assertTrue(listener.is_running())
 
 

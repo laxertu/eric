@@ -53,7 +53,7 @@ class ObjectAsKeyValuePersistenceMixin(ABC):
 
     @property
     @abstractmethod
-    def kv_value_as_dict(self) -> dict:
+    def kv_setup_values_as_dict(self) -> dict:
         """Returns value that will be persisted as a dictionary."""
         ...
 
@@ -102,7 +102,7 @@ class PersistableListener(MessageQueueListener, ObjectAsKeyValuePersistenceMixin
         return self.id
 
     @property
-    def kv_value_as_dict(self) -> dict:
+    def kv_setup_values_as_dict(self) -> dict:
         return {
             'id': self.id,
             'is_running': self.is_running()

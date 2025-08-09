@@ -35,7 +35,7 @@ class SSEChannel(AbstractChannel, PersistableChannel):
         return self.id
 
     @property
-    def kv_value_as_dict(self) -> dict:
+    def kv_setup_values_as_dict(self) -> dict:
         return {
             'stream_delay_seconds': self.stream_delay_seconds,
             'retry_timeout_milliseconds': self.retry_timeout_milliseconds,
