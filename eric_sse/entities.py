@@ -7,9 +7,7 @@ import eric_sse
 from eric_sse.exception import InvalidListenerException, NoMessagesException, InvalidChannelException
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import MessageContract, Message
-from eric_sse.queues import Queue
-from eric_sse.persistence import (ConnectionRepositoryInterface, InMemoryConnectionRepository,
-                                  PersistableListener, PersistableConnection)
+from eric_sse.queues import Queue, InMemoryQueue
 
 logger = eric_sse.get_logger()
 
@@ -20,30 +18,10 @@ MESSAGE_TYPE_INTERNAL_ERROR = '_eric_error'
 
 class _ConnectionManager:
     """Maintains relationships between listeners and queues"""
-    def __init__(self, channel_id: str, queues_repository: ConnectionRepositoryInterface):
+    def __init__(self, channel_id: str):
         self.__channel_id = channel_id
         self.__listeners: dict[str: MessageQueueListener] = {}
         self.__queues: dict[str: Queue] = {}
-        self.__queues_repository = queues_repository
-
-
-    def load(self):
-        for c in self.__queues_repository.load(self.__channel_id):
-            self.__listeners[c.listener.id] = c.listener
-            self.__queues[c.listener.id] = c.queue
-
-    def add_listener(self) -> PersistableListener:
-        l = PersistableListener()
-        self.register_listener(l)
-        return l
-
-    def register_listener(self, listener: PersistableListener):
-
-        queue = self.__queues_repository.create_queue(listener.id)
-
-        self.__listeners[listener.id] = listener
-        self.__queues[listener.id] = queue
-        self.__queues_repository.persist(self.__channel_id, PersistableConnection(listener=listener, queue=queue))
 
     def register_connection(self, listener: MessageQueueListener, queue: Queue):
         self.__listeners[listener.id] = listener
@@ -53,8 +31,6 @@ class _ConnectionManager:
     def remove_listener(self, listener_id: str):
         del self.__queues[listener_id]
         del self.__listeners[listener_id]
-
-        self.__queues_repository.delete(channel_id=self.__channel_id, listener_id=listener_id)
 
     def get_queue(self, listener_id: str) -> Queue:
         try:
@@ -85,29 +61,17 @@ class AbstractChannel(ABC):
     see :class:`~eric_sse.prefabs.SSEChannel`
 
     :param int stream_delay_seconds: Wait time in seconds between message delivery.
-    :param ~eric_sse.persistence.ConnectionRepositoryInterface connections_repository:
     :param str channel_id: Optionally sets the channel id. **IMPORTANT** by using this parameter, client is responsible for guaranteeing channel id uniqueness
     """
     def __init__(
             self,
             stream_delay_seconds: int = 0,
-            connections_repository: ConnectionRepositoryInterface | None = None,
             channel_id: str | None = None
     ):
         self.__id: str = eric_sse.generate_uuid() if channel_id is None else channel_id
-        assert self.__id is not None
         self.stream_delay_seconds = stream_delay_seconds
+        self.__connection_manager: _ConnectionManager = _ConnectionManager(self.__id)
 
-        self._connections_repository = connections_repository = connections_repository if connections_repository else InMemoryConnectionRepository()
-        self.__connection_manager: _ConnectionManager = _ConnectionManager(self.__id, connections_repository)
-
-    def load_persisted_data(self):
-        """
-        Loads persisted Connections
-
-        see :class:`~eric_sse.persistence.ConnectionRepositoryInterface`
-        """
-        self.__connection_manager.load()
 
     @property
     def id(self) -> str:
@@ -159,15 +123,10 @@ class AbstractChannel(ABC):
 
     def add_listener(self) -> MessageQueueListener:
         """Add the default listener and creates corresponding queue"""
-        l = PersistableListener()
-        self.register_listener(l)
-        return l
+        listener = MessageQueueListener()
+        self.register_connection(listener=listener, queue=InMemoryQueue())
+        return listener
 
-    def register_listener(self, listener: PersistableListener):
-        """
-        Registers listener and creates corresponding queue with persistence support
-        """
-        return self.__connection_manager.register_listener(listener)
 
     def register_connection(self, listener: MessageQueueListener, queue: Queue):
         """Registers a Connection with listener and queue without persistence"""
