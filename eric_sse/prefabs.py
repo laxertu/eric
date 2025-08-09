@@ -1,12 +1,14 @@
 import asyncio
+from abc import ABC
 from concurrent.futures import ThreadPoolExecutor, Executor
-from typing import Callable, AsyncIterable
+from typing import Callable, AsyncIterable, Iterable
 from eric_sse import get_logger
 from eric_sse.entities import AbstractChannel
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
-from eric_sse.exception import NoMessagesException
-from eric_sse.persistence import PersistableChannel
+from eric_sse.exception import NoMessagesException, InvalidChannelException
+from eric_sse.persistence import PersistableChannel, ChannelRepositoryInterface, ObjectAsKeyValuePersistenceMixin, \
+    ConnectionRepositoryInterface, ItemNotFound
 from eric_sse.queues import InMemoryQueue
 
 logger = get_logger()
@@ -71,6 +73,20 @@ class SSEChannel(AbstractChannel, PersistableChannel):
             "retry": self.retry_timeout_milliseconds,
             "data": msg.payload
         }
+
+class SSEChannelRepository(ChannelRepositoryInterface, ABC):
+
+    def __init__(self, connections_repository: ConnectionRepositoryInterface):
+        self.__connections_repository = connections_repository
+
+    def get_channel(self, channel_id: str) -> SSEChannel:
+        try:
+            channel_persistence_data = self.load_one(channel_id)
+            channel = SSEChannel(**channel_persistence_data.kv_constructor_params_as_dict)
+            channel.kv_setup_by_dict(channel_persistence_data.kv_setup_values_as_dict)
+            return channel
+        except ItemNotFound:
+            raise InvalidChannelException(channel_id)
 
 
 class DataProcessingChannel(AbstractChannel):
