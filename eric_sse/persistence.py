@@ -41,7 +41,7 @@ class ObjectAsKeyValuePersistenceMixin(ABC):
     see :func:`~eric_sse.persistence.importlib_create_instance`
     """
     @property
-    def dict(self):
+    def kv_as_dict(self):
         return {
             'class_path': self.kv_class_absolute_path,
             'constructor_parameters': self.kv_constructor_params_as_dict,
