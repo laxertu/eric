@@ -147,7 +147,7 @@ A connection is just a listener and its related message queue
 
 <a id="eric_sse.connection.Connection.__init__"></a>
 
-#### \_\_init_\_(listener, queue, id='96bf3784-6282-4014-ba18-eb52b2da33de')
+#### \_\_init_\_(listener, queue, id='e9730c7f-b828-48b7-bee7-198c71c554d7')
 
 * **Parameters:**
   * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
@@ -393,23 +393,6 @@ Class constructor parameters as dict
 ![image](_static/persistence-layer-connections.png)
 
 <a id="module-eric_sse.persistence"></a>
-
-This module is intended to those who want to create their own persistence layer
-
-**Writing a custom persistence layer**
-
-You’ll need to implement the following interfaces:
-
-**Channels**
-
-* `ChannelRepositoryInterface`
-* You’ll need to define a channel that implements `PersistableChannel` if [`SSEChannel`](#eric_sse.prefabs.SSEChannel) do not suit with your requirements
-* For **MessageQueueListener** support you can extend or directly use `PersistableListener`.
-
-**Connections**
-
-* `PersistableQueue`
-* `ConnectionRepositoryInterface`
 
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin"></a>
 

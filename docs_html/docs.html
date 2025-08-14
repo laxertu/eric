@@ -708,7 +708,7 @@ For validation purposes you can override its <a class="reference internal" href=
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.connection.Connection.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'96bf3784-6282-4014-ba18-eb52b2da33de'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.connection.Connection.__init__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'e9730c7f-b828-48b7-bee7-198c71c554d7'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.connection.Connection.__init__" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1003,21 +1003,7 @@ For validation purposes you can override its <a class="reference internal" href=
 <p><strong>Connections</strong></p>
 <a class="reference internal image-reference" href="_images/persistence-layer-connections.png"><img alt="_images/persistence-layer-connections.png" src="_images/persistence-layer-connections.png" style="width: 468.0px; height: 292.0px;" />
 </a>
-<p id="module-eric_sse.persistence">This module is intended to those who want to create their own persistence layer</p>
-<p><strong>Writing a custom persistence layer</strong></p>
-<p>You’ll need to implement the following interfaces:</p>
-<p><strong>Channels</strong></p>
-<ul class="simple">
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelRepositoryInterface</span></code></p></li>
-<li><p>You’ll need to define a channel that implements <code class="xref py py-class docutils literal notranslate"><span class="pre">PersistableChannel</span></code> if <a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eric_sse.prefabs.SSEChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SSEChannel</span></code></a> do not suit with your requirements</p></li>
-<li><p>For <strong>MessageQueueListener</strong> support you can extend or directly use <code class="xref py py-class docutils literal notranslate"><span class="pre">PersistableListener</span></code>.</p></li>
-</ul>
-<p><strong>Connections</strong></p>
-<ul class="simple">
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">PersistableQueue</span></code></p></li>
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectionRepositoryInterface</span></code></p></li>
-</ul>
-<dl class="py class">
+<dl class="py class" id="module-eric_sse.persistence">
 <dt class="sig sig-object py" id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ObjectAsKeyValuePersistenceMixin</span></span><a class="headerlink" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
