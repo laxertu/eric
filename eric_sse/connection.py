@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-from eric_sse.listener import MessageQueueListener
-from eric_sse.queues import Queue
-
+import eric_sse
+from eric_sse.listener import MessageQueueListener, PersistableListener
+from eric_sse.queues import Queue, PersistableQueue
 
 @dataclass
 class Connection:
@@ -14,3 +14,9 @@ class Connection:
     """
     listener: MessageQueueListener
     queue: Queue
+    id: str = eric_sse.generate_uuid()
+
+
+class PersistableConnection(Connection):
+    listener: PersistableListener
+    queue: PersistableQueue

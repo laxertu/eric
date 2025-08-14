@@ -4,10 +4,10 @@ from random import uniform
 from time import sleep
 from eric_sse import get_logger
 from eric_sse.entities import MESSAGE_TYPE_CLOSED
-from eric_sse.listener import MessageQueueListener
-from eric_sse.persistence import PersistableListener
+from eric_sse.listener import MessageQueueListener, PersistableListener
 from eric_sse.message import SignedMessage
 from eric_sse.prefabs import DataProcessingChannel
+from eric_sse.queues import InMemoryQueue
 
 logger = get_logger()
 
@@ -36,7 +36,7 @@ async def main():
 
 
     listener = Consumer()
-    channel.register_listener(listener)
+    channel.register_connection(listener, InMemoryQueue())
 
     await Producer.produce_num(c=channel, l=listener, num=20)
 

@@ -1,10 +1,10 @@
 import time
 
-from eric_sse.listener import MessageQueueListener
+from eric_sse.listener import MessageQueueListener, PersistableListener
 from eric_sse.message import MessageContract
 from eric_sse.prefabs import DataProcessingChannel
-from eric_sse.persistence import PersistableListener
 from eric_sse import get_logger
+from eric_sse.queues import InMemoryQueue
 
 logger = get_logger()
 
@@ -34,7 +34,7 @@ class DataProcessingChannelProfiler:
     def add_listener(self, listener: MessageQueueListener) -> ListenerWrapper:
         """Adds a listener to the channel after having wrapped it"""
         wrapper = ListenerWrapper(listener)
-        self.channel.register_listener(wrapper)
+        self.channel.register_connection(wrapper, InMemoryQueue())
         return wrapper
 
     async def run(self, listener: ListenerWrapper):

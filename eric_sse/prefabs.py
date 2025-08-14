@@ -1,4 +1,5 @@
 import asyncio
+from abc import ABC
 from concurrent.futures import ThreadPoolExecutor, Executor
 from typing import Callable, AsyncIterable
 from eric_sse import get_logger
@@ -6,13 +7,17 @@ from eric_sse.entities import AbstractChannel
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
-from eric_sse.persistence import ConnectionRepositoryInterface, PersistableChannel, PersistableListener
+from eric_sse.persistence import ObjectAsKeyValuePersistenceMixin
 from eric_sse.queues import InMemoryQueue
 
 logger = get_logger()
 
 
-class SSEChannel(AbstractChannel, PersistableChannel):
+class PersistableChannel(AbstractChannel, ObjectAsKeyValuePersistenceMixin, ABC):
+    ...
+
+
+class SSEChannel(PersistableChannel):
     """
     SSE streaming channel.
     See `Mozilla docs <https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format>`_
@@ -24,10 +29,9 @@ class SSEChannel(AbstractChannel, PersistableChannel):
             self,
             stream_delay_seconds: int = 0,
             retry_timeout_milliseconds: int = 5,
-            connections_repository: ConnectionRepositoryInterface = None,
             channel_id: str | None = None
     ):
-        super().__init__(channel_id=channel_id, stream_delay_seconds=stream_delay_seconds, connections_repository=connections_repository)
+        super().__init__(stream_delay_seconds=stream_delay_seconds, channel_id=channel_id)
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
 
 
@@ -36,12 +40,10 @@ class SSEChannel(AbstractChannel, PersistableChannel):
         return self.id
 
     @property
-    def kv_value_as_dict(self) -> dict:
+    def kv_setup_values_as_dict(self) -> dict:
         return {
             'stream_delay_seconds': self.stream_delay_seconds,
             'retry_timeout_milliseconds': self.retry_timeout_milliseconds,
-            'connections_repository':
-                f'{self._connections_repository.__module__}.{type(self._connections_repository).__name__}',
             'channel_id': self.id
         }
 
@@ -50,18 +52,12 @@ class SSEChannel(AbstractChannel, PersistableChannel):
         return {
             'stream_delay_seconds': self.stream_delay_seconds,
             'retry_timeout_milliseconds': self.retry_timeout_milliseconds,
-            'connections_repository': self._connections_repository,
             'channel_id': self.id,
         }
 
-    def setup_by_dict(self, setup: dict):
+    def kv_setup_by_dict(self, setup: dict):
         self.stream_delay_seconds = setup['stream_delay_seconds']
         self.retry_timeout_milliseconds = setup['retry_timeout_milliseconds']
-
-        connections = self._connections_repository.load(self.id)
-        for connection in connections:
-            self.register_connection(listener=connection.listener, queue=connection.queue)
-
 
     def adapt(self, msg: MessageContract) -> dict:
         """
