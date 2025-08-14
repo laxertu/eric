@@ -147,7 +147,7 @@ A connection is just a listener and its related message queue
 
 <a id="eric_sse.connection.Connection.__init__"></a>
 
-#### \_\_init_\_(listener, queue, id='ea370f53-e54f-4ad3-ae17-0011bbd65ea6')
+#### \_\_init_\_(listener, queue, id='96bf3784-6282-4014-ba18-eb52b2da33de')
 
 * **Parameters:**
   * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
@@ -428,7 +428,7 @@ see [`importlib_create_instance()`](#eric_sse.persistence.importlib_create_insta
 
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_as_dict"></a>
 
-#### *property* kv_as_dict
+#### *property* kv_as_dict *: dict*
 
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_key"></a>
 
