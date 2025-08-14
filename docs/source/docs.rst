@@ -49,10 +49,23 @@ Persistence
    :scale: 50 %
 
 .. automodule:: eric_sse.persistence
-    :members: importlib_create_instance, PersistableChannel, PersistableConnection, PersistableListener, InMemoryConnectionRepository, ObjectAsKeyValuePersistenceMixin, ChannelRepositoryInterface, ObjectRepositoryInterface, ConnectionRepositoryInterface, PersistableQueue
+    :members: KvStorageEngine, importlib_create_instance, ObjectAsKeyValuePersistenceMixin
     :undoc-members:
     :member-order: bysource
     :show-inheritance:
+
+.. automodule:: eric_sse.interfaces
+    :members: ListenerRepositoryInterface, QueueRepositoryInterface, ConnectionRepositoryInterface, ChannelRepositoryInterface
+    :undoc-members:
+    :member-order: bysource
+    :show-inheritance:
+
+.. automodule:: eric_sse.serializable
+    :members: ListenerRepository, QueueRepository, ConnectionRepository, ChannelRepository
+    :undoc-members:
+    :member-order: bysource
+    :show-inheritance:
+
 
 Prefab channels and listeners
 =============================

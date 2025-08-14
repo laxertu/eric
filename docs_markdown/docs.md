@@ -147,13 +147,20 @@ A connection is just a listener and its related message queue
 
 <a id="eric_sse.connection.Connection.__init__"></a>
 
-#### \_\_init_\_(listener, queue)
+#### \_\_init_\_(listener, queue, id='0658a107-8c5f-4924-a3d8-604db5ca1cbe')
 
 * **Parameters:**
   * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
   * **queue** ([*Queue*](#eric_sse.queues.Queue))
+  * **id** (*str*)
 * **Return type:**
   None
+
+<a id="eric_sse.connection.PersistableConnection"></a>
+
+### *class* PersistableConnection
+
+Bases: [`Connection`](#eric_sse.connection.Connection)
 
 <a id="module-eric_sse.entities"></a>
 
@@ -171,31 +178,21 @@ Provides functionalities for listeners and message delivery management.
 
 **Important** When using persistence layer you have to call to **load_persisted_data()** method just after object creation.
 
-[`InMemoryConnectionRepository`](#eric_sse.persistence.InMemoryConnectionRepository) is the default implementation used for **connections_repository** parameter.
+`InMemoryConnectionRepository` is the default implementation used for **connections_repository** parameter.
 
 see [`SSEChannel`](#eric_sse.prefabs.SSEChannel)
 
 * **Parameters:**
   * **stream_delay_seconds** (*int*) – Wait time in seconds between message delivery.
-  * **connections_repository** ([*ConnectionRepositoryInterface*](#eric_sse.persistence.ConnectionRepositoryInterface))
   * **channel_id** (*str*) – Optionally sets the channel id. **IMPORTANT** by using this parameter, client is responsible for guaranteeing channel id uniqueness
 
 <a id="eric_sse.entities.AbstractChannel.__init__"></a>
 
-#### \_\_init_\_(stream_delay_seconds=0, connections_repository=None, channel_id=None)
+#### \_\_init_\_(stream_delay_seconds=0, channel_id=None)
 
 * **Parameters:**
   * **stream_delay_seconds** (*int*)
-  * **connections_repository** ([*ConnectionRepositoryInterface*](#eric_sse.persistence.ConnectionRepositoryInterface) *|* *None*)
   * **channel_id** (*str* *|* *None*)
-
-<a id="eric_sse.entities.AbstractChannel.load_persisted_data"></a>
-
-#### load_persisted_data()
-
-Loads persisted Connections
-
-see [`ConnectionRepositoryInterface`](#eric_sse.persistence.ConnectionRepositoryInterface)
 
 <a id="eric_sse.entities.AbstractChannel.id"></a>
 
@@ -235,15 +232,6 @@ Add the default listener and creates corresponding queue
 
 * **Return type:**
   [*MessageQueueListener*](#eric_sse.listener.MessageQueueListener)
-
-<a id="eric_sse.entities.AbstractChannel.register_listener"></a>
-
-#### register_listener(listener)
-
-Registers listener and creates corresponding queue with persistence support
-
-* **Parameters:**
-  **listener** ([*PersistableListener*](#eric_sse.persistence.PersistableListener))
 
 <a id="eric_sse.entities.AbstractChannel.register_connection"></a>
 
@@ -359,6 +347,39 @@ Event handler. It executes when a message is delivered to client
 * **Return type:**
   bool
 
+<a id="eric_sse.listener.PersistableListener"></a>
+
+### *class* PersistableListener
+
+Gives KV persistence support to MessageQueueListener.
+
+<a id="eric_sse.listener.PersistableListener.kv_key"></a>
+
+#### *property* kv_key *: str*
+
+The key to use when persisting object
+
+<a id="eric_sse.listener.PersistableListener.kv_setup_values_as_dict"></a>
+
+#### *property* kv_setup_values_as_dict *: dict*
+
+Returns value that will be persisted as a dictionary.
+
+<a id="eric_sse.listener.PersistableListener.kv_setup_by_dict"></a>
+
+#### kv_setup_by_dict(setup)
+
+Does necessary post-creation setup of object given its persisted values
+
+* **Parameters:**
+  **setup** (*dict*)
+
+<a id="eric_sse.listener.PersistableListener.kv_constructor_params_as_dict"></a>
+
+#### *property* kv_constructor_params_as_dict *: dict*
+
+Class constructor parameters as dict
+
 <a id="persistence"></a>
 
 # Persistence
@@ -385,14 +406,14 @@ You’ll need to implement the following interfaces:
 
 **Channels**
 
-* [`ChannelRepositoryInterface`](#eric_sse.persistence.ChannelRepositoryInterface)
-* You’ll need to define a channel that implements [`PersistableChannel`](#eric_sse.persistence.PersistableChannel) if [`SSEChannel`](#eric_sse.prefabs.SSEChannel) do not suit with your requirements
-* For **MessageQueueListener** support you can extend or directly use [`PersistableListener`](#eric_sse.persistence.PersistableListener).
+* `ChannelRepositoryInterface`
+* You’ll need to define a channel that implements `PersistableChannel` if [`SSEChannel`](#eric_sse.prefabs.SSEChannel) do not suit with your requirements
+* For **MessageQueueListener** support you can extend or directly use `PersistableListener`.
 
 **Connections**
 
-* [`PersistableQueue`](#eric_sse.persistence.PersistableQueue)
-* [`ConnectionRepositoryInterface`](#eric_sse.persistence.ConnectionRepositoryInterface)
+* `PersistableQueue`
+* `ConnectionRepositoryInterface`
 
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin"></a>
 
@@ -409,26 +430,30 @@ For this reason, the idea is that dict values should be serializable by pickle t
 
 see [`importlib_create_instance()`](#eric_sse.persistence.importlib_create_instance)
 
+<a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.dict"></a>
+
+#### *property* dict
+
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_key"></a>
 
 #### *abstract property* kv_key *: str*
 
 The key to use when persisting object
 
-<a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_value_as_dict"></a>
+<a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_setup_values_as_dict"></a>
 
-#### *abstract property* kv_value_as_dict *: dict*
+#### *abstract property* kv_setup_values_as_dict *: <property object at 0x77bf980ebf10>*
 
 Returns value that will be persisted as a dictionary.
 
-<a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.setup_by_dict"></a>
+<a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_setup_by_dict"></a>
 
-#### *abstract* setup_by_dict(setup)
+#### *abstract* kv_setup_by_dict(setup)
 
 Does necessary post-creation setup of object given its persisted values
 
 * **Parameters:**
-  **setup** (*dict*)
+  **setup** ( *<property object at 0x77bf980ebf10>*)
 
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_class_absolute_path"></a>
 
@@ -438,9 +463,55 @@ Returns class full path as string
 
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_constructor_params_as_dict"></a>
 
-#### *abstract property* kv_constructor_params_as_dict *: dict*
+#### *abstract property* kv_constructor_params_as_dict *: <property object at 0x77bf980ebf10>*
 
 Class constructor parameters as dict
+
+<a id="eric_sse.persistence.KvStorageEngine"></a>
+
+### *class* KvStorageEngine
+
+Bases: `ABC`
+
+<a id="eric_sse.persistence.KvStorageEngine.fetch_by_prefix"></a>
+
+#### *abstract* fetch_by_prefix(prefix)
+
+* **Parameters:**
+  **prefix** (*str*)
+* **Return type:**
+  *Iterable*[any]
+
+<a id="eric_sse.persistence.KvStorageEngine.fetch_all"></a>
+
+#### *abstract* fetch_all()
+
+* **Return type:**
+  *Iterable*[any]
+
+<a id="eric_sse.persistence.KvStorageEngine.upsert"></a>
+
+#### *abstract* upsert(key, value)
+
+* **Parameters:**
+  * **key** (*str*)
+  * **value** (*any*)
+
+<a id="eric_sse.persistence.KvStorageEngine.fetch_one"></a>
+
+#### *abstract* fetch_one(key)
+
+* **Parameters:**
+  **key** (*str*)
+* **Return type:**
+  any
+
+<a id="eric_sse.persistence.KvStorageEngine.delete"></a>
+
+#### *abstract* delete(key)
+
+* **Parameters:**
+  **key** (*str*)
 
 <a id="eric_sse.persistence.importlib_create_instance"></a>
 
@@ -448,7 +519,7 @@ Class constructor parameters as dict
 
 Creates a persistable class instance given a persisted value and executes its setup_by_dict method
 
-see [`setup_by_dict()`](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.setup_by_dict)
+see `setup_by_dict()`
 
 * **Parameters:**
   * **class_full_path** (*str*)
@@ -457,250 +528,305 @@ see [`setup_by_dict()`](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.s
 * **Return type:**
   [*ObjectAsKeyValuePersistenceMixin*](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin)
 
-<a id="eric_sse.persistence.PersistableQueue"></a>
+<a id="module-eric_sse.interfaces"></a>
 
-### *class* PersistableQueue
+<a id="eric_sse.interfaces.ListenerRepositoryInterface"></a>
 
-Bases: [`Queue`](#eric_sse.queues.Queue), [`ObjectAsKeyValuePersistenceMixin`](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin), `ABC`
-
-Concrete implementations of methods should perform in **Queues** ones their I/O operations, and define in **ObjectAsKeyValuePersistenceMixin** ones their correspondant persistence strategy
-
-<a id="eric_sse.persistence.PersistableListener"></a>
-
-### *class* PersistableListener
-
-Bases: [`MessageQueueListener`](#eric_sse.listener.MessageQueueListener), [`ObjectAsKeyValuePersistenceMixin`](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin)
-
-Gives KV persistence support to MessageQueueListener.
-
-<a id="eric_sse.persistence.PersistableListener.kv_key"></a>
-
-#### *property* kv_key *: str*
-
-The key to use when persisting object
-
-<a id="eric_sse.persistence.PersistableListener.kv_value_as_dict"></a>
-
-#### *property* kv_value_as_dict *: dict*
-
-Returns value that will be persisted as a dictionary.
-
-<a id="eric_sse.persistence.PersistableListener.setup_by_dict"></a>
-
-#### setup_by_dict(setup)
-
-Does necessary post-creation setup of object given its persisted values
-
-* **Parameters:**
-  **setup** (*dict*)
-
-<a id="eric_sse.persistence.PersistableListener.kv_constructor_params_as_dict"></a>
-
-#### *property* kv_constructor_params_as_dict *: dict*
-
-Class constructor parameters as dict
-
-<a id="eric_sse.persistence.PersistableConnection"></a>
-
-### *class* PersistableConnection
-
-Bases: [`Connection`](#eric_sse.connection.Connection)
-
-<a id="eric_sse.persistence.PersistableConnection.listener"></a>
-
-#### listener *: [PersistableListener](#eric_sse.persistence.PersistableListener)*
-
-<a id="eric_sse.persistence.PersistableConnection.queue"></a>
-
-#### queue *: [PersistableQueue](#eric_sse.persistence.PersistableQueue)*
-
-<a id="eric_sse.persistence.PersistableChannel"></a>
-
-### *class* PersistableChannel
-
-Bases: [`ObjectAsKeyValuePersistenceMixin`](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin), `ABC`
-
-<a id="eric_sse.persistence.ObjectRepositoryInterface"></a>
-
-### *class* ObjectRepositoryInterface
+### *class* ListenerRepositoryInterface
 
 Bases: `ABC`
 
-Every exception raised by concrete implementations show be wrapped inside a [`RepositoryError`](#eric_sse.exception.RepositoryError)
+<a id="eric_sse.interfaces.ListenerRepositoryInterface.load"></a>
 
-<a id="eric_sse.persistence.ObjectRepositoryInterface.load"></a>
+#### *abstract* load(listener_id)
 
-#### *abstract* load()
-
-Returns an Iterable of all persisted objects of correspondant concrete implementation.
-
+* **Parameters:**
+  **listener_id** (*str*)
 * **Return type:**
-  *Iterable*[[*ObjectAsKeyValuePersistenceMixin*](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin)]
+  [*MessageQueueListener*](#eric_sse.listener.MessageQueueListener)
 
-<a id="eric_sse.persistence.ObjectRepositoryInterface.persist"></a>
+<a id="eric_sse.interfaces.ListenerRepositoryInterface.persist"></a>
 
-#### *abstract* persist(persistable)
-
-* **Parameters:**
-  **persistable** ([*ObjectAsKeyValuePersistenceMixin*](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin))
-
-<a id="eric_sse.persistence.ObjectRepositoryInterface.delete"></a>
-
-#### *abstract* delete(key)
+#### *abstract* persist(listener)
 
 * **Parameters:**
-  **key** (*str*)
+  **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
 
-<a id="eric_sse.persistence.ChannelRepositoryInterface"></a>
+<a id="eric_sse.interfaces.ListenerRepositoryInterface.delete"></a>
 
-### *class* ChannelRepositoryInterface
-
-Bases: [`ObjectRepositoryInterface`](#eric_sse.persistence.ObjectRepositoryInterface)
-
-<a id="eric_sse.persistence.ChannelRepositoryInterface.get_channel"></a>
-
-#### *abstract* get_channel(channel_id)
+#### *abstract* delete(listener_id)
 
 * **Parameters:**
-  **channel_id** (*str*)
+  **listener_id** (*str*)
+
+<a id="eric_sse.interfaces.QueueRepositoryInterface"></a>
+
+### *class* QueueRepositoryInterface
+
+Bases: `ABC`
+
+<a id="eric_sse.interfaces.QueueRepositoryInterface.load"></a>
+
+#### *abstract* load(queue_id)
+
+* **Parameters:**
+  **queue_id** (*str*)
 * **Return type:**
-  [*PersistableChannel*](#eric_sse.persistence.PersistableChannel)
+  [*Queue*](#eric_sse.queues.Queue)
 
-<a id="eric_sse.persistence.ChannelRepositoryInterface.delete_listener"></a>
+<a id="eric_sse.interfaces.QueueRepositoryInterface.persist"></a>
 
-#### *abstract* delete_listener(channel_id, listener_id)
+#### *abstract* persist(queue)
 
 * **Parameters:**
-  * **channel_id** (*str*)
-  * **listener_id** (*str*)
-* **Return type:**
-  None
+  **queue** ([*Queue*](#eric_sse.queues.Queue))
 
-<a id="eric_sse.persistence.ConnectionRepositoryInterface"></a>
+<a id="eric_sse.interfaces.QueueRepositoryInterface.delete"></a>
+
+#### *abstract* delete(queue_id)
+
+* **Parameters:**
+  **queue_id** (*str*)
+
+<a id="eric_sse.interfaces.ConnectionRepositoryInterface"></a>
 
 ### *class* ConnectionRepositoryInterface
 
 Bases: `ABC`
 
-Abstraction for connections creation.
+<a id="eric_sse.interfaces.ConnectionRepositoryInterface.load_all"></a>
 
-It exposes methods to be used by ChannelRepositoryInterface implementations for connections loading.
-
-see [`AbstractChannel`](#eric_sse.entities.AbstractChannel)
-
-<a id="eric_sse.persistence.ConnectionRepositoryInterface.create_queue"></a>
-
-#### *abstract* create_queue(listener_id)
-
-Returns a concrete Queue instance.
+#### *abstract* load_all(channel_id)
 
 * **Parameters:**
-  **listener_id** (*str*) – Corresponding listener id
+  **channel_id** (*str*)
 * **Return type:**
-  [*Queue*](#eric_sse.queues.Queue)
+  *Iterable*[[*Connection*](#eric_sse.connection.Connection)]
 
-<a id="eric_sse.persistence.ConnectionRepositoryInterface.persist"></a>
+<a id="eric_sse.interfaces.ConnectionRepositoryInterface.load_one"></a>
 
-#### *abstract* persist(channel_id, connection)
+#### *abstract* load_one(connection_id)
 
 * **Parameters:**
-  * **channel_id** (*str*)
-  * **connection** ([*PersistableConnection*](#eric_sse.persistence.PersistableConnection))
+  **connection_id** (*str*)
 * **Return type:**
-  None
+  [*Connection*](#eric_sse.connection.Connection)
 
-<a id="eric_sse.persistence.ConnectionRepositoryInterface.load_all"></a>
+<a id="eric_sse.interfaces.ConnectionRepositoryInterface.persist"></a>
+
+#### *abstract* persist(connection)
+
+* **Parameters:**
+  **connection** ([*Connection*](#eric_sse.connection.Connection))
+
+<a id="eric_sse.interfaces.ConnectionRepositoryInterface.delete"></a>
+
+#### *abstract* delete(connection_id)
+
+* **Parameters:**
+  **connection_id** (*str*)
+
+<a id="eric_sse.interfaces.ChannelRepositoryInterface"></a>
+
+### *class* ChannelRepositoryInterface
+
+Bases: `ABC`
+
+<a id="eric_sse.interfaces.ChannelRepositoryInterface.load_all"></a>
 
 #### *abstract* load_all()
 
-Returns an Iterable of all persisted connections
-
 * **Return type:**
-  *Iterable*[[*PersistableConnection*](#eric_sse.persistence.PersistableConnection)]
+  *Iterable*[[*AbstractChannel*](#eric_sse.entities.AbstractChannel)]
 
-<a id="eric_sse.persistence.ConnectionRepositoryInterface.load"></a>
+<a id="eric_sse.interfaces.ChannelRepositoryInterface.load_one"></a>
 
-#### *abstract* load(channel_id)
-
-Returns an Iterable of all persisted connections of a given channel
+#### *abstract* load_one(channel_id)
 
 * **Parameters:**
   **channel_id** (*str*)
 * **Return type:**
-  *Iterable*[[*PersistableConnection*](#eric_sse.persistence.PersistableConnection)]
+  [*AbstractChannel*](#eric_sse.entities.AbstractChannel)
 
-<a id="eric_sse.persistence.ConnectionRepositoryInterface.delete"></a>
+<a id="eric_sse.interfaces.ChannelRepositoryInterface.persist"></a>
 
-#### *abstract* delete(channel_id, listener_id)
-
-Removes a persisted [`PersistableConnection`](#eric_sse.persistence.PersistableConnection) given its correspondant listener id
+#### *abstract* persist(channel)
 
 * **Parameters:**
-  * **channel_id** (*str*)
-  * **listener_id** (*str*)
+  **channel** ([*AbstractChannel*](#eric_sse.entities.AbstractChannel))
+
+<a id="eric_sse.interfaces.ChannelRepositoryInterface.delete"></a>
+
+#### *abstract* delete(channel_id)
+
+* **Parameters:**
+  **channel_id** (*str*)
+
+<a id="module-eric_sse.serializable"></a>
+
+If you have to persist a serializable participant, you can use this module if correspondant storage engine supports its format
+
+see `InMemoryChannelRepository`
+
+<a id="eric_sse.serializable.ListenerRepository"></a>
+
+### *class* ListenerRepository
+
+Bases: [`ListenerRepositoryInterface`](#eric_sse.interfaces.ListenerRepositoryInterface)
+
+<a id="eric_sse.serializable.ListenerRepository.__init__"></a>
+
+#### \_\_init_\_(storage_engine)
+
+* **Parameters:**
+  **storage_engine** ([*KvStorageEngine*](#eric_sse.persistence.KvStorageEngine))
+
+<a id="eric_sse.serializable.ListenerRepository.load"></a>
+
+#### load(listener_id)
+
+* **Parameters:**
+  **listener_id** (*str*)
 * **Return type:**
-  None
+  [*MessageQueueListener*](#eric_sse.listener.MessageQueueListener)
 
-<a id="eric_sse.persistence.InMemoryConnectionRepository"></a>
+<a id="eric_sse.serializable.ListenerRepository.persist"></a>
 
-### *class* InMemoryConnectionRepository
-
-Bases: [`ConnectionRepositoryInterface`](#eric_sse.persistence.ConnectionRepositoryInterface)
-
-Default implementation used by [`AbstractChannel`](#eric_sse.entities.AbstractChannel)
-
-<a id="eric_sse.persistence.InMemoryConnectionRepository.create_queue"></a>
-
-#### create_queue(listener_id)
-
-Returns a concrete Queue instance.
+#### persist(listener)
 
 * **Parameters:**
-  **listener_id** (*str*) – Corresponding listener id
+  **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
+
+<a id="eric_sse.serializable.ListenerRepository.delete"></a>
+
+#### delete(listener_id)
+
+* **Parameters:**
+  **listener_id** (*str*)
+
+<a id="eric_sse.serializable.QueueRepository"></a>
+
+### *class* QueueRepository
+
+Bases: [`QueueRepositoryInterface`](#eric_sse.interfaces.QueueRepositoryInterface)
+
+<a id="eric_sse.serializable.QueueRepository.__init__"></a>
+
+#### \_\_init_\_(storage_engine)
+
+* **Parameters:**
+  **storage_engine** ([*KvStorageEngine*](#eric_sse.persistence.KvStorageEngine))
+
+<a id="eric_sse.serializable.QueueRepository.load"></a>
+
+#### load(queue_id)
+
+* **Parameters:**
+  **queue_id** (*str*)
 * **Return type:**
   [*Queue*](#eric_sse.queues.Queue)
 
-<a id="eric_sse.persistence.InMemoryConnectionRepository.persist"></a>
+<a id="eric_sse.serializable.QueueRepository.persist"></a>
 
-#### persist(channel_id, connection)
+#### persist(queue)
 
 * **Parameters:**
-  * **channel_id** (*str*)
-  * **connection** ([*Connection*](#eric_sse.connection.Connection))
-* **Return type:**
-  None
+  **queue** ([*Queue*](#eric_sse.queues.Queue))
 
-<a id="eric_sse.persistence.InMemoryConnectionRepository.load_all"></a>
+<a id="eric_sse.serializable.QueueRepository.delete"></a>
 
-#### load_all()
+#### delete(queue_id)
 
-Returns an Iterable of all persisted connections
+* **Parameters:**
+  **queue_id** (*str*)
 
-* **Return type:**
-  *Iterable*[[*Connection*](#eric_sse.connection.Connection)]
+<a id="eric_sse.serializable.ConnectionRepository"></a>
 
-<a id="eric_sse.persistence.InMemoryConnectionRepository.load"></a>
+### *class* ConnectionRepository
 
-#### load(channel_id)
+Bases: [`ConnectionRepositoryInterface`](#eric_sse.interfaces.ConnectionRepositoryInterface)
 
-Returns an Iterable of all persisted connections of a given channel
+<a id="eric_sse.serializable.ConnectionRepository.__init__"></a>
+
+#### \_\_init_\_(storage_engine)
+
+* **Parameters:**
+  **storage_engine** ([*KvStorageEngine*](#eric_sse.persistence.KvStorageEngine))
+
+<a id="eric_sse.serializable.ConnectionRepository.load_all"></a>
+
+#### load_all(channel_id)
 
 * **Parameters:**
   **channel_id** (*str*)
 * **Return type:**
   *Iterable*[[*Connection*](#eric_sse.connection.Connection)]
 
-<a id="eric_sse.persistence.InMemoryConnectionRepository.delete"></a>
+<a id="eric_sse.serializable.ConnectionRepository.load_one"></a>
 
-#### delete(channel_id, listener_id)
-
-Removes a persisted [`PersistableConnection`](#eric_sse.persistence.PersistableConnection) given its correspondant listener id
+#### load_one(connection_id)
 
 * **Parameters:**
-  * **channel_id** (*str*)
-  * **listener_id** (*str*)
+  **connection_id** (*str*)
 * **Return type:**
-  None
+  [*Connection*](#eric_sse.connection.Connection)
+
+<a id="eric_sse.serializable.ConnectionRepository.persist"></a>
+
+#### persist(connection)
+
+* **Parameters:**
+  **connection** ([*Connection*](#eric_sse.connection.Connection))
+
+<a id="eric_sse.serializable.ConnectionRepository.delete"></a>
+
+#### delete(connection_id)
+
+* **Parameters:**
+  **connection_id** (*str*)
+
+<a id="eric_sse.serializable.ChannelRepository"></a>
+
+### *class* ChannelRepository
+
+Bases: [`ChannelRepositoryInterface`](#eric_sse.interfaces.ChannelRepositoryInterface)
+
+<a id="eric_sse.serializable.ChannelRepository.__init__"></a>
+
+#### \_\_init_\_(storage_engine)
+
+* **Parameters:**
+  **storage_engine** ([*KvStorageEngine*](#eric_sse.persistence.KvStorageEngine))
+
+<a id="eric_sse.serializable.ChannelRepository.load_all"></a>
+
+#### load_all()
+
+* **Return type:**
+  *Iterable*[[*AbstractChannel*](#eric_sse.entities.AbstractChannel)]
+
+<a id="eric_sse.serializable.ChannelRepository.load_one"></a>
+
+#### load_one(channel_id)
+
+* **Parameters:**
+  **channel_id** (*str*)
+* **Return type:**
+  [*AbstractChannel*](#eric_sse.entities.AbstractChannel)
+
+<a id="eric_sse.serializable.ChannelRepository.persist"></a>
+
+#### persist(channel)
+
+* **Parameters:**
+  **channel** ([*AbstractChannel*](#eric_sse.entities.AbstractChannel))
+
+<a id="eric_sse.serializable.ChannelRepository.delete"></a>
+
+#### delete(channel_id)
+
+* **Parameters:**
+  **channel_id** (*str*)
 
 <a id="module-eric_sse.prefabs"></a>
 
@@ -708,11 +834,17 @@ Removes a persisted [`PersistableConnection`](#eric_sse.persistence.PersistableC
 
 # Prefab channels and listeners
 
+<a id="eric_sse.prefabs.PersistableChannel"></a>
+
+### *class* PersistableChannel
+
+Bases: [`AbstractChannel`](#eric_sse.entities.AbstractChannel), [`ObjectAsKeyValuePersistenceMixin`](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin), `ABC`
+
 <a id="eric_sse.prefabs.SSEChannel"></a>
 
 ### *class* SSEChannel
 
-Bases: [`AbstractChannel`](#eric_sse.entities.AbstractChannel), [`PersistableChannel`](#eric_sse.persistence.PersistableChannel)
+Bases: [`PersistableChannel`](#eric_sse.prefabs.PersistableChannel)
 
 SSE streaming channel.
 See [Mozilla docs](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
@@ -721,12 +853,11 @@ Currently, ‘id’ field is not supported.
 
 <a id="eric_sse.prefabs.SSEChannel.__init__"></a>
 
-#### \_\_init_\_(stream_delay_seconds=0, retry_timeout_milliseconds=5, connections_repository=None, channel_id=None)
+#### \_\_init_\_(stream_delay_seconds=0, retry_timeout_milliseconds=5, channel_id=None)
 
 * **Parameters:**
   * **stream_delay_seconds** (*int*)
   * **retry_timeout_milliseconds** (*int*)
-  * **connections_repository** ([*ConnectionRepositoryInterface*](#eric_sse.persistence.ConnectionRepositoryInterface) *|* *None*)
   * **channel_id** (*str* *|* *None*)
 
 <a id="eric_sse.prefabs.SSEChannel.kv_key"></a>
@@ -735,9 +866,9 @@ Currently, ‘id’ field is not supported.
 
 The key to use when persisting object
 
-<a id="eric_sse.prefabs.SSEChannel.kv_value_as_dict"></a>
+<a id="eric_sse.prefabs.SSEChannel.kv_setup_values_as_dict"></a>
 
-#### *property* kv_value_as_dict *: dict*
+#### *property* kv_setup_values_as_dict *: dict*
 
 Returns value that will be persisted as a dictionary.
 
@@ -747,9 +878,9 @@ Returns value that will be persisted as a dictionary.
 
 Class constructor parameters as dict
 
-<a id="eric_sse.prefabs.SSEChannel.setup_by_dict"></a>
+<a id="eric_sse.prefabs.SSEChannel.kv_setup_by_dict"></a>
 
-#### setup_by_dict(setup)
+#### kv_setup_by_dict(setup)
 
 Does necessary post-creation setup of object given its persisted values
 
@@ -885,8 +1016,6 @@ Bases: [`SSEChannel`](#eric_sse.prefabs.SSEChannel)
 <a id="eric_sse.prefabs.SimpleDistributedApplicationChannel.register_listener"></a>
 
 #### register_listener(listener)
-
-Registers listener and creates corresponding queue with persistence support
 
 * **Parameters:**
   **listener** ([*SimpleDistributedApplicationListener*](#eric_sse.prefabs.SimpleDistributedApplicationListener))
@@ -1104,6 +1233,10 @@ Bases: `ABC`
 
 Abstract base class for queues (FIFO).
 
+<a id="eric_sse.queues.Queue.id"></a>
+
+#### *abstract property* id *: str*
+
 <a id="eric_sse.queues.Queue.pop"></a>
 
 #### *abstract* pop()
@@ -1154,7 +1287,7 @@ Raised when trying to fetch from an empty queue
 
 Raised when an unexpected error occurs while trying to fetch messages from a queue.
 
-Concrete implementations of [`ObjectRepositoryInterface`](#eric_sse.persistence.ObjectRepositoryInterface) should wrap here the unexpected exceptions they catch before raising.
+Concrete implementations of `ObjectRepositoryInterface` should wrap here the unexpected exceptions they catch before raising.
 
 <a id="module-eric_sse.profile"></a>
 
@@ -1166,7 +1299,7 @@ Concrete implementations of [`ObjectRepositoryInterface`](#eric_sse.persistence.
 
 ### *class* ListenerWrapper
 
-Bases: [`PersistableListener`](#eric_sse.persistence.PersistableListener)
+Bases: [`PersistableListener`](#eric_sse.listener.PersistableListener)
 
 Wraps a listener to profile its on_message method.
 
