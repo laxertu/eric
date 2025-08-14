@@ -708,7 +708,7 @@ For validation purposes you can override its <a class="reference internal" href=
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.connection.Connection.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'0658a107-8c5f-4924-a3d8-604db5ca1cbe'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.connection.Connection.__init__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'b4bd2738-c5e8-4d7d-9813-c7f5e9c0a66b'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.connection.Connection.__init__" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1004,8 +1004,6 @@ For validation purposes you can override its <a class="reference internal" href=
 <a class="reference internal image-reference" href="_images/persistence-layer-connections.png"><img alt="_images/persistence-layer-connections.png" src="_images/persistence-layer-connections.png" style="width: 468.0px; height: 292.0px;" />
 </a>
 <p id="module-eric_sse.persistence">This module is intended to those who want to create their own persistence layer</p>
-<p>A <strong>Redis</strong> concrete implementation of interfaces is available at  <a class="reference external" href="https://github.com/laxertu/eric-redis-queues/blob/master/eric_redis_queues/__init__.py">eric-redis-queues package source</a>.</p>
-<p>Here is a <a class="reference external" href="https://github.com/laxertu/eric/blob/master/examples/use_cases/basic.py">Basic example</a> of integration.</p>
 <p><strong>Writing a custom persistence layer</strong></p>
 <p>You’ll need to implement the following interfaces:</p>
 <p><strong>Channels</strong></p>
@@ -1041,7 +1039,7 @@ serializable by pickle, for example, if your Queues implementation wraps some in
 
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_setup_values_as_dict">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kv_setup_values_as_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">&lt;property</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x77bf980ebf10&gt;</span></em><a class="headerlink" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_setup_values_as_dict" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kv_setup_values_as_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">&lt;property</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x7a0fa7053830&gt;</span></em><a class="headerlink" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_setup_values_as_dict" title="Link to this definition">#</a></dt>
 <dd><p>Returns value that will be persisted as a dictionary.</p>
 </dd></dl>
 
@@ -1051,7 +1049,7 @@ serializable by pickle, for example, if your Queues implementation wraps some in
 <dd><p>Does necessary post-creation setup of object given its persisted values</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>setup</strong> (<em>&lt;property object at 0x77bf980ebf10&gt;</em>)</p>
+<dd class="field-odd"><p><strong>setup</strong> (<em>&lt;property object at 0x7a0fa7053830&gt;</em>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1064,7 +1062,7 @@ serializable by pickle, for example, if your Queues implementation wraps some in
 
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_constructor_params_as_dict">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kv_constructor_params_as_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">&lt;property</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x77bf980ebf10&gt;</span></em><a class="headerlink" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_constructor_params_as_dict" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kv_constructor_params_as_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">&lt;property</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x7a0fa7053830&gt;</span></em><a class="headerlink" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_constructor_params_as_dict" title="Link to this definition">#</a></dt>
 <dd><p>Class constructor parameters as dict</p>
 </dd></dl>
 

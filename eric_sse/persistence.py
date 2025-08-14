@@ -1,10 +1,6 @@
 """
 This module is intended to those who want to create their own persistence layer
 
-A **Redis** concrete implementation of interfaces is available at  `eric-redis-queues package source <https://github.com/laxertu/eric-redis-queues/blob/master/eric_redis_queues/__init__.py>`_.
-
-Here is a `Basic example <https://github.com/laxertu/eric/blob/master/examples/use_cases/basic.py>`_ of integration.
-
 **Writing a custom persistence layer**
 
 You'll need to implement the following interfaces:

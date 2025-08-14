@@ -147,7 +147,7 @@ A connection is just a listener and its related message queue
 
 <a id="eric_sse.connection.Connection.__init__"></a>
 
-#### \_\_init_\_(listener, queue, id='0658a107-8c5f-4924-a3d8-604db5ca1cbe')
+#### \_\_init_\_(listener, queue, id='b4bd2738-c5e8-4d7d-9813-c7f5e9c0a66b')
 
 * **Parameters:**
   * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
@@ -396,10 +396,6 @@ Class constructor parameters as dict
 
 This module is intended to those who want to create their own persistence layer
 
-A **Redis** concrete implementation of interfaces is available at  [eric-redis-queues package source](https://github.com/laxertu/eric-redis-queues/blob/master/eric_redis_queues/__init__.py).
-
-Here is a [Basic example](https://github.com/laxertu/eric/blob/master/examples/use_cases/basic.py) of integration.
-
 **Writing a custom persistence layer**
 
 You’ll need to implement the following interfaces:
@@ -442,7 +438,7 @@ The key to use when persisting object
 
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_setup_values_as_dict"></a>
 
-#### *abstract property* kv_setup_values_as_dict *: <property object at 0x77bf980ebf10>*
+#### *abstract property* kv_setup_values_as_dict *: <property object at 0x7a0fa7053830>*
 
 Returns value that will be persisted as a dictionary.
 
@@ -453,7 +449,7 @@ Returns value that will be persisted as a dictionary.
 Does necessary post-creation setup of object given its persisted values
 
 * **Parameters:**
-  **setup** ( *<property object at 0x77bf980ebf10>*)
+  **setup** ( *<property object at 0x7a0fa7053830>*)
 
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_class_absolute_path"></a>
 
@@ -463,7 +459,7 @@ Returns class full path as string
 
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_constructor_params_as_dict"></a>
 
-#### *abstract property* kv_constructor_params_as_dict *: <property object at 0x77bf980ebf10>*
+#### *abstract property* kv_constructor_params_as_dict *: <property object at 0x7a0fa7053830>*
 
 Class constructor parameters as dict
 
