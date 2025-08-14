@@ -375,7 +375,7 @@ document.write(`
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#persistence">Persistence</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin"><code class="docutils literal notranslate"><span class="pre">ObjectAsKeyValuePersistenceMixin</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.dict"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_as_dict"><code class="docutils literal notranslate"><span class="pre">kv_as_dict</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_key"><code class="docutils literal notranslate"><span class="pre">kv_key</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_setup_values_as_dict"><code class="docutils literal notranslate"><span class="pre">kv_setup_values_as_dict</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_setup_by_dict"><code class="docutils literal notranslate"><span class="pre">kv_setup_by_dict()</span></code></a></li>
@@ -708,7 +708,7 @@ For validation purposes you can override its <a class="reference internal" href=
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.connection.Connection.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'b4bd2738-c5e8-4d7d-9813-c7f5e9c0a66b'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.connection.Connection.__init__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ea370f53-e54f-4ad3-ae17-0011bbd65ea6'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.connection.Connection.__init__" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1027,8 +1027,8 @@ serializable by pickle, for example, if your Queues implementation wraps some in
 <p>For this reason, the idea is that dict values should be serializable by pickle too.</p>
 <p>see <a class="reference internal" href="#eric_sse.persistence.importlib_create_instance" title="eric_sse.persistence.importlib_create_instance"><code class="xref py py-func docutils literal notranslate"><span class="pre">importlib_create_instance()</span></code></a></p>
 <dl class="py property">
-<dt class="sig sig-object py" id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.dict">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dict</span></span><a class="headerlink" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.dict" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_as_dict">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kv_as_dict</span></span><a class="headerlink" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_as_dict" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
@@ -1039,7 +1039,7 @@ serializable by pickle, for example, if your Queues implementation wraps some in
 
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_setup_values_as_dict">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kv_setup_values_as_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">&lt;property</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x7a0fa7053830&gt;</span></em><a class="headerlink" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_setup_values_as_dict" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kv_setup_values_as_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_setup_values_as_dict" title="Link to this definition">#</a></dt>
 <dd><p>Returns value that will be persisted as a dictionary.</p>
 </dd></dl>
 
@@ -1049,7 +1049,7 @@ serializable by pickle, for example, if your Queues implementation wraps some in
 <dd><p>Does necessary post-creation setup of object given its persisted values</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>setup</strong> (<em>&lt;property object at 0x7a0fa7053830&gt;</em>)</p>
+<dd class="field-odd"><p><strong>setup</strong> (<em>dict</em>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1062,7 +1062,7 @@ serializable by pickle, for example, if your Queues implementation wraps some in
 
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_constructor_params_as_dict">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kv_constructor_params_as_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">&lt;property</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x7a0fa7053830&gt;</span></em><a class="headerlink" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_constructor_params_as_dict" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">kv_constructor_params_as_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_constructor_params_as_dict" title="Link to this definition">#</a></dt>
 <dd><p>Class constructor parameters as dict</p>
 </dd></dl>
 
@@ -2275,7 +2275,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#persistence">Persistence</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin"><code class="docutils literal notranslate"><span class="pre">ObjectAsKeyValuePersistenceMixin</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.dict"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_as_dict"><code class="docutils literal notranslate"><span class="pre">kv_as_dict</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_key"><code class="docutils literal notranslate"><span class="pre">kv_key</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_setup_values_as_dict"><code class="docutils literal notranslate"><span class="pre">kv_setup_values_as_dict</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_setup_by_dict"><code class="docutils literal notranslate"><span class="pre">kv_setup_by_dict()</span></code></a></li>

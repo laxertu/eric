@@ -147,7 +147,7 @@ A connection is just a listener and its related message queue
 
 <a id="eric_sse.connection.Connection.__init__"></a>
 
-#### \_\_init_\_(listener, queue, id='b4bd2738-c5e8-4d7d-9813-c7f5e9c0a66b')
+#### \_\_init_\_(listener, queue, id='ea370f53-e54f-4ad3-ae17-0011bbd65ea6')
 
 * **Parameters:**
   * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
@@ -426,9 +426,9 @@ For this reason, the idea is that dict values should be serializable by pickle t
 
 see [`importlib_create_instance()`](#eric_sse.persistence.importlib_create_instance)
 
-<a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.dict"></a>
+<a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_as_dict"></a>
 
-#### *property* dict
+#### *property* kv_as_dict
 
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_key"></a>
 
@@ -438,7 +438,7 @@ The key to use when persisting object
 
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_setup_values_as_dict"></a>
 
-#### *abstract property* kv_setup_values_as_dict *: <property object at 0x7a0fa7053830>*
+#### *abstract property* kv_setup_values_as_dict *: dict*
 
 Returns value that will be persisted as a dictionary.
 
@@ -449,7 +449,7 @@ Returns value that will be persisted as a dictionary.
 Does necessary post-creation setup of object given its persisted values
 
 * **Parameters:**
-  **setup** ( *<property object at 0x7a0fa7053830>*)
+  **setup** (*dict*)
 
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_class_absolute_path"></a>
 
@@ -459,7 +459,7 @@ Returns class full path as string
 
 <a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_constructor_params_as_dict"></a>
 
-#### *abstract property* kv_constructor_params_as_dict *: <property object at 0x7a0fa7053830>*
+#### *abstract property* kv_constructor_params_as_dict *: dict*
 
 Class constructor parameters as dict
 
