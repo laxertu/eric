@@ -105,7 +105,7 @@ def importlib_create_instance(class_full_path: str, constructor_params: dict, se
     """
     Creates a persistable class instance given a persisted value and executes its setup_by_dict method
 
-    see :func:`~eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.setup_by_dict`
+    see :func:`~eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_setup_values_as_dict`
     """
     path_parts = class_full_path.split('.')
     module = '.'.join(path_parts[:-1])
