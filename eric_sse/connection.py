@@ -11,9 +11,6 @@ class Connection:
     :param ~eric_sse.listener.MessageQueueListener listener:
     :param ~eric_sse.queues.Queue queue:
     """
-    listener: MessageQueueListener
-    queue: Queue
-
     def __init__(self, listener: MessageQueueListener, queue: Queue):
         self.listener = listener
         self.queue = queue
