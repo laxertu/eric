@@ -4,7 +4,6 @@ import eric_sse
 from eric_sse.listener import MessageQueueListener, PersistableListener
 from eric_sse.queues import Queue, PersistableQueue
 
-@dataclass
 class Connection:
     """
     A connection is just a listener and its related message queue
@@ -14,8 +13,11 @@ class Connection:
     """
     listener: MessageQueueListener
     queue: Queue
-    id: str = eric_sse.generate_uuid()
 
+    def __init__(self, listener: MessageQueueListener, queue: Queue):
+        self.listener = listener
+        self.queue = queue
+        self.id = eric_sse.generate_uuid()
 
 class PersistableConnection(Connection):
     listener: PersistableListener
