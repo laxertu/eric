@@ -708,17 +708,13 @@ For validation purposes you can override its <a class="reference internal" href=
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.connection.Connection.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'e9730c7f-b828-48b7-bee7-198c71c554d7'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.connection.Connection.__init__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.connection.Connection.__init__" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>listener</strong> (<a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a>)</p></li>
 <li><p><strong>queue</strong> (<a class="reference internal" href="#eric_sse.queues.Queue" title="eric_sse.queues.Queue"><em>Queue</em></a>)</p></li>
-<li><p><strong>id</strong> (<em>str</em>)</p></li>
 </ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1123,7 +1119,7 @@ serializable by pickle, for example, if your Queues implementation wraps some in
 <dt class="sig sig-object py" id="eric_sse.persistence.importlib_create_instance">
 <span class="sig-name descname"><span class="pre">importlib_create_instance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">class_full_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constructor_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setup_values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.persistence.importlib_create_instance" title="Link to this definition">#</a></dt>
 <dd><p>Creates a persistable class instance given a persisted value and executes its setup_by_dict method</p>
-<p>see <code class="xref py py-func docutils literal notranslate"><span class="pre">setup_by_dict()</span></code></p>
+<p>see <a class="reference internal" href="#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_setup_values_as_dict" title="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_setup_values_as_dict"><code class="xref py py-func docutils literal notranslate"><span class="pre">kv_setup_values_as_dict()</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">

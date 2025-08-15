@@ -147,14 +147,11 @@ A connection is just a listener and its related message queue
 
 <a id="eric_sse.connection.Connection.__init__"></a>
 
-#### \_\_init_\_(listener, queue, id='e9730c7f-b828-48b7-bee7-198c71c554d7')
+#### \_\_init_\_(listener, queue)
 
 * **Parameters:**
   * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
   * **queue** ([*Queue*](#eric_sse.queues.Queue))
-  * **id** (*str*)
-* **Return type:**
-  None
 
 <a id="eric_sse.connection.PersistableConnection"></a>
 
@@ -498,7 +495,7 @@ Bases: `ABC`
 
 Creates a persistable class instance given a persisted value and executes its setup_by_dict method
 
-see `setup_by_dict()`
+see [`kv_setup_values_as_dict()`](#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_setup_values_as_dict)
 
 * **Parameters:**
   * **class_full_path** (*str*)
