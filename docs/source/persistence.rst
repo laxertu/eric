@@ -13,8 +13,11 @@ Persistence
 .. image:: _static/persistence-layer-connections.png
    :scale: 50 %
 
+
+Abstractions
+============
 .. automodule:: eric_sse.persistence
-    :members: KvStorageEngine, importlib_create_instance, ObjectAsKeyValuePersistenceMixin
+    :members: KvStorageEngine, ObjectAsKeyValuePersistenceMixin
     :undoc-members:
     :member-order: bysource
     :show-inheritance:
@@ -24,3 +27,19 @@ Persistence
     :undoc-members:
     :member-order: bysource
     :show-inheritance:
+
+
+In memory implementations
+=========================
+.. automodule:: eric_sse.inmemory
+    :members:
+    :show-inheritance:
+    :member-order: bysource
+
+Implementation for serializable objects
+=======================================
+.. automodule:: eric_sse.serializable
+    :undoc-members:
+    :members:
+    :show-inheritance:
+    :member-order: bysource

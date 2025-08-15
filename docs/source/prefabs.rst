@@ -10,15 +10,6 @@ Prefab channels and listeners
     :show-inheritance:
     :member-order: bysource
 
-Persistence layer implementation for serializable objects
-=========================================================
-.. automodule:: eric_sse.serializable
-    :undoc-members:
-    :members:
-    :show-inheritance:
-    :member-order: bysource
-
-
 Prefab servers and clients
 ==========================
 .. automodule:: eric_sse.servers
@@ -32,10 +23,3 @@ Prefab servers and clients
     :members:
     :member-order: bysource
 
-
-In memory implementations
-=========================
-.. automodule:: eric_sse.inmemory
-    :members:
-    :show-inheritance:
-    :member-order: bysource
