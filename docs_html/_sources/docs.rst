@@ -5,7 +5,7 @@ Reference
    :scale: 50 %
 
 
-thanks a lot https://excalidraw.com !!
+| thanks a lot https://excalidraw.com !!
 
 .. toctree::
    :maxdepth: 2
