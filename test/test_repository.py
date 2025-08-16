@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from eric_sse.queues import InMemoryQueue
-from eric_sse.serializable import ChannelRepository, ListenerRepository, QueueRepository
+from eric_sse.serializable import ChannelRepository, ListenerRepository, QueueRepository, ConnectionRepository
 from eric_sse.prefabs import SSEChannel
 from eric_sse.inmemory import InMemoryStorage
 from eric_sse.listener import MessageQueueListener
@@ -10,7 +10,16 @@ from eric_sse.listener import MessageQueueListener
 class TestChannelRepository(TestCase):
 
     def test_repositories(self):
-        sut = ChannelRepository(InMemoryStorage())
+        sut = ChannelRepository(
+            storage_engine=InMemoryStorage(),
+            connection_repository=ConnectionRepository(
+                storage_engine=InMemoryStorage(),
+                listeners_repository=ListenerRepository(InMemoryStorage()),
+                queues_repository=QueueRepository(InMemoryStorage()),
+            )
+        )
+
+
         channel = SSEChannel(stream_delay_seconds=20)
         sut.persist(channel)
 

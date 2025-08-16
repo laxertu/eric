@@ -12,7 +12,7 @@ from eric_sse.message import Message
 from eric_sse.persistence import ItemNotFound, ObjectAsKeyValuePersistenceMixin
 
 from eric_sse.interfaces import ChannelRepositoryInterface, ConnectionRepositoryInterface
-from eric_sse.serializable import ConnectionRepository
+from eric_sse.serializable import ConnectionRepository, QueueRepository, ListenerRepository
 from eric_sse.inmemory import InMemoryStorage
 
 
@@ -21,7 +21,11 @@ class PersistenceLayerRepositoryImplementation(ChannelRepositoryInterface):
 
     def __init__(self):
         self.__channels: dict[str, SSEChannel] = {}
-        self.__connection_repository = ConnectionRepository(InMemoryStorage())
+        self.__connection_repository = ConnectionRepository(
+            storage_engine=InMemoryStorage(),
+            listeners_repository=ListenerRepository(InMemoryStorage()),
+            queues_repository=QueueRepository(InMemoryStorage())
+        )
 
     @property
     def connections_repository(self) -> ConnectionRepositoryInterface:

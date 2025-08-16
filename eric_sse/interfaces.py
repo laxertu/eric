@@ -6,6 +6,7 @@ from eric_sse.connection import Connection
 from eric_sse.queues import Queue
 from eric_sse.listener import MessageQueueListener
 
+
 class ListenerRepositoryInterface(ABC):
 
     @abstractmethod
@@ -35,6 +36,16 @@ class QueueRepositoryInterface(ABC):
         pass
 
 class ConnectionRepositoryInterface(ABC):
+    @property
+    @abstractmethod
+    def queues_repository(self) -> QueueRepositoryInterface:
+        pass
+
+    @property
+    @abstractmethod
+    def listeners_repository(self) -> ListenerRepositoryInterface:
+        pass
+
 
     @abstractmethod
     def load_all(self, channel_id: str) -> Iterable[Connection]:
@@ -54,6 +65,10 @@ class ConnectionRepositoryInterface(ABC):
 
 
 class ChannelRepositoryInterface(ABC):
+    @property
+    @abstractmethod
+    def connections_repository(self) -> ConnectionRepositoryInterface:
+        pass
 
     @abstractmethod
     def load_all(self) -> Iterable[AbstractChannel]:

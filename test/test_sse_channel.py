@@ -2,7 +2,7 @@ from unittest import IsolatedAsyncioTestCase, TestCase
 
 from eric_sse.prefabs import SSEChannel
 from eric_sse.entities import Message
-from eric_sse.inmemory import InMemoryChannelRepository
+from eric_sse.inmemory import InMemoryChannelRepository, InMemoryConnectionRepository, InMemoryQueueRepository, InMemoryListenerRepository
 
 
 class SSEStreamTestCase(IsolatedAsyncioTestCase):
@@ -63,7 +63,12 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
 class SSEChannelInMemoryPersistenceTestCase(TestCase):
 
     def setUp(self):
-        self.sut = InMemoryChannelRepository()
+        self.sut = InMemoryChannelRepository(
+            connection_repository=InMemoryConnectionRepository(
+                listeners_repository=InMemoryListenerRepository(),
+                queues_repository=InMemoryQueueRepository()
+            )
+        )
 
     def test_crud(self):
         repo = self.sut

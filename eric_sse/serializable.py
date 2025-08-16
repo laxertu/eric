@@ -44,10 +44,23 @@ class QueueRepository(QueueRepositoryInterface):
 
 class ConnectionRepository(ConnectionRepositoryInterface):
 
-    def __init__(self, storage_engine: KvStorageEngine):
+    def __init__(
+            self,
+            storage_engine: KvStorageEngine,
+            listeners_repository: ListenerRepositoryInterface,
+            queues_repository: QueueRepositoryInterface
+    ):
         self.__storage_engine = storage_engine
-        self.__listener_repository = ListenerRepository(storage_engine)
-        self.__queues_repository = QueueRepository(storage_engine)
+        self.__listener_repository = listeners_repository
+        self.__queues_repository = queues_repository
+
+    @property
+    def queues_repository(self) -> QueueRepositoryInterface:
+        return self.__queues_repository
+
+    @property
+    def listeners_repository(self) -> ListenerRepositoryInterface:
+        return self.__listener_repository
 
     def load_all(self, channel_id: str) -> Iterable[Connection]:
         for obj in self.__storage_engine.fetch_all():
@@ -64,16 +77,23 @@ class ConnectionRepository(ConnectionRepositoryInterface):
 
 
 class ChannelRepository(ChannelRepositoryInterface):
-    def __init__(self, storage_engine: KvStorageEngine):
+    def __init__(self, storage_engine: KvStorageEngine, connection_repository: ConnectionRepositoryInterface):
         self.__storage_engine = storage_engine
-        self.connection_repository = ConnectionRepository(storage_engine)
+        self.__connection_repository = connection_repository
+
+    @property
+    def connections_repository(self) -> ConnectionRepositoryInterface:
+        return self.__connection_repository
 
     def load_all(self) -> Iterable[AbstractChannel]:
-        for obj in self.__storage_engine.fetch_all():
-            yield obj
+        for channel in self.__storage_engine.fetch_all():
+            yield self.load_one(channel.id)
 
     def load_one(self, channel_id: str) -> AbstractChannel:
-        return self.__storage_engine.fetch_one(channel_id)
+        channel: AbstractChannel = self.__storage_engine.fetch_one(channel_id)
+        for connection in self.__connection_repository.load_all(channel.id):
+            channel.register_connection(listener=connection.listener, queue=connection.queue)
+        return channel
 
     def persist(self, channel: AbstractChannel):
         self.__storage_engine.upsert(channel.id, channel)
