@@ -1,11 +1,12 @@
 import asyncio
 import traceback
 from abc import ABC, abstractmethod
-from typing import AsyncIterable, Any
+from typing import AsyncIterable, Any, Iterable
 
 import eric_sse
 from eric_sse.exception import InvalidListenerException, NoMessagesException, InvalidChannelException
 from eric_sse.listener import MessageQueueListener
+from eric_sse.connection import Connection
 from eric_sse.message import MessageContract, Message
 from eric_sse.queues import Queue, InMemoryQueue
 
@@ -22,13 +23,15 @@ class _ConnectionManager:
         self.__channel_id = channel_id
         self.__listeners: dict[str: MessageQueueListener] = {}
         self.__queues: dict[str: Queue] = {}
+        self.__connections: dict[str: Connection] = {}
 
-    def register_connection(self, listener: MessageQueueListener, queue: Queue):
-        self.__listeners[listener.id] = listener
-        self.__queues[listener.id] = queue
-
+    def register_connection(self, connection: Connection):
+        self.__connections[connection.listener.id] = connection
+        self.__queues[connection.listener.id] = connection.queue
+        self.__listeners[connection.listener.id] = connection.listener
 
     def remove_listener(self, listener_id: str):
+        del self.__connections[listener_id]
         del self.__queues[listener_id]
         del self.__listeners[listener_id]
 
@@ -47,6 +50,10 @@ class _ConnectionManager:
     def get_listeners(self) -> dict[str, MessageQueueListener]:
         """Returns a dict mapping listener ids to listeners"""
         return self.__listeners
+
+    def get_connections(self) -> Iterable[Connection]:
+        for listener_id, listener in self.__listeners.items():
+            yield Connection(listener=listener, queue=self.__queues[listener_id])
 
 class AbstractChannel(ABC):
     """
@@ -122,15 +129,16 @@ class AbstractChannel(ABC):
             yield event
 
     def add_listener(self) -> MessageQueueListener:
-        """Add the default listener and creates corresponding queue"""
+        """Shortcut to add an inmemory MessageQueueListener"""
         listener = MessageQueueListener()
-        self.register_connection(listener=listener, queue=InMemoryQueue())
+        self.register_connection(Connection(listener=listener, queue=InMemoryQueue()))
         return listener
 
 
-    def register_connection(self, listener: MessageQueueListener, queue: Queue):
-        """Registers a Connection with listener and queue without persistence"""
-        return self.__connection_manager.register_connection(listener, queue)
+    def register_connection(self, connection: Connection):
+        """Registers a Connection given its listener and queue"""
+        self.__connection_manager.register_connection(connection)
+
 
     def remove_listener(self, listener_id: str):
         self.__connection_manager.remove_listener(listener_id)
@@ -168,11 +176,10 @@ class AbstractChannel(ABC):
     def get_listener(self, listener_id: str) -> MessageQueueListener:
         return self.__connection_manager.get_listener(listener_id)
 
+    def get_connections(self) -> Iterable[Connection]:
+        return self.__connection_manager.get_connections()
+
     async def watch(self) -> AsyncIterable[Any]:
-        # TODO tests
         listener = self.add_listener()
         listener.start()
         return self.message_stream(listener)
-
-    def get_listeners_ids(self) -> list[str]:
-        return [l.id for l in self.__connection_manager.get_listeners().values()]

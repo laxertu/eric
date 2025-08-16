@@ -1,8 +1,6 @@
-from dataclasses import dataclass
-
 import eric_sse
-from eric_sse.listener import MessageQueueListener, PersistableListener
-from eric_sse.queues import Queue, PersistableQueue
+from eric_sse.listener import MessageQueueListener
+from eric_sse.queues import Queue
 
 class Connection:
     """
@@ -11,11 +9,7 @@ class Connection:
     :param ~eric_sse.listener.MessageQueueListener listener:
     :param ~eric_sse.queues.Queue queue:
     """
-    def __init__(self, listener: MessageQueueListener, queue: Queue):
+    def __init__(self, listener: MessageQueueListener, queue: Queue, connection_id: str | None = None):
         self.listener = listener
         self.queue = queue
-        self.id = eric_sse.generate_uuid()
-
-class PersistableConnection(Connection):
-    listener: PersistableListener
-    queue: PersistableQueue
+        self.id = connection_id or eric_sse.generate_uuid()

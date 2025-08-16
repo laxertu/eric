@@ -1,5 +1,10 @@
 from unittest import TestCase
-from eric_sse.inmemory import InMemoryStorage, ChannelRepository, ConnectionRepository, QueueRepository
+
+import pytest
+
+from eric_sse.exception import RepositoryError
+from eric_sse.inmemory import InMemoryStorage, InMemoryChannelRepository
+from eric_sse.prefabs import SSEChannel
 
 
 class TestInMemory(TestCase):
@@ -17,6 +22,25 @@ class TestInMemory(TestCase):
         self.assertEqual([x for x in sut.fetch_by_prefix('abcde')], [2])
         self.assertEqual([x for x in sut.fetch_by_prefix('zzz')], [])
 
-    def test_entities(self):
-        sut = InMemoryStorage()
-        sut.upsert('abc', 1)
+    def test_channel_repository(self):
+        sut = InMemoryChannelRepository()
+        channel = SSEChannel()
+        listener = channel.add_listener()
+
+        sut.persist(channel)
+        channel_clone = sut.load_one(channel_id=channel.id)
+        self.assertIs(
+            channel_clone.get_listener(listener_id=listener.id),
+            channel.get_listener(listener_id=listener.id)
+        )
+
+        self.assertIs(
+            channel_clone,
+            channel,
+        )
+
+        sut.delete(channel_id=channel.id)
+        with pytest.raises(RepositoryError):
+            _ = sut.load_one(channel_id=channel.id)
+
+

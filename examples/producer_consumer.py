@@ -3,8 +3,9 @@ import asyncio
 from random import uniform
 from time import sleep
 from eric_sse import get_logger
+from eric_sse.connection import Connection
 from eric_sse.entities import MESSAGE_TYPE_CLOSED
-from eric_sse.listener import MessageQueueListener, PersistableListener
+from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage
 from eric_sse.prefabs import DataProcessingChannel
 from eric_sse.queues import InMemoryQueue
@@ -20,7 +21,7 @@ class Producer:
         c.dispatch(l.id, SignedMessage(msg_type=MESSAGE_TYPE_CLOSED, sender_id='producer'))
 
 
-class Consumer(PersistableListener):
+class Consumer(MessageQueueListener):
     def on_message(self, msg: SignedMessage) -> None:
         sleep(uniform(0, 1))
         logger.info(f"Received {msg.type}: {msg.payload}")
@@ -36,7 +37,7 @@ async def main():
 
 
     listener = Consumer()
-    channel.register_connection(listener, InMemoryQueue())
+    channel.register_connection(Connection(listener=listener, queue=InMemoryQueue()))
 
     await Producer.produce_num(c=channel, l=listener, num=20)
 
