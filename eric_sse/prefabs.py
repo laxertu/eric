@@ -1,5 +1,4 @@
 import asyncio
-from abc import ABC
 from concurrent.futures import ThreadPoolExecutor, Executor
 from typing import Callable, AsyncIterable
 from eric_sse import get_logger
@@ -7,14 +6,10 @@ from eric_sse.entities import AbstractChannel
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
-from eric_sse.persistence import ObjectAsKeyValuePersistenceMixin
+from eric_sse.channel import PersistableChannel
 from eric_sse.queues import InMemoryQueue
 
 logger = get_logger()
-
-
-class PersistableChannel(AbstractChannel, ObjectAsKeyValuePersistenceMixin, ABC):
-    ...
 
 
 class SSEChannel(PersistableChannel):

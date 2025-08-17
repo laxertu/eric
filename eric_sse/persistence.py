@@ -123,4 +123,9 @@ def importlib_create_instance(class_full_path: str, constructor_params: dict, se
 
     return obj
 
-
+def create_instance(kv_values: ObjectAsKeyValuePersistenceMixin) -> ObjectAsKeyValuePersistenceMixin:
+    return importlib_create_instance(
+        class_full_path=kv_values.kv_class_absolute_path,
+        constructor_params=kv_values.kv_constructor_params_as_dict,
+        setup_values=kv_values.kv_setup_values_as_dict
+    )

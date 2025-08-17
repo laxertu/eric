@@ -1,7 +1,5 @@
 """
-If you have to persist a serializable participant, you can use this module if correspondant storage engine supports its format
-
-see :class:`~eric_sse.inmemory.InMemoryChannelRepository`
+TODO refactor and delete this
 """
 
 from typing import Iterable
@@ -47,20 +45,8 @@ class ConnectionRepository(ConnectionRepositoryInterface):
     def __init__(
             self,
             storage_engine: KvStorageEngine,
-            listeners_repository: ListenerRepositoryInterface,
-            queues_repository: QueueRepositoryInterface
     ):
         self.__storage_engine = storage_engine
-        self.__listener_repository = listeners_repository
-        self.__queues_repository = queues_repository
-
-    @property
-    def queues_repository(self) -> QueueRepositoryInterface:
-        return self.__queues_repository
-
-    @property
-    def listeners_repository(self) -> ListenerRepositoryInterface:
-        return self.__listener_repository
 
     def load_all(self, channel_id: str) -> Iterable[Connection]:
         for obj in self.__storage_engine.fetch_all():

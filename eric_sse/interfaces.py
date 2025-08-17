@@ -36,16 +36,6 @@ class QueueRepositoryInterface(ABC):
         pass
 
 class ConnectionRepositoryInterface(ABC):
-    @property
-    @abstractmethod
-    def queues_repository(self) -> QueueRepositoryInterface:
-        pass
-
-    @property
-    @abstractmethod
-    def listeners_repository(self) -> ListenerRepositoryInterface:
-        pass
-
 
     @abstractmethod
     def load_all(self, channel_id: str) -> Iterable[Connection]:

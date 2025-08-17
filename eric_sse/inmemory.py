@@ -1,6 +1,6 @@
 from typing import Iterable
 
-from eric_sse.interfaces import ListenerRepositoryInterface, QueueRepositoryInterface, ConnectionRepositoryInterface
+from eric_sse.interfaces import ConnectionRepositoryInterface
 from eric_sse.listener import MessageQueueListener
 from eric_sse.persistence import KvStorageEngine, ItemNotFound
 from eric_sse.serializable import ChannelRepository, ConnectionRepository, QueueRepository, ListenerRepository
@@ -39,13 +39,10 @@ class InMemoryStorage(KvStorageEngine):
 class InMemoryConnectionRepository(ConnectionRepository):
     def __init__(
         self,
-        listeners_repository: ListenerRepositoryInterface, queues_repository: QueueRepositoryInterface,
         connections: dict[str, Connection] = None
     ):
         super().__init__(
             storage_engine=InMemoryStorage(objects=connections or {}),
-            listeners_repository=listeners_repository,
-            queues_repository=queues_repository
         )
 
 class InMemoryChannelRepository(ChannelRepository):

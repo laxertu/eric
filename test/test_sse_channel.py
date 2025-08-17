@@ -63,12 +63,7 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
 class SSEChannelInMemoryPersistenceTestCase(TestCase):
 
     def setUp(self):
-        self.sut = InMemoryChannelRepository(
-            connection_repository=InMemoryConnectionRepository(
-                listeners_repository=InMemoryListenerRepository(),
-                queues_repository=InMemoryQueueRepository()
-            )
-        )
+        self.sut = InMemoryChannelRepository(connection_repository=InMemoryConnectionRepository())
 
     def test_crud(self):
         repo = self.sut

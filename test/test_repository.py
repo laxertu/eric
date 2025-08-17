@@ -1,7 +1,5 @@
 from unittest import TestCase
 
-import pytest
-
 import eric_sse.exception
 from eric_sse.queues import InMemoryQueue
 from eric_sse.serializable import ChannelRepository, ListenerRepository, QueueRepository, ConnectionRepository
@@ -15,11 +13,7 @@ class TestChannelRepository(TestCase):
     def test_repositories(self):
         sut = ChannelRepository(
             storage_engine=InMemoryStorage(),
-            connection_repository=ConnectionRepository(
-                storage_engine=InMemoryStorage(),
-                listeners_repository=ListenerRepository(InMemoryStorage()),
-                queues_repository=QueueRepository(InMemoryStorage()),
-            )
+            connection_repository=ConnectionRepository(storage_engine=InMemoryStorage())
         )
 
 
@@ -52,11 +46,7 @@ class TestChannelRepository(TestCase):
 
         sut = ChannelRepository(
             storage_engine=InMemoryStorage(),
-            connection_repository=ConnectionRepository(
-                storage_engine=InMemoryStorage(),
-                listeners_repository=ListenerRepository(InMemoryStorage()),
-                queues_repository=QueueRepository(InMemoryStorage()),
-            )
+            connection_repository=ConnectionRepository(storage_engine=InMemoryStorage())
         )
 
         sut.persist(sse_channel)
