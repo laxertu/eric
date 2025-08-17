@@ -1,14 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import Iterable
-
-from eric_sse.connection import Connection
 from eric_sse.interfaces import ChannelRepositoryInterface, ConnectionRepositoryInterface, ListenerRepositoryInterface, \
     QueueRepositoryInterface
-from eric_sse.persistence import KvStorageEngine, create_instance, ObjectAsKeyValuePersistenceMixin
 
-from eric_sse.queues import PersistableQueue
+from eric_sse.persistence import KvStorageEngine, ObjectAsKeyValuePersistenceMixin
 from eric_sse.channel import PersistableChannel
-from eric_sse.listener import PersistableListener
 from eric_sse.connection import Connection
 
 class ChannelStorageEngine(KvStorageEngine, ABC):
