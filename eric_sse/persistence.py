@@ -10,6 +10,11 @@ class ItemNotFound(Exception):
 
 
 class ObjectAsKeyValuePersistenceMixin(ABC):
+
+    CLASS_PATH = 'class_path'
+    CONSTRUCTOR_PARAMETERS = 'constructor_parameters'
+    SETUP_DICT = 'setup_dict'
+
     """
     Adds KV persistence support.
 
@@ -23,9 +28,9 @@ class ObjectAsKeyValuePersistenceMixin(ABC):
     @property
     def kv_as_dict(self) -> dict:
         return {
-            'class_path': self.kv_class_absolute_path,
-            'constructor_parameters': self.kv_constructor_params_as_dict,
-            'setup_dict': self.kv_setup_values_as_dict
+            ObjectAsKeyValuePersistenceMixin.CLASS_PATH: self.kv_class_absolute_path,
+            ObjectAsKeyValuePersistenceMixin.CONSTRUCTOR_PARAMETERS: self.kv_constructor_params_as_dict,
+            ObjectAsKeyValuePersistenceMixin.SETUP_DICT: self.kv_setup_values_as_dict
         }
 
     @property

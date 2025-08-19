@@ -31,7 +31,7 @@ class InMemoryStorage(KvStorageEngine):
         try:
             return self.objects[key]
         except KeyError:
-            raise ItemNotFound(key)
+            raise ItemNotFound(key) from None
 
     def delete(self, key: str):
         del InMemoryStorage.objects[key]

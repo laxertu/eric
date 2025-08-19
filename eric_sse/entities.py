@@ -1,13 +1,14 @@
 import asyncio
 import traceback
 from abc import ABC, abstractmethod
-from typing import AsyncIterable, Any
+from typing import AsyncIterable, Any, Iterable
 
 import eric_sse
 from eric_sse.exception import InvalidListenerException, NoMessagesException, InvalidChannelException
-from eric_sse.listener import MessageQueueListener
+from eric_sse.listener import MessageQueueListener, PersistableListener
+from eric_sse.connection import Connection
 from eric_sse.message import MessageContract, Message
-from eric_sse.queues import Queue, InMemoryQueue
+from eric_sse.queues import Queue, InMemoryQueue, PersistableQueue
 
 logger = eric_sse.get_logger()
 
@@ -22,11 +23,10 @@ class _ConnectionManager:
         self.__channel_id = channel_id
         self.__listeners: dict[str: MessageQueueListener] = {}
         self.__queues: dict[str: Queue] = {}
+        self.__connections: dict[str: Connection] = {}
 
-    def register_connection(self, listener: MessageQueueListener, queue: Queue):
-        self.__listeners[listener.id] = listener
-        self.__queues[listener.id] = queue
-
+    def register_connection(self, connection: Connection):
+        self.__connections[connection.id] = connection
 
     def remove_listener(self, listener_id: str):
         del self.__queues[listener_id]
@@ -47,6 +47,10 @@ class _ConnectionManager:
     def get_listeners(self) -> dict[str, MessageQueueListener]:
         """Returns a dict mapping listener ids to listeners"""
         return self.__listeners
+
+    def get_connections(self) -> Iterable[Connection]:
+        for listener_id, listener in self.__listeners.items():
+            yield Connection(listener=listener, queue=self.__queues[listener_id])
 
 class AbstractChannel(ABC):
     """
@@ -128,9 +132,9 @@ class AbstractChannel(ABC):
         return listener
 
 
-    def register_connection(self, listener: MessageQueueListener, queue: Queue):
-        """Registers a Connection with listener and queue without persistence"""
-        return self.__connection_manager.register_connection(listener, queue)
+    def register_connection(self, listener: PersistableListener, queue: PersistableQueue):
+        """Registers a Connection with listener and queue"""
+        return self.__connection_manager.register_connection(Connection(listener=listener, queue=queue))
 
     def remove_listener(self, listener_id: str):
         self.__connection_manager.remove_listener(listener_id)
@@ -167,6 +171,9 @@ class AbstractChannel(ABC):
 
     def get_listener(self, listener_id: str) -> MessageQueueListener:
         return self.__connection_manager.get_listener(listener_id)
+
+    def get_connections(self) -> Iterable[Connection]:
+        return self.__connection_manager.get_connections()
 
     async def watch(self) -> AsyncIterable[Any]:
         # TODO tests

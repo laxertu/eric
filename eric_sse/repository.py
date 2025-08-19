@@ -32,46 +32,7 @@ class ConnectionStorageEngine(KvStorageEngine, ABC):
     def fetch_by_channel_id(self, channel_id: str) -> Iterable[Connection]:
         pass
 
-class AbstractPersistableChannelRepository(ChannelRepositoryInterface, ABC):
 
-
-    def __init__(self, storage_engine: KvStorageEngine, connections_repository: ConnectionRepositoryInterface):
-        self._storage_engine = storage_engine
-        self.__connections_repository = connections_repository
-
-    @property
-    def connections_repository(self) -> ConnectionRepositoryInterface:
-        return self.__connections_repository
-
-    @abstractmethod
-    def create_instance(self, persisted_kv: ObjectAsKeyValuePersistenceMixin) -> PersistableChannel:
-        pass
-
-    def load_all(self) -> Iterable[PersistableChannel]:
-        for channel_kv in self._storage_engine.fetch_all():
-            channel = self.create_instance(channel_kv)
-            for connection in self.__connections_repository.load_all(channel_id=channel.kv_key):
-                channel.register_connection(
-                    listener=connection.listener,
-                    queue=connection.queue
-                )
-            yield channel
-
-    def load_one(self, channel_id: str) -> PersistableChannel:
-        channel = self._storage_engine.fetch_one(channel_id)
-        for connection in self.__connections_repository.load_all(channel_id=channel_id):
-            channel.register_connection(
-                listener=connection.listener,
-                queue=connection.queue
-            )
-        return channel
-
-
-    def persist(self, channel: PersistableChannel):
-        self._storage_engine.upsert(channel.kv_key, channel.kv_as_dict)
-
-    def delete(self, channel_id: str):
-        self._storage_engine.delete(channel_id)
 
 class AbstractConnectionRepository(ConnectionRepositoryInterface, ABC):
     def __init__(
@@ -100,3 +61,50 @@ class AbstractConnectionRepository(ConnectionRepositoryInterface, ABC):
 
     def delete(self, connection_id: str):
         self._storage_engine.delete(connection_id)
+
+
+class AbstractPersistableChannelRepository(ChannelRepositoryInterface, ABC):
+
+
+    def __init__(self, storage_engine: KvStorageEngine, connections_repository: ConnectionRepositoryInterface):
+        self._storage_engine = storage_engine
+        self.__connections_repository = connections_repository
+
+    @property
+    def connections_repository(self) -> ConnectionRepositoryInterface:
+        return self.__connections_repository
+
+    @abstractmethod
+    def create_instance(self, persisted_kv: dict) -> PersistableChannel:
+        pass
+
+    def load_all(self) -> Iterable[PersistableChannel]:
+        for channel_kv in self._storage_engine.fetch_all():
+            channel = self.create_instance(channel_kv)
+            for connection in self.__connections_repository.load_all(channel_id=channel.kv_key):
+                channel.register_connection(
+                    listener=connection.listener,
+                    queue=connection.queue
+                )
+            yield channel
+
+    def load_one(self, channel_id: str) -> PersistableChannel:
+        channel = self.create_instance(self._storage_engine.fetch_one(channel_id))
+        for connection in self.__connections_repository.load_all(channel_id=channel_id):
+            print("connection loaded")
+            channel.register_connection(
+                listener=connection.listener,
+                queue=connection.queue
+            )
+        return channel
+
+
+    def persist(self, channel: PersistableChannel):
+        print("persist channel")
+        self._storage_engine.upsert(channel.kv_key, channel.kv_as_dict)
+        for connection in channel.get_connections():
+            print("persisting connection", connection.id)
+            self.__connections_repository.persist(connection)
+
+    def delete(self, channel_id: str):
+        self._storage_engine.delete(channel_id)

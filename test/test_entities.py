@@ -1,5 +1,11 @@
+from typing import Any
 from unittest import TestCase
-from eric_sse.message import Message, SignedMessage, UniqueMessage
+
+from eric_sse.channel import PersistableChannel
+from eric_sse.entities import AbstractChannel
+from eric_sse.listener import MessageQueueListener
+from eric_sse.message import Message, SignedMessage, UniqueMessage, MessageContract
+from eric_sse.queues import InMemoryQueue
 
 
 class MessageContractImplementationsTestCase(TestCase):
@@ -32,3 +38,32 @@ class MessageContractImplementationsTestCase(TestCase):
         self.assertEqual('message_id', m.id)
         self.assertEqual('test', m.type)
         self.assertEqual({'a': 1}, m.payload)
+
+    def test_listeners_management(self):
+
+        class _FakeChannel(AbstractChannel):
+            def adapt(self, msg: MessageContract) -> Any:
+                return msg
+
+        fake_channel = _FakeChannel()
+        listener = fake_channel.add_listener()
+
+        connections = [connection for connection in fake_channel.get_connections()]
+        self.assertEqual(1, len(connections))
+        self.assertIs(connections[0].listener, listener)
+
+        listener2 = MessageQueueListener()
+        fake_channel.register_connection(listener=listener2, queue=InMemoryQueue())
+
+        connections = [connection for connection in fake_channel.get_connections()]
+        self.assertEqual(2, len(connections))
+        self.assertIs(connections[0].listener, listener)
+        self.assertIs(connections[1].listener, listener2)
+
+        fake_channel.remove_listener(listener.id)
+        connections = [connection for connection in fake_channel.get_connections()]
+        self.assertEqual(1, len(connections))
+        self.assertIs(connections[0].listener, listener2)
+        self.assertIs(fake_channel.get_listener(listener2.id), listener2)
+
+

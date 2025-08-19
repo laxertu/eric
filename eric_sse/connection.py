@@ -1,9 +1,7 @@
-from dataclasses import dataclass
-
 import eric_sse
 from eric_sse.listener import PersistableListener
 from eric_sse.queues import PersistableQueue
-from eric_sse.channel import ObjectAsKeyValuePersistenceMixin
+from eric_sse.persistence import ObjectAsKeyValuePersistenceMixin
 
 class Connection(ObjectAsKeyValuePersistenceMixin):
     """

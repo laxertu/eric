@@ -51,8 +51,8 @@ class SSEChannel(PersistableChannel):
         }
 
     def kv_setup_by_dict(self, setup: dict):
-        self.stream_delay_seconds = setup['stream_delay_seconds']
-        self.retry_timeout_milliseconds = setup['retry_timeout_milliseconds']
+        pass
+
 
     def adapt(self, msg: MessageContract) -> dict:
         """
