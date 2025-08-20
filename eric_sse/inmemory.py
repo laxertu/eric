@@ -1,11 +1,8 @@
 from typing import Iterable
 
-from eric_sse.interfaces import ConnectionRepositoryInterface, ChannelRepositoryInterface, QueueRepositoryInterface, \
-    ListenerRepositoryInterface
-from eric_sse.listener import MessageQueueListener
+from eric_sse.interfaces import ConnectionRepositoryInterface, ChannelRepositoryInterface
 from eric_sse.entities import AbstractChannel
 from eric_sse.connection import Connection
-from eric_sse.queues import Queue
 from eric_sse.exception import RepositoryError
 
 class InMemoryStorage:

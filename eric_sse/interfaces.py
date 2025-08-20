@@ -6,35 +6,6 @@ from eric_sse.connection import Connection
 from eric_sse.queues import Queue
 from eric_sse.listener import MessageQueueListener
 
-
-class ListenerRepositoryInterface(ABC):
-
-    @abstractmethod
-    def load(self, listener_id: str) -> MessageQueueListener:
-        pass
-
-    @abstractmethod
-    def persist(self, listener: MessageQueueListener):
-        pass
-
-    @abstractmethod
-    def delete(self, listener_id: str):
-        pass
-
-class QueueRepositoryInterface(ABC):
-
-    @abstractmethod
-    def load(self, queue_id: str) -> Queue:
-        pass
-
-    @abstractmethod
-    def persist(self, queue: Queue):
-        pass
-
-    @abstractmethod
-    def delete(self, queue_id: str):
-        pass
-
 class ConnectionRepositoryInterface(ABC):
 
     @abstractmethod
@@ -55,6 +26,8 @@ class ConnectionRepositoryInterface(ABC):
 
 
 class ChannelRepositoryInterface(ABC):
+
+    # TODO dependency with conn repo
 
     @abstractmethod
     def load_one(self, channel_id: str) -> AbstractChannel:
