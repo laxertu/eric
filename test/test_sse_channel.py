@@ -1,8 +1,11 @@
 from unittest import IsolatedAsyncioTestCase
 
+import pytest
+
+from eric_sse.exception import RepositoryError
 from eric_sse.prefabs import SSEChannel
 from eric_sse.entities import Message
-
+from eric_sse.inmemory import InMemoryChannelRepository, InMemoryConnectionRepository
 
 
 class SSEStreamTestCase(IsolatedAsyncioTestCase):
@@ -43,3 +46,27 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
             l.stop()
 
         self.assertEqual(2, total_messages_received)
+
+    async def test_integration_with_inmemory_channel_repo(self):
+        repo = InMemoryChannelRepository(
+            connections_repository=InMemoryConnectionRepository()
+        )
+        l = self.sut.add_listener()
+        self.sut.dispatch(l.id, Message(msg_type='test'))
+        repo.persist(self.sut)
+
+        channel_clone = repo.load_one(self.sut.id)
+        total_messages_received = 0
+        l.start()
+        async for _ in channel_clone.message_stream(listener=l):
+            total_messages_received += 1
+            l.stop()
+
+        self.assertEqual(1, total_messages_received)
+        repo.delete(self.sut.id)
+
+        with pytest.raises(RepositoryError):
+            _ = repo.load_one(self.sut.id)
+
+
+

@@ -39,21 +39,23 @@ class InMemoryStorage:
 class InMemoryConnectionRepository(ConnectionRepositoryInterface):
     def __init__(
         self,
-        connections: dict[str, Connection] = None
+            # mal
+        connections: InMemoryStorage = InMemoryStorage(),
     ):
         self.connections = connections or {}
 
     def load_all(self, channel_id: str) -> Iterable[Connection]:
-        pass
+        for connection in self.connections.fetch_all():
+            yield connection
 
     def load_one(self, connection_id: str) -> Connection:
-        pass
+        return self.connections.get(connection_id)
 
     def persist(self, connection: Connection):
-        pass
+        self.connections.upsert(connection.id, connection)
 
     def delete(self, connection_id: str):
-        pass
+        self.connections.delete(connection_id)
 
 
 class InMemoryChannelRepository(ChannelRepositoryInterface):
@@ -63,49 +65,22 @@ class InMemoryChannelRepository(ChannelRepositoryInterface):
             channels: dict[str, AbstractChannel] = None
     ):
         self.__connections_repository = connections_repository
-
-    @property
-    def connections_repository(self) -> ConnectionRepositoryInterface:
-        return self.__connections_repository
+        self.__channels = channels or {}
 
     def load_all(self) -> Iterable[AbstractChannel]:
         pass
 
     def load_one(self, channel_id: str) -> AbstractChannel:
-        pass
+        try:
+            return self.__channels[channel_id]
+        except KeyError:
+            raise RepositoryError(f'Item not found {channel_id}') from None
 
     def persist(self, channel: AbstractChannel):
-        pass
+        self.__channels[channel.id] = channel
 
     def delete(self, channel_id: str):
-        pass
+        del self.__channels[channel_id]
 
-
-class InMemoryQueueRepository(QueueRepositoryInterface):
-    def __init__(self, queues: dict[str, Queue] = None):
-        self.__queues = queues or {}
-
-    def load(self, queue_id: str) -> Queue:
-        pass
-
-    def persist(self, queue: Queue):
-        pass
-
-    def delete(self, queue_id: str):
-        pass
-
-
-class InMemoryListenerRepository(ListenerRepositoryInterface):
-    def __init__(self, listeners: dict[str, MessageQueueListener] = None):
-        self.__listeners = listeners or {}
-
-    def load(self, listener_id: str) -> MessageQueueListener:
-        pass
-
-    def persist(self, listener: MessageQueueListener):
-        pass
-
-    def delete(self, listener_id: str):
-        pass
 
 

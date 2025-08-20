@@ -55,14 +55,6 @@ class ConnectionRepositoryInterface(ABC):
 
 
 class ChannelRepositoryInterface(ABC):
-    @property
-    @abstractmethod
-    def connections_repository(self) -> ConnectionRepositoryInterface:
-        pass
-
-    @abstractmethod
-    def load_all(self) -> Iterable[AbstractChannel]:
-        pass
 
     @abstractmethod
     def load_one(self, channel_id: str) -> AbstractChannel:
