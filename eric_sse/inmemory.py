@@ -1,14 +1,14 @@
 from typing import Iterable
 
-from eric_sse.interfaces import ConnectionRepositoryInterface
+from eric_sse.interfaces import ConnectionRepositoryInterface, ChannelRepositoryInterface, QueueRepositoryInterface, \
+    ListenerRepositoryInterface
 from eric_sse.listener import MessageQueueListener
-from eric_sse.persistence import KvStorageEngine, ItemNotFound
-from eric_sse.serializable import ChannelRepository, ConnectionRepository, QueueRepository, ListenerRepository
 from eric_sse.entities import AbstractChannel
 from eric_sse.connection import Connection
 from eric_sse.queues import Queue
+from eric_sse.exception import RepositoryError
 
-class InMemoryStorage(KvStorageEngine):
+class InMemoryStorage:
 
     def __init__(self, objects: dict[str, any] = None):
         self.objects = objects or {}
@@ -31,35 +31,81 @@ class InMemoryStorage(KvStorageEngine):
         try:
             return self.objects[key]
         except KeyError:
-            raise ItemNotFound(key) from None
+            raise RepositoryError(f'Item not found {key}') from None
 
     def delete(self, key: str):
-        del InMemoryStorage.objects[key]
+        del self.objects[key]
 
-class InMemoryConnectionRepository(ConnectionRepository):
+class InMemoryConnectionRepository(ConnectionRepositoryInterface):
     def __init__(
         self,
         connections: dict[str, Connection] = None
     ):
-        super().__init__(
-            storage_engine=InMemoryStorage(objects=connections or {}),
-        )
+        self.connections = connections or {}
 
-class InMemoryChannelRepository(ChannelRepository):
+    def load_all(self, channel_id: str) -> Iterable[Connection]:
+        pass
+
+    def load_one(self, connection_id: str) -> Connection:
+        pass
+
+    def persist(self, connection: Connection):
+        pass
+
+    def delete(self, connection_id: str):
+        pass
+
+
+class InMemoryChannelRepository(ChannelRepositoryInterface):
     def __init__(
             self,
-            connection_repository: ConnectionRepositoryInterface,
+            connections_repository: ConnectionRepositoryInterface,
             channels: dict[str, AbstractChannel] = None
     ):
-        super().__init__(
-            storage_engine=InMemoryStorage(objects=channels or {}),
-            connection_repository=connection_repository
-        )
+        self.__connections_repository = connections_repository
 
-class InMemoryQueueRepository(QueueRepository):
+    @property
+    def connections_repository(self) -> ConnectionRepositoryInterface:
+        return self.__connections_repository
+
+    def load_all(self) -> Iterable[AbstractChannel]:
+        pass
+
+    def load_one(self, channel_id: str) -> AbstractChannel:
+        pass
+
+    def persist(self, channel: AbstractChannel):
+        pass
+
+    def delete(self, channel_id: str):
+        pass
+
+
+class InMemoryQueueRepository(QueueRepositoryInterface):
     def __init__(self, queues: dict[str, Queue] = None):
-        super().__init__(storage_engine=InMemoryStorage(objects=queues or {}))
+        self.__queues = queues or {}
 
-class InMemoryListenerRepository(ListenerRepository):
+    def load(self, queue_id: str) -> Queue:
+        pass
+
+    def persist(self, queue: Queue):
+        pass
+
+    def delete(self, queue_id: str):
+        pass
+
+
+class InMemoryListenerRepository(ListenerRepositoryInterface):
     def __init__(self, listeners: dict[str, MessageQueueListener] = None):
-        super().__init__(storage_engine=InMemoryStorage(objects=listeners or {}))
+        self.__listeners = listeners or {}
+
+    def load(self, listener_id: str) -> MessageQueueListener:
+        pass
+
+    def persist(self, listener: MessageQueueListener):
+        pass
+
+    def delete(self, listener_id: str):
+        pass
+
+

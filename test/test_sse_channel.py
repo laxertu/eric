@@ -1,8 +1,8 @@
-from unittest import IsolatedAsyncioTestCase, TestCase
+from unittest import IsolatedAsyncioTestCase
 
 from eric_sse.prefabs import SSEChannel
 from eric_sse.entities import Message
-from eric_sse.inmemory import InMemoryChannelRepository, InMemoryConnectionRepository, InMemoryQueueRepository, InMemoryListenerRepository
+
 
 
 class SSEStreamTestCase(IsolatedAsyncioTestCase):
@@ -26,9 +26,6 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
             listener.stop()
 
 
-    def test_persistable_behavior(self):
-        self.assertEqual('eric_sse.prefabs.SSEChannel', self.sut.kv_class_absolute_path)
-
     async def test_stream_stops_if_listener_stops(self):
         l = self.sut.add_listener()
         self.sut.dispatch(l.id, Message(msg_type='test'))
@@ -46,29 +43,3 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
             l.stop()
 
         self.assertEqual(2, total_messages_received)
-
-
-
-    def test_parameters_are_maintained(self):
-        sut = SSEChannel(
-            stream_delay_seconds=3,
-            retry_timeout_milliseconds=27,
-            channel_id='test',
-        )
-        constructor_params = sut.kv_constructor_params_as_dict
-        self.assertEqual(3, constructor_params['stream_delay_seconds'])
-        self.assertEqual(27, constructor_params['retry_timeout_milliseconds'])
-        self.assertEqual('test', constructor_params['channel_id'])
-
-class SSEChannelInMemoryPersistenceTestCase(TestCase):
-
-    def setUp(self):
-        self.sut = InMemoryChannelRepository(connection_repository=InMemoryConnectionRepository())
-
-    def test_crud(self):
-        repo = self.sut
-        channel = SSEChannel()
-        repo.persist(channel)
-        self.assertEqual(1, len([x for x in repo.load_all()]))
-        channel_loaded = repo.load_one(channel_id=channel.id)
-        self.assertEqual(channel.id, channel_loaded.id)

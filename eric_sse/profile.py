@@ -1,6 +1,6 @@
 import time
 
-from eric_sse.listener import MessageQueueListener, PersistableListener
+from eric_sse.listener import MessageQueueListener
 from eric_sse.message import MessageContract
 from eric_sse.prefabs import DataProcessingChannel
 from eric_sse import get_logger
@@ -8,7 +8,7 @@ from eric_sse.queues import InMemoryQueue
 
 logger = get_logger()
 
-class ListenerWrapper(PersistableListener):
+class ListenerWrapper(MessageQueueListener):
     """Wraps a listener to profile its on_message method."""
 
     def __init__(self, listener: MessageQueueListener, profile_messages: bool = False):

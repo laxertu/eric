@@ -5,10 +5,10 @@ from typing import AsyncIterable, Any, Iterable
 
 import eric_sse
 from eric_sse.exception import InvalidListenerException, NoMessagesException, InvalidChannelException
-from eric_sse.listener import MessageQueueListener, PersistableListener
+from eric_sse.listener import MessageQueueListener
 from eric_sse.connection import Connection
 from eric_sse.message import MessageContract, Message
-from eric_sse.queues import Queue, InMemoryQueue, PersistableQueue
+from eric_sse.queues import Queue, InMemoryQueue
 
 logger = eric_sse.get_logger()
 
@@ -27,6 +27,8 @@ class _ConnectionManager:
 
     def register_connection(self, connection: Connection):
         self.__connections[connection.id] = connection
+        self.__queues[connection.listener.id] = connection.queue
+        self.__listeners[connection.listener.id] = connection.listener
 
     def remove_listener(self, listener_id: str):
         del self.__queues[listener_id]
@@ -132,7 +134,7 @@ class AbstractChannel(ABC):
         return listener
 
 
-    def register_connection(self, listener: PersistableListener, queue: PersistableQueue):
+    def register_connection(self, listener: MessageQueueListener, queue: Queue):
         """Registers a Connection with listener and queue"""
         return self.__connection_manager.register_connection(Connection(listener=listener, queue=queue))
 

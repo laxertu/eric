@@ -1,5 +1,5 @@
 from unittest import TestCase
-from eric_sse.inmemory import InMemoryStorage, ChannelRepository, ConnectionRepository, QueueRepository
+from eric_sse.inmemory import InMemoryStorage
 
 
 class TestInMemory(TestCase):

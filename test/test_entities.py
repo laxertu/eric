@@ -1,7 +1,7 @@
 from typing import Any
 from unittest import TestCase
 
-from eric_sse.channel import PersistableChannel
+
 from eric_sse.entities import AbstractChannel
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import Message, SignedMessage, UniqueMessage, MessageContract
