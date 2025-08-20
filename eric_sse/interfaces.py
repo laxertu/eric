@@ -3,8 +3,6 @@ from typing import Iterable
 
 from eric_sse.entities import AbstractChannel
 from eric_sse.connection import Connection
-from eric_sse.queues import Queue
-from eric_sse.listener import MessageQueueListener
 
 class ConnectionRepositoryInterface(ABC):
 
@@ -27,7 +25,9 @@ class ConnectionRepositoryInterface(ABC):
 
 class ChannelRepositoryInterface(ABC):
 
-    # TODO dependency with conn repo
+    @abstractmethod
+    def load_all(self) -> Iterable[AbstractChannel]:
+        pass
 
     @abstractmethod
     def load_one(self, channel_id: str) -> AbstractChannel:

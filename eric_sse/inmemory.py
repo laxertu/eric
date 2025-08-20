@@ -65,7 +65,8 @@ class InMemoryChannelRepository(ChannelRepositoryInterface):
         self.__channels = channels or {}
 
     def load_all(self) -> Iterable[AbstractChannel]:
-        pass
+        for channel in self.__channels.values():
+            yield channel
 
     def load_one(self, channel_id: str) -> AbstractChannel:
         try:
