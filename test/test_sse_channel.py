@@ -48,9 +48,7 @@ class SSEStreamTestCase(IsolatedAsyncioTestCase):
         self.assertEqual(2, total_messages_received)
 
     async def test_integration_with_inmemory_channel_repo(self):
-        repo = InMemoryChannelRepository(
-            connections_repository=InMemoryConnectionRepository()
-        )
+        repo = InMemoryChannelRepository()
         l = self.sut.add_listener()
         self.sut.dispatch(l.id, Message(msg_type='test'))
         repo.persist(self.sut)

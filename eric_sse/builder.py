@@ -10,14 +10,11 @@ class ChannelBuilder:
         self.channel_repository = channel_repository
         self.connection_repository = connection_repository
 
-
     def build_one(self, channel_id: str):
         channel = self.channel_repository.load_one(channel_id)
         self._setup(channel)
         return channel
 
-
     def _setup(self, channel: AbstractChannel):
         for connection in self.connection_repository.load_all(channel.id):
             channel.register_connection(connection.listener, connection.queue)
-

@@ -58,10 +58,8 @@ class InMemoryConnectionRepository(ConnectionRepositoryInterface):
 class InMemoryChannelRepository(ChannelRepositoryInterface):
     def __init__(
             self,
-            connections_repository: ConnectionRepositoryInterface,
             channels: dict[str, AbstractChannel] = None
     ):
-        self.__connections_repository = connections_repository
         self.__channels = channels or {}
 
     def load_all(self) -> Iterable[AbstractChannel]:
