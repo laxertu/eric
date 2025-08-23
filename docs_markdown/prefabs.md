@@ -1,0 +1,394 @@
+<a id="prefabs"></a>
+
+# Prefabs
+
+<a id="module-eric_sse.prefabs"></a>
+
+<a id="prefab-channels-and-listeners"></a>
+
+# Prefab channels and listeners
+
+<a id="eric_sse.prefabs.PersistableChannel"></a>
+
+### *class* PersistableChannel
+
+Bases: [`AbstractChannel`](channels.md#eric_sse.entities.AbstractChannel), [`ObjectAsKeyValuePersistenceMixin`](persistence.md#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin), `ABC`
+
+<a id="eric_sse.prefabs.SSEChannel"></a>
+
+### *class* SSEChannel
+
+Bases: [`PersistableChannel`](#eric_sse.prefabs.PersistableChannel)
+
+SSE streaming channel.
+See [Mozilla docs](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
+
+Currently, ‘id’ field is not supported.
+
+<a id="eric_sse.prefabs.SSEChannel.__init__"></a>
+
+#### \_\_init_\_(stream_delay_seconds=0, retry_timeout_milliseconds=5, channel_id=None)
+
+* **Parameters:**
+  * **stream_delay_seconds** (*int*)
+  * **retry_timeout_milliseconds** (*int*)
+  * **channel_id** (*str* *|* *None*)
+
+<a id="eric_sse.prefabs.SSEChannel.kv_key"></a>
+
+#### *property* kv_key *: str*
+
+The key to use when persisting object
+
+<a id="eric_sse.prefabs.SSEChannel.kv_setup_values_as_dict"></a>
+
+#### *property* kv_setup_values_as_dict *: dict*
+
+Returns value that will be persisted as a dictionary.
+
+<a id="eric_sse.prefabs.SSEChannel.kv_constructor_params_as_dict"></a>
+
+#### *property* kv_constructor_params_as_dict *: dict*
+
+Class constructor parameters as dict
+
+<a id="eric_sse.prefabs.SSEChannel.kv_setup_by_dict"></a>
+
+#### kv_setup_by_dict(setup)
+
+Does necessary post-creation setup of object given its persisted values
+
+* **Parameters:**
+  **setup** (*dict*)
+
+<a id="eric_sse.prefabs.SSEChannel.adapt"></a>
+
+#### adapt(msg)
+
+SSE adapter.
+
+Returns:
+
+```default
+{
+    "event": "message type",
+    "retry": "channel time out",
+    "data": "original payload"
+}
+```
+
+* **Parameters:**
+  **msg** ([*MessageContract*](entities.md#eric_sse.message.MessageContract))
+* **Return type:**
+  dict
+
+<a id="eric_sse.prefabs.DataProcessingChannel"></a>
+
+### *class* DataProcessingChannel
+
+Bases: [`AbstractChannel`](channels.md#eric_sse.entities.AbstractChannel)
+
+Channel intended for concurrent processing of data.
+
+Relies on [concurrent.futures.Executor](https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Executor).
+Just override **adapt** method to control output returned to clients
+
+MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.
+
+<a id="eric_sse.prefabs.DataProcessingChannel.__init__"></a>
+
+#### \_\_init_\_(max_workers, stream_delay_seconds=0, executor_class=<class 'concurrent.futures.thread.ThreadPoolExecutor'>)
+
+* **Parameters:**
+  * **max_workers** (*int*) – Num of workers to use
+  * **stream_delay_seconds** (*int*) – Can be used to limit response rate of streaming. Only applies to message_stream calls.
+  * **executor_class** (*type*) – The constructor of some Executor class. Defaults to  [ThreadPoolExecutor](https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.ThreadPoolExecutor).
+
+<a id="eric_sse.prefabs.DataProcessingChannel.process_queue"></a>
+
+#### *async* process_queue(listener)
+
+Performs queue processing of a given listener, returns an AsyncIterable of dictionaries containing message process result. See **adapt** method
+
+* **Parameters:**
+  **listener** ([*MessageQueueListener*](channels.md#eric_sse.listener.MessageQueueListener))
+* **Return type:**
+  *AsyncIterable*[dict]
+
+<a id="eric_sse.prefabs.DataProcessingChannel.adapt"></a>
+
+#### adapt(msg)
+
+Returns a dictionary in the following format:
+
+```default
+{
+    "event": message type
+    "data": message payload
+}
+```
+
+* **Parameters:**
+  **msg** ([*MessageContract*](entities.md#eric_sse.message.MessageContract))
+* **Return type:**
+  dict
+
+<a id="eric_sse.prefabs.SimpleDistributedApplicationListener"></a>
+
+### *class* SimpleDistributedApplicationListener
+
+Bases: [`MessageQueueListener`](channels.md#eric_sse.listener.MessageQueueListener)
+
+Listener for distributed applications
+
+<a id="eric_sse.prefabs.SimpleDistributedApplicationListener.__init__"></a>
+
+#### \_\_init_\_()
+
+<a id="eric_sse.prefabs.SimpleDistributedApplicationListener.set_action"></a>
+
+#### set_action(name, action)
+
+Hooks a callable to a string key.
+
+Callables are selected when listener processes the message depending on its type.
+
+They should return a list of MessageContract instances corresponding to response to action requested.
+
+Reserved actions are ‘start’, ‘stop’.
+Receiving a message with one of these types will fire corresponding action.
+
+* **Parameters:**
+  * **name** (*str*)
+  * **action** (*Callable* *[* *[*[*MessageContract*](entities.md#eric_sse.message.MessageContract) *]* *,* *list* *[*[*MessageContract*](entities.md#eric_sse.message.MessageContract) *]* *]*)
+
+<a id="eric_sse.prefabs.SimpleDistributedApplicationListener.dispatch_to"></a>
+
+#### dispatch_to(receiver, msg)
+
+* **Parameters:**
+  * **receiver** ([*MessageQueueListener*](channels.md#eric_sse.listener.MessageQueueListener))
+  * **msg** ([*MessageContract*](entities.md#eric_sse.message.MessageContract))
+
+<a id="eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"></a>
+
+#### on_message(msg)
+
+Executes action corresponding to message’s type
+
+* **Parameters:**
+  **msg** ([*SignedMessage*](entities.md#eric_sse.message.SignedMessage))
+* **Return type:**
+  None
+
+<a id="eric_sse.prefabs.SimpleDistributedApplicationChannel"></a>
+
+### *class* SimpleDistributedApplicationChannel
+
+Bases: [`SSEChannel`](#eric_sse.prefabs.SSEChannel)
+
+<a id="eric_sse.prefabs.SimpleDistributedApplicationChannel.register_listener"></a>
+
+#### register_listener(listener)
+
+* **Parameters:**
+  **listener** ([*SimpleDistributedApplicationListener*](#eric_sse.prefabs.SimpleDistributedApplicationListener))
+
+<a id="module-eric_sse.servers"></a>
+
+<a id="prefab-servers-and-clients"></a>
+
+# Prefab servers and clients
+
+<a id="eric_sse.servers.ChannelContainer"></a>
+
+### *class* ChannelContainer
+
+Helper class for management of multiple channels cases of use.
+
+<a id="eric_sse.servers.ChannelContainer.__init__"></a>
+
+#### \_\_init_\_()
+
+<a id="eric_sse.servers.ChannelContainer.register"></a>
+
+#### register(channel)
+
+* **Parameters:**
+  **channel** ([*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel))
+* **Return type:**
+  None
+
+<a id="eric_sse.servers.ChannelContainer.register_iterable"></a>
+
+#### register_iterable(channels)
+
+* **Parameters:**
+  **channels** (*Iterable* *[*[*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel) *]*)
+* **Return type:**
+  None
+
+<a id="eric_sse.servers.ChannelContainer.get"></a>
+
+#### get(channel_id)
+
+* **Parameters:**
+  **channel_id** (*str*)
+* **Return type:**
+  [*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel)
+
+<a id="eric_sse.servers.ChannelContainer.rm"></a>
+
+#### rm(channel_id)
+
+* **Parameters:**
+  **channel_id** (*str*)
+
+<a id="eric_sse.servers.ChannelContainer.get_all_ids"></a>
+
+#### get_all_ids()
+
+* **Return type:**
+  *Iterable*[str]
+
+<a id="eric_sse.servers.SocketServer"></a>
+
+### *class* SocketServer
+
+An implementation of a socket server that acts as a controller to interact with library
+
+**Accepted format**: a plain JSON with the following keys:
+
+```default
+{        
+    "c": "channel id" 
+    "v": "verb" 
+    "t": "message type" 
+    "p": "message payload" 
+    "r": "receiver (listener id when verb is 'rl')"
+}
+```
+
+Possible values of **verb** identifies a supported action:
+
+```default
+"d" dispatch
+"b" broadcast
+"c" create channel
+"r" add listener
+"l" listen (opens a stream)
+"w" watch (opens a stream)
+"rl" remove a listener
+"rc" remove a channel
+```
+
+See examples
+
+<a id="eric_sse.servers.SocketServer.__init__"></a>
+
+#### \_\_init_\_(file_descriptor_path)
+
+* **Parameters:**
+  **file_descriptor_path** (*str*) – See **start** method
+
+<a id="eric_sse.servers.SocketServer.start"></a>
+
+#### *static* start(file_descriptor_path)
+
+Shortcut to start a server given a file descriptor path
+
+* **Parameters:**
+  **file_descriptor_path** (*str*) – file descriptor path, all understood by [Path](https://docs.python.org/3/library/pathlib.html#pathlib.Path) is fine
+
+<a id="eric_sse.servers.SocketServer.shutdown"></a>
+
+#### *async* shutdown()
+
+Graceful Shutdown
+
+<a id="eric_sse.servers.SocketServer.main"></a>
+
+#### *async* main()
+
+Starts the server
+
+<a id="module-eric_sse.clients"></a>
+
+<a id="eric_sse.clients.SocketClient"></a>
+
+### *class* SocketClient
+
+A little facade to interact with SocketServer
+
+<a id="eric_sse.clients.SocketClient.__init__"></a>
+
+#### \_\_init_\_(file_descriptor_path)
+
+* **Parameters:**
+  **file_descriptor_path** (*str*)
+
+<a id="eric_sse.clients.SocketClient.send_payload"></a>
+
+#### *async* send_payload(payload)
+
+Send an arbitrary payload to a socket
+
+see [`SocketServer`](#eric_sse.servers.SocketServer)
+
+* **Parameters:**
+  **payload** (*dict*)
+
+<a id="eric_sse.clients.SocketClient.create_channel"></a>
+
+#### *async* create_channel()
+
+* **Return type:**
+  str
+
+<a id="eric_sse.clients.SocketClient.register"></a>
+
+#### *async* register(channel_id)
+
+* **Parameters:**
+  **channel_id** (*str*)
+
+<a id="eric_sse.clients.SocketClient.stream"></a>
+
+#### *async* stream(channel_id, listener_id)
+
+* **Return type:**
+  *AsyncIterable*[str]
+
+<a id="eric_sse.clients.SocketClient.broadcast_message"></a>
+
+#### *async* broadcast_message(channel_id, message_type, payload)
+
+* **Parameters:**
+  * **channel_id** (*str*)
+  * **message_type** (*str*)
+  * **payload** (*str* *|* *dict* *|* *int* *|* *float*)
+
+<a id="eric_sse.clients.SocketClient.dispatch"></a>
+
+#### *async* dispatch(channel_id, receiver_id, message_type, payload)
+
+* **Parameters:**
+  * **channel_id** (*str*)
+  * **receiver_id** (*str*)
+  * **message_type** (*str*)
+  * **payload** (*str* *|* *dict* *|* *int* *|* *float*)
+
+<a id="eric_sse.clients.SocketClient.remove_listener"></a>
+
+#### *async* remove_listener(channel_id, listener_id)
+
+* **Parameters:**
+  * **channel_id** (*str*)
+  * **listener_id** (*str*)
+
+<a id="eric_sse.clients.SocketClient.remove_channel"></a>
+
+#### *async* remove_channel(channel_id)
+
+* **Parameters:**
+  **channel_id** (*str*)
