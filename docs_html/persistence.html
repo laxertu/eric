@@ -420,7 +420,8 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.interfaces.QueueRepositoryInterface.persist">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">persist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.QueueRepositoryInterface.persist" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Persists queue and assign to connection.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>connection_id</strong> (<em>str</em>)</p></li>
@@ -464,7 +465,8 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.interfaces.ListenerRepositoryInterface.persist">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">persist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listener</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ListenerRepositoryInterface.persist" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Persists listener and assign to connection.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>connection_id</strong> (<em>str</em>)</p></li>
@@ -504,7 +506,8 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.interfaces.ConnectionRepositoryInterface.load_all">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ConnectionRepositoryInterface.load_all" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Loads all connections managed by a given channel</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>channel_id</strong> (<em>str</em>)</p>
 </dd>
@@ -517,7 +520,8 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.interfaces.ConnectionRepositoryInterface.load_one">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ConnectionRepositoryInterface.load_one" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Loads a connection given the connection and channel id it belongs to.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>channel_id</strong> (<em>str</em>)</p></li>
@@ -533,7 +537,8 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.interfaces.ConnectionRepositoryInterface.persist">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">persist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ConnectionRepositoryInterface.persist" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Persists a connection and assign it to a channel.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>channel_id</strong> (<em>str</em>)</p></li>
@@ -546,7 +551,8 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.interfaces.ConnectionRepositoryInterface.delete">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ConnectionRepositoryInterface.delete" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Deletes a connection given the connection and channel id it belongs to.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>channel_id</strong> (<em>str</em>)</p></li>
@@ -565,17 +571,20 @@ document.write(`
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.interfaces.ChannelRepositoryInterface.connections_factory">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connections_factory</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="channels.html#eric_sse.connection.ConnectionsFactory" title="eric_sse.connection.ConnectionsFactory"><span class="pre">ConnectionsFactory</span></a></em><a class="headerlink" href="#eric_sse.interfaces.ChannelRepositoryInterface.connections_factory" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>The connections factory that will be injected into concrete channel instances.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.interfaces.ChannelRepositoryInterface.connections_repository">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connections_repository</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#eric_sse.interfaces.ConnectionRepositoryInterface" title="eric_sse.interfaces.ConnectionRepositoryInterface"><span class="pre">ConnectionRepositoryInterface</span></a></em><a class="headerlink" href="#eric_sse.interfaces.ChannelRepositoryInterface.connections_repository" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Repository to be used to persist connections.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.interfaces.ChannelRepositoryInterface.load_all">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ChannelRepositoryInterface.load_all" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Loads all channels</p>
+<dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><em>Iterable</em>[<a class="reference internal" href="channels.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a>]</p>
 </dd>
@@ -585,7 +594,8 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.interfaces.ChannelRepositoryInterface.load_one">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ChannelRepositoryInterface.load_one" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Loads a channel given its it</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>channel_id</strong> (<em>str</em>)</p>
 </dd>
@@ -598,7 +608,8 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.interfaces.ChannelRepositoryInterface.persist">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">persist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ChannelRepositoryInterface.persist" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Persists a channel</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>channel</strong> (<a class="reference internal" href="channels.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a>)</p>
 </dd>
@@ -608,7 +619,8 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.interfaces.ChannelRepositoryInterface.delete">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ChannelRepositoryInterface.delete" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Deletes a channel given its it</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>channel_id</strong> (<em>str</em>)</p>
 </dd>
@@ -618,7 +630,8 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.interfaces.ChannelRepositoryInterface.create">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ChannelRepositoryInterface.create" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Creates a new channel and configures it depending on channel_data.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>channel_data</strong> (<em>dict</em>)</p>
 </dd>
@@ -637,6 +650,7 @@ document.write(`
 <dt class="sig sig-object py" id="eric_sse.repository.KvStorage">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">KvStorage</span></span><a class="headerlink" href="#eric_sse.repository.KvStorage" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Represents a Key Value storage engine. Provides functionalities do load, persist and find by key prefix</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.repository.KvStorage.fetch_by_prefix">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_by_prefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvStorage.fetch_by_prefix" title="Link to this definition">#</a></dt>
@@ -702,6 +716,7 @@ document.write(`
 <dt class="sig sig-object py" id="eric_sse.repository.InMemoryStorage">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">InMemoryStorage</span></span><a class="headerlink" href="#eric_sse.repository.InMemoryStorage" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">KvStorage</span></code></a></p>
+<p>In memory implementation</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.repository.InMemoryStorage.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.InMemoryStorage.__init__" title="Link to this definition">#</a></dt>
@@ -777,6 +792,8 @@ document.write(`
 <dt class="sig sig-object py" id="eric_sse.repository.AbstractChannelRepository">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AbstractChannelRepository</span></span><a class="headerlink" href="#eric_sse.repository.AbstractChannelRepository" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#eric_sse.interfaces.ChannelRepositoryInterface" title="eric_sse.interfaces.ChannelRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelRepositoryInterface</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Abstract base class for channel repositories.</p>
+<p>Builds channels before return them using injected repositories</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.repository.AbstractChannelRepository.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">storage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connections_repository</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connections_factory</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.AbstractChannelRepository.__init__" title="Link to this definition">#</a></dt>
@@ -794,17 +811,20 @@ document.write(`
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.repository.AbstractChannelRepository.connections_factory">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connections_factory</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="channels.html#eric_sse.connection.ConnectionsFactory" title="eric_sse.connection.ConnectionsFactory"><span class="pre">ConnectionsFactory</span></a></em><a class="headerlink" href="#eric_sse.repository.AbstractChannelRepository.connections_factory" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>The connections factory that will be injected into concrete channel instances.</p>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.repository.AbstractChannelRepository.connections_repository">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connections_repository</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#eric_sse.interfaces.ConnectionRepositoryInterface" title="eric_sse.interfaces.ConnectionRepositoryInterface"><span class="pre">ConnectionRepositoryInterface</span></a></em><a class="headerlink" href="#eric_sse.repository.AbstractChannelRepository.connections_repository" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Repository to be used to persist connections.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.repository.AbstractChannelRepository.load_all">
 <span class="sig-name descname"><span class="pre">load_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.AbstractChannelRepository.load_all" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Loads all channels</p>
+<dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><em>Iterable</em>[<a class="reference internal" href="channels.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a>]</p>
 </dd>
@@ -814,7 +834,8 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.repository.AbstractChannelRepository.load_one">
 <span class="sig-name descname"><span class="pre">load_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.AbstractChannelRepository.load_one" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Loads a channel given its it</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>channel_id</strong> (<em>str</em>)</p>
 </dd>
@@ -827,7 +848,8 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.repository.AbstractChannelRepository.persist">
 <span class="sig-name descname"><span class="pre">persist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.AbstractChannelRepository.persist" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Persists a channel</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>channel</strong> (<a class="reference internal" href="channels.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a>)</p>
 </dd>
@@ -837,7 +859,8 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.repository.AbstractChannelRepository.delete">
 <span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.AbstractChannelRepository.delete" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Deletes a channel given its it</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>channel_id</strong> (<em>str</em>)</p>
 </dd>
@@ -850,6 +873,9 @@ document.write(`
 <dt class="sig sig-object py" id="eric_sse.repository.ConnectionRepository">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConnectionRepository</span></span><a class="headerlink" href="#eric_sse.repository.ConnectionRepository" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#eric_sse.interfaces.ConnectionRepositoryInterface" title="eric_sse.interfaces.ConnectionRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectionRepositoryInterface</span></code></a></p>
+<p>Concrete Connection Repository</p>
+<p>Relies on <a class="reference internal" href="#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">KvStorage</span></code></a> abstraction for final writes of connections data, and on
+correspondant repositories for related objects ones.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.repository.ConnectionRepository.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">storage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listeners_repository</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queues_repository</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.ConnectionRepository.__init__" title="Link to this definition">#</a></dt>
@@ -877,7 +903,8 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.repository.ConnectionRepository.load_all">
 <span class="sig-name descname"><span class="pre">load_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.ConnectionRepository.load_all" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Loads all connections managed by a given channel</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>channel_id</strong> (<em>str</em>)</p>
 </dd>
@@ -890,7 +917,8 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.repository.ConnectionRepository.load_one">
 <span class="sig-name descname"><span class="pre">load_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.ConnectionRepository.load_one" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Loads a connection given the connection and channel id it belongs to.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>channel_id</strong> (<em>str</em>)</p></li>
@@ -906,7 +934,8 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.repository.ConnectionRepository.persist">
 <span class="sig-name descname"><span class="pre">persist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.ConnectionRepository.persist" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Persists a connection and assign it to a channel.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>channel_id</strong> (<em>str</em>)</p></li>
@@ -919,7 +948,8 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.repository.ConnectionRepository.delete">
 <span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.ConnectionRepository.delete" title="Link to this definition">#</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Deletes a connection given the connection and channel id it belongs to.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>channel_id</strong> (<em>str</em>)</p></li>

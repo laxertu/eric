@@ -8,6 +8,8 @@ from eric_sse.interfaces import ChannelRepositoryInterface, ConnectionRepository
 from eric_sse.exception import RepositoryError
 
 class KvStorage(ABC):
+    """Represents a Key Value storage engine. Provides functionalities do load, persist and find by key prefix"""
+
     @abstractmethod
     def fetch_by_prefix(self, prefix: str) -> Iterable[Any]:
         pass
@@ -30,7 +32,7 @@ class KvStorage(ABC):
 
 
 class InMemoryStorage(KvStorage):
-
+    """In memory implementation"""
     def __init__(self, items: dict[str, Any] = None):
         self.items = items or {}
 
@@ -56,6 +58,11 @@ class InMemoryStorage(KvStorage):
         del self.items[key]
 
 class AbstractChannelRepository(ChannelRepositoryInterface, ABC):
+    """
+    Abstract base class for channel repositories.
+
+    Builds channels before return them using injected repositories
+    """
     def __init__(
             self,
             storage: KvStorage,
@@ -110,6 +117,12 @@ class AbstractChannelRepository(ChannelRepositoryInterface, ABC):
         self.__storage.delete(channel_id)
 
 class ConnectionRepository(ConnectionRepositoryInterface):
+    """
+    Concrete Connection Repository
+
+    Relies on :class:`~eric_sse.repository.KvStorage` abstraction for final writes of connections data, and on
+    correspondant repositories for related objects ones.
+    """
     def __init__(
             self,
             storage: KvStorage,

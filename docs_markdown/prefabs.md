@@ -174,6 +174,8 @@ Bases: [`AbstractChannelRepository`](persistence.md#eric_sse.repository.Abstract
 
 #### create(channel_data)
 
+Creates a new channel and configures it depending on channel_data.
+
 * **Parameters:**
   **channel_data** (*dict*)
 * **Return type:**

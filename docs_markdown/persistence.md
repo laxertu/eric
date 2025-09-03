@@ -25,6 +25,8 @@ Loads a queue given the connection id it belongs to.
 
 #### *abstract* persist(connection_id, queue)
 
+Persists queue and assign to connection.
+
 * **Parameters:**
   * **connection_id** (*str*)
   * **queue** ([*Queue*](channels.md#eric_sse.queues.Queue))
@@ -59,6 +61,8 @@ Loads a listener given the connection id it belongs to.
 
 #### *abstract* persist(connection_id, listener)
 
+Persists listener and assign to connection.
+
 * **Parameters:**
   * **connection_id** (*str*)
   * **listener** ([*MessageQueueListener*](channels.md#eric_sse.listener.MessageQueueListener))
@@ -90,6 +94,8 @@ Bases: `ABC`
 
 #### *abstract* load_all(channel_id)
 
+Loads all connections managed by a given channel
+
 * **Parameters:**
   **channel_id** (*str*)
 * **Return type:**
@@ -98,6 +104,8 @@ Bases: `ABC`
 <a id="eric_sse.interfaces.ConnectionRepositoryInterface.load_one"></a>
 
 #### *abstract* load_one(channel_id, connection_id)
+
+Loads a connection given the connection and channel id it belongs to.
 
 * **Parameters:**
   * **channel_id** (*str*)
@@ -109,6 +117,8 @@ Bases: `ABC`
 
 #### *abstract* persist(channel_id, connection)
 
+Persists a connection and assign it to a channel.
+
 * **Parameters:**
   * **channel_id** (*str*)
   * **connection** ([*Connection*](channels.md#eric_sse.connection.Connection))
@@ -116,6 +126,8 @@ Bases: `ABC`
 <a id="eric_sse.interfaces.ConnectionRepositoryInterface.delete"></a>
 
 #### *abstract* delete(channel_id, connection_id)
+
+Deletes a connection given the connection and channel id it belongs to.
 
 * **Parameters:**
   * **channel_id** (*str*)
@@ -131,13 +143,19 @@ Bases: `ABC`
 
 #### *abstract property* connections_factory *: [ConnectionsFactory](channels.md#eric_sse.connection.ConnectionsFactory)*
 
+The connections factory that will be injected into concrete channel instances.
+
 <a id="eric_sse.interfaces.ChannelRepositoryInterface.connections_repository"></a>
 
 #### *abstract property* connections_repository *: [ConnectionRepositoryInterface](#eric_sse.interfaces.ConnectionRepositoryInterface)*
 
+Repository to be used to persist connections.
+
 <a id="eric_sse.interfaces.ChannelRepositoryInterface.load_all"></a>
 
 #### *abstract* load_all()
+
+Loads all channels
 
 * **Return type:**
   *Iterable*[[*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel)]
@@ -145,6 +163,8 @@ Bases: `ABC`
 <a id="eric_sse.interfaces.ChannelRepositoryInterface.load_one"></a>
 
 #### *abstract* load_one(channel_id)
+
+Loads a channel given its it
 
 * **Parameters:**
   **channel_id** (*str*)
@@ -155,6 +175,8 @@ Bases: `ABC`
 
 #### *abstract* persist(channel)
 
+Persists a channel
+
 * **Parameters:**
   **channel** ([*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel))
 
@@ -162,12 +184,16 @@ Bases: `ABC`
 
 #### *abstract* delete(channel_id)
 
+Deletes a channel given its it
+
 * **Parameters:**
   **channel_id** (*str*)
 
 <a id="eric_sse.interfaces.ChannelRepositoryInterface.create"></a>
 
 #### *abstract* create(channel_data)
+
+Creates a new channel and configures it depending on channel_data.
 
 * **Parameters:**
   **channel_data** (*dict*)
@@ -185,6 +211,8 @@ Bases: `ABC`
 ### *class* KvStorage
 
 Bases: `ABC`
+
+Represents a Key Value storage engine. Provides functionalities do load, persist and find by key prefix
 
 <a id="eric_sse.repository.KvStorage.fetch_by_prefix"></a>
 
@@ -231,6 +259,8 @@ Bases: `ABC`
 ### *class* InMemoryStorage
 
 Bases: [`KvStorage`](#eric_sse.repository.KvStorage)
+
+In memory implementation
 
 <a id="eric_sse.repository.InMemoryStorage.__init__"></a>
 
@@ -285,6 +315,10 @@ Bases: [`KvStorage`](#eric_sse.repository.KvStorage)
 
 Bases: [`ChannelRepositoryInterface`](#eric_sse.interfaces.ChannelRepositoryInterface), `ABC`
 
+Abstract base class for channel repositories.
+
+Builds channels before return them using injected repositories
+
 <a id="eric_sse.repository.AbstractChannelRepository.__init__"></a>
 
 #### \_\_init_\_(storage, connections_repository, connections_factory)
@@ -298,13 +332,19 @@ Bases: [`ChannelRepositoryInterface`](#eric_sse.interfaces.ChannelRepositoryInte
 
 #### *property* connections_factory *: [ConnectionsFactory](channels.md#eric_sse.connection.ConnectionsFactory)*
 
+The connections factory that will be injected into concrete channel instances.
+
 <a id="eric_sse.repository.AbstractChannelRepository.connections_repository"></a>
 
 #### *property* connections_repository *: [ConnectionRepositoryInterface](#eric_sse.interfaces.ConnectionRepositoryInterface)*
 
+Repository to be used to persist connections.
+
 <a id="eric_sse.repository.AbstractChannelRepository.load_all"></a>
 
 #### load_all()
+
+Loads all channels
 
 * **Return type:**
   *Iterable*[[*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel)]
@@ -312,6 +352,8 @@ Bases: [`ChannelRepositoryInterface`](#eric_sse.interfaces.ChannelRepositoryInte
 <a id="eric_sse.repository.AbstractChannelRepository.load_one"></a>
 
 #### load_one(channel_id)
+
+Loads a channel given its it
 
 * **Parameters:**
   **channel_id** (*str*)
@@ -322,12 +364,16 @@ Bases: [`ChannelRepositoryInterface`](#eric_sse.interfaces.ChannelRepositoryInte
 
 #### persist(channel)
 
+Persists a channel
+
 * **Parameters:**
   **channel** ([*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel))
 
 <a id="eric_sse.repository.AbstractChannelRepository.delete"></a>
 
 #### delete(channel_id)
+
+Deletes a channel given its it
 
 * **Parameters:**
   **channel_id** (*str*)
@@ -337,6 +383,11 @@ Bases: [`ChannelRepositoryInterface`](#eric_sse.interfaces.ChannelRepositoryInte
 ### *class* ConnectionRepository
 
 Bases: [`ConnectionRepositoryInterface`](#eric_sse.interfaces.ConnectionRepositoryInterface)
+
+Concrete Connection Repository
+
+Relies on [`KvStorage`](#eric_sse.repository.KvStorage) abstraction for final writes of connections data, and on
+correspondant repositories for related objects ones.
 
 <a id="eric_sse.repository.ConnectionRepository.__init__"></a>
 
@@ -359,6 +410,8 @@ Bases: [`ConnectionRepositoryInterface`](#eric_sse.interfaces.ConnectionReposito
 
 #### load_all(channel_id)
 
+Loads all connections managed by a given channel
+
 * **Parameters:**
   **channel_id** (*str*)
 * **Return type:**
@@ -367,6 +420,8 @@ Bases: [`ConnectionRepositoryInterface`](#eric_sse.interfaces.ConnectionReposito
 <a id="eric_sse.repository.ConnectionRepository.load_one"></a>
 
 #### load_one(channel_id, connection_id)
+
+Loads a connection given the connection and channel id it belongs to.
 
 * **Parameters:**
   * **channel_id** (*str*)
@@ -378,6 +433,8 @@ Bases: [`ConnectionRepositoryInterface`](#eric_sse.interfaces.ConnectionReposito
 
 #### persist(channel_id, connection)
 
+Persists a connection and assign it to a channel.
+
 * **Parameters:**
   * **channel_id** (*str*)
   * **connection** ([*Connection*](channels.md#eric_sse.connection.Connection))
@@ -385,6 +442,8 @@ Bases: [`ConnectionRepositoryInterface`](#eric_sse.interfaces.ConnectionReposito
 <a id="eric_sse.repository.ConnectionRepository.delete"></a>
 
 #### delete(channel_id, connection_id)
+
+Deletes a connection given the connection and channel id it belongs to.
 
 * **Parameters:**
   * **channel_id** (*str*)
