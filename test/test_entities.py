@@ -2,10 +2,12 @@ from typing import Any
 from unittest import TestCase
 
 from eric_sse.entities import AbstractChannel
+from eric_sse.exception import InvalidListenerException
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import Message, SignedMessage, UniqueMessage, MessageContract
 from eric_sse.connection import Connection, InMemoryConnectionsFactory
 from eric_sse.queues import InMemoryQueue
+from eric_sse.prefabs import SSEChannel
 
 
 class MessageContractImplementationsTestCase(TestCase):
@@ -93,5 +95,10 @@ class ConnectionsTestCase(TestCase):
         self.assertIsInstance(connection, Connection)
         self.assertIsInstance(connection.listener, MessageQueueListener)
         self.assertIsInstance(connection.queue, InMemoryQueue)
+
+    def test_listener_deletion(self):
+        sut = SSEChannel()
+        with self.assertRaises(InvalidListenerException):
+            sut.remove_listener('fake')
 
 

@@ -31,9 +31,12 @@ class _ConnectionManager:
         self.__listeners[connection.listener.id] = connection.listener
 
     def remove_listener(self, listener_id: str):
-        del self.__connections[listener_id]
-        del self.__queues[listener_id]
-        del self.__listeners[listener_id]
+        try:
+            del self.__connections[listener_id]
+            del self.__queues[listener_id]
+            del self.__listeners[listener_id]
+        except KeyError:
+            raise InvalidListenerException(listener_id) from None
 
     def get_queue(self, listener_id: str) -> Queue:
         try:
