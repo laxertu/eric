@@ -73,7 +73,7 @@ Base class for channels.
 
 Provides functionalities for listeners and message delivery management.
 
-[`ConnectionsFactory`](#eric_sse.connection.ConnectionsFactory) is the default implementation used for **connections_factory** parameter.
+[`InMemoryConnectionsFactory`](#eric_sse.connection.InMemoryConnectionsFactory) is the default implementation used for **connections_factory** parameter.
 
 see [`SSEChannel`](prefabs.md#eric_sse.prefabs.SSEChannel)
 

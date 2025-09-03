@@ -63,7 +63,7 @@ class AbstractChannel(ABC):
 
     Provides functionalities for listeners and message delivery management.
 
-    :class:`~eric_sse.connection.ConnectionsFactory` is the default implementation used for **connections_factory** parameter.
+    :class:`~eric_sse.connection.InMemoryConnectionsFactory` is the default implementation used for **connections_factory** parameter.
 
     see :class:`~eric_sse.prefabs.SSEChannel`
 
