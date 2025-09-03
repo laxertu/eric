@@ -135,7 +135,7 @@ class ConnectionRepository(ConnectionRepositoryInterface):
         return Connection(listener=listener, queue=queue, connection_id=connection_id)
 
     def load_all(self, channel_id: str) -> Iterable[Connection]:
-        for connection_data in self.__storage.fetch_by_prefix(f'{channel_id}:'):
+        for connection_data in self.__storage.fetch_by_prefix(channel_id):
             yield self._load_connection(connection_data['id'])
 
 
