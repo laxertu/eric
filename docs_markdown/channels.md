@@ -31,11 +31,35 @@ A connection is just a listener and its related message queue
 
 Bases: `ABC`
 
+<a id="eric_sse.connection.ConnectionsFactory.create"></a>
+
+#### *abstract* create(listener=None)
+
+Creates a connection
+
+* **Parameters:**
+  **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener)) – If provided, assigns a concrete listener
+* **Return type:**
+  [*Connection*](#eric_sse.connection.Connection)
+
 <a id="eric_sse.connection.InMemoryConnectionsFactory"></a>
 
 ### *class* InMemoryConnectionsFactory
 
 Bases: [`ConnectionsFactory`](#eric_sse.connection.ConnectionsFactory)
+
+Creates Connections with In memory queues (no persistence support)
+
+<a id="eric_sse.connection.InMemoryConnectionsFactory.create"></a>
+
+#### create(listener=None)
+
+Creates a connection
+
+* **Parameters:**
+  **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener)) – If provided, assigns a concrete listener
+* **Return type:**
+  [*Connection*](#eric_sse.connection.Connection)
 
 <a id="module-eric_sse.entities"></a>
 

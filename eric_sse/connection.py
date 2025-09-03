@@ -33,11 +33,16 @@ class Connection:
 class ConnectionsFactory(ABC):
     @abstractmethod
     def create(self, listener: MessageQueueListener | None = None) -> Connection:
+        """
+        Creates a connection
+
+        :param ~eric_sse.listener.MessageQueueListener listener: If provided, assigns a concrete listener
+        """
         pass
 
 
 class InMemoryConnectionsFactory(ConnectionsFactory):
-
+    """Creates Connections with In memory queues (no persistence support)"""
     def create(self, listener: MessageQueueListener | None = None) -> Connection:
         if listener is None:
             listener = MessageQueueListener()
