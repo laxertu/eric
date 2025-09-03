@@ -15,7 +15,7 @@ Queues
 ======
 .. automodule:: eric_sse.queues
     :undoc-members:
-    :members: Queue, PersistableQueue
+    :members: Queue
     :member-order: bysource
     :show-inheritance:
 
@@ -23,6 +23,6 @@ Listeners
 =========
 .. automodule:: eric_sse.listener
     :undoc-members:
-    :members: MessageQueueListener, PersistableListener
+    :members: MessageQueueListener
     :member-order: bysource
     :show-inheritance:

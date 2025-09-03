@@ -18,17 +18,24 @@ A connection is just a listener and its related message queue
 
 <a id="eric_sse.connection.Connection.__init__"></a>
 
-#### \_\_init_\_(listener, queue)
+#### \_\_init_\_(listener, queue, connection_id=None)
 
 * **Parameters:**
   * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
   * **queue** ([*Queue*](#eric_sse.queues.Queue))
+  * **connection_id** (*str* *|* *None*)
 
-<a id="eric_sse.connection.PersistableConnection"></a>
+<a id="eric_sse.connection.ConnectionsFactory"></a>
 
-### *class* PersistableConnection
+### *class* ConnectionsFactory
 
-Bases: [`Connection`](#eric_sse.connection.Connection)
+Bases: `ABC`
+
+<a id="eric_sse.connection.InMemoryConnectionsFactory"></a>
+
+### *class* InMemoryConnectionsFactory
+
+Bases: [`ConnectionsFactory`](#eric_sse.connection.ConnectionsFactory)
 
 <a id="module-eric_sse.entities"></a>
 
@@ -54,11 +61,12 @@ see [`SSEChannel`](prefabs.md#eric_sse.prefabs.SSEChannel)
 
 <a id="eric_sse.entities.AbstractChannel.__init__"></a>
 
-#### \_\_init_\_(stream_delay_seconds=0, channel_id=None)
+#### \_\_init_\_(stream_delay_seconds=0, channel_id=None, connections_factory=None)
 
 * **Parameters:**
   * **stream_delay_seconds** (*int*)
   * **channel_id** (*str* *|* *None*)
+  * **connections_factory** ([*ConnectionsFactory*](#eric_sse.connection.ConnectionsFactory) *|* *None*)
 
 <a id="eric_sse.entities.AbstractChannel.id"></a>
 
@@ -94,20 +102,19 @@ A message with type = ‘error’ is yield on invalid listener
 
 #### add_listener()
 
-Add the default listener and creates corresponding queue
+Shortcut to add an inmemory MessageQueueListener
 
 * **Return type:**
   [*MessageQueueListener*](#eric_sse.listener.MessageQueueListener)
 
-<a id="eric_sse.entities.AbstractChannel.register_connection"></a>
+<a id="eric_sse.entities.AbstractChannel.register_listener"></a>
 
-#### register_connection(listener, queue)
+#### register_listener(listener)
 
-Registers a Connection with listener and queue without persistence
+Registers a Connection given its listener and queue
 
 * **Parameters:**
-  * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
-  * **queue** ([*Queue*](#eric_sse.queues.Queue))
+  **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
 
 <a id="eric_sse.entities.AbstractChannel.deliver_next"></a>
 
@@ -155,10 +162,6 @@ Bases: `ABC`
 
 Abstract base class for queues (FIFO).
 
-<a id="eric_sse.queues.Queue.id"></a>
-
-#### *abstract property* id *: str*
-
 <a id="eric_sse.queues.Queue.pop"></a>
 
 #### *abstract* pop()
@@ -179,14 +182,6 @@ Raises a [`NoMessagesException`](exceptions.md#eric_sse.exception.NoMessagesExce
 * **Return type:**
   None
 
-<a id="eric_sse.queues.PersistableQueue"></a>
-
-### *class* PersistableQueue
-
-Bases: `AbstractQueue`, [`ObjectAsKeyValuePersistenceMixin`](persistence.md#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin), `ABC`
-
-Concrete implementations of methods should perform in **Queues** ones their I/O operations, and define in **ObjectAsKeyValuePersistenceMixin** ones their correspondant persistence strategy
-
 <a id="module-eric_sse.listener"></a>
 
 <a id="listeners"></a>
@@ -205,7 +200,10 @@ Optionally you can override on_message method if you need to inject code at mess
 
 <a id="eric_sse.listener.MessageQueueListener.__init__"></a>
 
-#### \_\_init_\_()
+#### \_\_init_\_(listener_id=None)
+
+* **Parameters:**
+  **listener_id** (*str* *|* *None*)
 
 <a id="eric_sse.listener.MessageQueueListener.on_message"></a>
 
@@ -238,38 +236,3 @@ Event handler. It executes when a message is delivered to client
 
 * **Return type:**
   bool
-
-<a id="eric_sse.listener.PersistableListener"></a>
-
-### *class* PersistableListener
-
-Bases: [`MessageQueueListener`](#eric_sse.listener.MessageQueueListener), [`ObjectAsKeyValuePersistenceMixin`](persistence.md#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin)
-
-Gives KV persistence support to MessageQueueListener.
-
-<a id="eric_sse.listener.PersistableListener.kv_key"></a>
-
-#### *property* kv_key *: str*
-
-The key to use when persisting object
-
-<a id="eric_sse.listener.PersistableListener.kv_setup_values_as_dict"></a>
-
-#### *property* kv_setup_values_as_dict *: dict*
-
-Returns value that will be persisted as a dictionary.
-
-<a id="eric_sse.listener.PersistableListener.kv_setup_by_dict"></a>
-
-#### kv_setup_by_dict(setup)
-
-Does necessary post-creation setup of object given its persisted values
-
-* **Parameters:**
-  **setup** (*dict*)
-
-<a id="eric_sse.listener.PersistableListener.kv_constructor_params_as_dict"></a>
-
-#### *property* kv_constructor_params_as_dict *: dict*
-
-Class constructor parameters as dict

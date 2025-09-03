@@ -1,149 +1,8 @@
+<a id="module-eric_sse.interfaces"></a>
+
 <a id="persistence"></a>
 
 # Persistence
-
-**Channels**
-
-![image](_static/persistence-layer-channels.png)
-
-**Connections**
-
-![image](_static/persistence-layer-connections.png)
-
-<a id="module-eric_sse.persistence"></a>
-
-<a id="abstractions"></a>
-
-# Abstractions
-
-<a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin"></a>
-
-### *class* ObjectAsKeyValuePersistenceMixin
-
-Bases: `ABC`
-
-Adds KV persistence support.
-
-By implementing this abstract mixin should be possible to persist every object that is not directly
-serializable by pickle, for example, if your Queues implementation wraps some incompatible dependency, e.g. a Redis client.
-
-For this reason, the idea is that dict values should be serializable by pickle too.
-
-see `importlib_create_instance()`
-
-<a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_as_dict"></a>
-
-#### *property* kv_as_dict *: dict*
-
-<a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_key"></a>
-
-#### *abstract property* kv_key *: str*
-
-The key to use when persisting object
-
-<a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_setup_values_as_dict"></a>
-
-#### *abstract property* kv_setup_values_as_dict *: dict*
-
-Returns value that will be persisted as a dictionary.
-
-<a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_setup_by_dict"></a>
-
-#### *abstract* kv_setup_by_dict(setup)
-
-Does necessary post-creation setup of object given its persisted values
-
-* **Parameters:**
-  **setup** (*dict*)
-
-<a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_class_absolute_path"></a>
-
-#### *property* kv_class_absolute_path *: str*
-
-Returns class full path as string
-
-<a id="eric_sse.persistence.ObjectAsKeyValuePersistenceMixin.kv_constructor_params_as_dict"></a>
-
-#### *abstract property* kv_constructor_params_as_dict *: dict*
-
-Class constructor parameters as dict
-
-<a id="eric_sse.persistence.KvStorageEngine"></a>
-
-### *class* KvStorageEngine
-
-Bases: `ABC`
-
-<a id="eric_sse.persistence.KvStorageEngine.fetch_by_prefix"></a>
-
-#### *abstract* fetch_by_prefix(prefix)
-
-* **Parameters:**
-  **prefix** (*str*)
-* **Return type:**
-  *Iterable*[any]
-
-<a id="eric_sse.persistence.KvStorageEngine.fetch_all"></a>
-
-#### *abstract* fetch_all()
-
-* **Return type:**
-  *Iterable*[any]
-
-<a id="eric_sse.persistence.KvStorageEngine.upsert"></a>
-
-#### *abstract* upsert(key, value)
-
-* **Parameters:**
-  * **key** (*str*)
-  * **value** (*any*)
-
-<a id="eric_sse.persistence.KvStorageEngine.fetch_one"></a>
-
-#### *abstract* fetch_one(key)
-
-* **Parameters:**
-  **key** (*str*)
-* **Return type:**
-  any
-
-<a id="eric_sse.persistence.KvStorageEngine.delete"></a>
-
-#### *abstract* delete(key)
-
-* **Parameters:**
-  **key** (*str*)
-
-<a id="module-eric_sse.interfaces"></a>
-
-<a id="eric_sse.interfaces.ListenerRepositoryInterface"></a>
-
-### *class* ListenerRepositoryInterface
-
-Bases: `ABC`
-
-<a id="eric_sse.interfaces.ListenerRepositoryInterface.load"></a>
-
-#### *abstract* load(listener_id)
-
-* **Parameters:**
-  **listener_id** (*str*)
-* **Return type:**
-  [*MessageQueueListener*](channels.md#eric_sse.listener.MessageQueueListener)
-
-<a id="eric_sse.interfaces.ListenerRepositoryInterface.persist"></a>
-
-#### *abstract* persist(listener)
-
-* **Parameters:**
-  **listener** ([*MessageQueueListener*](channels.md#eric_sse.listener.MessageQueueListener))
-
-<a id="eric_sse.interfaces.ListenerRepositoryInterface.delete"></a>
-
-#### *abstract* delete(listener_id)
-
-* **Parameters:**
-  **listener_id** (*str*)
 
 <a id="eric_sse.interfaces.QueueRepositoryInterface"></a>
 
@@ -153,32 +12,79 @@ Bases: `ABC`
 
 <a id="eric_sse.interfaces.QueueRepositoryInterface.load"></a>
 
-#### *abstract* load(queue_id)
+#### *abstract* load(connection_id)
+
+Loads a queue given the connection id it belongs to.
 
 * **Parameters:**
-  **queue_id** (*str*)
+  **connection_id** (*str*)
 * **Return type:**
   [*Queue*](channels.md#eric_sse.queues.Queue)
 
 <a id="eric_sse.interfaces.QueueRepositoryInterface.persist"></a>
 
-#### *abstract* persist(queue)
+#### *abstract* persist(connection_id, queue)
 
 * **Parameters:**
-  **queue** ([*Queue*](channels.md#eric_sse.queues.Queue))
+  * **connection_id** (*str*)
+  * **queue** ([*Queue*](channels.md#eric_sse.queues.Queue))
 
 <a id="eric_sse.interfaces.QueueRepositoryInterface.delete"></a>
 
-#### *abstract* delete(queue_id)
+#### *abstract* delete(connection_id)
+
+Deletes a queue given the connection id it belongs to.
 
 * **Parameters:**
-  **queue_id** (*str*)
+  **connection_id** (*str*)
+
+<a id="eric_sse.interfaces.ListenerRepositoryInterface"></a>
+
+### *class* ListenerRepositoryInterface
+
+Bases: `ABC`
+
+<a id="eric_sse.interfaces.ListenerRepositoryInterface.load"></a>
+
+#### *abstract* load(connection_id)
+
+Loads a listener given the connection id it belongs to.
+
+* **Parameters:**
+  **connection_id** (*str*)
+* **Return type:**
+  [*MessageQueueListener*](channels.md#eric_sse.listener.MessageQueueListener)
+
+<a id="eric_sse.interfaces.ListenerRepositoryInterface.persist"></a>
+
+#### *abstract* persist(connection_id, listener)
+
+* **Parameters:**
+  * **connection_id** (*str*)
+  * **listener** ([*MessageQueueListener*](channels.md#eric_sse.listener.MessageQueueListener))
+
+<a id="eric_sse.interfaces.ListenerRepositoryInterface.delete"></a>
+
+#### *abstract* delete(connection_id)
+
+Deleted a listener given the connection id it belongs to.
+
+* **Parameters:**
+  **connection_id** (*str*)
 
 <a id="eric_sse.interfaces.ConnectionRepositoryInterface"></a>
 
 ### *class* ConnectionRepositoryInterface
 
 Bases: `ABC`
+
+<a id="eric_sse.interfaces.ConnectionRepositoryInterface.queues_repository"></a>
+
+#### *abstract property* queues_repository *: [QueueRepositoryInterface](#eric_sse.interfaces.QueueRepositoryInterface)*
+
+<a id="eric_sse.interfaces.ConnectionRepositoryInterface.listeners_repository"></a>
+
+#### *abstract property* listeners_repository *: [ListenerRepositoryInterface](#eric_sse.interfaces.ListenerRepositoryInterface)*
 
 <a id="eric_sse.interfaces.ConnectionRepositoryInterface.load_all"></a>
 
@@ -191,32 +97,43 @@ Bases: `ABC`
 
 <a id="eric_sse.interfaces.ConnectionRepositoryInterface.load_one"></a>
 
-#### *abstract* load_one(connection_id)
+#### *abstract* load_one(channel_id, connection_id)
 
 * **Parameters:**
-  **connection_id** (*str*)
+  * **channel_id** (*str*)
+  * **connection_id** (*str*)
 * **Return type:**
   [*Connection*](channels.md#eric_sse.connection.Connection)
 
 <a id="eric_sse.interfaces.ConnectionRepositoryInterface.persist"></a>
 
-#### *abstract* persist(connection)
+#### *abstract* persist(channel_id, connection)
 
 * **Parameters:**
-  **connection** ([*Connection*](channels.md#eric_sse.connection.Connection))
+  * **channel_id** (*str*)
+  * **connection** ([*Connection*](channels.md#eric_sse.connection.Connection))
 
 <a id="eric_sse.interfaces.ConnectionRepositoryInterface.delete"></a>
 
-#### *abstract* delete(connection_id)
+#### *abstract* delete(channel_id, connection_id)
 
 * **Parameters:**
-  **connection_id** (*str*)
+  * **channel_id** (*str*)
+  * **connection_id** (*str*)
 
 <a id="eric_sse.interfaces.ChannelRepositoryInterface"></a>
 
 ### *class* ChannelRepositoryInterface
 
 Bases: `ABC`
+
+<a id="eric_sse.interfaces.ChannelRepositoryInterface.connections_factory"></a>
+
+#### *abstract property* connections_factory *: [ConnectionsFactory](channels.md#eric_sse.connection.ConnectionsFactory)*
+
+<a id="eric_sse.interfaces.ChannelRepositoryInterface.connections_repository"></a>
+
+#### *abstract property* connections_repository *: [ConnectionRepositoryInterface](#eric_sse.interfaces.ConnectionRepositoryInterface)*
 
 <a id="eric_sse.interfaces.ChannelRepositoryInterface.load_all"></a>
 
@@ -248,212 +165,151 @@ Bases: `ABC`
 * **Parameters:**
   **channel_id** (*str*)
 
-<a id="module-eric_sse.inmemory"></a>
+<a id="eric_sse.interfaces.ChannelRepositoryInterface.create"></a>
 
-<a id="in-memory-implementations"></a>
+#### *abstract* create(channel_data)
 
-# In memory implementations
+* **Parameters:**
+  **channel_data** (*dict*)
+* **Return type:**
+  [*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel)
 
-<a id="eric_sse.inmemory.InMemoryStorage"></a>
+<a id="module-eric_sse.repository"></a>
+
+<a id="base-repositories"></a>
+
+# Base repositories
+
+<a id="eric_sse.repository.KvStorage"></a>
+
+### *class* KvStorage
+
+Bases: `ABC`
+
+<a id="eric_sse.repository.KvStorage.fetch_by_prefix"></a>
+
+#### *abstract* fetch_by_prefix(prefix)
+
+* **Parameters:**
+  **prefix** (*str*)
+* **Return type:**
+  *Iterable*[*Any*]
+
+<a id="eric_sse.repository.KvStorage.fetch_all"></a>
+
+#### *abstract* fetch_all()
+
+* **Return type:**
+  *Iterable*[*Any*]
+
+<a id="eric_sse.repository.KvStorage.upsert"></a>
+
+#### *abstract* upsert(key, value)
+
+* **Parameters:**
+  * **key** (*str*)
+  * **value** (*Any*)
+
+<a id="eric_sse.repository.KvStorage.fetch_one"></a>
+
+#### *abstract* fetch_one(key)
+
+* **Parameters:**
+  **key** (*str*)
+* **Return type:**
+  *Any*
+
+<a id="eric_sse.repository.KvStorage.delete"></a>
+
+#### *abstract* delete(key)
+
+* **Parameters:**
+  **key** (*str*)
+
+<a id="eric_sse.repository.InMemoryStorage"></a>
 
 ### *class* InMemoryStorage
 
-Bases: [`KvStorageEngine`](#eric_sse.persistence.KvStorageEngine)
+Bases: [`KvStorage`](#eric_sse.repository.KvStorage)
 
-<a id="eric_sse.inmemory.InMemoryStorage.__init__"></a>
+<a id="eric_sse.repository.InMemoryStorage.__init__"></a>
 
-#### \_\_init_\_(objects=None)
-
-* **Parameters:**
-  **objects** (*dict* *[**str* *,* *any* *]*  *|* *None*)
-
-<a id="eric_sse.inmemory.InMemoryConnectionRepository"></a>
-
-### *class* InMemoryConnectionRepository
-
-Bases: [`ConnectionRepository`](#eric_sse.serializable.ConnectionRepository)
-
-<a id="eric_sse.inmemory.InMemoryConnectionRepository.__init__"></a>
-
-#### \_\_init_\_(connections=None)
+#### \_\_init_\_(items=None)
 
 * **Parameters:**
-  **connections** (*dict* *[**str* *,* [*Connection*](channels.md#eric_sse.connection.Connection) *]*  *|* *None*)
+  **items** (*dict* *[**str* *,* *Any* *]*  *|* *None*)
 
-<a id="eric_sse.inmemory.InMemoryChannelRepository"></a>
+<a id="eric_sse.repository.InMemoryStorage.fetch_by_prefix"></a>
 
-### *class* InMemoryChannelRepository
-
-Bases: [`ChannelRepository`](#eric_sse.serializable.ChannelRepository)
-
-<a id="eric_sse.inmemory.InMemoryChannelRepository.__init__"></a>
-
-#### \_\_init_\_(channels=None)
+#### fetch_by_prefix(prefix)
 
 * **Parameters:**
-  **channels** (*dict* *[**str* *,* [*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel) *]*  *|* *None*)
-
-<a id="eric_sse.inmemory.InMemoryQueueRepository"></a>
-
-### *class* InMemoryQueueRepository
-
-Bases: [`QueueRepository`](#eric_sse.serializable.QueueRepository)
-
-<a id="eric_sse.inmemory.InMemoryQueueRepository.__init__"></a>
-
-#### \_\_init_\_(queues=None)
-
-* **Parameters:**
-  **queues** (*dict* *[**str* *,* [*Queue*](channels.md#eric_sse.queues.Queue) *]*  *|* *None*)
-
-<a id="module-eric_sse.serializable"></a>
-
-<a id="implementation-for-serializable-objects"></a>
-
-# Implementation for serializable objects
-
-If you have to persist a serializable participant, you can use this module if correspondant storage engine supports its format
-
-see [`InMemoryChannelRepository`](#eric_sse.inmemory.InMemoryChannelRepository)
-
-<a id="eric_sse.serializable.ListenerRepository"></a>
-
-### *class* ListenerRepository
-
-Bases: [`ListenerRepositoryInterface`](#eric_sse.interfaces.ListenerRepositoryInterface)
-
-<a id="eric_sse.serializable.ListenerRepository.__init__"></a>
-
-#### \_\_init_\_(storage_engine)
-
-* **Parameters:**
-  **storage_engine** ([*KvStorageEngine*](#eric_sse.persistence.KvStorageEngine))
-
-<a id="eric_sse.serializable.ListenerRepository.load"></a>
-
-#### load(listener_id)
-
-* **Parameters:**
-  **listener_id** (*str*)
+  **prefix** (*str*)
 * **Return type:**
-  [*MessageQueueListener*](channels.md#eric_sse.listener.MessageQueueListener)
+  *Iterable*[*Any*]
 
-<a id="eric_sse.serializable.ListenerRepository.persist"></a>
+<a id="eric_sse.repository.InMemoryStorage.fetch_all"></a>
 
-#### persist(listener)
+#### fetch_all()
 
-* **Parameters:**
-  **listener** ([*MessageQueueListener*](channels.md#eric_sse.listener.MessageQueueListener))
-
-<a id="eric_sse.serializable.ListenerRepository.delete"></a>
-
-#### delete(listener_id)
-
-* **Parameters:**
-  **listener_id** (*str*)
-
-<a id="eric_sse.serializable.QueueRepository"></a>
-
-### *class* QueueRepository
-
-Bases: [`QueueRepositoryInterface`](#eric_sse.interfaces.QueueRepositoryInterface)
-
-<a id="eric_sse.serializable.QueueRepository.__init__"></a>
-
-#### \_\_init_\_(storage_engine)
-
-* **Parameters:**
-  **storage_engine** ([*KvStorageEngine*](#eric_sse.persistence.KvStorageEngine))
-
-<a id="eric_sse.serializable.QueueRepository.load"></a>
-
-#### load(queue_id)
-
-* **Parameters:**
-  **queue_id** (*str*)
 * **Return type:**
-  [*Queue*](channels.md#eric_sse.queues.Queue)
+  *Iterable*[*Any*]
 
-<a id="eric_sse.serializable.QueueRepository.persist"></a>
+<a id="eric_sse.repository.InMemoryStorage.upsert"></a>
 
-#### persist(queue)
-
-* **Parameters:**
-  **queue** ([*Queue*](channels.md#eric_sse.queues.Queue))
-
-<a id="eric_sse.serializable.QueueRepository.delete"></a>
-
-#### delete(queue_id)
+#### upsert(key, value)
 
 * **Parameters:**
-  **queue_id** (*str*)
+  * **key** (*str*)
+  * **value** (*Any*)
 
-<a id="eric_sse.serializable.ConnectionRepository"></a>
+<a id="eric_sse.repository.InMemoryStorage.fetch_one"></a>
 
-### *class* ConnectionRepository
-
-Bases: [`ConnectionRepositoryInterface`](#eric_sse.interfaces.ConnectionRepositoryInterface)
-
-<a id="eric_sse.serializable.ConnectionRepository.__init__"></a>
-
-#### \_\_init_\_(storage_engine)
+#### fetch_one(key)
 
 * **Parameters:**
-  **storage_engine** ([*KvStorageEngine*](#eric_sse.persistence.KvStorageEngine))
-
-<a id="eric_sse.serializable.ConnectionRepository.load_all"></a>
-
-#### load_all(channel_id)
-
-* **Parameters:**
-  **channel_id** (*str*)
+  **key** (*str*)
 * **Return type:**
-  *Iterable*[[*Connection*](channels.md#eric_sse.connection.Connection)]
+  *Any*
 
-<a id="eric_sse.serializable.ConnectionRepository.load_one"></a>
+<a id="eric_sse.repository.InMemoryStorage.delete"></a>
 
-#### load_one(connection_id)
-
-* **Parameters:**
-  **connection_id** (*str*)
-* **Return type:**
-  [*Connection*](channels.md#eric_sse.connection.Connection)
-
-<a id="eric_sse.serializable.ConnectionRepository.persist"></a>
-
-#### persist(connection)
+#### delete(key)
 
 * **Parameters:**
-  **connection** ([*Connection*](channels.md#eric_sse.connection.Connection))
+  **key** (*str*)
 
-<a id="eric_sse.serializable.ConnectionRepository.delete"></a>
+<a id="eric_sse.repository.AbstractChannelRepository"></a>
 
-#### delete(connection_id)
+### *class* AbstractChannelRepository
 
-* **Parameters:**
-  **connection_id** (*str*)
+Bases: [`ChannelRepositoryInterface`](#eric_sse.interfaces.ChannelRepositoryInterface), `ABC`
 
-<a id="eric_sse.serializable.ChannelRepository"></a>
+<a id="eric_sse.repository.AbstractChannelRepository.__init__"></a>
 
-### *class* ChannelRepository
-
-Bases: [`ChannelRepositoryInterface`](#eric_sse.interfaces.ChannelRepositoryInterface)
-
-<a id="eric_sse.serializable.ChannelRepository.__init__"></a>
-
-#### \_\_init_\_(storage_engine)
+#### \_\_init_\_(storage, connections_repository, connections_factory)
 
 * **Parameters:**
-  **storage_engine** ([*KvStorageEngine*](#eric_sse.persistence.KvStorageEngine))
+  * **storage** ([*KvStorage*](#eric_sse.repository.KvStorage))
+  * **connections_repository** ([*ConnectionRepositoryInterface*](#eric_sse.interfaces.ConnectionRepositoryInterface))
+  * **connections_factory** ([*ConnectionsFactory*](channels.md#eric_sse.connection.ConnectionsFactory))
 
-<a id="eric_sse.serializable.ChannelRepository.load_all"></a>
+<a id="eric_sse.repository.AbstractChannelRepository.connections_factory"></a>
+
+#### *property* connections_factory *: [ConnectionsFactory](channels.md#eric_sse.connection.ConnectionsFactory)*
+
+<a id="eric_sse.repository.AbstractChannelRepository.connections_repository"></a>
+
+#### *property* connections_repository *: [ConnectionRepositoryInterface](#eric_sse.interfaces.ConnectionRepositoryInterface)*
+
+<a id="eric_sse.repository.AbstractChannelRepository.load_all"></a>
 
 #### load_all()
 
 * **Return type:**
   *Iterable*[[*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel)]
 
-<a id="eric_sse.serializable.ChannelRepository.load_one"></a>
+<a id="eric_sse.repository.AbstractChannelRepository.load_one"></a>
 
 #### load_one(channel_id)
 
@@ -462,16 +318,74 @@ Bases: [`ChannelRepositoryInterface`](#eric_sse.interfaces.ChannelRepositoryInte
 * **Return type:**
   [*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel)
 
-<a id="eric_sse.serializable.ChannelRepository.persist"></a>
+<a id="eric_sse.repository.AbstractChannelRepository.persist"></a>
 
 #### persist(channel)
 
 * **Parameters:**
   **channel** ([*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel))
 
-<a id="eric_sse.serializable.ChannelRepository.delete"></a>
+<a id="eric_sse.repository.AbstractChannelRepository.delete"></a>
 
 #### delete(channel_id)
 
 * **Parameters:**
   **channel_id** (*str*)
+
+<a id="eric_sse.repository.ConnectionRepository"></a>
+
+### *class* ConnectionRepository
+
+Bases: [`ConnectionRepositoryInterface`](#eric_sse.interfaces.ConnectionRepositoryInterface)
+
+<a id="eric_sse.repository.ConnectionRepository.__init__"></a>
+
+#### \_\_init_\_(storage, listeners_repository, queues_repository)
+
+* **Parameters:**
+  * **storage** ([*KvStorage*](#eric_sse.repository.KvStorage))
+  * **listeners_repository** ([*ListenerRepositoryInterface*](#eric_sse.interfaces.ListenerRepositoryInterface))
+  * **queues_repository** ([*QueueRepositoryInterface*](#eric_sse.interfaces.QueueRepositoryInterface))
+
+<a id="eric_sse.repository.ConnectionRepository.queues_repository"></a>
+
+#### *property* queues_repository *: [QueueRepositoryInterface](#eric_sse.interfaces.QueueRepositoryInterface)*
+
+<a id="eric_sse.repository.ConnectionRepository.listeners_repository"></a>
+
+#### *property* listeners_repository *: [ListenerRepositoryInterface](#eric_sse.interfaces.ListenerRepositoryInterface)*
+
+<a id="eric_sse.repository.ConnectionRepository.load_all"></a>
+
+#### load_all(channel_id)
+
+* **Parameters:**
+  **channel_id** (*str*)
+* **Return type:**
+  *Iterable*[[*Connection*](channels.md#eric_sse.connection.Connection)]
+
+<a id="eric_sse.repository.ConnectionRepository.load_one"></a>
+
+#### load_one(channel_id, connection_id)
+
+* **Parameters:**
+  * **channel_id** (*str*)
+  * **connection_id** (*str*)
+* **Return type:**
+  [*Connection*](channels.md#eric_sse.connection.Connection)
+
+<a id="eric_sse.repository.ConnectionRepository.persist"></a>
+
+#### persist(channel_id, connection)
+
+* **Parameters:**
+  * **channel_id** (*str*)
+  * **connection** ([*Connection*](channels.md#eric_sse.connection.Connection))
+
+<a id="eric_sse.repository.ConnectionRepository.delete"></a>
+
+#### delete(channel_id, connection_id)
+
+* **Parameters:**
+  * **channel_id** (*str*)
+  * **connection_id** (*str*)

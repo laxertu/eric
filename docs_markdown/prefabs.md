@@ -8,17 +8,11 @@
 
 # Prefab channels and listeners
 
-<a id="eric_sse.prefabs.PersistableChannel"></a>
-
-### *class* PersistableChannel
-
-Bases: [`AbstractChannel`](channels.md#eric_sse.entities.AbstractChannel), [`ObjectAsKeyValuePersistenceMixin`](persistence.md#eric_sse.persistence.ObjectAsKeyValuePersistenceMixin), `ABC`
-
 <a id="eric_sse.prefabs.SSEChannel"></a>
 
 ### *class* SSEChannel
 
-Bases: [`PersistableChannel`](#eric_sse.prefabs.PersistableChannel)
+Bases: [`AbstractChannel`](channels.md#eric_sse.entities.AbstractChannel)
 
 SSE streaming channel.
 See [Mozilla docs](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
@@ -27,39 +21,13 @@ Currently, ‘id’ field is not supported.
 
 <a id="eric_sse.prefabs.SSEChannel.__init__"></a>
 
-#### \_\_init_\_(stream_delay_seconds=0, retry_timeout_milliseconds=5, channel_id=None)
+#### \_\_init_\_(stream_delay_seconds=0, retry_timeout_milliseconds=5, channel_id=None, connections_factory=None)
 
 * **Parameters:**
   * **stream_delay_seconds** (*int*)
   * **retry_timeout_milliseconds** (*int*)
   * **channel_id** (*str* *|* *None*)
-
-<a id="eric_sse.prefabs.SSEChannel.kv_key"></a>
-
-#### *property* kv_key *: str*
-
-The key to use when persisting object
-
-<a id="eric_sse.prefabs.SSEChannel.kv_setup_values_as_dict"></a>
-
-#### *property* kv_setup_values_as_dict *: dict*
-
-Returns value that will be persisted as a dictionary.
-
-<a id="eric_sse.prefabs.SSEChannel.kv_constructor_params_as_dict"></a>
-
-#### *property* kv_constructor_params_as_dict *: dict*
-
-Class constructor parameters as dict
-
-<a id="eric_sse.prefabs.SSEChannel.kv_setup_by_dict"></a>
-
-#### kv_setup_by_dict(setup)
-
-Does necessary post-creation setup of object given its persisted values
-
-* **Parameters:**
-  **setup** (*dict*)
+  * **connections_factory** ([*ConnectionsFactory*](channels.md#eric_sse.connection.ConnectionsFactory) *|* *None*)
 
 <a id="eric_sse.prefabs.SSEChannel.adapt"></a>
 
@@ -191,8 +159,25 @@ Bases: [`SSEChannel`](#eric_sse.prefabs.SSEChannel)
 
 #### register_listener(listener)
 
+Registers a Connection given its listener and queue
+
 * **Parameters:**
   **listener** ([*SimpleDistributedApplicationListener*](#eric_sse.prefabs.SimpleDistributedApplicationListener))
+
+<a id="eric_sse.prefabs.SSEChannelRepository"></a>
+
+### *class* SSEChannelRepository
+
+Bases: [`AbstractChannelRepository`](persistence.md#eric_sse.repository.AbstractChannelRepository)
+
+<a id="eric_sse.prefabs.SSEChannelRepository.create"></a>
+
+#### create(channel_data)
+
+* **Parameters:**
+  **channel_data** (*dict*)
+* **Return type:**
+  [*SSEChannel*](#eric_sse.prefabs.SSEChannel)
 
 <a id="module-eric_sse.servers"></a>
 

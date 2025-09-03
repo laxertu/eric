@@ -16,6 +16,5 @@ Reference
    prefabs
    persistence
    exceptions
-   profiling
 
 
