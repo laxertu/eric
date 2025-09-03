@@ -63,14 +63,12 @@ class AbstractChannel(ABC):
 
     Provides functionalities for listeners and message delivery management.
 
-    **Important** When using persistence layer you have to call to **load_persisted_data()** method just after object creation.
-
-    :class:`~eric_sse.persistence.InMemoryConnectionRepository` is the default implementation used for **connections_repository** parameter.
+    :class:`~eric_sse.connection.ConnectionsFactory` is the default implementation used for **connections_factory** parameter.
 
     see :class:`~eric_sse.prefabs.SSEChannel`
 
     :param int stream_delay_seconds: Wait time in seconds between message delivery.
-    :param str channel_id: Optionally sets the channel id. **IMPORTANT** by using this parameter, client is responsible for guaranteeing channel id uniqueness
+    :param str channel_id: Optionally sets the channel id.
     """
     def __init__(
             self,

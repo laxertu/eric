@@ -49,15 +49,13 @@ Base class for channels.
 
 Provides functionalities for listeners and message delivery management.
 
-**Important** When using persistence layer you have to call to **load_persisted_data()** method just after object creation.
-
-`InMemoryConnectionRepository` is the default implementation used for **connections_repository** parameter.
+[`ConnectionsFactory`](#eric_sse.connection.ConnectionsFactory) is the default implementation used for **connections_factory** parameter.
 
 see [`SSEChannel`](prefabs.md#eric_sse.prefabs.SSEChannel)
 
 * **Parameters:**
   * **stream_delay_seconds** (*int*) – Wait time in seconds between message delivery.
-  * **channel_id** (*str*) – Optionally sets the channel id. **IMPORTANT** by using this parameter, client is responsible for guaranteeing channel id uniqueness
+  * **channel_id** (*str*) – Optionally sets the channel id.
 
 <a id="eric_sse.entities.AbstractChannel.__init__"></a>
 

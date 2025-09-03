@@ -412,14 +412,13 @@ document.write(`
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
 <p>Base class for channels.</p>
 <p>Provides functionalities for listeners and message delivery management.</p>
-<p><strong>Important</strong> When using persistence layer you have to call to <strong>load_persisted_data()</strong> method just after object creation.</p>
-<p><code class="xref py py-class docutils literal notranslate"><span class="pre">InMemoryConnectionRepository</span></code> is the default implementation used for <strong>connections_repository</strong> parameter.</p>
+<p><a class="reference internal" href="#eric_sse.connection.ConnectionsFactory" title="eric_sse.connection.ConnectionsFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectionsFactory</span></code></a> is the default implementation used for <strong>connections_factory</strong> parameter.</p>
 <p>see <a class="reference internal" href="prefabs.html#eric_sse.prefabs.SSEChannel" title="eric_sse.prefabs.SSEChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SSEChannel</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>stream_delay_seconds</strong> (<em>int</em>) – Wait time in seconds between message delivery.</p></li>
-<li><p><strong>channel_id</strong> (<em>str</em>) – Optionally sets the channel id. <strong>IMPORTANT</strong> by using this parameter, client is responsible for guaranteeing channel id uniqueness</p></li>
+<li><p><strong>channel_id</strong> (<em>str</em>) – Optionally sets the channel id.</p></li>
 </ul>
 </dd>
 </dl>
