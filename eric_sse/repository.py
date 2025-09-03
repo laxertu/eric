@@ -140,9 +140,6 @@ class ConnectionRepository(ConnectionRepositoryInterface):
 
 
     def load_one(self, channel_id: str, connection_id: str) -> Connection:
-
-
-        # test
         return self._load_connection(self.__storage.fetch_one(f'{channel_id}:{connection_id}')['id'])
 
     def persist(self, channel_id: str, connection: Connection):
