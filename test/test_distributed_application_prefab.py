@@ -1,9 +1,8 @@
 from unittest import IsolatedAsyncioTestCase
 
-
 from eric_sse.message import MessageContract, Message
 from eric_sse.prefabs import SimpleDistributedApplicationChannel, SimpleDistributedApplicationListener, DataProcessingChannel
-from eric_sse.queues import InMemoryQueue
+
 
 from test.mock.listener import MessageQueueListenerMock
 
@@ -55,7 +54,7 @@ class DataProcessingChannelTestCase(IsolatedAsyncioTestCase):
     async def test_channel(self):
         channel = DataProcessingChannel(stream_delay_seconds=0, max_workers=2)
         listener = MessageQueueListenerMock()
-        channel.register_connection(listener, InMemoryQueue())
+        channel.register_listener(listener=listener)
 
         channel.dispatch(listener.id, Message(msg_type='test1'))
         channel.dispatch(listener.id, Message(msg_type='test2'))

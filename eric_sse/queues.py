@@ -1,19 +1,12 @@
 from abc import ABC, abstractmethod
 from queue import SimpleQueue, Empty, Full
 
-import eric_sse
 from eric_sse.message import MessageContract
 from eric_sse.exception import NoMessagesException, RepositoryError
-from eric_sse.persistence import ObjectAsKeyValuePersistenceMixin
 
 
 class Queue(ABC):
     """Abstract base class for queues (FIFO)."""
-
-    @property
-    @abstractmethod
-    def id(self) -> str:
-        ...
 
     @abstractmethod
     def pop(self) -> MessageContract:
@@ -28,17 +21,7 @@ class Queue(ABC):
     def push(self, message: MessageContract) -> None:
         ...
 
-class AbstractQueue(Queue, ABC):
-
-    def __init__(self):
-        self.__id = eric_sse.generate_uuid()
-
-    @property
-    def id(self) -> str:
-        return self.__id
-
-
-class InMemoryQueue(AbstractQueue):
+class InMemoryQueue(Queue):
 
     def __init__(self):
         super().__init__()
@@ -58,7 +41,3 @@ class InMemoryQueue(AbstractQueue):
         except Full as e:
             raise RepositoryError(e)
 
-
-class PersistableQueue(AbstractQueue, ObjectAsKeyValuePersistenceMixin, ABC):
-    """Concrete implementations of methods should perform in **Queues** ones their I/O operations, and define in **ObjectAsKeyValuePersistenceMixin** ones their correspondant persistence strategy"""
-    ...

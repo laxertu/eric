@@ -2,58 +2,82 @@ from abc import ABC, abstractmethod
 from typing import Iterable
 
 from eric_sse.entities import AbstractChannel
-from eric_sse.connection import Connection
-from eric_sse.queues import Queue
+from eric_sse.connection import Connection, ConnectionsFactory
 from eric_sse.listener import MessageQueueListener
-
-class ListenerRepositoryInterface(ABC):
-
-    @abstractmethod
-    def load(self, listener_id: str) -> MessageQueueListener:
-        pass
-
-    @abstractmethod
-    def persist(self, listener: MessageQueueListener):
-        pass
-
-    @abstractmethod
-    def delete(self, listener_id: str):
-        pass
+from eric_sse.queues import Queue
 
 class QueueRepositoryInterface(ABC):
 
     @abstractmethod
-    def load(self, queue_id: str) -> Queue:
+    def load(self, connection_id: str) -> Queue:
+        """Loads a queue given the connection id it belongs to."""
         pass
 
     @abstractmethod
-    def persist(self, queue: Queue):
+    def persist(self, connection_id: str, queue: Queue):
         pass
 
     @abstractmethod
-    def delete(self, queue_id: str):
+    def delete(self, connection_id: str):
+        """Deletes a queue given the connection id it belongs to."""
         pass
+
+
+class ListenerRepositoryInterface(ABC):
+    @abstractmethod
+    def load(self, connection_id: str) -> MessageQueueListener:
+        """Loads a listener given the connection id it belongs to."""
+        pass
+
+    @abstractmethod
+    def persist(self, connection_id: str, listener: MessageQueueListener):
+        pass
+
+    @abstractmethod
+    def delete(self, connection_id: str):
+        """Deleted a listener given the connection id it belongs to."""
+        pass
+
 
 class ConnectionRepositoryInterface(ABC):
+    @property
+    @abstractmethod
+    def queues_repository(self) -> QueueRepositoryInterface:
+        pass
+
+    @property
+    @abstractmethod
+    def listeners_repository(self) -> ListenerRepositoryInterface:
+        pass
 
     @abstractmethod
     def load_all(self, channel_id: str) -> Iterable[Connection]:
         pass
 
     @abstractmethod
-    def load_one(self, connection_id: str) -> Connection:
+    def load_one(self, channel_id: str, connection_id: str) -> Connection:
         pass
 
     @abstractmethod
-    def persist(self, connection: Connection):
+    def persist(self, channel_id: str, connection: Connection):
         pass
 
     @abstractmethod
-    def delete(self, connection_id: str):
+    def delete(self, channel_id: str, connection_id: str):
         pass
+
 
 
 class ChannelRepositoryInterface(ABC):
+    @property
+    @abstractmethod
+    def connections_factory(self) -> ConnectionsFactory:
+        pass
+
+    @property
+    @abstractmethod
+    def connections_repository(self) -> ConnectionRepositoryInterface:
+        pass
 
     @abstractmethod
     def load_all(self) -> Iterable[AbstractChannel]:
@@ -70,3 +94,8 @@ class ChannelRepositoryInterface(ABC):
     @abstractmethod
     def delete(self, channel_id: str):
         pass
+
+    @abstractmethod
+    def create(self, channel_data: dict) -> AbstractChannel:
+        pass
+
