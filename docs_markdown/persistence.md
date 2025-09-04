@@ -9,6 +9,8 @@ The main idea is that a repository relies on some KV storage engine abstraction,
 
 To build a persistence layer is needed to provide an implementation to one or more of above abstractions, and use them to build a custom ChannelRepository
 
+[Here](https://github.com/laxertu/eric-redis-queues/blob/master/eric_redis_queues/repository.py) is a possible Redis implementation
+
 <a id="module-eric_sse.repository"></a>
 
 <a id="base-repositories"></a>
