@@ -6,7 +6,7 @@ Persistence
 
 
 Base classes for channels and connections repositories.
-The main idea is that a repository relies on some KV storage engine abstraction, and uses it and its correspondant composites repositories to build final objects to return.
+The main idea is that a repository relies on some KV storage engine abstraction, and uses it for storing its own configuration, and its correspondant composites repositories to build final objects to return.
 
 To build a persistence layer is needed to provide an implementation to one or more of above abstractions, and use them to build a custom ChannelRepository
 
