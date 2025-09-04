@@ -159,7 +159,7 @@ Bases: [`SSEChannel`](#eric_sse.prefabs.SSEChannel)
 
 #### register_listener(listener)
 
-Registers a Connection given its listener and queue
+Registers an existing listener
 
 * **Parameters:**
   **listener** ([*SimpleDistributedApplicationListener*](#eric_sse.prefabs.SimpleDistributedApplicationListener))

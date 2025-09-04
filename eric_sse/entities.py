@@ -132,18 +132,23 @@ class AbstractChannel(ABC):
             yield event
 
     def add_listener(self) -> MessageQueueListener:
-        """Shortcut to add an inmemory MessageQueueListener"""
+        """Shortcut that creates a connection and returns correspondant listener"""
         connection = self.__connections_factory.create()
         self.__connection_manager.register_connection(connection)
         return connection.listener
 
 
     def register_listener(self, listener: MessageQueueListener):
-        """Registers a Connection given its listener and queue"""
+        """Registers an existing listener"""
         connection = self.__connections_factory.create(listener=listener)
         self.__connection_manager.register_connection(connection)
 
     def register_connection(self, connection: Connection):
+        """
+        Register and existing connection.
+
+        **Warning**: Listener and queue should belong to the same classes returned by connection factory to avoid compatibility issues with persistence layer
+        """
         self.__connection_manager.register_connection(connection)
 
     def remove_listener(self, listener_id: str):

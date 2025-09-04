@@ -2,6 +2,10 @@
 
 # Changelog
 
+2.1.0
+
+* General rework of persistence layer. Removed some modules and introduced repository one.
+
 1.5.5
 
 Added get_channel method to ChannelRepositoryInterface

@@ -332,6 +332,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.message_stream"><code class="docutils literal notranslate"><span class="pre">message_stream()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.add_listener"><code class="docutils literal notranslate"><span class="pre">add_listener()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.register_listener"><code class="docutils literal notranslate"><span class="pre">register_listener()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.register_connection"><code class="docutils literal notranslate"><span class="pre">register_connection()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.deliver_next"><code class="docutils literal notranslate"><span class="pre">deliver_next()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.dispatch"><code class="docutils literal notranslate"><span class="pre">dispatch()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.broadcast"><code class="docutils literal notranslate"><span class="pre">broadcast()</span></code></a></li>
@@ -511,7 +512,7 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.add_listener">
 <span class="sig-name descname"><span class="pre">add_listener</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.add_listener" title="Link to this definition">#</a></dt>
-<dd><p>Shortcut to add an inmemory MessageQueueListener</p>
+<dd><p>Shortcut that creates a connection and returns correspondant listener</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a></p>
@@ -522,10 +523,22 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.register_listener">
 <span class="sig-name descname"><span class="pre">register_listener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.register_listener" title="Link to this definition">#</a></dt>
-<dd><p>Registers a Connection given its listener and queue</p>
+<dd><p>Registers an existing listener</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>listener</strong> (<a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.register_connection">
+<span class="sig-name descname"><span class="pre">register_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.entities.AbstractChannel.register_connection" title="Link to this definition">#</a></dt>
+<dd><p>Register and existing connection.</p>
+<p><strong>Warning</strong>: Listener and queue should belong to the same classes returned by connection factory to avoid compatibility issues with persistence layer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>connection</strong> (<a class="reference internal" href="#eric_sse.connection.Connection" title="eric_sse.connection.Connection"><em>Connection</em></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -739,6 +752,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.message_stream"><code class="docutils literal notranslate"><span class="pre">message_stream()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.add_listener"><code class="docutils literal notranslate"><span class="pre">add_listener()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.register_listener"><code class="docutils literal notranslate"><span class="pre">register_listener()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.register_connection"><code class="docutils literal notranslate"><span class="pre">register_connection()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.deliver_next"><code class="docutils literal notranslate"><span class="pre">deliver_next()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.dispatch"><code class="docutils literal notranslate"><span class="pre">dispatch()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.entities.AbstractChannel.broadcast"><code class="docutils literal notranslate"><span class="pre">broadcast()</span></code></a></li>

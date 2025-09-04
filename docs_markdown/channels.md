@@ -125,7 +125,7 @@ A message with type = ‘error’ is yield on invalid listener
 
 #### add_listener()
 
-Shortcut to add an inmemory MessageQueueListener
+Shortcut that creates a connection and returns correspondant listener
 
 * **Return type:**
   [*MessageQueueListener*](#eric_sse.listener.MessageQueueListener)
@@ -134,10 +134,21 @@ Shortcut to add an inmemory MessageQueueListener
 
 #### register_listener(listener)
 
-Registers a Connection given its listener and queue
+Registers an existing listener
 
 * **Parameters:**
   **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
+
+<a id="eric_sse.entities.AbstractChannel.register_connection"></a>
+
+#### register_connection(connection)
+
+Register and existing connection.
+
+**Warning**: Listener and queue should belong to the same classes returned by connection factory to avoid compatibility issues with persistence layer
+
+* **Parameters:**
+  **connection** ([*Connection*](#eric_sse.connection.Connection))
 
 <a id="eric_sse.entities.AbstractChannel.deliver_next"></a>
 
