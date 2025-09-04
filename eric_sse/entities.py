@@ -69,6 +69,7 @@ class AbstractChannel(ABC):
 
     :param int stream_delay_seconds: Wait time in seconds between message delivery.
     :param str channel_id: Optionally sets the channel id.
+    :param ~eric_sse.connection.ConnectionsFactory connections_factory: Factory to be used for creating connections instances on channel subscriptions.
     """
     def __init__(
             self,

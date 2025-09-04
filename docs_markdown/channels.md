@@ -80,6 +80,7 @@ see [`SSEChannel`](prefabs.md#eric_sse.prefabs.SSEChannel)
 * **Parameters:**
   * **stream_delay_seconds** (*int*) – Wait time in seconds between message delivery.
   * **channel_id** (*str*) – Optionally sets the channel id.
+  * **connections_factory** ([*ConnectionsFactory*](#eric_sse.connection.ConnectionsFactory)) – Factory to be used for creating connections instances on channel subscriptions.
 
 <a id="eric_sse.entities.AbstractChannel.__init__"></a>
 
