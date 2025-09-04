@@ -9,9 +9,6 @@ Reference
 
 **Introduction**
 
-Eric is a library intended for management
-
-
 .. toctree::
    :maxdepth: 2
    :hidden:

@@ -7,5 +7,3 @@ thanks a lot [https://excalidraw.com](https://excalidraw.com) !!
 <br/>
 
 **Introduction**
-
-Eric is a library intended for management
