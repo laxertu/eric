@@ -1,204 +1,11 @@
-<a id="module-eric_sse.interfaces"></a>
-
 <a id="persistence"></a>
 
 # Persistence
 
-<a id="eric_sse.interfaces.QueueRepositoryInterface"></a>
+![image](_static/persistence_layer_class_diagram.png)
 
-### *class* QueueRepositoryInterface
-
-Bases: `ABC`
-
-<a id="eric_sse.interfaces.QueueRepositoryInterface.load"></a>
-
-#### *abstract* load(connection_id)
-
-Loads a queue given the connection id it belongs to.
-
-* **Parameters:**
-  **connection_id** (*str*)
-* **Return type:**
-  [*Queue*](channels.md#eric_sse.queues.Queue)
-
-<a id="eric_sse.interfaces.QueueRepositoryInterface.persist"></a>
-
-#### *abstract* persist(connection_id, queue)
-
-Persists queue and assign to connection.
-
-* **Parameters:**
-  * **connection_id** (*str*)
-  * **queue** ([*Queue*](channels.md#eric_sse.queues.Queue))
-
-<a id="eric_sse.interfaces.QueueRepositoryInterface.delete"></a>
-
-#### *abstract* delete(connection_id)
-
-Deletes a queue given the connection id it belongs to.
-
-* **Parameters:**
-  **connection_id** (*str*)
-
-<a id="eric_sse.interfaces.ListenerRepositoryInterface"></a>
-
-### *class* ListenerRepositoryInterface
-
-Bases: `ABC`
-
-<a id="eric_sse.interfaces.ListenerRepositoryInterface.load"></a>
-
-#### *abstract* load(connection_id)
-
-Loads a listener given the connection id it belongs to.
-
-* **Parameters:**
-  **connection_id** (*str*)
-* **Return type:**
-  [*MessageQueueListener*](channels.md#eric_sse.listener.MessageQueueListener)
-
-<a id="eric_sse.interfaces.ListenerRepositoryInterface.persist"></a>
-
-#### *abstract* persist(connection_id, listener)
-
-Persists listener and assign to connection.
-
-* **Parameters:**
-  * **connection_id** (*str*)
-  * **listener** ([*MessageQueueListener*](channels.md#eric_sse.listener.MessageQueueListener))
-
-<a id="eric_sse.interfaces.ListenerRepositoryInterface.delete"></a>
-
-#### *abstract* delete(connection_id)
-
-Deleted a listener given the connection id it belongs to.
-
-* **Parameters:**
-  **connection_id** (*str*)
-
-<a id="eric_sse.interfaces.ConnectionRepositoryInterface"></a>
-
-### *class* ConnectionRepositoryInterface
-
-Bases: `ABC`
-
-<a id="eric_sse.interfaces.ConnectionRepositoryInterface.queues_repository"></a>
-
-#### *abstract property* queues_repository *: [QueueRepositoryInterface](#eric_sse.interfaces.QueueRepositoryInterface)*
-
-<a id="eric_sse.interfaces.ConnectionRepositoryInterface.listeners_repository"></a>
-
-#### *abstract property* listeners_repository *: [ListenerRepositoryInterface](#eric_sse.interfaces.ListenerRepositoryInterface)*
-
-<a id="eric_sse.interfaces.ConnectionRepositoryInterface.load_all"></a>
-
-#### *abstract* load_all(channel_id)
-
-Loads all connections managed by a given channel
-
-* **Parameters:**
-  **channel_id** (*str*)
-* **Return type:**
-  *Iterable*[[*Connection*](channels.md#eric_sse.connection.Connection)]
-
-<a id="eric_sse.interfaces.ConnectionRepositoryInterface.load_one"></a>
-
-#### *abstract* load_one(channel_id, connection_id)
-
-Loads a connection given the connection and channel id it belongs to.
-
-* **Parameters:**
-  * **channel_id** (*str*)
-  * **connection_id** (*str*)
-* **Return type:**
-  [*Connection*](channels.md#eric_sse.connection.Connection)
-
-<a id="eric_sse.interfaces.ConnectionRepositoryInterface.persist"></a>
-
-#### *abstract* persist(channel_id, connection)
-
-Persists a connection and assign it to a channel.
-
-* **Parameters:**
-  * **channel_id** (*str*)
-  * **connection** ([*Connection*](channels.md#eric_sse.connection.Connection))
-
-<a id="eric_sse.interfaces.ConnectionRepositoryInterface.delete"></a>
-
-#### *abstract* delete(channel_id, connection_id)
-
-Deletes a connection given the connection and channel id it belongs to.
-
-* **Parameters:**
-  * **channel_id** (*str*)
-  * **connection_id** (*str*)
-
-<a id="eric_sse.interfaces.ChannelRepositoryInterface"></a>
-
-### *class* ChannelRepositoryInterface
-
-Bases: `ABC`
-
-<a id="eric_sse.interfaces.ChannelRepositoryInterface.connections_factory"></a>
-
-#### *abstract property* connections_factory *: [ConnectionsFactory](channels.md#eric_sse.connection.ConnectionsFactory)*
-
-The connections factory that will be injected into concrete channel instances.
-
-<a id="eric_sse.interfaces.ChannelRepositoryInterface.connections_repository"></a>
-
-#### *abstract property* connections_repository *: [ConnectionRepositoryInterface](#eric_sse.interfaces.ConnectionRepositoryInterface)*
-
-Repository to be used to persist connections.
-
-<a id="eric_sse.interfaces.ChannelRepositoryInterface.load_all"></a>
-
-#### *abstract* load_all()
-
-Loads all channels
-
-* **Return type:**
-  *Iterable*[[*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel)]
-
-<a id="eric_sse.interfaces.ChannelRepositoryInterface.load_one"></a>
-
-#### *abstract* load_one(channel_id)
-
-Loads a channel given its it
-
-* **Parameters:**
-  **channel_id** (*str*)
-* **Return type:**
-  [*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel)
-
-<a id="eric_sse.interfaces.ChannelRepositoryInterface.persist"></a>
-
-#### *abstract* persist(channel)
-
-Persists a channel
-
-* **Parameters:**
-  **channel** ([*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel))
-
-<a id="eric_sse.interfaces.ChannelRepositoryInterface.delete"></a>
-
-#### *abstract* delete(channel_id)
-
-Deletes a channel given its it
-
-* **Parameters:**
-  **channel_id** (*str*)
-
-<a id="eric_sse.interfaces.ChannelRepositoryInterface.create"></a>
-
-#### *abstract* create(channel_data)
-
-Creates a new channel and configures it depending on channel_data.
-
-* **Parameters:**
-  **channel_data** (*dict*)
-* **Return type:**
-  [*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel)
+Base classes for channels and connections repositories.
+The main idea is that a repository relies on some KV storage engine abstraction, and uses it and its correspondant composites repositories to build final objects to return.
 
 <a id="module-eric_sse.repository"></a>
 
@@ -448,3 +255,205 @@ Deletes a connection given the connection and channel id it belongs to.
 * **Parameters:**
   * **channel_id** (*str*)
   * **connection_id** (*str*)
+
+<a id="module-eric_sse.interfaces"></a>
+
+<a id="interoperability"></a>
+
+# Interoperability
+
+<a id="eric_sse.interfaces.QueueRepositoryInterface"></a>
+
+### *class* QueueRepositoryInterface
+
+Bases: `ABC`
+
+<a id="eric_sse.interfaces.QueueRepositoryInterface.load"></a>
+
+#### *abstract* load(connection_id)
+
+Loads a queue given the connection id it belongs to.
+
+* **Parameters:**
+  **connection_id** (*str*)
+* **Return type:**
+  [*Queue*](channels.md#eric_sse.queues.Queue)
+
+<a id="eric_sse.interfaces.QueueRepositoryInterface.persist"></a>
+
+#### *abstract* persist(connection_id, queue)
+
+Persists queue and assign to connection.
+
+* **Parameters:**
+  * **connection_id** (*str*)
+  * **queue** ([*Queue*](channels.md#eric_sse.queues.Queue))
+
+<a id="eric_sse.interfaces.QueueRepositoryInterface.delete"></a>
+
+#### *abstract* delete(connection_id)
+
+Deletes a queue given the connection id it belongs to.
+
+* **Parameters:**
+  **connection_id** (*str*)
+
+<a id="eric_sse.interfaces.ListenerRepositoryInterface"></a>
+
+### *class* ListenerRepositoryInterface
+
+Bases: `ABC`
+
+<a id="eric_sse.interfaces.ListenerRepositoryInterface.load"></a>
+
+#### *abstract* load(connection_id)
+
+Loads a listener given the connection id it belongs to.
+
+* **Parameters:**
+  **connection_id** (*str*)
+* **Return type:**
+  [*MessageQueueListener*](channels.md#eric_sse.listener.MessageQueueListener)
+
+<a id="eric_sse.interfaces.ListenerRepositoryInterface.persist"></a>
+
+#### *abstract* persist(connection_id, listener)
+
+Persists listener and assign to connection.
+
+* **Parameters:**
+  * **connection_id** (*str*)
+  * **listener** ([*MessageQueueListener*](channels.md#eric_sse.listener.MessageQueueListener))
+
+<a id="eric_sse.interfaces.ListenerRepositoryInterface.delete"></a>
+
+#### *abstract* delete(connection_id)
+
+Deleted a listener given the connection id it belongs to.
+
+* **Parameters:**
+  **connection_id** (*str*)
+
+<a id="eric_sse.interfaces.ConnectionRepositoryInterface"></a>
+
+### *class* ConnectionRepositoryInterface
+
+Bases: `ABC`
+
+<a id="eric_sse.interfaces.ConnectionRepositoryInterface.queues_repository"></a>
+
+#### *abstract property* queues_repository *: [QueueRepositoryInterface](#eric_sse.interfaces.QueueRepositoryInterface)*
+
+<a id="eric_sse.interfaces.ConnectionRepositoryInterface.listeners_repository"></a>
+
+#### *abstract property* listeners_repository *: [ListenerRepositoryInterface](#eric_sse.interfaces.ListenerRepositoryInterface)*
+
+<a id="eric_sse.interfaces.ConnectionRepositoryInterface.load_all"></a>
+
+#### *abstract* load_all(channel_id)
+
+Loads all connections managed by a given channel
+
+* **Parameters:**
+  **channel_id** (*str*)
+* **Return type:**
+  *Iterable*[[*Connection*](channels.md#eric_sse.connection.Connection)]
+
+<a id="eric_sse.interfaces.ConnectionRepositoryInterface.load_one"></a>
+
+#### *abstract* load_one(channel_id, connection_id)
+
+Loads a connection given the connection and channel id it belongs to.
+
+* **Parameters:**
+  * **channel_id** (*str*)
+  * **connection_id** (*str*)
+* **Return type:**
+  [*Connection*](channels.md#eric_sse.connection.Connection)
+
+<a id="eric_sse.interfaces.ConnectionRepositoryInterface.persist"></a>
+
+#### *abstract* persist(channel_id, connection)
+
+Persists a connection and assign it to a channel.
+
+* **Parameters:**
+  * **channel_id** (*str*)
+  * **connection** ([*Connection*](channels.md#eric_sse.connection.Connection))
+
+<a id="eric_sse.interfaces.ConnectionRepositoryInterface.delete"></a>
+
+#### *abstract* delete(channel_id, connection_id)
+
+Deletes a connection given the connection and channel id it belongs to.
+
+* **Parameters:**
+  * **channel_id** (*str*)
+  * **connection_id** (*str*)
+
+<a id="eric_sse.interfaces.ChannelRepositoryInterface"></a>
+
+### *class* ChannelRepositoryInterface
+
+Bases: `ABC`
+
+<a id="eric_sse.interfaces.ChannelRepositoryInterface.connections_factory"></a>
+
+#### *abstract property* connections_factory *: [ConnectionsFactory](channels.md#eric_sse.connection.ConnectionsFactory)*
+
+The connections factory that will be injected into concrete channel instances.
+
+<a id="eric_sse.interfaces.ChannelRepositoryInterface.connections_repository"></a>
+
+#### *abstract property* connections_repository *: [ConnectionRepositoryInterface](#eric_sse.interfaces.ConnectionRepositoryInterface)*
+
+Repository to be used to persist connections.
+
+<a id="eric_sse.interfaces.ChannelRepositoryInterface.load_all"></a>
+
+#### *abstract* load_all()
+
+Loads all channels
+
+* **Return type:**
+  *Iterable*[[*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel)]
+
+<a id="eric_sse.interfaces.ChannelRepositoryInterface.load_one"></a>
+
+#### *abstract* load_one(channel_id)
+
+Loads a channel given its it
+
+* **Parameters:**
+  **channel_id** (*str*)
+* **Return type:**
+  [*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel)
+
+<a id="eric_sse.interfaces.ChannelRepositoryInterface.persist"></a>
+
+#### *abstract* persist(channel)
+
+Persists a channel
+
+* **Parameters:**
+  **channel** ([*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel))
+
+<a id="eric_sse.interfaces.ChannelRepositoryInterface.delete"></a>
+
+#### *abstract* delete(channel_id)
+
+Deletes a channel given its it
+
+* **Parameters:**
+  **channel_id** (*str*)
+
+<a id="eric_sse.interfaces.ChannelRepositoryInterface.create"></a>
+
+#### *abstract* create(channel_data)
+
+Creates a new channel and configures it depending on channel_data.
+
+* **Parameters:**
+  **channel_data** (*dict*)
+* **Return type:**
+  [*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel)
