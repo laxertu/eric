@@ -345,6 +345,38 @@ Raises a [`NoMessagesException`](exceptions.md#eric_sse.exception.NoMessagesExce
 * **Return type:**
   None
 
+<a id="eric_sse.queues.InMemoryQueue"></a>
+
+### *class* InMemoryQueue
+
+Bases: [`Queue`](#eric_sse.queues.Queue)
+
+In memory implementation.
+
+<a id="eric_sse.queues.InMemoryQueue.__init__"></a>
+
+#### \_\_init_\_()
+
+<a id="eric_sse.queues.InMemoryQueue.pop"></a>
+
+#### pop()
+
+Next message from the queue.
+
+Raises a [`NoMessagesException`](exceptions.md#eric_sse.exception.NoMessagesException) if the queue is empty.
+
+* **Return type:**
+  [*MessageContract*](#eric_sse.message.MessageContract)
+
+<a id="eric_sse.queues.InMemoryQueue.push"></a>
+
+#### push(message)
+
+* **Parameters:**
+  **message** ([*MessageContract*](#eric_sse.message.MessageContract))
+* **Return type:**
+  None
+
 <a id="module-eric_sse.listener"></a>
 
 <a id="listeners"></a>

@@ -28,7 +28,7 @@ Queues
 ======
 .. automodule:: eric_sse.queues
     :undoc-members:
-    :members: Queue
+    :members: Queue, InMemoryQueue
     :member-order: bysource
     :show-inheritance:
 

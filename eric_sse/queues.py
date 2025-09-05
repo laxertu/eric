@@ -22,7 +22,7 @@ class Queue(ABC):
         ...
 
 class InMemoryQueue(Queue):
-
+    """In memory implementation."""
     def __init__(self):
         super().__init__()
         self.__messages: list[MessageContract] = []
