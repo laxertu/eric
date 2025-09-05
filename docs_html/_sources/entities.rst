@@ -14,12 +14,12 @@ Messages
 Channels and connections
 ========================
 
-.. automodule:: eric_sse.connection
+.. automodule:: eric_sse.entities
     :members:
     :show-inheritance:
     :member-order: bysource
 
-.. automodule:: eric_sse.entities
+.. automodule:: eric_sse.connection
     :members:
     :show-inheritance:
     :member-order: bysource

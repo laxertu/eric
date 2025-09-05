@@ -127,70 +127,11 @@ Message plus sender id
 
 Returns the id of the listener that sent the message
 
-<a id="module-eric_sse.connection"></a>
+<a id="module-eric_sse.entities"></a>
 
 <a id="channels-and-connections"></a>
 
 # Channels and connections
-
-<a id="eric_sse.connection.Connection"></a>
-
-### *class* Connection
-
-Bases: `object`
-
-A connection is just a listener and its related message queue
-
-* **Parameters:**
-  * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
-  * **queue** ([*Queue*](#eric_sse.queues.Queue))
-
-<a id="eric_sse.connection.Connection.__init__"></a>
-
-#### \_\_init_\_(listener, queue, connection_id=None)
-
-* **Parameters:**
-  * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
-  * **queue** ([*Queue*](#eric_sse.queues.Queue))
-  * **connection_id** (*str* *|* *None*)
-
-<a id="eric_sse.connection.ConnectionsFactory"></a>
-
-### *class* ConnectionsFactory
-
-Bases: `ABC`
-
-<a id="eric_sse.connection.ConnectionsFactory.create"></a>
-
-#### *abstract* create(listener=None)
-
-Creates a connection
-
-* **Parameters:**
-  **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener)) – If provided, assigns a concrete listener
-* **Return type:**
-  [*Connection*](#eric_sse.connection.Connection)
-
-<a id="eric_sse.connection.InMemoryConnectionsFactory"></a>
-
-### *class* InMemoryConnectionsFactory
-
-Bases: [`ConnectionsFactory`](#eric_sse.connection.ConnectionsFactory)
-
-Creates Connections with In memory queues (no persistence support)
-
-<a id="eric_sse.connection.InMemoryConnectionsFactory.create"></a>
-
-#### create(listener=None)
-
-Creates a connection
-
-* **Parameters:**
-  **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener)) – If provided, assigns a concrete listener
-* **Return type:**
-  [*Connection*](#eric_sse.connection.Connection)
-
-<a id="module-eric_sse.entities"></a>
 
 <a id="eric_sse.entities.AbstractChannel"></a>
 
@@ -310,6 +251,65 @@ Enqueue a message to all listeners
 
 * **Parameters:**
   **msg** ([*MessageContract*](#eric_sse.message.MessageContract))
+
+<a id="module-eric_sse.connection"></a>
+
+<a id="eric_sse.connection.Connection"></a>
+
+### *class* Connection
+
+Bases: `object`
+
+A connection is just a listener and its related message queue
+
+* **Parameters:**
+  * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
+  * **queue** ([*Queue*](#eric_sse.queues.Queue))
+
+<a id="eric_sse.connection.Connection.__init__"></a>
+
+#### \_\_init_\_(listener, queue, connection_id=None)
+
+* **Parameters:**
+  * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
+  * **queue** ([*Queue*](#eric_sse.queues.Queue))
+  * **connection_id** (*str* *|* *None*)
+
+<a id="eric_sse.connection.ConnectionsFactory"></a>
+
+### *class* ConnectionsFactory
+
+Bases: `ABC`
+
+<a id="eric_sse.connection.ConnectionsFactory.create"></a>
+
+#### *abstract* create(listener=None)
+
+Creates a connection
+
+* **Parameters:**
+  **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener)) – If provided, assigns a concrete listener
+* **Return type:**
+  [*Connection*](#eric_sse.connection.Connection)
+
+<a id="eric_sse.connection.InMemoryConnectionsFactory"></a>
+
+### *class* InMemoryConnectionsFactory
+
+Bases: [`ConnectionsFactory`](#eric_sse.connection.ConnectionsFactory)
+
+Creates Connections with In memory queues (no persistence support)
+
+<a id="eric_sse.connection.InMemoryConnectionsFactory.create"></a>
+
+#### create(listener=None)
+
+Creates a connection
+
+* **Parameters:**
+  **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener)) – If provided, assigns a concrete listener
+* **Return type:**
+  [*Connection*](#eric_sse.connection.Connection)
 
 <a id="module-eric_sse.queues"></a>
 
