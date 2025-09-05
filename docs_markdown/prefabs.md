@@ -12,7 +12,7 @@
 
 ### *class* SSEChannel
 
-Bases: [`AbstractChannel`](channels.md#eric_sse.entities.AbstractChannel)
+Bases: [`AbstractChannel`](entities.md#eric_sse.entities.AbstractChannel)
 
 SSE streaming channel.
 See [Mozilla docs](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format)
@@ -27,7 +27,7 @@ Currently, ‘id’ field is not supported.
   * **stream_delay_seconds** (*int*)
   * **retry_timeout_milliseconds** (*int*)
   * **channel_id** (*str* *|* *None*)
-  * **connections_factory** ([*ConnectionsFactory*](channels.md#eric_sse.connection.ConnectionsFactory) *|* *None*)
+  * **connections_factory** ([*ConnectionsFactory*](entities.md#eric_sse.connection.ConnectionsFactory) *|* *None*)
 
 <a id="eric_sse.prefabs.SSEChannel.adapt"></a>
 
@@ -54,7 +54,7 @@ Returns:
 
 ### *class* DataProcessingChannel
 
-Bases: [`AbstractChannel`](channels.md#eric_sse.entities.AbstractChannel)
+Bases: [`AbstractChannel`](entities.md#eric_sse.entities.AbstractChannel)
 
 Channel intended for concurrent processing of data.
 
@@ -79,7 +79,7 @@ MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered a
 Performs queue processing of a given listener, returns an AsyncIterable of dictionaries containing message process result. See **adapt** method
 
 * **Parameters:**
-  **listener** ([*MessageQueueListener*](channels.md#eric_sse.listener.MessageQueueListener))
+  **listener** ([*MessageQueueListener*](entities.md#eric_sse.listener.MessageQueueListener))
 * **Return type:**
   *AsyncIterable*[dict]
 
@@ -105,7 +105,7 @@ Returns a dictionary in the following format:
 
 ### *class* SimpleDistributedApplicationListener
 
-Bases: [`MessageQueueListener`](channels.md#eric_sse.listener.MessageQueueListener)
+Bases: [`MessageQueueListener`](entities.md#eric_sse.listener.MessageQueueListener)
 
 Listener for distributed applications
 
@@ -135,7 +135,7 @@ Receiving a message with one of these types will fire corresponding action.
 #### dispatch_to(receiver, msg)
 
 * **Parameters:**
-  * **receiver** ([*MessageQueueListener*](channels.md#eric_sse.listener.MessageQueueListener))
+  * **receiver** ([*MessageQueueListener*](entities.md#eric_sse.listener.MessageQueueListener))
   * **msg** ([*MessageContract*](entities.md#eric_sse.message.MessageContract))
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.on_message"></a>
@@ -202,7 +202,7 @@ Helper class for management of multiple channels cases of use.
 #### register(channel)
 
 * **Parameters:**
-  **channel** ([*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel))
+  **channel** ([*AbstractChannel*](entities.md#eric_sse.entities.AbstractChannel))
 * **Return type:**
   None
 
@@ -211,7 +211,7 @@ Helper class for management of multiple channels cases of use.
 #### register_iterable(channels)
 
 * **Parameters:**
-  **channels** (*Iterable* *[*[*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel) *]*)
+  **channels** (*Iterable* *[*[*AbstractChannel*](entities.md#eric_sse.entities.AbstractChannel) *]*)
 * **Return type:**
   None
 
@@ -222,7 +222,7 @@ Helper class for management of multiple channels cases of use.
 * **Parameters:**
   **channel_id** (*str*)
 * **Return type:**
-  [*AbstractChannel*](channels.md#eric_sse.entities.AbstractChannel)
+  [*AbstractChannel*](entities.md#eric_sse.entities.AbstractChannel)
 
 <a id="eric_sse.servers.ChannelContainer.rm"></a>
 

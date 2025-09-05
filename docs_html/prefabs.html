@@ -44,7 +44,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Persistence" href="persistence.html" />
-    <link rel="prev" title="Channels" href="channels.html" />
+    <link rel="prev" title="Entities" href="entities.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -151,7 +151,8 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="docs.html">Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="entities.html">Entities</a></li>
-<li class="toctree-l2"><a class="reference internal" href="channels.html">Channels</a></li>
+
+
 
 
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Prefabs</a></li>
@@ -393,7 +394,7 @@ document.write(`
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.prefabs.SSEChannel">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SSEChannel</span></span><a class="headerlink" href="#eric_sse.prefabs.SSEChannel" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="channels.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="entities.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a></p>
 <p>SSE streaming channel.
 See <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format">Mozilla docs</a></p>
 <p>Currently, ‘id’ field is not supported.</p>
@@ -406,7 +407,7 @@ See <a class="reference external" href="https://developer.mozilla.org/en-US/docs
 <li><p><strong>stream_delay_seconds</strong> (<em>int</em>)</p></li>
 <li><p><strong>retry_timeout_milliseconds</strong> (<em>int</em>)</p></li>
 <li><p><strong>channel_id</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
-<li><p><strong>connections_factory</strong> (<a class="reference internal" href="channels.html#eric_sse.connection.ConnectionsFactory" title="eric_sse.connection.ConnectionsFactory"><em>ConnectionsFactory</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>connections_factory</strong> (<a class="reference internal" href="entities.html#eric_sse.connection.ConnectionsFactory" title="eric_sse.connection.ConnectionsFactory"><em>ConnectionsFactory</em></a><em> | </em><em>None</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -439,7 +440,7 @@ See <a class="reference external" href="https://developer.mozilla.org/en-US/docs
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.prefabs.DataProcessingChannel">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DataProcessingChannel</span></span><a class="headerlink" href="#eric_sse.prefabs.DataProcessingChannel" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="channels.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="entities.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a></p>
 <p>Channel intended for concurrent processing of data.</p>
 <p>Relies on <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Executor">concurrent.futures.Executor</a>.
 Just override <strong>adapt</strong> method to control output returned to clients</p>
@@ -464,7 +465,7 @@ Just override <strong>adapt</strong> method to control output returned to client
 <dd><p>Performs queue processing of a given listener, returns an AsyncIterable of dictionaries containing message process result. See <strong>adapt</strong> method</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>listener</strong> (<a class="reference internal" href="channels.html#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a>)</p>
+<dd class="field-odd"><p><strong>listener</strong> (<a class="reference internal" href="entities.html#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><em>AsyncIterable</em>[dict]</p>
@@ -497,7 +498,7 @@ Just override <strong>adapt</strong> method to control output returned to client
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.prefabs.SimpleDistributedApplicationListener">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SimpleDistributedApplicationListener</span></span><a class="headerlink" href="#eric_sse.prefabs.SimpleDistributedApplicationListener" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="channels.html#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="entities.html#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a></p>
 <p>Listener for distributed applications</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.prefabs.SimpleDistributedApplicationListener.__init__">
@@ -528,7 +529,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>receiver</strong> (<a class="reference internal" href="channels.html#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a>)</p></li>
+<li><p><strong>receiver</strong> (<a class="reference internal" href="entities.html#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a>)</p></li>
 <li><p><strong>msg</strong> (<a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>)</p></li>
 </ul>
 </dd>
@@ -605,7 +606,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.ChannelContainer.register" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>channel</strong> (<a class="reference internal" href="channels.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a>)</p>
+<dd class="field-odd"><p><strong>channel</strong> (<a class="reference internal" href="entities.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
@@ -618,7 +619,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <span class="sig-name descname"><span class="pre">register_iterable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.ChannelContainer.register_iterable" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>channels</strong> (<em>Iterable</em><em>[</em><a class="reference internal" href="channels.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a><em>]</em>)</p>
+<dd class="field-odd"><p><strong>channels</strong> (<em>Iterable</em><em>[</em><a class="reference internal" href="entities.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a><em>]</em>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
@@ -634,7 +635,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <dd class="field-odd"><p><strong>channel_id</strong> (<em>str</em>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="channels.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a></p>
+<dd class="field-even"><p><a class="reference internal" href="entities.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -846,12 +847,12 @@ Receiving a message with one of these types will fire corresponding action.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="channels.html"
+       href="entities.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Channels</p>
+        <p class="prev-next-title">Entities</p>
       </div>
     </a>
     <a class="right-next"

@@ -14,7 +14,6 @@ Reference
    :hidden:
 
    entities
-   channels
    prefabs
    persistence
    exceptions
