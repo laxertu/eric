@@ -7,9 +7,15 @@
 Base classes for channels and connections repositories.
 The main idea is that a repository relies on some KV storage engine abstraction, and uses it for storing its own configuration, and its correspondant composites repositories to build final objects to return.
 
-To build a persistence layer is needed to provide an implementation to one or more of above abstractions, and use them to build a custom ChannelRepository
+To build a persistence layer is needed to provide an implementation to some of above abstractions, and use them to build a custom ChannelRepository
 
 [Here](https://github.com/laxertu/eric-redis-queues/blob/master/eric_redis_queues/repository.py) is a possible Redis implementation
+
+**Suggestions**
+
+If your implementation uses objects that are directly persistable by storage engine you are using, cleanest manner of implementing your custom layer is to simply
+implement a [`KvStorage`](#eric_sse.repository.KvStorage) and delegate to it all repositories ones.
+Otherwise you should implement a dump strategy inside repositories themselves. An example is RedisQueues persistence, as Redis client used is not serializable by pickle.
 
 <a id="module-eric_sse.repository"></a>
 

@@ -67,12 +67,12 @@ Messages plus an unique identifier
 
 <a id="eric_sse.message.UniqueMessage.__init__"></a>
 
-#### \_\_init_\_(message_id, message, sender_id=None)
+#### \_\_init_\_(message, sender_id=None, message_id=None)
 
 * **Parameters:**
-  * **message_id** (*str*)
   * **message** ([*MessageContract*](#eric_sse.message.MessageContract))
   * **sender_id** (*str* *|* *None*)
+  * **message_id** (*str* *|* *None*)
 * **Return type:**
   None
 
