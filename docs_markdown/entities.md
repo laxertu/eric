@@ -12,7 +12,7 @@
 
 ### *class* MessageContract
 
-Bases: `ABC`
+Bases: [`ABC`](https://docs.python.org/3/library/abc.html#abc.ABC)
 
 Contract class for messages
 
@@ -21,13 +21,13 @@ For validation purposes you can override its [`on_message()`](#eric_sse.listener
 
 <a id="eric_sse.message.MessageContract.type"></a>
 
-#### *abstract property* type *: str*
+#### *abstract property* type *: [str](https://docs.python.org/3/library/stdtypes.html#str)*
 
 Message type
 
 <a id="eric_sse.message.MessageContract.payload"></a>
 
-#### *abstract property* payload *: dict | list | str | int | float | None*
+#### *abstract property* payload *: [dict](https://docs.python.org/3/library/stdtypes.html#dict) | [list](https://docs.python.org/3/library/stdtypes.html#list) | [str](https://docs.python.org/3/library/stdtypes.html#str) | [int](https://docs.python.org/3/library/functions.html#int) | [float](https://docs.python.org/3/library/functions.html#float) | [None](https://docs.python.org/3/library/constants.html#None)*
 
 Message payload
 
@@ -44,20 +44,20 @@ Models a simple message
 #### \_\_init_\_(msg_type, msg_payload=None)
 
 * **Parameters:**
-  * **msg_type** (*str*)
-  * **msg_payload** (*dict* *|* *list* *|* *str* *|* *int* *|* *float* *|* *None*)
+  * **msg_type** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
+  * **msg_payload** ([*dict*](https://docs.python.org/3/library/stdtypes.html#dict) *|* [*list*](https://docs.python.org/3/library/stdtypes.html#list) *|* [*str*](https://docs.python.org/3/library/stdtypes.html#str) *|* [*int*](https://docs.python.org/3/library/functions.html#int) *|* [*float*](https://docs.python.org/3/library/functions.html#float) *|* *None*)
 * **Return type:**
   None
 
 <a id="eric_sse.message.Message.type"></a>
 
-#### *property* type *: str*
+#### *property* type *: [str](https://docs.python.org/3/library/stdtypes.html#str)*
 
 Message type
 
 <a id="eric_sse.message.Message.payload"></a>
 
-#### *property* payload *: dict | list | str | int | float | None*
+#### *property* payload *: [dict](https://docs.python.org/3/library/stdtypes.html#dict) | [list](https://docs.python.org/3/library/stdtypes.html#list) | [str](https://docs.python.org/3/library/stdtypes.html#str) | [int](https://docs.python.org/3/library/functions.html#int) | [float](https://docs.python.org/3/library/functions.html#float) | [None](https://docs.python.org/3/library/constants.html#None)*
 
 Message payload
 
@@ -75,32 +75,32 @@ Messages plus an unique identifier
 
 * **Parameters:**
   * **message** ([*MessageContract*](#eric_sse.message.MessageContract))
-  * **sender_id** (*str* *|* *None*)
-  * **message_id** (*str* *|* *None*)
+  * **sender_id** ([*str*](https://docs.python.org/3/library/stdtypes.html#str) *|* *None*)
+  * **message_id** ([*str*](https://docs.python.org/3/library/stdtypes.html#str) *|* *None*)
 * **Return type:**
   None
 
 <a id="eric_sse.message.UniqueMessage.id"></a>
 
-#### *property* id *: str*
+#### *property* id *: [str](https://docs.python.org/3/library/stdtypes.html#str)*
 
 Unique message identifier
 
 <a id="eric_sse.message.UniqueMessage.type"></a>
 
-#### *property* type *: str*
+#### *property* type *: [str](https://docs.python.org/3/library/stdtypes.html#str)*
 
 Message type
 
 <a id="eric_sse.message.UniqueMessage.sender_id"></a>
 
-#### *property* sender_id *: str*
+#### *property* sender_id *: [str](https://docs.python.org/3/library/stdtypes.html#str)*
 
 Returns the id of the listener that sent the message
 
 <a id="eric_sse.message.UniqueMessage.payload"></a>
 
-#### *property* payload *: dict | list | str | int | float | None*
+#### *property* payload *: [dict](https://docs.python.org/3/library/stdtypes.html#dict) | [list](https://docs.python.org/3/library/stdtypes.html#list) | [str](https://docs.python.org/3/library/stdtypes.html#str) | [int](https://docs.python.org/3/library/functions.html#int) | [float](https://docs.python.org/3/library/functions.html#float) | [None](https://docs.python.org/3/library/constants.html#None)*
 
 Message payload
 
@@ -117,13 +117,13 @@ Message plus sender id
 #### \_\_init_\_(sender_id, msg_type, msg_payload=None)
 
 * **Parameters:**
-  * **sender_id** (*str*)
-  * **msg_type** (*str*)
-  * **msg_payload** (*dict* *|* *list* *|* *str* *|* *int* *|* *float* *|* *None*)
+  * **sender_id** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
+  * **msg_type** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
+  * **msg_payload** ([*dict*](https://docs.python.org/3/library/stdtypes.html#dict) *|* [*list*](https://docs.python.org/3/library/stdtypes.html#list) *|* [*str*](https://docs.python.org/3/library/stdtypes.html#str) *|* [*int*](https://docs.python.org/3/library/functions.html#int) *|* [*float*](https://docs.python.org/3/library/functions.html#float) *|* *None*)
 
 <a id="eric_sse.message.SignedMessage.sender_id"></a>
 
-#### *property* sender_id *: str*
+#### *property* sender_id *: [str](https://docs.python.org/3/library/stdtypes.html#str)*
 
 Returns the id of the listener that sent the message
 
@@ -137,7 +137,7 @@ Returns the id of the listener that sent the message
 
 ### *class* AbstractChannel
 
-Bases: `ABC`
+Bases: [`ABC`](https://docs.python.org/3/library/abc.html#abc.ABC)
 
 Base class for channels.
 
@@ -148,8 +148,8 @@ Provides functionalities for listeners and message delivery management.
 see [`SSEChannel`](prefabs.md#eric_sse.prefabs.SSEChannel)
 
 * **Parameters:**
-  * **stream_delay_seconds** (*int*) – Wait time in seconds between message delivery.
-  * **channel_id** (*str*) – Optionally sets the channel id.
+  * **stream_delay_seconds** ([*int*](https://docs.python.org/3/library/functions.html#int)) – Wait time in seconds between message delivery.
+  * **channel_id** ([*str*](https://docs.python.org/3/library/stdtypes.html#str)) – Optionally sets the channel id.
   * **connections_factory** ([*ConnectionsFactory*](#eric_sse.connection.ConnectionsFactory)) – Factory to be used for creating connections instances on channel subscriptions.
 
 <a id="eric_sse.entities.AbstractChannel.__init__"></a>
@@ -157,13 +157,13 @@ see [`SSEChannel`](prefabs.md#eric_sse.prefabs.SSEChannel)
 #### \_\_init_\_(stream_delay_seconds=0, channel_id=None, connections_factory=None)
 
 * **Parameters:**
-  * **stream_delay_seconds** (*int*)
-  * **channel_id** (*str* *|* *None*)
+  * **stream_delay_seconds** ([*int*](https://docs.python.org/3/library/functions.html#int))
+  * **channel_id** ([*str*](https://docs.python.org/3/library/stdtypes.html#str) *|* *None*)
   * **connections_factory** ([*ConnectionsFactory*](#eric_sse.connection.ConnectionsFactory) *|* *None*)
 
 <a id="eric_sse.entities.AbstractChannel.id"></a>
 
-#### *property* id *: str*
+#### *property* id *: [str](https://docs.python.org/3/library/stdtypes.html#str)*
 
 Unique identifier for this channel, it can be set by **channel_id** constructor parameter
 
@@ -176,7 +176,7 @@ Models output of channel streams
 * **Parameters:**
   **msg** ([*MessageContract*](#eric_sse.message.MessageContract))
 * **Return type:**
-  *Any*
+  [*Any*](https://docs.python.org/3/library/typing.html#typing.Any)
 
 <a id="eric_sse.entities.AbstractChannel.message_stream"></a>
 
@@ -189,7 +189,7 @@ A message with type = ‘error’ is yield on invalid listener
 * **Parameters:**
   **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
 * **Return type:**
-  *AsyncIterable*[*Any*]
+  [*AsyncIterable*](https://docs.python.org/3/library/typing.html#typing.AsyncIterable)[[*Any*](https://docs.python.org/3/library/typing.html#typing.Any)]
 
 <a id="eric_sse.entities.AbstractChannel.add_listener"></a>
 
@@ -229,7 +229,7 @@ Returns next message for given listener id.
 Raises a NoMessagesException if queue is empty
 
 * **Parameters:**
-  **listener_id** (*str*)
+  **listener_id** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
 * **Return type:**
   [*MessageContract*](#eric_sse.message.MessageContract)
 
@@ -240,7 +240,7 @@ Raises a NoMessagesException if queue is empty
 Adds a message to listener’s queue
 
 * **Parameters:**
-  * **listener_id** (*str*)
+  * **listener_id** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
   * **msg** ([*MessageContract*](#eric_sse.message.MessageContract))
 
 <a id="eric_sse.entities.AbstractChannel.broadcast"></a>
@@ -258,7 +258,7 @@ Enqueue a message to all listeners
 
 ### *class* Connection
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/library/functions.html#object)
 
 A connection is just a listener and its related message queue
 
@@ -273,13 +273,13 @@ A connection is just a listener and its related message queue
 * **Parameters:**
   * **listener** ([*MessageQueueListener*](#eric_sse.listener.MessageQueueListener))
   * **queue** ([*Queue*](#eric_sse.queues.Queue))
-  * **connection_id** (*str* *|* *None*)
+  * **connection_id** ([*str*](https://docs.python.org/3/library/stdtypes.html#str) *|* *None*)
 
 <a id="eric_sse.connection.ConnectionsFactory"></a>
 
 ### *class* ConnectionsFactory
 
-Bases: `ABC`
+Bases: [`ABC`](https://docs.python.org/3/library/abc.html#abc.ABC)
 
 <a id="eric_sse.connection.ConnectionsFactory.create"></a>
 
@@ -321,7 +321,7 @@ Creates a connection
 
 ### *class* Queue
 
-Bases: `ABC`
+Bases: [`ABC`](https://docs.python.org/3/library/abc.html#abc.ABC)
 
 Abstract base class for queues (FIFO).
 
@@ -387,7 +387,7 @@ Raises a [`NoMessagesException`](exceptions.md#eric_sse.exception.NoMessagesExce
 
 ### *class* MessageQueueListener
 
-Bases: `object`
+Bases: [`object`](https://docs.python.org/3/library/functions.html#object)
 
 Base class for listeners.
 
@@ -398,7 +398,7 @@ Optionally you can override on_message method if you need to inject code at mess
 #### \_\_init_\_(listener_id=None)
 
 * **Parameters:**
-  **listener_id** (*str* *|* *None*)
+  **listener_id** ([*str*](https://docs.python.org/3/library/stdtypes.html#str) *|* *None*)
 
 <a id="eric_sse.listener.MessageQueueListener.on_message"></a>
 
@@ -430,4 +430,4 @@ Event handler. It executes when a message is delivered to client
 #### is_running()
 
 * **Return type:**
-  bool
+  [bool](https://docs.python.org/3/library/functions.html#bool)

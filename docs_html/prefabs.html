@@ -404,9 +404,9 @@ See <a class="reference external" href="https://developer.mozilla.org/en-US/docs
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>stream_delay_seconds</strong> (<em>int</em>)</p></li>
-<li><p><strong>retry_timeout_milliseconds</strong> (<em>int</em>)</p></li>
-<li><p><strong>channel_id</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>stream_delay_seconds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>)</p></li>
+<li><p><strong>retry_timeout_milliseconds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>)</p></li>
+<li><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
 <li><p><strong>connections_factory</strong> (<a class="reference internal" href="entities.html#eric_sse.connection.ConnectionsFactory" title="eric_sse.connection.ConnectionsFactory"><em>ConnectionsFactory</em></a><em> | </em><em>None</em>)</p></li>
 </ul>
 </dd>
@@ -430,7 +430,7 @@ See <a class="reference external" href="https://developer.mozilla.org/en-US/docs
 <dd class="field-odd"><p><strong>msg</strong> (<a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>dict</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)">dict</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -451,9 +451,9 @@ Just override <strong>adapt</strong> method to control output returned to client
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>max_workers</strong> (<em>int</em>) – Num of workers to use</p></li>
-<li><p><strong>stream_delay_seconds</strong> (<em>int</em>) – Can be used to limit response rate of streaming. Only applies to message_stream calls.</p></li>
-<li><p><strong>executor_class</strong> (<em>type</em>) – The constructor of some Executor class. Defaults to  <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.ThreadPoolExecutor">ThreadPoolExecutor</a>.</p></li>
+<li><p><strong>max_workers</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Num of workers to use</p></li>
+<li><p><strong>stream_delay_seconds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Can be used to limit response rate of streaming. Only applies to message_stream calls.</p></li>
+<li><p><strong>executor_class</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.13)"><em>type</em></a>) – The constructor of some Executor class. Defaults to  <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.ThreadPoolExecutor">ThreadPoolExecutor</a>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -468,7 +468,7 @@ Just override <strong>adapt</strong> method to control output returned to client
 <dd class="field-odd"><p><strong>listener</strong> (<a class="reference internal" href="entities.html#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>AsyncIterable</em>[dict]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.AsyncIterable" title="(in Python v3.13)"><em>AsyncIterable</em></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)">dict</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -488,7 +488,7 @@ Just override <strong>adapt</strong> method to control output returned to client
 <dd class="field-odd"><p><strong>msg</strong> (<a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>dict</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)">dict</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -516,8 +516,8 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em>)</p></li>
-<li><p><strong>action</strong> (<em>Callable</em><em>[</em><em>[</em><a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a><em>]</em><em>, </em><em>list</em><em>[</em><a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a><em>]</em><em>]</em>)</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
+<li><p><strong>action</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><em>Callable</em></a><em>[</em><em>[</em><a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a><em>]</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em>[</em><a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a><em>]</em><em>]</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -579,7 +579,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <dd><p>Creates a new channel and configures it depending on channel_data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>channel_data</strong> (<em>dict</em>)</p>
+<dd class="field-odd"><p><strong>channel_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#eric_sse.prefabs.SSEChannel" title="eric_sse.prefabs.SSEChannel"><em>SSEChannel</em></a></p>
@@ -619,7 +619,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <span class="sig-name descname"><span class="pre">register_iterable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.ChannelContainer.register_iterable" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>channels</strong> (<em>Iterable</em><em>[</em><a class="reference internal" href="entities.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a><em>]</em>)</p>
+<dd class="field-odd"><p><strong>channels</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><em>Iterable</em></a><em>[</em><a class="reference internal" href="entities.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a><em>]</em>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
@@ -632,7 +632,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.ChannelContainer.get" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>channel_id</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="entities.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a></p>
@@ -645,7 +645,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <span class="sig-name descname"><span class="pre">rm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.ChannelContainer.rm" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>channel_id</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -655,7 +655,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <span class="sig-name descname"><span class="pre">get_all_ids</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.ChannelContainer.get_all_ids" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>Iterable</em>[str]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><em>Iterable</em></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -693,7 +693,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_descriptor_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.servers.SocketServer.__init__" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>file_descriptor_path</strong> (<em>str</em>) – See <strong>start</strong> method</p>
+<dd class="field-odd"><p><strong>file_descriptor_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – See <strong>start</strong> method</p>
 </dd>
 </dl>
 </dd></dl>
@@ -704,7 +704,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <dd><p>Shortcut to start a server given a file descriptor path</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>file_descriptor_path</strong> (<em>str</em>) – file descriptor path, all understood by <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a> is fine</p>
+<dd class="field-odd"><p><strong>file_descriptor_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – file descriptor path, all understood by <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a> is fine</p>
 </dd>
 </dl>
 </dd></dl>
@@ -732,7 +732,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_descriptor_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.clients.SocketClient.__init__" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>file_descriptor_path</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>file_descriptor_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -744,7 +744,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <p>see <a class="reference internal" href="#eric_sse.servers.SocketServer" title="eric_sse.servers.SocketServer"><code class="xref py py-class docutils literal notranslate"><span class="pre">SocketServer</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>payload</strong> (<em>dict</em>)</p>
+<dd class="field-odd"><p><strong>payload</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -754,7 +754,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_channel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.clients.SocketClient.create_channel" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -764,7 +764,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.clients.SocketClient.register" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>channel_id</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -774,7 +774,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listener_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.clients.SocketClient.stream" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>AsyncIterable</em>[str]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.AsyncIterable" title="(in Python v3.13)"><em>AsyncIterable</em></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -785,9 +785,9 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>channel_id</strong> (<em>str</em>)</p></li>
-<li><p><strong>message_type</strong> (<em>str</em>)</p></li>
-<li><p><strong>payload</strong> (<em>str</em><em> | </em><em>dict</em><em> | </em><em>int</em><em> | </em><em>float</em>)</p></li>
+<li><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
+<li><p><strong>message_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
+<li><p><strong>payload</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -799,10 +799,10 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>channel_id</strong> (<em>str</em>)</p></li>
-<li><p><strong>receiver_id</strong> (<em>str</em>)</p></li>
-<li><p><strong>message_type</strong> (<em>str</em>)</p></li>
-<li><p><strong>payload</strong> (<em>str</em><em> | </em><em>dict</em><em> | </em><em>int</em><em> | </em><em>float</em>)</p></li>
+<li><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
+<li><p><strong>receiver_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
+<li><p><strong>message_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
+<li><p><strong>payload</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -814,8 +814,8 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>channel_id</strong> (<em>str</em>)</p></li>
-<li><p><strong>listener_id</strong> (<em>str</em>)</p></li>
+<li><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
+<li><p><strong>listener_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -826,7 +826,7 @@ Receiving a message with one of these types will fire corresponding action.</p>
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remove_channel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.clients.SocketClient.remove_channel" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>channel_id</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 </dl>
 </dd></dl>

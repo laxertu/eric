@@ -24,9 +24,9 @@ Currently, ‘id’ field is not supported.
 #### \_\_init_\_(stream_delay_seconds=0, retry_timeout_milliseconds=5, channel_id=None, connections_factory=None)
 
 * **Parameters:**
-  * **stream_delay_seconds** (*int*)
-  * **retry_timeout_milliseconds** (*int*)
-  * **channel_id** (*str* *|* *None*)
+  * **stream_delay_seconds** ([*int*](https://docs.python.org/3/library/functions.html#int))
+  * **retry_timeout_milliseconds** ([*int*](https://docs.python.org/3/library/functions.html#int))
+  * **channel_id** ([*str*](https://docs.python.org/3/library/stdtypes.html#str) *|* *None*)
   * **connections_factory** ([*ConnectionsFactory*](entities.md#eric_sse.connection.ConnectionsFactory) *|* *None*)
 
 <a id="eric_sse.prefabs.SSEChannel.adapt"></a>
@@ -48,7 +48,7 @@ Returns:
 * **Parameters:**
   **msg** ([*MessageContract*](entities.md#eric_sse.message.MessageContract))
 * **Return type:**
-  dict
+  [dict](https://docs.python.org/3/library/stdtypes.html#dict)
 
 <a id="eric_sse.prefabs.DataProcessingChannel"></a>
 
@@ -68,9 +68,9 @@ MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered a
 #### \_\_init_\_(max_workers, stream_delay_seconds=0, executor_class=<class 'concurrent.futures.thread.ThreadPoolExecutor'>)
 
 * **Parameters:**
-  * **max_workers** (*int*) – Num of workers to use
-  * **stream_delay_seconds** (*int*) – Can be used to limit response rate of streaming. Only applies to message_stream calls.
-  * **executor_class** (*type*) – The constructor of some Executor class. Defaults to  [ThreadPoolExecutor](https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.ThreadPoolExecutor).
+  * **max_workers** ([*int*](https://docs.python.org/3/library/functions.html#int)) – Num of workers to use
+  * **stream_delay_seconds** ([*int*](https://docs.python.org/3/library/functions.html#int)) – Can be used to limit response rate of streaming. Only applies to message_stream calls.
+  * **executor_class** ([*type*](https://docs.python.org/3/library/functions.html#type)) – The constructor of some Executor class. Defaults to  [ThreadPoolExecutor](https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.ThreadPoolExecutor).
 
 <a id="eric_sse.prefabs.DataProcessingChannel.process_queue"></a>
 
@@ -81,7 +81,7 @@ Performs queue processing of a given listener, returns an AsyncIterable of dicti
 * **Parameters:**
   **listener** ([*MessageQueueListener*](entities.md#eric_sse.listener.MessageQueueListener))
 * **Return type:**
-  *AsyncIterable*[dict]
+  [*AsyncIterable*](https://docs.python.org/3/library/typing.html#typing.AsyncIterable)[[dict](https://docs.python.org/3/library/stdtypes.html#dict)]
 
 <a id="eric_sse.prefabs.DataProcessingChannel.adapt"></a>
 
@@ -99,7 +99,7 @@ Returns a dictionary in the following format:
 * **Parameters:**
   **msg** ([*MessageContract*](entities.md#eric_sse.message.MessageContract))
 * **Return type:**
-  dict
+  [dict](https://docs.python.org/3/library/stdtypes.html#dict)
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener"></a>
 
@@ -127,8 +127,8 @@ Reserved actions are ‘start’, ‘stop’.
 Receiving a message with one of these types will fire corresponding action.
 
 * **Parameters:**
-  * **name** (*str*)
-  * **action** (*Callable* *[* *[*[*MessageContract*](entities.md#eric_sse.message.MessageContract) *]* *,* *list* *[*[*MessageContract*](entities.md#eric_sse.message.MessageContract) *]* *]*)
+  * **name** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
+  * **action** ([*Callable*](https://docs.python.org/3/library/typing.html#typing.Callable) *[* *[*[*MessageContract*](entities.md#eric_sse.message.MessageContract) *]* *,* [*list*](https://docs.python.org/3/library/stdtypes.html#list) *[*[*MessageContract*](entities.md#eric_sse.message.MessageContract) *]* *]*)
 
 <a id="eric_sse.prefabs.SimpleDistributedApplicationListener.dispatch_to"></a>
 
@@ -177,7 +177,7 @@ Bases: [`AbstractChannelRepository`](persistence.md#eric_sse.repository.Abstract
 Creates a new channel and configures it depending on channel_data.
 
 * **Parameters:**
-  **channel_data** (*dict*)
+  **channel_data** ([*dict*](https://docs.python.org/3/library/stdtypes.html#dict))
 * **Return type:**
   [*SSEChannel*](#eric_sse.prefabs.SSEChannel)
 
@@ -211,7 +211,7 @@ Helper class for management of multiple channels cases of use.
 #### register_iterable(channels)
 
 * **Parameters:**
-  **channels** (*Iterable* *[*[*AbstractChannel*](entities.md#eric_sse.entities.AbstractChannel) *]*)
+  **channels** ([*Iterable*](https://docs.python.org/3/library/typing.html#typing.Iterable) *[*[*AbstractChannel*](entities.md#eric_sse.entities.AbstractChannel) *]*)
 * **Return type:**
   None
 
@@ -220,7 +220,7 @@ Helper class for management of multiple channels cases of use.
 #### get(channel_id)
 
 * **Parameters:**
-  **channel_id** (*str*)
+  **channel_id** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
 * **Return type:**
   [*AbstractChannel*](entities.md#eric_sse.entities.AbstractChannel)
 
@@ -229,14 +229,14 @@ Helper class for management of multiple channels cases of use.
 #### rm(channel_id)
 
 * **Parameters:**
-  **channel_id** (*str*)
+  **channel_id** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
 
 <a id="eric_sse.servers.ChannelContainer.get_all_ids"></a>
 
 #### get_all_ids()
 
 * **Return type:**
-  *Iterable*[str]
+  [*Iterable*](https://docs.python.org/3/library/typing.html#typing.Iterable)[[str](https://docs.python.org/3/library/stdtypes.html#str)]
 
 <a id="eric_sse.servers.SocketServer"></a>
 
@@ -276,7 +276,7 @@ See examples
 #### \_\_init_\_(file_descriptor_path)
 
 * **Parameters:**
-  **file_descriptor_path** (*str*) – See **start** method
+  **file_descriptor_path** ([*str*](https://docs.python.org/3/library/stdtypes.html#str)) – See **start** method
 
 <a id="eric_sse.servers.SocketServer.start"></a>
 
@@ -285,7 +285,7 @@ See examples
 Shortcut to start a server given a file descriptor path
 
 * **Parameters:**
-  **file_descriptor_path** (*str*) – file descriptor path, all understood by [Path](https://docs.python.org/3/library/pathlib.html#pathlib.Path) is fine
+  **file_descriptor_path** ([*str*](https://docs.python.org/3/library/stdtypes.html#str)) – file descriptor path, all understood by [Path](https://docs.python.org/3/library/pathlib.html#pathlib.Path) is fine
 
 <a id="eric_sse.servers.SocketServer.shutdown"></a>
 
@@ -312,7 +312,7 @@ A little facade to interact with SocketServer
 #### \_\_init_\_(file_descriptor_path)
 
 * **Parameters:**
-  **file_descriptor_path** (*str*)
+  **file_descriptor_path** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
 
 <a id="eric_sse.clients.SocketClient.send_payload"></a>
 
@@ -323,59 +323,59 @@ Send an arbitrary payload to a socket
 see [`SocketServer`](#eric_sse.servers.SocketServer)
 
 * **Parameters:**
-  **payload** (*dict*)
+  **payload** ([*dict*](https://docs.python.org/3/library/stdtypes.html#dict))
 
 <a id="eric_sse.clients.SocketClient.create_channel"></a>
 
 #### *async* create_channel()
 
 * **Return type:**
-  str
+  [str](https://docs.python.org/3/library/stdtypes.html#str)
 
 <a id="eric_sse.clients.SocketClient.register"></a>
 
 #### *async* register(channel_id)
 
 * **Parameters:**
-  **channel_id** (*str*)
+  **channel_id** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
 
 <a id="eric_sse.clients.SocketClient.stream"></a>
 
 #### *async* stream(channel_id, listener_id)
 
 * **Return type:**
-  *AsyncIterable*[str]
+  [*AsyncIterable*](https://docs.python.org/3/library/typing.html#typing.AsyncIterable)[[str](https://docs.python.org/3/library/stdtypes.html#str)]
 
 <a id="eric_sse.clients.SocketClient.broadcast_message"></a>
 
 #### *async* broadcast_message(channel_id, message_type, payload)
 
 * **Parameters:**
-  * **channel_id** (*str*)
-  * **message_type** (*str*)
-  * **payload** (*str* *|* *dict* *|* *int* *|* *float*)
+  * **channel_id** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
+  * **message_type** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
+  * **payload** ([*str*](https://docs.python.org/3/library/stdtypes.html#str) *|* [*dict*](https://docs.python.org/3/library/stdtypes.html#dict) *|* [*int*](https://docs.python.org/3/library/functions.html#int) *|* [*float*](https://docs.python.org/3/library/functions.html#float))
 
 <a id="eric_sse.clients.SocketClient.dispatch"></a>
 
 #### *async* dispatch(channel_id, receiver_id, message_type, payload)
 
 * **Parameters:**
-  * **channel_id** (*str*)
-  * **receiver_id** (*str*)
-  * **message_type** (*str*)
-  * **payload** (*str* *|* *dict* *|* *int* *|* *float*)
+  * **channel_id** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
+  * **receiver_id** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
+  * **message_type** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
+  * **payload** ([*str*](https://docs.python.org/3/library/stdtypes.html#str) *|* [*dict*](https://docs.python.org/3/library/stdtypes.html#dict) *|* [*int*](https://docs.python.org/3/library/functions.html#int) *|* [*float*](https://docs.python.org/3/library/functions.html#float))
 
 <a id="eric_sse.clients.SocketClient.remove_listener"></a>
 
 #### *async* remove_listener(channel_id, listener_id)
 
 * **Parameters:**
-  * **channel_id** (*str*)
-  * **listener_id** (*str*)
+  * **channel_id** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
+  * **listener_id** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
 
 <a id="eric_sse.clients.SocketClient.remove_channel"></a>
 
 #### *async* remove_channel(channel_id)
 
 * **Parameters:**
-  **channel_id** (*str*)
+  **channel_id** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))

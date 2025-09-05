@@ -418,17 +418,17 @@ Otherwise you should implement a dump strategy inside repositories themselves. A
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.repository.KvStorage">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">KvStorage</span></span><a class="headerlink" href="#eric_sse.repository.KvStorage" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a></p>
 <p>Represents a Key Value storage engine. Provides functionalities do load, persist and find by key prefix</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.repository.KvStorage.fetch_by_prefix">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_by_prefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvStorage.fetch_by_prefix" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>prefix</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>Iterable</em>[<em>Any</em>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><em>Iterable</em></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -438,7 +438,7 @@ Otherwise you should implement a dump strategy inside repositories themselves. A
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvStorage.fetch_all" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>Iterable</em>[<em>Any</em>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><em>Iterable</em></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -449,8 +449,8 @@ Otherwise you should implement a dump strategy inside repositories themselves. A
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>key</strong> (<em>str</em>)</p></li>
-<li><p><strong>value</strong> (<em>Any</em>)</p></li>
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -461,10 +461,10 @@ Otherwise you should implement a dump strategy inside repositories themselves. A
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvStorage.fetch_one" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>Any</em></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -474,7 +474,7 @@ Otherwise you should implement a dump strategy inside repositories themselves. A
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvStorage.delete" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -491,7 +491,7 @@ Otherwise you should implement a dump strategy inside repositories themselves. A
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.InMemoryStorage.__init__" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>items</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>] </em><em>| </em><em>None</em>)</p>
+<dd class="field-odd"><p><strong>items</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -501,10 +501,10 @@ Otherwise you should implement a dump strategy inside repositories themselves. A
 <span class="sig-name descname"><span class="pre">fetch_by_prefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.InMemoryStorage.fetch_by_prefix" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>prefix</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>Iterable</em>[<em>Any</em>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><em>Iterable</em></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -514,7 +514,7 @@ Otherwise you should implement a dump strategy inside repositories themselves. A
 <span class="sig-name descname"><span class="pre">fetch_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.InMemoryStorage.fetch_all" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>Iterable</em>[<em>Any</em>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><em>Iterable</em></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -525,8 +525,8 @@ Otherwise you should implement a dump strategy inside repositories themselves. A
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>key</strong> (<em>str</em>)</p></li>
-<li><p><strong>value</strong> (<em>Any</em>)</p></li>
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -537,10 +537,10 @@ Otherwise you should implement a dump strategy inside repositories themselves. A
 <span class="sig-name descname"><span class="pre">fetch_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.InMemoryStorage.fetch_one" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>Any</em></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -550,7 +550,7 @@ Otherwise you should implement a dump strategy inside repositories themselves. A
 <span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.InMemoryStorage.delete" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>key</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -560,7 +560,7 @@ Otherwise you should implement a dump strategy inside repositories themselves. A
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.repository.AbstractChannelRepository">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AbstractChannelRepository</span></span><a class="headerlink" href="#eric_sse.repository.AbstractChannelRepository" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#eric_sse.interfaces.ChannelRepositoryInterface" title="eric_sse.interfaces.ChannelRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelRepositoryInterface</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="#eric_sse.interfaces.ChannelRepositoryInterface" title="eric_sse.interfaces.ChannelRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelRepositoryInterface</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a></p>
 <p>Abstract base class for channel repositories.</p>
 <p>Builds channels before return them using injected repositories</p>
 <dl class="py method">
@@ -595,7 +595,7 @@ Otherwise you should implement a dump strategy inside repositories themselves. A
 <dd><p>Loads all channels</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>Iterable</em>[<a class="reference internal" href="entities.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><em>Iterable</em></a>[<a class="reference internal" href="entities.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -606,7 +606,7 @@ Otherwise you should implement a dump strategy inside repositories themselves. A
 <dd><p>Loads a channel given its it</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>channel_id</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="entities.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a></p>
@@ -631,7 +631,7 @@ Otherwise you should implement a dump strategy inside repositories themselves. A
 <dd><p>Deletes a channel given its it</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>channel_id</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -675,10 +675,10 @@ correspondant repositories for related objects ones.</p>
 <dd><p>Loads all connections managed by a given channel</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>channel_id</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>Iterable</em>[<a class="reference internal" href="entities.html#eric_sse.connection.Connection" title="eric_sse.connection.Connection"><em>Connection</em></a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><em>Iterable</em></a>[<a class="reference internal" href="entities.html#eric_sse.connection.Connection" title="eric_sse.connection.Connection"><em>Connection</em></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -690,8 +690,8 @@ correspondant repositories for related objects ones.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>channel_id</strong> (<em>str</em>)</p></li>
-<li><p><strong>connection_id</strong> (<em>str</em>)</p></li>
+<li><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -707,7 +707,7 @@ correspondant repositories for related objects ones.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>channel_id</strong> (<em>str</em>)</p></li>
+<li><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
 <li><p><strong>connection</strong> (<a class="reference internal" href="entities.html#eric_sse.connection.Connection" title="eric_sse.connection.Connection"><em>Connection</em></a>)</p></li>
 </ul>
 </dd>
@@ -721,8 +721,8 @@ correspondant repositories for related objects ones.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>channel_id</strong> (<em>str</em>)</p></li>
-<li><p><strong>connection_id</strong> (<em>str</em>)</p></li>
+<li><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -736,14 +736,14 @@ correspondant repositories for related objects ones.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.interfaces.QueueRepositoryInterface">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">QueueRepositoryInterface</span></span><a class="headerlink" href="#eric_sse.interfaces.QueueRepositoryInterface" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.interfaces.QueueRepositoryInterface.load">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.QueueRepositoryInterface.load" title="Link to this definition">#</a></dt>
 <dd><p>Loads a queue given the connection id it belongs to.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>connection_id</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="entities.html#eric_sse.queues.Queue" title="eric_sse.queues.Queue"><em>Queue</em></a></p>
@@ -758,7 +758,7 @@ correspondant repositories for related objects ones.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>connection_id</strong> (<em>str</em>)</p></li>
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
 <li><p><strong>queue</strong> (<a class="reference internal" href="entities.html#eric_sse.queues.Queue" title="eric_sse.queues.Queue"><em>Queue</em></a>)</p></li>
 </ul>
 </dd>
@@ -771,7 +771,7 @@ correspondant repositories for related objects ones.</p>
 <dd><p>Deletes a queue given the connection id it belongs to.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>connection_id</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -781,14 +781,14 @@ correspondant repositories for related objects ones.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.interfaces.ListenerRepositoryInterface">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ListenerRepositoryInterface</span></span><a class="headerlink" href="#eric_sse.interfaces.ListenerRepositoryInterface" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.interfaces.ListenerRepositoryInterface.load">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ListenerRepositoryInterface.load" title="Link to this definition">#</a></dt>
 <dd><p>Loads a listener given the connection id it belongs to.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>connection_id</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="entities.html#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a></p>
@@ -803,7 +803,7 @@ correspondant repositories for related objects ones.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>connection_id</strong> (<em>str</em>)</p></li>
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
 <li><p><strong>listener</strong> (<a class="reference internal" href="entities.html#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a>)</p></li>
 </ul>
 </dd>
@@ -816,7 +816,7 @@ correspondant repositories for related objects ones.</p>
 <dd><p>Deleted a listener given the connection id it belongs to.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>connection_id</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -826,7 +826,7 @@ correspondant repositories for related objects ones.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.interfaces.ConnectionRepositoryInterface">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConnectionRepositoryInterface</span></span><a class="headerlink" href="#eric_sse.interfaces.ConnectionRepositoryInterface" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a></p>
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.interfaces.ConnectionRepositoryInterface.queues_repository">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">queues_repository</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#eric_sse.interfaces.QueueRepositoryInterface" title="eric_sse.interfaces.QueueRepositoryInterface"><span class="pre">QueueRepositoryInterface</span></a></em><a class="headerlink" href="#eric_sse.interfaces.ConnectionRepositoryInterface.queues_repository" title="Link to this definition">#</a></dt>
@@ -843,10 +843,10 @@ correspondant repositories for related objects ones.</p>
 <dd><p>Loads all connections managed by a given channel</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>channel_id</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>Iterable</em>[<a class="reference internal" href="entities.html#eric_sse.connection.Connection" title="eric_sse.connection.Connection"><em>Connection</em></a>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><em>Iterable</em></a>[<a class="reference internal" href="entities.html#eric_sse.connection.Connection" title="eric_sse.connection.Connection"><em>Connection</em></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -858,8 +858,8 @@ correspondant repositories for related objects ones.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>channel_id</strong> (<em>str</em>)</p></li>
-<li><p><strong>connection_id</strong> (<em>str</em>)</p></li>
+<li><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -875,7 +875,7 @@ correspondant repositories for related objects ones.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>channel_id</strong> (<em>str</em>)</p></li>
+<li><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
 <li><p><strong>connection</strong> (<a class="reference internal" href="entities.html#eric_sse.connection.Connection" title="eric_sse.connection.Connection"><em>Connection</em></a>)</p></li>
 </ul>
 </dd>
@@ -889,8 +889,8 @@ correspondant repositories for related objects ones.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>channel_id</strong> (<em>str</em>)</p></li>
-<li><p><strong>connection_id</strong> (<em>str</em>)</p></li>
+<li><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -901,7 +901,7 @@ correspondant repositories for related objects ones.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.interfaces.ChannelRepositoryInterface">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ChannelRepositoryInterface</span></span><a class="headerlink" href="#eric_sse.interfaces.ChannelRepositoryInterface" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a></p>
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.interfaces.ChannelRepositoryInterface.connections_factory">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connections_factory</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="entities.html#eric_sse.connection.ConnectionsFactory" title="eric_sse.connection.ConnectionsFactory"><span class="pre">ConnectionsFactory</span></a></em><a class="headerlink" href="#eric_sse.interfaces.ChannelRepositoryInterface.connections_factory" title="Link to this definition">#</a></dt>
@@ -920,7 +920,7 @@ correspondant repositories for related objects ones.</p>
 <dd><p>Loads all channels</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><em>Iterable</em>[<a class="reference internal" href="entities.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a>]</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><em>Iterable</em></a>[<a class="reference internal" href="entities.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -931,7 +931,7 @@ correspondant repositories for related objects ones.</p>
 <dd><p>Loads a channel given its it</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>channel_id</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="entities.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a></p>
@@ -956,7 +956,7 @@ correspondant repositories for related objects ones.</p>
 <dd><p>Deletes a channel given its it</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>channel_id</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -967,7 +967,7 @@ correspondant repositories for related objects ones.</p>
 <dd><p>Creates a new channel and configures it depending on channel_data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>channel_data</strong> (<em>dict</em>)</p>
+<dd class="field-odd"><p><strong>channel_data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="entities.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><em>AbstractChannel</em></a></p>

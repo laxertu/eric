@@ -414,19 +414,19 @@ document.write(`
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.message.MessageContract">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MessageContract</span></span><a class="headerlink" href="#eric_sse.message.MessageContract" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a></p>
 <p>Contract class for messages</p>
 <p>A message is just a container of information identified by a type.
 For validation purposes you can override its <a class="reference internal" href="#eric_sse.listener.MessageQueueListener.on_message" title="eric_sse.listener.MessageQueueListener.on_message"><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_message()</span></code></a> method.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.message.MessageContract.type">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.message.MessageContract.type" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#eric_sse.message.MessageContract.type" title="Link to this definition">#</a></dt>
 <dd><p>Message type</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.message.MessageContract.payload">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#eric_sse.message.MessageContract.payload" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></em><a class="headerlink" href="#eric_sse.message.MessageContract.payload" title="Link to this definition">#</a></dt>
 <dd><p>Message payload</p>
 </dd></dl>
 
@@ -443,8 +443,8 @@ For validation purposes you can override its <a class="reference internal" href=
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>msg_type</strong> (<em>str</em>)</p></li>
-<li><p><strong>msg_payload</strong> (<em>dict</em><em> | </em><em>list</em><em> | </em><em>str</em><em> | </em><em>int</em><em> | </em><em>float</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>msg_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
+<li><p><strong>msg_payload</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> | </em><em>None</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -455,13 +455,13 @@ For validation purposes you can override its <a class="reference internal" href=
 
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.message.Message.type">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.message.Message.type" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#eric_sse.message.Message.type" title="Link to this definition">#</a></dt>
 <dd><p>Message type</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.message.Message.payload">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#eric_sse.message.Message.payload" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></em><a class="headerlink" href="#eric_sse.message.Message.payload" title="Link to this definition">#</a></dt>
 <dd><p>Message payload</p>
 </dd></dl>
 
@@ -479,8 +479,8 @@ For validation purposes you can override its <a class="reference internal" href=
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>message</strong> (<a class="reference internal" href="#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>)</p></li>
-<li><p><strong>sender_id</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
-<li><p><strong>message_id</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>sender_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>message_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -491,25 +491,25 @@ For validation purposes you can override its <a class="reference internal" href=
 
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.message.UniqueMessage.id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.message.UniqueMessage.id" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#eric_sse.message.UniqueMessage.id" title="Link to this definition">#</a></dt>
 <dd><p>Unique message identifier</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.message.UniqueMessage.type">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.message.UniqueMessage.type" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#eric_sse.message.UniqueMessage.type" title="Link to this definition">#</a></dt>
 <dd><p>Message type</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.message.UniqueMessage.sender_id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sender_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.message.UniqueMessage.sender_id" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sender_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#eric_sse.message.UniqueMessage.sender_id" title="Link to this definition">#</a></dt>
 <dd><p>Returns the id of the listener that sent the message</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.message.UniqueMessage.payload">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#eric_sse.message.UniqueMessage.payload" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><span class="pre">list</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></em><a class="headerlink" href="#eric_sse.message.UniqueMessage.payload" title="Link to this definition">#</a></dt>
 <dd><p>Message payload</p>
 </dd></dl>
 
@@ -526,9 +526,9 @@ For validation purposes you can override its <a class="reference internal" href=
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>sender_id</strong> (<em>str</em>)</p></li>
-<li><p><strong>msg_type</strong> (<em>str</em>)</p></li>
-<li><p><strong>msg_payload</strong> (<em>dict</em><em> | </em><em>list</em><em> | </em><em>str</em><em> | </em><em>int</em><em> | </em><em>float</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>sender_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
+<li><p><strong>msg_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
+<li><p><strong>msg_payload</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><em>list</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> | </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><em>float</em></a><em> | </em><em>None</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -536,7 +536,7 @@ For validation purposes you can override its <a class="reference internal" href=
 
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.message.SignedMessage.sender_id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sender_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.message.SignedMessage.sender_id" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sender_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#eric_sse.message.SignedMessage.sender_id" title="Link to this definition">#</a></dt>
 <dd><p>Returns the id of the listener that sent the message</p>
 </dd></dl>
 
@@ -548,7 +548,7 @@ For validation purposes you can override its <a class="reference internal" href=
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AbstractChannel</span></span><a class="headerlink" href="#eric_sse.entities.AbstractChannel" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a></p>
 <p>Base class for channels.</p>
 <p>Provides functionalities for listeners and message delivery management.</p>
 <p><a class="reference internal" href="#eric_sse.connection.InMemoryConnectionsFactory" title="eric_sse.connection.InMemoryConnectionsFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">InMemoryConnectionsFactory</span></code></a> is the default implementation used for <strong>connections_factory</strong> parameter.</p>
@@ -556,8 +556,8 @@ For validation purposes you can override its <a class="reference internal" href=
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>stream_delay_seconds</strong> (<em>int</em>) – Wait time in seconds between message delivery.</p></li>
-<li><p><strong>channel_id</strong> (<em>str</em>) – Optionally sets the channel id.</p></li>
+<li><p><strong>stream_delay_seconds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Wait time in seconds between message delivery.</p></li>
+<li><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Optionally sets the channel id.</p></li>
 <li><p><strong>connections_factory</strong> (<a class="reference internal" href="#eric_sse.connection.ConnectionsFactory" title="eric_sse.connection.ConnectionsFactory"><em>ConnectionsFactory</em></a>) – Factory to be used for creating connections instances on channel subscriptions.</p></li>
 </ul>
 </dd>
@@ -568,8 +568,8 @@ For validation purposes you can override its <a class="reference internal" href=
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>stream_delay_seconds</strong> (<em>int</em>)</p></li>
-<li><p><strong>channel_id</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>stream_delay_seconds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>)</p></li>
+<li><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
 <li><p><strong>connections_factory</strong> (<a class="reference internal" href="#eric_sse.connection.ConnectionsFactory" title="eric_sse.connection.ConnectionsFactory"><em>ConnectionsFactory</em></a><em> | </em><em>None</em>)</p></li>
 </ul>
 </dd>
@@ -578,7 +578,7 @@ For validation purposes you can override its <a class="reference internal" href=
 
 <dl class="py property">
 <dt class="sig sig-object py" id="eric_sse.entities.AbstractChannel.id">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#eric_sse.entities.AbstractChannel.id" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#eric_sse.entities.AbstractChannel.id" title="Link to this definition">#</a></dt>
 <dd><p>Unique identifier for this channel, it can be set by <strong>channel_id</strong> constructor parameter</p>
 </dd></dl>
 
@@ -591,7 +591,7 @@ For validation purposes you can override its <a class="reference internal" href=
 <dd class="field-odd"><p><strong>msg</strong> (<a class="reference internal" href="#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>Any</em></p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -606,7 +606,7 @@ For validation purposes you can override its <a class="reference internal" href=
 <dd class="field-odd"><p><strong>listener</strong> (<a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>AsyncIterable</em>[<em>Any</em>]</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.AsyncIterable" title="(in Python v3.13)"><em>AsyncIterable</em></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a>]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -652,7 +652,7 @@ For validation purposes you can override its <a class="reference internal" href=
 <p>Raises a NoMessagesException if queue is empty</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>listener_id</strong> (<em>str</em>)</p>
+<dd class="field-odd"><p><strong>listener_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a></p>
@@ -667,7 +667,7 @@ For validation purposes you can override its <a class="reference internal" href=
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>listener_id</strong> (<em>str</em>)</p></li>
+<li><p><strong>listener_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
 <li><p><strong>msg</strong> (<a class="reference internal" href="#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>)</p></li>
 </ul>
 </dd>
@@ -690,7 +690,7 @@ For validation purposes you can override its <a class="reference internal" href=
 <dl class="py class" id="module-eric_sse.connection">
 <dt class="sig sig-object py" id="eric_sse.connection.Connection">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Connection</span></span><a class="headerlink" href="#eric_sse.connection.Connection" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>A connection is just a listener and its related message queue</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -708,7 +708,7 @@ For validation purposes you can override its <a class="reference internal" href=
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>listener</strong> (<a class="reference internal" href="#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a>)</p></li>
 <li><p><strong>queue</strong> (<a class="reference internal" href="#eric_sse.queues.Queue" title="eric_sse.queues.Queue"><em>Queue</em></a>)</p></li>
-<li><p><strong>connection_id</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>)</p></li>
 </ul>
 </dd>
 </dl>
@@ -719,7 +719,7 @@ For validation purposes you can override its <a class="reference internal" href=
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.connection.ConnectionsFactory">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConnectionsFactory</span></span><a class="headerlink" href="#eric_sse.connection.ConnectionsFactory" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.connection.ConnectionsFactory.create">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.connection.ConnectionsFactory.create" title="Link to this definition">#</a></dt>
@@ -763,7 +763,7 @@ For validation purposes you can override its <a class="reference internal" href=
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.queues.Queue">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Queue</span></span><a class="headerlink" href="#eric_sse.queues.Queue" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a></p>
 <p>Abstract base class for queues (FIFO).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.queues.Queue.pop">
@@ -835,7 +835,7 @@ For validation purposes you can override its <a class="reference internal" href=
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.listener.MessageQueueListener">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MessageQueueListener</span></span><a class="headerlink" href="#eric_sse.listener.MessageQueueListener" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Base class for listeners.</p>
 <p>Optionally you can override on_message method if you need to inject code at message delivery time.</p>
 <dl class="py method">
@@ -843,7 +843,7 @@ For validation purposes you can override its <a class="reference internal" href=
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.listener.MessageQueueListener.__init__" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>listener_id</strong> (<em>str</em><em> | </em><em>None</em>)</p>
+<dd class="field-odd"><p><strong>listener_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -887,7 +887,7 @@ For validation purposes you can override its <a class="reference internal" href=
 <span class="sig-name descname"><span class="pre">is_running</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.listener.MessageQueueListener.is_running" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
