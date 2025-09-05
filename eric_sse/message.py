@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from eric_sse import generate_uuid
 
 class MessageContract(ABC):
     """
@@ -43,10 +44,11 @@ class UniqueMessage(MessageContract):
     __message: MessageContract
     __sender_id: str | None = None
 
-    def __init__(self, message_id: str, message: MessageContract, sender_id: str = None) -> None:
-        self.__id = message_id
+    def __init__(self, message: MessageContract, sender_id: str = None, message_id: str = None) -> None:
+        self.__id = message_id if message_id else generate_uuid()
         self.__message = message
         self.__sender_id = sender_id
+
 
     @property
     def id(self) -> str:

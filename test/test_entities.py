@@ -41,6 +41,11 @@ class MessageContractImplementationsTestCase(TestCase):
         self.assertEqual('test', m.type)
         self.assertEqual({'a': 1}, m.payload)
 
+        m1 = UniqueMessage(message=Message(msg_type='test', msg_payload={'a': 1}), sender_id='sender_id')
+        m2 = UniqueMessage(message=Message(msg_type='test', msg_payload={'a': 1}), sender_id='sender_id')
+
+        self.assertNotEqual(m1.id, m2.id)
+
     def test_listeners_management(self):
 
         class _FakeChannel(AbstractChannel):
