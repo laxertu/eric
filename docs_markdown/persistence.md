@@ -81,7 +81,7 @@ Repository to be used to persist connections.
 
 #### *abstract static* \_channel_to_dict(channel)
 
-Returns a dictionary representation of the channel to be passed to create() calls.
+Returns a dictionary representation of the channel to be passed to [`eric_sse.interfaces.ChannelRepositoryInterface.create()`](#eric_sse.interfaces.ChannelRepositoryInterface.create) calls.
 
 * **Parameters:**
   **channel** ([*AbstractChannel*](entities.md#eric_sse.entities.AbstractChannel))
