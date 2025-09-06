@@ -31,46 +31,6 @@ Bases: [`ABC`](https://docs.python.org/3/library/abc.html#abc.ABC)
 
 Represents a Key Value storage engine. Provides functionalities do load, persist and find by key prefix
 
-<a id="eric_sse.repository.KvStorage.fetch_by_prefix"></a>
-
-#### *abstract* fetch_by_prefix(prefix)
-
-* **Parameters:**
-  **prefix** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
-* **Return type:**
-  [*Iterable*](https://docs.python.org/3/library/typing.html#typing.Iterable)[[*Any*](https://docs.python.org/3/library/typing.html#typing.Any)]
-
-<a id="eric_sse.repository.KvStorage.fetch_all"></a>
-
-#### *abstract* fetch_all()
-
-* **Return type:**
-  [*Iterable*](https://docs.python.org/3/library/typing.html#typing.Iterable)[[*Any*](https://docs.python.org/3/library/typing.html#typing.Any)]
-
-<a id="eric_sse.repository.KvStorage.upsert"></a>
-
-#### *abstract* upsert(key, value)
-
-* **Parameters:**
-  * **key** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
-  * **value** ([*Any*](https://docs.python.org/3/library/typing.html#typing.Any))
-
-<a id="eric_sse.repository.KvStorage.fetch_one"></a>
-
-#### *abstract* fetch_one(key)
-
-* **Parameters:**
-  **key** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
-* **Return type:**
-  [*Any*](https://docs.python.org/3/library/typing.html#typing.Any)
-
-<a id="eric_sse.repository.KvStorage.delete"></a>
-
-#### *abstract* delete(key)
-
-* **Parameters:**
-  **key** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
-
 <a id="eric_sse.repository.InMemoryStorage"></a>
 
 ### *class* InMemoryStorage
@@ -85,46 +45,6 @@ In memory implementation
 
 * **Parameters:**
   **items** ([*dict*](https://docs.python.org/3/library/stdtypes.html#dict) *[*[*str*](https://docs.python.org/3/library/stdtypes.html#str) *,* [*Any*](https://docs.python.org/3/library/typing.html#typing.Any) *]*  *|* *None*)
-
-<a id="eric_sse.repository.InMemoryStorage.fetch_by_prefix"></a>
-
-#### fetch_by_prefix(prefix)
-
-* **Parameters:**
-  **prefix** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
-* **Return type:**
-  [*Iterable*](https://docs.python.org/3/library/typing.html#typing.Iterable)[[*Any*](https://docs.python.org/3/library/typing.html#typing.Any)]
-
-<a id="eric_sse.repository.InMemoryStorage.fetch_all"></a>
-
-#### fetch_all()
-
-* **Return type:**
-  [*Iterable*](https://docs.python.org/3/library/typing.html#typing.Iterable)[[*Any*](https://docs.python.org/3/library/typing.html#typing.Any)]
-
-<a id="eric_sse.repository.InMemoryStorage.upsert"></a>
-
-#### upsert(key, value)
-
-* **Parameters:**
-  * **key** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
-  * **value** ([*Any*](https://docs.python.org/3/library/typing.html#typing.Any))
-
-<a id="eric_sse.repository.InMemoryStorage.fetch_one"></a>
-
-#### fetch_one(key)
-
-* **Parameters:**
-  **key** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
-* **Return type:**
-  [*Any*](https://docs.python.org/3/library/typing.html#typing.Any)
-
-<a id="eric_sse.repository.InMemoryStorage.delete"></a>
-
-#### delete(key)
-
-* **Parameters:**
-  **key** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
 
 <a id="eric_sse.repository.AbstractChannelRepository"></a>
 
@@ -156,6 +76,17 @@ The connections factory that will be injected into concrete channel instances.
 #### *property* connections_repository *: [ConnectionRepositoryInterface](#eric_sse.interfaces.ConnectionRepositoryInterface)*
 
 Repository to be used to persist connections.
+
+<a id="eric_sse.repository.AbstractChannelRepository._channel_to_dict"></a>
+
+#### *abstract static* \_channel_to_dict(channel)
+
+Returns a dictionary representation of the channel to be passed to create() calls.
+
+* **Parameters:**
+  **channel** ([*AbstractChannel*](entities.md#eric_sse.entities.AbstractChannel))
+* **Return type:**
+  [dict](https://docs.python.org/3/library/stdtypes.html#dict)
 
 <a id="eric_sse.repository.AbstractChannelRepository.load_all"></a>
 
@@ -214,14 +145,6 @@ correspondant repositories for related objects ones.
   * **storage** ([*KvStorage*](#eric_sse.repository.KvStorage))
   * **listeners_repository** ([*ListenerRepositoryInterface*](#eric_sse.interfaces.ListenerRepositoryInterface))
   * **queues_repository** ([*QueueRepositoryInterface*](#eric_sse.interfaces.QueueRepositoryInterface))
-
-<a id="eric_sse.repository.ConnectionRepository.queues_repository"></a>
-
-#### *property* queues_repository *: [QueueRepositoryInterface](#eric_sse.interfaces.QueueRepositoryInterface)*
-
-<a id="eric_sse.repository.ConnectionRepository.listeners_repository"></a>
-
-#### *property* listeners_repository *: [ListenerRepositoryInterface](#eric_sse.interfaces.ListenerRepositoryInterface)*
 
 <a id="eric_sse.repository.ConnectionRepository.load_all"></a>
 

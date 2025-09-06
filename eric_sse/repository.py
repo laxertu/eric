@@ -85,6 +85,9 @@ class AbstractChannelRepository(ChannelRepositoryInterface, ABC):
     @staticmethod
     @abstractmethod
     def _channel_to_dict(channel: AbstractChannel) -> dict:
+        """
+        Returns a dictionary representation of the channel to be passed to create() calls.
+        """
         pass
 
     def _setup_channel(self, channel: AbstractChannel):

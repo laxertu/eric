@@ -21,8 +21,8 @@ Otherwise you should implement a dump strategy inside repositories themselves. A
 Base repositories
 =================
 .. automodule:: eric_sse.repository
-    :undoc-members:
     :members:
+    :private-members:
     :show-inheritance:
     :member-order: bysource
 

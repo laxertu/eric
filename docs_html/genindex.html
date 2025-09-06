@@ -324,7 +324,6 @@ document.write(`
  | <a href="#C"><strong>C</strong></a>
  | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
- | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#K"><strong>K</strong></a>
@@ -377,6 +376,10 @@ document.write(`
         <li><a href="entities.html#eric_sse.message.UniqueMessage.__init__">(UniqueMessage method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="persistence.html#eric_sse.repository.AbstractChannelRepository._channel_to_dict">_channel_to_dict() (AbstractChannelRepository static method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -471,10 +474,6 @@ document.write(`
         <li><a href="persistence.html#eric_sse.repository.ConnectionRepository.delete">(ConnectionRepository method)</a>
 </li>
         <li><a href="persistence.html#eric_sse.interfaces.ConnectionRepositoryInterface.delete">(ConnectionRepositoryInterface method)</a>
-</li>
-        <li><a href="persistence.html#eric_sse.repository.InMemoryStorage.delete">(InMemoryStorage method)</a>
-</li>
-        <li><a href="persistence.html#eric_sse.repository.KvStorage.delete">(KvStorage method)</a>
 </li>
         <li><a href="persistence.html#eric_sse.interfaces.ListenerRepositoryInterface.delete">(ListenerRepositoryInterface method)</a>
 </li>
@@ -581,32 +580,6 @@ document.write(`
   </ul></td>
 </tr></table>
 
-<h2 id="F">F</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="persistence.html#eric_sse.repository.InMemoryStorage.fetch_all">fetch_all() (InMemoryStorage method)</a>
-
-      <ul>
-        <li><a href="persistence.html#eric_sse.repository.KvStorage.fetch_all">(KvStorage method)</a>
-</li>
-      </ul></li>
-      <li><a href="persistence.html#eric_sse.repository.InMemoryStorage.fetch_by_prefix">fetch_by_prefix() (InMemoryStorage method)</a>
-
-      <ul>
-        <li><a href="persistence.html#eric_sse.repository.KvStorage.fetch_by_prefix">(KvStorage method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="persistence.html#eric_sse.repository.InMemoryStorage.fetch_one">fetch_one() (InMemoryStorage method)</a>
-
-      <ul>
-        <li><a href="persistence.html#eric_sse.repository.KvStorage.fetch_one">(KvStorage method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-</tr></table>
-
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -660,12 +633,8 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="persistence.html#eric_sse.interfaces.ListenerRepositoryInterface">ListenerRepositoryInterface (class in eric_sse.interfaces)</a>
 </li>
-      <li><a href="persistence.html#eric_sse.repository.ConnectionRepository.listeners_repository">listeners_repository (ConnectionRepository property)</a>
-
-      <ul>
-        <li><a href="persistence.html#eric_sse.interfaces.ConnectionRepositoryInterface.listeners_repository">(ConnectionRepositoryInterface property)</a>
+      <li><a href="persistence.html#eric_sse.interfaces.ConnectionRepositoryInterface.listeners_repository">listeners_repository (ConnectionRepositoryInterface property)</a>
 </li>
-      </ul></li>
       <li><a href="persistence.html#eric_sse.interfaces.ListenerRepositoryInterface.load">load() (ListenerRepositoryInterface method)</a>
 
       <ul>
@@ -809,16 +778,12 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="entities.html#eric_sse.queues.Queue">Queue (class in eric_sse.queues)</a>
 </li>
-      <li><a href="persistence.html#eric_sse.interfaces.QueueRepositoryInterface">QueueRepositoryInterface (class in eric_sse.interfaces)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="persistence.html#eric_sse.repository.ConnectionRepository.queues_repository">queues_repository (ConnectionRepository property)</a>
-
-      <ul>
-        <li><a href="persistence.html#eric_sse.interfaces.ConnectionRepositoryInterface.queues_repository">(ConnectionRepositoryInterface property)</a>
+      <li><a href="persistence.html#eric_sse.interfaces.QueueRepositoryInterface">QueueRepositoryInterface (class in eric_sse.interfaces)</a>
 </li>
-      </ul></li>
+      <li><a href="persistence.html#eric_sse.interfaces.ConnectionRepositoryInterface.queues_repository">queues_repository (ConnectionRepositoryInterface property)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -917,14 +882,6 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="entities.html#eric_sse.message.UniqueMessage">UniqueMessage (class in eric_sse.message)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="persistence.html#eric_sse.repository.InMemoryStorage.upsert">upsert() (InMemoryStorage method)</a>
-
-      <ul>
-        <li><a href="persistence.html#eric_sse.repository.KvStorage.upsert">(KvStorage method)</a>
-</li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
