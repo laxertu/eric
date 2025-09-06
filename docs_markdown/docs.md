@@ -13,3 +13,5 @@ Its main components are:
 
 * A core model with a set of abstractions and prefabs that give support to SSE and more.
 * A persistence layer composed by a set of interfaces and base classes for building concrete layers
+
+[`ConnectionsFactory`](entities.md#eric_sse.connection.ConnectionsFactory) is shared between components. Persistence uses it to create objects after data fetch, while channels create connections when receiving new subscriptions.
