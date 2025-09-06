@@ -3,9 +3,10 @@ from abc import ABC, abstractmethod
 
 from eric_sse.connection import Connection, ConnectionsFactory
 from eric_sse.entities import AbstractChannel
+from eric_sse.exception import ItemNotFound
 from eric_sse.interfaces import ChannelRepositoryInterface, ConnectionRepositoryInterface, ListenerRepositoryInterface, \
     QueueRepositoryInterface
-from eric_sse.exception import RepositoryError
+
 
 class KvStorage(ABC):
     """Represents a Key Value storage engine. Provides functionalities do load, persist and find by key prefix"""
@@ -52,7 +53,7 @@ class InMemoryStorage(KvStorage):
         try:
             return self.items[key]
         except KeyError:
-            raise RepositoryError(f'Item not found {key}') from None
+            raise ItemNotFound(key=key) from None
 
     def delete(self, key: str):
         del self.items[key]

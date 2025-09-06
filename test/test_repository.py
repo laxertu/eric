@@ -6,8 +6,9 @@ from eric_sse.queues import InMemoryQueue
 from eric_sse.repository import ConnectionRepository, KvStorage
 from eric_sse.interfaces import ListenerRepositoryInterface, QueueRepositoryInterface
 
-from eric_sse.exception import RepositoryError
 from eric_sse.repository import InMemoryStorage
+from eric_sse.exception import ItemNotFound
+
 
 class TestInMemoryStorage(TestCase):
 
@@ -30,7 +31,7 @@ class TestInMemoryStorage(TestCase):
         self.assertEqual([item1, item2, item3], fetched_items)
 
         sut.delete('item1')
-        with self.assertRaises(RepositoryError):
+        with self.assertRaises(ItemNotFound):
             sut.fetch_one('item1')
 
 class ConnectionsRepositoryTestCase(TestCase):
@@ -72,7 +73,7 @@ class ConnectionsRepositoryTestCase(TestCase):
 
 
     def error_handling(self):
-        with self.assertRaises(RepositoryError):
+        with self.assertRaises(ItemNotFound):
             self.sut.load_one('nonexistent_channel', 'nonexistent_connection')
 
 

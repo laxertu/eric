@@ -1,6 +1,8 @@
 class InvalidChannelException(Exception):
     ...
 
+class InvalidConnectionException(Exception):
+    ...
 
 class InvalidListenerException(Exception):
     ...
@@ -22,3 +24,9 @@ class RepositoryError(Exception):
     Concrete implementations of :class:`~eric_sse.persistence.ObjectRepositoryInterface` should wrap here the unexpected exceptions they catch before raising.
     """
     ...
+
+
+class ItemNotFound(Exception):
+    """Raised to inform that a key was not found in a repository"""
+    def __init__(self, key: str):
+        self.key = key
