@@ -168,6 +168,8 @@ Registers an existing listener
 
 Bases: [`AbstractChannelRepository`](persistence.md#eric_sse.repository.AbstractChannelRepository)
 
+Enable SSE channels persistence
+
 <a id="eric_sse.prefabs.SSEChannelRepository.create"></a>
 
 #### create(channel_data)

@@ -170,12 +170,15 @@ class SimpleDistributedApplicationChannel(SSEChannel):
 
 
 class SSEChannelRepository(AbstractChannelRepository):
-
+    """Enable SSE channels persistence"""
     def create(self, channel_data: dict) -> SSEChannel:
         return SSEChannel(**channel_data, connections_factory=self.connections_factory)
 
     @staticmethod
     def _channel_to_dict(channel: SSEChannel) -> dict:
+        """
+        Returns a dictionary representation of the SSE channel to be passed to create() calls.
+        """
         return {
             'retry_timeout_milliseconds': channel.retry_timeout_milliseconds,
             'stream_delay_seconds': channel.stream_delay_seconds,
