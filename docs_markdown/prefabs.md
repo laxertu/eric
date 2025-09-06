@@ -61,8 +61,6 @@ Channel intended for concurrent processing of data.
 Relies on [concurrent.futures.Executor](https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Executor).
 Just override **adapt** method to control output returned to clients
 
-MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.
-
 <a id="eric_sse.prefabs.DataProcessingChannel.__init__"></a>
 
 #### \_\_init_\_(max_workers, stream_delay_seconds=0, executor_class=<class 'concurrent.futures.thread.ThreadPoolExecutor'>)

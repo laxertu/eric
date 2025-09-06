@@ -59,8 +59,6 @@ class DataProcessingChannel(AbstractChannel):
 
     Relies on `concurrent.futures.Executor <https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Executor>`_.
     Just override **adapt** method to control output returned to clients
-
-    MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.  
     """
 
     def __init__(self, max_workers: int, stream_delay_seconds: int = 0, executor_class: Executor.__class__ = ThreadPoolExecutor):

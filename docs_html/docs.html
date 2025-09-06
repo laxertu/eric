@@ -330,10 +330,10 @@ Its main components are:</p>
 <li><p>A persistence layer composed by a set of interfaces and base classes for building concrete layers</p></li>
 </ul>
 <p><a class="reference internal" href="entities.html#eric_sse.connection.ConnectionsFactory" title="eric_sse.connection.ConnectionsFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectionsFactory</span></code></a> is shared between components. Persistence uses it to create objects after data fetch, while channels create connections when receiving new subscriptions.</p>
-<p><em>SSE in memory use case</em></p>
+<p><strong>SSE in memory use case</strong></p>
 <p>If you just want a simple, inmemory SSE service, base building blocks are available.
 <a class="reference external" href="https://github.com/laxertu/eric/blob/master/examples/inmemory.py">Here</a> is a little demo</p>
-<p><em>Prefabs</em></p>
+<p><strong>Prefabs</strong></p>
 <ul class="simple">
 <li><p><a class="reference internal" href="prefabs.html#eric_sse.prefabs.SSEChannel" title="eric_sse.prefabs.SSEChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SSEChannel</span></code></a> Server side Events support</p></li>
 <li><p><a class="reference internal" href="prefabs.html#eric_sse.prefabs.DataProcessingChannel" title="eric_sse.prefabs.DataProcessingChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataProcessingChannel</span></code></a> Launches parallel tasks when consuming queues and dispatches results to client who pushed them</p></li>

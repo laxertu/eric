@@ -444,7 +444,6 @@ See <a class="reference external" href="https://developer.mozilla.org/en-US/docs
 <p>Channel intended for concurrent processing of data.</p>
 <p>Relies on <a class="reference external" href="https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.Executor">concurrent.futures.Executor</a>.
 Just override <strong>adapt</strong> method to control output returned to clients</p>
-<p>MESSAGE_TYPE_CLOSED type is intended as end of stream. It should be considered as a reserved Message type.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.prefabs.DataProcessingChannel.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_workers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream_delay_seconds=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">executor_class=&lt;class</span> <span class="pre">'concurrent.futures.thread.ThreadPoolExecutor'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.prefabs.DataProcessingChannel.__init__" title="Link to this definition">#</a></dt>
