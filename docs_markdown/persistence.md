@@ -14,7 +14,7 @@ To build a persistence layer is needed to provide an implementation to some of a
 **Suggestions**
 
 If your implementation uses objects that are directly persistable by storage engine you are using, cleanest manner of implementing your custom layer is to simply
-implement a [`KvStorage`](#eric_sse.repository.KvStorage) and delegate to it all repositories ones.
+give an implementation to a [`KvStorage`](#eric_sse.repository.KvStorage) and just use it in all composite repositories.
 Otherwise you should implement a dump strategy inside repositories themselves. An example is RedisQueues persistence, as Redis client used is not serializable by pickle.
 
 <a id="module-eric_sse.repository"></a>
