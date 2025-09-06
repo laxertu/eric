@@ -86,7 +86,7 @@ class AbstractChannelRepository(ChannelRepositoryInterface, ABC):
     @abstractmethod
     def _channel_to_dict(channel: AbstractChannel) -> dict:
         """
-        Returns a dictionary representation of the channel to be passed to :meth:`eric_sse.interfaces.ChannelRepositoryInterface.create()` calls.
+        Returns a dictionary representation of the channel to be passed to :meth:`eric_sse.interfaces.ChannelRepositoryInterface.create` calls.
         """
         pass
 
