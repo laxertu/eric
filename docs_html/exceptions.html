@@ -314,8 +314,13 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.InvalidChannelException"><code class="docutils literal notranslate"><span class="pre">InvalidChannelException</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.InvalidConnectionException"><code class="docutils literal notranslate"><span class="pre">InvalidConnectionException</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.InvalidListenerException"><code class="docutils literal notranslate"><span class="pre">InvalidListenerException</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.InvalidMessageFormat"><code class="docutils literal notranslate"><span class="pre">InvalidMessageFormat</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.ItemNotFound"><code class="docutils literal notranslate"><span class="pre">ItemNotFound</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.ItemNotFound.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.NoMessagesException"><code class="docutils literal notranslate"><span class="pre">NoMessagesException</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.RepositoryError"><code class="docutils literal notranslate"><span class="pre">RepositoryError</span></code></a></li>
 </ul>
@@ -337,6 +342,11 @@ document.write(`
 <dd></dd></dl>
 
 <dl class="py exception">
+<dt class="sig sig-object py" id="eric_sse.exception.InvalidConnectionException">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">InvalidConnectionException</span></span><a class="headerlink" href="#eric_sse.exception.InvalidConnectionException" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
 <dt class="sig sig-object py" id="eric_sse.exception.InvalidListenerException">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">InvalidListenerException</span></span><a class="headerlink" href="#eric_sse.exception.InvalidListenerException" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
@@ -345,6 +355,22 @@ document.write(`
 <dt class="sig sig-object py" id="eric_sse.exception.InvalidMessageFormat">
 <em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">InvalidMessageFormat</span></span><a class="headerlink" href="#eric_sse.exception.InvalidMessageFormat" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="eric_sse.exception.ItemNotFound">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ItemNotFound</span></span><a class="headerlink" href="#eric_sse.exception.ItemNotFound" title="Link to this definition">#</a></dt>
+<dd><p>Raised to inform that a key was not found in a repository</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.exception.ItemNotFound.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.exception.ItemNotFound.__init__" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="eric_sse.exception.NoMessagesException">
@@ -407,8 +433,13 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.InvalidChannelException"><code class="docutils literal notranslate"><span class="pre">InvalidChannelException</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.InvalidConnectionException"><code class="docutils literal notranslate"><span class="pre">InvalidConnectionException</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.InvalidListenerException"><code class="docutils literal notranslate"><span class="pre">InvalidListenerException</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.InvalidMessageFormat"><code class="docutils literal notranslate"><span class="pre">InvalidMessageFormat</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.ItemNotFound"><code class="docutils literal notranslate"><span class="pre">ItemNotFound</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.ItemNotFound.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.NoMessagesException"><code class="docutils literal notranslate"><span class="pre">NoMessagesException</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.exception.RepositoryError"><code class="docutils literal notranslate"><span class="pre">RepositoryError</span></code></a></li>
 </ul>

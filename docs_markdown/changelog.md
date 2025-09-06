@@ -2,6 +2,11 @@
 
 # Changelog
 
+2.1.1
+
+* Added InvalidConnectionException and ItemNotFound to exceptions module
+* Now InMemoryRepository raises an ItemNotFound on nonexistent key
+
 2.1.0
 
 * General rework of persistence layer. Removed some modules and introduced repository one.
