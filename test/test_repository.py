@@ -33,6 +33,11 @@ class TestInMemoryStorage(TestCase):
         sut.delete('item1')
         with self.assertRaises(ItemNotFound):
             sut.fetch_one('item1')
+        try:
+            sut.delete('fake_key')
+        except KeyError:
+            self.fail('Delete on nonexistent key raised exception')
+
 
 class ConnectionsRepositoryTestCase(TestCase):
 

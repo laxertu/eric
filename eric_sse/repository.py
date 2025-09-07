@@ -13,22 +13,27 @@ class KvStorage(ABC):
 
     @abstractmethod
     def fetch_by_prefix(self, prefix: str) -> Iterable[Any]:
+        """Search by KV prefix"""
         pass
 
     @abstractmethod
     def fetch_all(self) -> Iterable[Any]:
+        """Return all items that have been persisted"""
         pass
 
     @abstractmethod
     def upsert(self, key: str, value: Any):
+        """Updates or inserts a value given its corresponding key"""
         pass
 
     @abstractmethod
     def fetch_one(self, key: str) -> Any:
+        """Return value correspondant to key"""
         pass
 
     @abstractmethod
     def delete(self, key: str):
+        """Idempotent deletion. Do not throw an error on invalid key"""
         pass
 
 
@@ -56,6 +61,8 @@ class InMemoryStorage(KvStorage):
             raise ItemNotFound(key=key) from None
 
     def delete(self, key: str):
+        if key not in self.items:
+            return
         del self.items[key]
 
 class AbstractChannelRepository(ChannelRepositoryInterface, ABC):
