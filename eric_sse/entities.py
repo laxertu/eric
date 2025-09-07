@@ -100,6 +100,10 @@ class AbstractChannel(ABC):
 
         A message with type = 'error' is yield on invalid listener
         """
+        try:
+            self.__connection_manager.get_listener(listener.id)
+        except InvalidListenerException:
+            raise
 
         async def new_messages():
             try:

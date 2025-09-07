@@ -1,14 +1,21 @@
 from typing import Any
-from unittest import TestCase
+from unittest import TestCase, IsolatedAsyncioTestCase
+
+import pytest
 
 from eric_sse.entities import AbstractChannel
-from eric_sse.exception import InvalidListenerException
+from eric_sse.exception import InvalidListenerException, NoMessagesException
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import Message, SignedMessage, UniqueMessage, MessageContract
 from eric_sse.connection import Connection, InMemoryConnectionsFactory
 from eric_sse.queues import InMemoryQueue
 from eric_sse.prefabs import SSEChannel
+from test.mock.listener import MessageQueueListenerMock
 
+
+class _FakeChannel(AbstractChannel):
+    def adapt(self, msg: MessageContract) -> Any:
+        return msg
 
 class MessageContractImplementationsTestCase(TestCase):
 
@@ -48,12 +55,16 @@ class MessageContractImplementationsTestCase(TestCase):
 
     def test_listeners_management(self):
 
-        class _FakeChannel(AbstractChannel):
-            def adapt(self, msg: MessageContract) -> Any:
-                return msg
-
         fake_channel = _FakeChannel()
         listener = fake_channel.add_listener()
+
+        with self.assertRaises(NoMessagesException):
+            fake_channel.deliver_next(listener.id)
+
+        listener.start()
+        with self.assertRaises(NoMessagesException):
+            fake_channel.deliver_next(listener.id)
+
         connections = [connection for connection in fake_channel.get_connections()]
         self.assertEqual(1, len(connections))
         self.assertIs(connections[0].listener, listener)
@@ -105,5 +116,57 @@ class ConnectionsTestCase(TestCase):
         sut = SSEChannel()
         with self.assertRaises(InvalidListenerException):
             sut.remove_listener('fake')
+
+
+class AbstractChannelTestCase(IsolatedAsyncioTestCase):
+    def setUp(self):
+        self.sut = _FakeChannel()
+
+    def test_model_is_consistent(self):
+        listener1 = self.sut.add_listener()
+        listener2 = self.sut.add_listener()
+
+        listeners = set([c.listener for c in self.sut.get_connections()])
+        self.assertEqual(2, len(listeners))
+        self.assertTrue(listener1 in listeners)
+        self.assertTrue(listener2 in listeners)
+        self.assertIs(listener1, self.sut.get_listener(listener1.id))
+        self.assertIs(listener2, self.sut.get_listener(listener2.id))
+
+
+    def test_error_handling(self):
+
+        with self.assertRaises(InvalidListenerException):
+            self.sut.remove_listener('fake')
+
+        with self.assertRaises(InvalidListenerException):
+            self.sut.get_listener('fake')
+
+        with self.assertRaises(InvalidListenerException):
+            self.sut.dispatch('fake', Message(msg_type='test'))
+
+    async def test_error_handling_async(self):
+        listener = MessageQueueListener()
+
+        with pytest.raises(InvalidListenerException):
+            async for _ in self.sut.message_stream(listener):
+                pass
+
+    async def test_stream(self):
+        listener = MessageQueueListenerMock()
+        self.sut.register_listener(listener)
+        self.sut.dispatch(listener_id=listener.id, msg=Message(msg_type='test'))
+
+        num_dispatched = 0
+        async for _ in self.sut.message_stream(listener):
+            num_dispatched += 1
+
+        self.assertEqual(0, num_dispatched)
+        listener.start()
+
+        async for _ in self.sut.message_stream(listener):
+            num_dispatched += 1
+
+        self.assertEqual(1, num_dispatched)
 
 
