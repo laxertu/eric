@@ -170,8 +170,13 @@ class SimpleDistributedApplicationChannel(SSEChannel):
 
 
 class SSEChannelRepository(AbstractChannelRepository):
-    """Enable SSE channels persistence"""
+    """
+    Enable SSE channels persistence
+    """
     def create(self, channel_data: dict) -> SSEChannel:
+        """
+        :param dict channel_data: Fill it with SSEChannel constructor arguments, except for connections_factory that wil be injected by repository
+        """
         return SSEChannel(**channel_data, connections_factory=self.connections_factory)
 
     @staticmethod

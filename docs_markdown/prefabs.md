@@ -174,10 +174,8 @@ Enable SSE channels persistence
 
 #### create(channel_data)
 
-Creates a new channel and configures it depending on channel_data.
-
 * **Parameters:**
-  **channel_data** ([*dict*](https://docs.python.org/3/library/stdtypes.html#dict))
+  **channel_data** ([*dict*](https://docs.python.org/3/library/stdtypes.html#dict)) – Fill it with SSEChannel constructor arguments, except for connections_factory that wil be injected by repository
 * **Return type:**
   [*SSEChannel*](#eric_sse.prefabs.SSEChannel)
 
