@@ -118,8 +118,16 @@ class AbstractChannelRepository(ChannelRepositoryInterface, ABC):
 
     def persist(self, channel: AbstractChannel):
         self.__storage.upsert(channel.id, self._channel_to_dict(channel))
+
+        persisted_connections_ids = {c.id for c in self.__connections_repository.load_all(channel_id=channel.id)}
+        current_connections_ids = set()
+
         for connection in channel.get_connections():
+            current_connections_ids.add(connection.id)
             self.__connections_repository.persist(channel_id=channel.id, connection=connection)
+
+        for connection_id_to_remove in persisted_connections_ids - current_connections_ids:
+            self.__connections_repository.delete(channel_id=channel.id, connection_id=connection_id_to_remove)
 
     def delete(self, channel_id: str):
         try:

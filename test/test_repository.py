@@ -120,16 +120,19 @@ class AbstractChannelRepositoryInMemoryStorageIntegrationTestCase(TestCase):
         # Test delete idempotency
         sut.delete(channel_id=channel.id)
 
-    def missing_connections_are_deleted_on_persist(self):
+    def test_missing_connections_are_deleted_on_persist(self):
         sut = self.create_sut()
         channel = FakeChannel()
         listener = channel.add_listener()
+        connection_id = [c for c in channel.get_connections()][0].id
         sut.persist(channel=channel)
         channel.remove_listener(listener.id)
         sut.persist(channel=channel)
 
+        self.listeners_repository.delete.assert_called_once_with(connection_id = connection_id)
+
         channel = sut.load_one(channel_id=channel.id)
-        self.assertEqual(0, [c for c in channel.get_connections()])
+        self.assertEqual(0, len([c for c in channel.get_connections()]))
 
 
 
