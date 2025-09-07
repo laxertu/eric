@@ -1,3 +1,7 @@
+"""
+An example oh use of DataProcessingChannel usage
+"""
+
 import asyncio
 
 from random import uniform
