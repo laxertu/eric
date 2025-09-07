@@ -8,6 +8,7 @@ from eric_sse.interfaces import ListenerRepositoryInterface, QueueRepositoryInte
 
 from eric_sse.repository import InMemoryStorage
 from eric_sse.exception import ItemNotFound
+from test.mock.channel import FakeChannelRepository, FakeConnectionsFactory, FakeChannel
 
 
 class TestInMemoryStorage(TestCase):
@@ -81,4 +82,53 @@ class ConnectionsRepositoryTestCase(TestCase):
         with self.assertRaises(ItemNotFound):
             self.sut.load_one('nonexistent_channel', 'nonexistent_connection')
 
+
+
+class AbstractChannelRepositoryTestCase(TestCase):
+    def setUp(self):
+        self.listeners_repository = MagicMock(spec=ListenerRepositoryInterface)
+        self.queues_repository = MagicMock(spec=QueueRepositoryInterface)
+        self.connections_factory = FakeConnectionsFactory()
+
+
+    def create_sut(self):
+        connections_repository = ConnectionRepository(
+            listeners_repository=self.listeners_repository,
+            queues_repository=self.queues_repository,
+            storage=InMemoryStorage(),
+        )
+        return FakeChannelRepository(
+            storage=InMemoryStorage(),
+            connections_repository=connections_repository,
+            connections_factory=self.connections_factory
+        )
+
+    def test_persistence(self):
+        sut = self.create_sut()
+        channel = FakeChannel()
+        sut.persist(channel=channel)
+
+        channels = [c for c in sut.load_all()]
+        self.assertEqual(len(channels), 1)
+
+        self.assertEqual(channels[0].id, channel.id)
+        self.assertEqual(sut.load_one(channel_id=channel.id).id, channel.id)
+
+        sut.delete(channel_id=channel.id)
+        channels = [c for c in sut.load_all()]
+        self.assertEqual(len(channels), 0)
+        # Test delete idempotency
+        sut.delete(channel_id=channel.id)
+
+
+        """
+        sut.delete(channel_id=channel.id)
+        channels = [c for c in sut.load_all()]
+        self.assertEqual(len(channels), 1)
+        # Test delete idempotency
+        sut.delete(channel_id=channel.id)
+
+        with self.assertRaises(ItemNotFound):
+            _ = sut.load_one(channel_id=channel.id)
+        """
 

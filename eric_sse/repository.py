@@ -122,7 +122,10 @@ class AbstractChannelRepository(ChannelRepositoryInterface, ABC):
             self.__connections_repository.persist(channel_id=channel.id, connection=connection)
 
     def delete(self, channel_id: str):
-        channel = self.load_one(channel_id)
+        try:
+            channel = self.load_one(channel_id)
+        except ItemNotFound:
+            return
         for connection in self.__connections_repository.load_all(channel_id=channel.id):
             self.__connections_repository.delete(channel_id=channel_id, connection_id=connection.id)
         self.__storage.delete(channel_id)
@@ -160,6 +163,7 @@ class ConnectionRepository(ConnectionRepositoryInterface):
 
     def load_all(self, channel_id: str) -> Iterable[Connection]:
         for connection_data in self.__storage.fetch_by_prefix(channel_id):
+            print(connection_data)
             yield self._load_connection(connection_data['id'])
 
 
