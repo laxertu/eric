@@ -1,6 +1,5 @@
 from unittest import TestCase
 
-from eric_sse.exception import NoMessagesException
 from eric_sse.listener import MessageQueueListener
 from eric_sse.prefabs import SSEChannel, SSEChannelRepository
 from eric_sse.queues import InMemoryQueue

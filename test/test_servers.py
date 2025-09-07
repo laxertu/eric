@@ -6,6 +6,8 @@ from eric_sse.clients import SocketClient
 from eric_sse.exception import InvalidChannelException
 from eric_sse.prefabs import SSEChannel
 from eric_sse.servers import SocketServer, ChannelContainer
+from test.mock.channel import FakeChannel
+
 SOCKET_FILE_DESCRIPTOR_PATH = 'socketserver_e2e_test.sock'
 
 
@@ -29,6 +31,18 @@ class TestChannelContainer(TestCase):
         self.assertIs(ch_1, sut.get(ch_1.id))
         self.assertIs(ch_2, sut.get(ch_2.id))
 
+    def test_error_handling(self):
+        sut = ChannelContainer()
+        with self.assertRaises(InvalidChannelException):
+            sut.rm('fake_channel_id')
+
+        channel = FakeChannel()
+        sut.register(channel)
+        self.assertIs(channel, sut.get(channel.id))
+        self.assertEqual([channel.id], [i for i in sut.get_all_ids()])
+
+        with self.assertRaises(InvalidChannelException):
+            sut.register(channel)
 
 class TestSocketServer(IsolatedAsyncioTestCase):
     async def asyncSetUp(self):

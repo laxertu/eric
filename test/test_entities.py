@@ -1,21 +1,16 @@
-from typing import Any
 from unittest import TestCase, IsolatedAsyncioTestCase
 
 import pytest
 
-from eric_sse.entities import AbstractChannel
 from eric_sse.exception import InvalidListenerException, NoMessagesException
 from eric_sse.listener import MessageQueueListener
-from eric_sse.message import Message, SignedMessage, UniqueMessage, MessageContract
+from eric_sse.message import Message, SignedMessage, UniqueMessage
 from eric_sse.connection import Connection, InMemoryConnectionsFactory
 from eric_sse.queues import InMemoryQueue
 from eric_sse.prefabs import SSEChannel
+from test.mock.channel import FakeChannel
 from test.mock.listener import MessageQueueListenerMock
 
-
-class _FakeChannel(AbstractChannel):
-    def adapt(self, msg: MessageContract) -> Any:
-        return msg
 
 class MessageContractImplementationsTestCase(TestCase):
 
@@ -55,7 +50,7 @@ class MessageContractImplementationsTestCase(TestCase):
 
     def test_listeners_management(self):
 
-        fake_channel = _FakeChannel()
+        fake_channel = FakeChannel()
         listener = fake_channel.add_listener()
 
         with self.assertRaises(NoMessagesException):
@@ -120,7 +115,7 @@ class ConnectionsTestCase(TestCase):
 
 class AbstractChannelTestCase(IsolatedAsyncioTestCase):
     def setUp(self):
-        self.sut = _FakeChannel()
+        self.sut = FakeChannel()
 
     def test_model_is_consistent(self):
         listener1 = self.sut.add_listener()
