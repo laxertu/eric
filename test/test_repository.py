@@ -84,7 +84,7 @@ class ConnectionsRepositoryTestCase(TestCase):
 
 
 
-class AbstractChannelRepositoryTestCase(TestCase):
+class AbstractChannelRepositoryInMemoryStorageIntegrationTestCase(TestCase):
     def setUp(self):
         self.listeners_repository = MagicMock(spec=ListenerRepositoryInterface)
         self.queues_repository = MagicMock(spec=QueueRepositoryInterface)
@@ -120,15 +120,16 @@ class AbstractChannelRepositoryTestCase(TestCase):
         # Test delete idempotency
         sut.delete(channel_id=channel.id)
 
+    def missing_connections_are_deleted_on_persist(self):
+        sut = self.create_sut()
+        channel = FakeChannel()
+        listener = channel.add_listener()
+        sut.persist(channel=channel)
+        channel.remove_listener(listener.id)
+        sut.persist(channel=channel)
 
-        """
-        sut.delete(channel_id=channel.id)
-        channels = [c for c in sut.load_all()]
-        self.assertEqual(len(channels), 1)
-        # Test delete idempotency
-        sut.delete(channel_id=channel.id)
+        channel = sut.load_one(channel_id=channel.id)
+        self.assertEqual(0, [c for c in channel.get_connections()])
 
-        with self.assertRaises(ItemNotFound):
-            _ = sut.load_one(channel_id=channel.id)
-        """
+
 
