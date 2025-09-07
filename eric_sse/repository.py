@@ -171,7 +171,6 @@ class ConnectionRepository(ConnectionRepositoryInterface):
 
     def load_all(self, channel_id: str) -> Iterable[Connection]:
         for connection_data in self.__storage.fetch_by_prefix(channel_id):
-            print(connection_data)
             yield self._load_connection(connection_data['id'])
 
 
