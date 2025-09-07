@@ -31,6 +31,56 @@ Bases: [`ABC`](https://docs.python.org/3/library/abc.html#abc.ABC)
 
 Represents a Key Value storage engine. Provides functionalities do load, persist and find by key prefix
 
+<a id="eric_sse.repository.KvStorage.fetch_by_prefix"></a>
+
+#### *abstract* fetch_by_prefix(prefix)
+
+Search by KV prefix
+
+* **Parameters:**
+  **prefix** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
+* **Return type:**
+  [*Iterable*](https://docs.python.org/3/library/typing.html#typing.Iterable)[[*Any*](https://docs.python.org/3/library/typing.html#typing.Any)]
+
+<a id="eric_sse.repository.KvStorage.fetch_all"></a>
+
+#### *abstract* fetch_all()
+
+Return all items that have been persisted
+
+* **Return type:**
+  [*Iterable*](https://docs.python.org/3/library/typing.html#typing.Iterable)[[*Any*](https://docs.python.org/3/library/typing.html#typing.Any)]
+
+<a id="eric_sse.repository.KvStorage.upsert"></a>
+
+#### *abstract* upsert(key, value)
+
+Updates or inserts a value given its corresponding key
+
+* **Parameters:**
+  * **key** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
+  * **value** ([*Any*](https://docs.python.org/3/library/typing.html#typing.Any))
+
+<a id="eric_sse.repository.KvStorage.fetch_one"></a>
+
+#### *abstract* fetch_one(key)
+
+Return value correspondant to key
+
+* **Parameters:**
+  **key** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
+* **Return type:**
+  [*Any*](https://docs.python.org/3/library/typing.html#typing.Any)
+
+<a id="eric_sse.repository.KvStorage.delete"></a>
+
+#### *abstract* delete(key)
+
+Idempotent deletion. Do not throw an error on invalid key
+
+* **Parameters:**
+  **key** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
+
 <a id="eric_sse.repository.InMemoryStorage"></a>
 
 ### *class* InMemoryStorage
@@ -45,6 +95,56 @@ In memory implementation
 
 * **Parameters:**
   **items** ([*dict*](https://docs.python.org/3/library/stdtypes.html#dict) *[*[*str*](https://docs.python.org/3/library/stdtypes.html#str) *,* [*Any*](https://docs.python.org/3/library/typing.html#typing.Any) *]*  *|* *None*)
+
+<a id="eric_sse.repository.InMemoryStorage.fetch_by_prefix"></a>
+
+#### fetch_by_prefix(prefix)
+
+Search by KV prefix
+
+* **Parameters:**
+  **prefix** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
+* **Return type:**
+  [*Iterable*](https://docs.python.org/3/library/typing.html#typing.Iterable)[[*Any*](https://docs.python.org/3/library/typing.html#typing.Any)]
+
+<a id="eric_sse.repository.InMemoryStorage.fetch_all"></a>
+
+#### fetch_all()
+
+Return all items that have been persisted
+
+* **Return type:**
+  [*Iterable*](https://docs.python.org/3/library/typing.html#typing.Iterable)[[*Any*](https://docs.python.org/3/library/typing.html#typing.Any)]
+
+<a id="eric_sse.repository.InMemoryStorage.upsert"></a>
+
+#### upsert(key, value)
+
+Updates or inserts a value given its corresponding key
+
+* **Parameters:**
+  * **key** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
+  * **value** ([*Any*](https://docs.python.org/3/library/typing.html#typing.Any))
+
+<a id="eric_sse.repository.InMemoryStorage.fetch_one"></a>
+
+#### fetch_one(key)
+
+Return value correspondant to key
+
+* **Parameters:**
+  **key** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
+* **Return type:**
+  [*Any*](https://docs.python.org/3/library/typing.html#typing.Any)
+
+<a id="eric_sse.repository.InMemoryStorage.delete"></a>
+
+#### delete(key)
+
+Idempotent deletion. Do not throw an error on invalid key
+
+* **Parameters:**
+  **key** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
 
 <a id="eric_sse.repository.AbstractChannelRepository"></a>
 

@@ -315,9 +315,21 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Persistence</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.repository">Base repositories</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage"><code class="docutils literal notranslate"><span class="pre">KvStorage</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage"><code class="docutils literal notranslate"><span class="pre">KvStorage</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage.fetch_by_prefix"><code class="docutils literal notranslate"><span class="pre">fetch_by_prefix()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage.fetch_all"><code class="docutils literal notranslate"><span class="pre">fetch_all()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage.upsert"><code class="docutils literal notranslate"><span class="pre">upsert()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage.fetch_one"><code class="docutils literal notranslate"><span class="pre">fetch_one()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage"><code class="docutils literal notranslate"><span class="pre">InMemoryStorage</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.fetch_by_prefix"><code class="docutils literal notranslate"><span class="pre">fetch_by_prefix()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.fetch_all"><code class="docutils literal notranslate"><span class="pre">fetch_all()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.upsert"><code class="docutils literal notranslate"><span class="pre">upsert()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.fetch_one"><code class="docutils literal notranslate"><span class="pre">fetch_one()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.AbstractChannelRepository"><code class="docutils literal notranslate"><span class="pre">AbstractChannelRepository</span></code></a><ul class="nav section-nav flex-column">
@@ -407,6 +419,70 @@ Otherwise you should implement a dump strategy inside repositories themselves. A
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">KvStorage</span></span><a class="headerlink" href="#eric_sse.repository.KvStorage" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a></p>
 <p>Represents a Key Value storage engine. Provides functionalities do load, persist and find by key prefix</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.KvStorage.fetch_by_prefix">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_by_prefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvStorage.fetch_by_prefix" title="Link to this definition">#</a></dt>
+<dd><p>Search by KV prefix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><em>Iterable</em></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.KvStorage.fetch_all">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvStorage.fetch_all" title="Link to this definition">#</a></dt>
+<dd><p>Return all items that have been persisted</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><em>Iterable</em></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.KvStorage.upsert">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">upsert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvStorage.upsert" title="Link to this definition">#</a></dt>
+<dd><p>Updates or inserts a value given its corresponding key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.KvStorage.fetch_one">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvStorage.fetch_one" title="Link to this definition">#</a></dt>
+<dd><p>Return value correspondant to key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.KvStorage.delete">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvStorage.delete" title="Link to this definition">#</a></dt>
+<dd><p>Idempotent deletion. Do not throw an error on invalid key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -420,6 +496,70 @@ Otherwise you should implement a dump strategy inside repositories themselves. A
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>items</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a><em>] </em><em>| </em><em>None</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.InMemoryStorage.fetch_by_prefix">
+<span class="sig-name descname"><span class="pre">fetch_by_prefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.InMemoryStorage.fetch_by_prefix" title="Link to this definition">#</a></dt>
+<dd><p>Search by KV prefix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><em>Iterable</em></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.InMemoryStorage.fetch_all">
+<span class="sig-name descname"><span class="pre">fetch_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.InMemoryStorage.fetch_all" title="Link to this definition">#</a></dt>
+<dd><p>Return all items that have been persisted</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.13)"><em>Iterable</em></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.InMemoryStorage.upsert">
+<span class="sig-name descname"><span class="pre">upsert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.InMemoryStorage.upsert" title="Link to this definition">#</a></dt>
+<dd><p>Updates or inserts a value given its corresponding key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.InMemoryStorage.fetch_one">
+<span class="sig-name descname"><span class="pre">fetch_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.InMemoryStorage.fetch_one" title="Link to this definition">#</a></dt>
+<dd><p>Return value correspondant to key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><em>Any</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.InMemoryStorage.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.InMemoryStorage.delete" title="Link to this definition">#</a></dt>
+<dd><p>Idempotent deletion. Do not throw an error on invalid key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -899,9 +1039,21 @@ correspondant repositories for related objects ones.</p>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Persistence</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.repository">Base repositories</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage"><code class="docutils literal notranslate"><span class="pre">KvStorage</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage"><code class="docutils literal notranslate"><span class="pre">KvStorage</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage.fetch_by_prefix"><code class="docutils literal notranslate"><span class="pre">fetch_by_prefix()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage.fetch_all"><code class="docutils literal notranslate"><span class="pre">fetch_all()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage.upsert"><code class="docutils literal notranslate"><span class="pre">upsert()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage.fetch_one"><code class="docutils literal notranslate"><span class="pre">fetch_one()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage"><code class="docutils literal notranslate"><span class="pre">InMemoryStorage</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.fetch_by_prefix"><code class="docutils literal notranslate"><span class="pre">fetch_by_prefix()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.fetch_all"><code class="docutils literal notranslate"><span class="pre">fetch_all()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.upsert"><code class="docutils literal notranslate"><span class="pre">upsert()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.fetch_one"><code class="docutils literal notranslate"><span class="pre">fetch_one()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.AbstractChannelRepository"><code class="docutils literal notranslate"><span class="pre">AbstractChannelRepository</span></code></a><ul class="nav section-nav flex-column">
