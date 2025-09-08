@@ -7,7 +7,6 @@ import asyncio
 from random import uniform
 from time import sleep
 from eric_sse import get_logger
-from eric_sse.entities import MESSAGE_TYPE_CLOSED
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage
 from eric_sse.prefabs import DataProcessingChannel
@@ -20,7 +19,7 @@ class Producer:
     async def produce_num(c: DataProcessingChannel, l: MessageQueueListener, num: int):
         for i in range(0, num):
             c.dispatch(l.id, SignedMessage(msg_type='counter', msg_payload=i, sender_id='producer'))
-        c.dispatch(l.id, SignedMessage(msg_type=MESSAGE_TYPE_CLOSED, sender_id='producer'))
+        c.dispatch(l.id, SignedMessage(msg_type='end_of_stream', sender_id='producer'))
 
 
 class Consumer(MessageQueueListener):
@@ -48,3 +47,4 @@ async def main():
         print(m)
 
 asyncio.run(main())
+

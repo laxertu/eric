@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 from eric_sse.connection import Connection, ConnectionsFactory
 from eric_sse.entities import AbstractChannel
-from eric_sse.exception import ItemNotFound
+from eric_sse.exception import ItemNotFound, InvalidChannelException
 from eric_sse.interfaces import ChannelRepositoryInterface, ConnectionRepositoryInterface, ListenerRepositoryInterface, \
     QueueRepositoryInterface
 
@@ -74,16 +74,10 @@ class AbstractChannelRepository(ChannelRepositoryInterface, ABC):
     def __init__(
             self,
             storage: KvStorage,
-            connections_repository: ConnectionRepositoryInterface,
-            connections_factory: ConnectionsFactory
+            connections_repository: ConnectionRepositoryInterface
     ):
         self.__storage = storage
         self.__connections_repository = connections_repository
-        self.__connections_factory = connections_factory
-
-    @property
-    def connections_factory(self) -> ConnectionsFactory:
-        return self.__connections_factory
 
     @property
     def connections_repository(self) -> ConnectionRepositoryInterface:
@@ -127,7 +121,7 @@ class AbstractChannelRepository(ChannelRepositoryInterface, ABC):
             self.__connections_repository.persist(channel_id=channel.id, connection=connection)
 
         for connection_id_to_remove in persisted_connections_ids - current_connections_ids:
-            self.__connections_repository.delete(channel_id=channel.id, connection_id=connection_id_to_remove)
+            self.__connections_repository.delete(connection_id=connection_id_to_remove)
 
     def delete(self, channel_id: str):
         try:
@@ -135,7 +129,7 @@ class AbstractChannelRepository(ChannelRepositoryInterface, ABC):
         except ItemNotFound:
             return
         for connection in self.__connections_repository.load_all(channel_id=channel.id):
-            self.__connections_repository.delete(channel_id=channel_id, connection_id=connection.id)
+            self.__connections_repository.delete(connection_id=connection.id)
         self.__storage.delete(channel_id)
 
 class ConnectionRepository(ConnectionRepositoryInterface):
@@ -149,11 +143,16 @@ class ConnectionRepository(ConnectionRepositoryInterface):
             self,
             storage: KvStorage,
             listeners_repository: ListenerRepositoryInterface,
-            queues_repository: QueueRepositoryInterface
+            queues_repository: QueueRepositoryInterface,
+            connections_factory:ConnectionsFactory
     ):
         self.__storage = storage
         self.__listeners_repository = listeners_repository
         self.__queues_repository = queues_repository
+        self.__connections_factory = connections_factory
+
+    CONNECTIONS_BY_CHANNEL_PREFIX: str = 'ch_cn'
+    CONNECTIONS_PREFIX: str = 'cn_ch'
 
     @property
     def queues_repository(self) -> QueueRepositoryInterface:
@@ -163,27 +162,47 @@ class ConnectionRepository(ConnectionRepositoryInterface):
     def listeners_repository(self) -> ListenerRepositoryInterface:
         return self.__listeners_repository
 
+    @property
+    def connections_factory(self) -> ConnectionsFactory:
+        return self.__connections_factory
+
     def _load_connection(self, connection_id: str) -> Connection:
+        try:
+            _ = self.__storage.fetch_one(f'{self.CONNECTIONS_PREFIX}:{connection_id}')
+        except ItemNotFound as e:
+            raise e from None
+
         listener = self.__listeners_repository.load(connection_id=connection_id)
         queue = self.__queues_repository.load(connection_id=connection_id)
 
         return Connection(listener=listener, queue=queue, connection_id=connection_id)
 
     def load_all(self, channel_id: str) -> Iterable[Connection]:
-        for connection_data in self.__storage.fetch_by_prefix(channel_id):
-            yield self._load_connection(connection_data['id'])
+        for connection_data in self.__storage.fetch_by_prefix(f'{self.CONNECTIONS_BY_CHANNEL_PREFIX}:{channel_id}:'):
+            yield self._load_connection(connection_id=connection_data['cn_id'])
 
 
-    def load_one(self, channel_id: str, connection_id: str) -> Connection:
-        return self._load_connection(self.__storage.fetch_one(f'{channel_id}:{connection_id}')['id'])
+    def load_one(self, connection_id: str) -> Connection:
+        return self._load_connection(connection_id=connection_id)
 
     def persist(self, channel_id: str, connection: Connection):
+
         self.__listeners_repository.persist(connection_id=connection.id, listener=connection.listener)
         self.__queues_repository.persist(connection_id=connection.id, queue=connection.queue)
-        self.__storage.upsert(f'{channel_id}:{connection.id}', {'id': connection.id})
+        self.__storage.upsert(key=f'{self.CONNECTIONS_PREFIX}:{connection.id}', value={'ch_id': channel_id, 'cn_id': connection.id})
+        self.__storage.upsert(key=f'{self.CONNECTIONS_BY_CHANNEL_PREFIX}:{channel_id}:{connection.id}', value={'ch_id': channel_id, 'cn_id': connection.id})
 
-    def delete(self, channel_id: str, connection_id: str):
+
+    def delete(self, connection_id: str):
+        try:
+            connection_data = self.__storage.fetch_one(key=f'{self.CONNECTIONS_PREFIX}:{connection_id}')
+        except ItemNotFound:
+            return
+
+        channel_id = connection_data['ch_id']
+
         self.__listeners_repository.delete(connection_id=connection_id)
         self.__queues_repository.delete(connection_id=connection_id)
-        self.__storage.delete(key=f'{channel_id}:{connection_id}')
+        self.__storage.delete(key=f'{self.CONNECTIONS_PREFIX}:{connection_id}')
+        self.__storage.delete(key=f'{self.CONNECTIONS_BY_CHANNEL_PREFIX}:{channel_id}:{connection_id}')
 

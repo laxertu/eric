@@ -58,9 +58,9 @@ class TestSSEChannelRepository(TestCase):
             connections_repository=FakeConnectionRepository(
                 storage=connections_storage,
                 listeners_repository=FakeListenerRepository(listeners_storage),
-                queues_repository=FakeQueueRepository(queues_storage)
-            ),
-            connections_factory=InMemoryConnectionsFactory()
+                queues_repository=FakeQueueRepository(queues_storage),
+                connections_factory=InMemoryConnectionsFactory()
+            )
         )
         return sut
 

@@ -2,8 +2,9 @@ from abc import ABC, abstractmethod
 
 import eric_sse
 from eric_sse.listener import MessageQueueListener
+from eric_sse.message import MessageContract
 from eric_sse.queues import Queue, InMemoryQueue
-
+from eric_sse.handlers import QueuingErrorHandler
 
 class Connection:
     """
@@ -16,6 +17,8 @@ class Connection:
         self.__listener = listener
         self.__queue = queue
         self.__id = connection_id or eric_sse.generate_uuid()
+        self.__queues_error_handlers: list[QueuingErrorHandler] = []
+
 
     @property
     def listener(self) -> MessageQueueListener:
@@ -28,6 +31,26 @@ class Connection:
     @property
     def id(self) -> str:
         return self.__id
+
+    def send_message(self, msg: MessageContract):
+        try:
+            self.__queue.push(msg)
+        except Exception as e:
+            for handler in self.__queues_error_handlers:
+                handler.handle_push_error(msg=msg, exception=e)
+            raise
+
+
+    def fetch_message(self) -> MessageContract:
+        try:
+            return self.__queue.pop()
+        except Exception as e:
+            for handler in self.__queues_error_handlers:
+                handler.handle_pop_error(exception=e)
+            raise e
+
+    def register_queuing_error_handler(self,  handler: QueuingErrorHandler):
+        self.__queues_error_handlers.append(handler)
 
 
 class ConnectionsFactory(ABC):

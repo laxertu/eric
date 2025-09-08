@@ -80,7 +80,7 @@ class DataProcessingChannel(AbstractChannel):
             loop = asyncio.get_running_loop()
             while there_are_pending_messages:
                 try:
-                    msg = self._get_queue(listener_id=listener.id).pop()
+                    msg = self._get_connection(listener_id=listener.id).fetch_message()
                     tasks.append(loop.run_in_executor(e, DataProcessingChannel._invoke_callback_and_return, listener.on_message, msg))
 
                 except NoMessagesException:
@@ -177,7 +177,7 @@ class SSEChannelRepository(AbstractChannelRepository):
         """
         :param dict channel_data: Fill it with SSEChannel constructor arguments, except for connections_factory that wil be injected by repository
         """
-        return SSEChannel(**channel_data, connections_factory=self.connections_factory)
+        return SSEChannel(**channel_data, connections_factory=self.connections_repository.connections_factory)
 
     @staticmethod
     def _channel_to_dict(channel: SSEChannel) -> dict:

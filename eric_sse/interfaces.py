@@ -44,6 +44,11 @@ class ListenerRepositoryInterface(ABC):
 class ConnectionRepositoryInterface(ABC):
     @property
     @abstractmethod
+    def connections_factory(self) -> ConnectionsFactory:
+        pass
+
+    @property
+    @abstractmethod
     def queues_repository(self) -> QueueRepositoryInterface:
         pass
 
@@ -58,7 +63,7 @@ class ConnectionRepositoryInterface(ABC):
         pass
 
     @abstractmethod
-    def load_one(self, channel_id: str, connection_id: str) -> Connection:
+    def load_one(self, connection_id: str) -> Connection:
         """Loads a connection given the connection and channel id it belongs to."""
         pass
 
@@ -68,18 +73,13 @@ class ConnectionRepositoryInterface(ABC):
         pass
 
     @abstractmethod
-    def delete(self, channel_id: str, connection_id: str):
-        """Deletes a connection given the connection and channel id it belongs to."""
+    def delete(self, connection_id: str):
+        """Deletes a connection given its id."""
         pass
 
 
 
 class ChannelRepositoryInterface(ABC):
-    @property
-    @abstractmethod
-    def connections_factory(self) -> ConnectionsFactory:
-        """The connections factory that will be injected into concrete channel instances."""
-        pass
 
     @property
     @abstractmethod

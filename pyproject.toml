@@ -1,6 +1,6 @@
 [project]
 name = "eric-sse"
-description = "A lightweight message dispatcher based on SSE protocol data transfer objects format"
+description = "A lightweight and extensible asyncronous message dispatcher"
 requires-python = ">=3.10"
 version = "2.1.1.2"
 authors = [
