@@ -317,12 +317,33 @@ document.write(`
                   
   <section id="reference">
 <h1>Reference<a class="headerlink" href="#reference" title="Link to this heading">#</a></h1>
+<p><strong>Introduction</strong></p>
+<p>If you just want a simple, inmemory SSE service, base building blocks are already available.</p>
+<p>The following code creates a Server Side Events channel and attaches a listener to it.
+<a class="reference external" href="https://github.com/laxertu/eric/blob/master/examples/inmemory.py">Here</a> is the complete example.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eric_sse.message</span><span class="w"> </span><span class="kn">import</span> <span class="n">Message</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">eric_sse.prefabs</span><span class="w"> </span><span class="kn">import</span> <span class="n">SSEChannel</span>
+
+<span class="n">channel</span> <span class="o">=</span> <span class="n">SSEChannel</span><span class="p">()</span>
+<span class="n">listener</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">add_listener</span><span class="p">()</span>
+<span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">channel</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">listener</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">Message</span><span class="p">(</span><span class="n">msg_type</span><span class="o">=</span><span class="s1">&#39;welcome&#39;</span><span class="p">,</span> <span class="n">msg_payload</span><span class="o">=</span><span class="s1">&#39;Hello!&#39;</span><span class="p">))</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="k">async</span> <span class="k">for</span> <span class="n">sse_event</span> <span class="ow">in</span> <span class="n">channel</span><span class="o">.</span><span class="n">message_stream</span><span class="p">(</span><span class="n">listener</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Received message: </span><span class="si">{</span><span class="n">sse_event</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+</div>
+<p><strong>Overview</strong></p>
 <a class="reference internal image-reference" href="_images/overview.png"><img alt="_images/overview.png" src="_images/overview.png" style="width: 673.5px; height: 345.5px;" />
 </a>
 <div class="line-block">
 <div class="line">thanks a lot <a class="reference external" href="https://excalidraw.com">https://excalidraw.com</a> !!</div>
 </div>
-<p><strong>Introduction</strong></p>
+<p><strong>What is this?</strong></p>
 <p>Eric is basically a toolkit for building async message management applications, paying special attention to Server Side Events based ones.
 Its main components are:</p>
 <ul class="simple">
@@ -330,9 +351,6 @@ Its main components are:</p>
 <li><p>A persistence layer composed by a set of interfaces and base classes for building concrete layers</p></li>
 </ul>
 <p><a class="reference internal" href="entities.html#eric_sse.connection.ConnectionsFactory" title="eric_sse.connection.ConnectionsFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectionsFactory</span></code></a> is shared between components. Persistence uses it to create objects after data fetch, while channels create connections when receiving new subscriptions.</p>
-<p><strong>SSE in memory use case</strong></p>
-<p>If you just want a simple, inmemory SSE service, base building blocks are available.
-<a class="reference external" href="https://github.com/laxertu/eric/blob/master/examples/inmemory.py">Here</a> is a little demo</p>
 <p><strong>Prefabs</strong></p>
 <ul class="simple">
 <li><p><a class="reference internal" href="prefabs.html#eric_sse.prefabs.SSEChannel" title="eric_sse.prefabs.SSEChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SSEChannel</span></code></a> Server side Events support</p></li>
