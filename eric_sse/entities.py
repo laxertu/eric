@@ -8,47 +8,39 @@ from eric_sse.exception import InvalidListenerException, NoMessagesException, In
 from eric_sse.listener import MessageQueueListener
 from eric_sse.connection import Connection, ConnectionsFactory, InMemoryConnectionsFactory
 from eric_sse.message import MessageContract, Message
-from eric_sse.queues import Queue
+from eric_sse.handlers import ListenerErrorHandler
 
 logger = eric_sse.get_logger()
 
-MESSAGE_TYPE_CLOSED = '_eric_channel_closed'
-MESSAGE_TYPE_END_OF_STREAM = '_eric_channel_eof'
-MESSAGE_TYPE_INTERNAL_ERROR = '_eric_error'
-
-
 class _ConnectionManager:
-    """Maintains relationships between listeners and queues"""
+    """Maintains relationships between listeners and connections."""
     def __init__(self, channel_id: str):
         self.__channel_id = channel_id
         self.__listeners: dict[str, MessageQueueListener] = {}
-        self.__queues: dict[str, Queue] = {}
         self.__connections: dict[str, Connection] = {}
 
     def register_connection(self, connection: Connection):
         self.__connections[connection.listener.id] = connection
-        self.__queues[connection.listener.id] = connection.queue
         self.__listeners[connection.listener.id] = connection.listener
 
     def remove_listener(self, listener_id: str):
         try:
             del self.__connections[listener_id]
-            del self.__queues[listener_id]
             del self.__listeners[listener_id]
         except KeyError:
             raise InvalidListenerException(listener_id) from None
-
-    def get_queue(self, listener_id: str) -> Queue:
-        try:
-            return self.__queues[listener_id]
-        except KeyError:
-            raise InvalidListenerException(f"Invalid listener {listener_id}") from None
 
     def get_listener(self, listener_id: str) -> MessageQueueListener:
         try:
             return self.__listeners[listener_id]
         except KeyError:
-            raise InvalidListenerException
+            raise InvalidListenerException(listener_id) from None
+
+    def get_connection(self, listener_id: str) -> Connection:
+        try:
+            return self.__connections[listener_id]
+        except KeyError:
+            raise InvalidListenerException(listener_id) from None
 
     def get_listeners(self) -> dict[str, MessageQueueListener]:
         """Returns a dict mapping listener ids to listeners"""
@@ -82,6 +74,9 @@ class AbstractChannel(ABC):
         self.__connection_manager: _ConnectionManager = _ConnectionManager(self.__id)
         self.__connections_factory = connections_factory if connections_factory else InMemoryConnectionsFactory()
 
+        self.__listeners_error_handlers: list[ListenerErrorHandler] = []
+
+
 
     @property
     def id(self) -> str:
@@ -100,10 +95,9 @@ class AbstractChannel(ABC):
 
         A message with type = 'error' is yield on invalid listener
         """
-        try:
-            self.__connection_manager.get_listener(listener.id)
-        except InvalidListenerException:
-            raise
+
+        # check that listener was registered
+        _ = self.__connection_manager.get_listener(listener.id)
 
         async def new_messages():
             try:
@@ -149,11 +143,14 @@ class AbstractChannel(ABC):
 
     def register_connection(self, connection: Connection):
         """
-        Register and existing connection.
+        Register an existing connection.
 
         **Warning**: Listener and queue should belong to the same classes returned by connection factory to avoid compatibility issues with persistence layer
         """
         self.__connection_manager.register_connection(connection)
+
+    def register_listener_error_handler(self, handler: ListenerErrorHandler):
+        self.__listeners_error_handlers.append(handler)
 
     def remove_listener(self, listener_id: str):
         self.__connection_manager.remove_listener(listener_id)
@@ -166,21 +163,29 @@ class AbstractChannel(ABC):
         """
         listener = self.get_listener(listener_id)
         if listener.is_running():
-            queue = self.__connection_manager.get_queue(listener.id)
-            msg = queue.pop()
-            listener.on_message(msg)
+            msg = self._get_connection(listener.id).fetch_message()
+            try:
+                listener.on_message(msg)
+            except Exception as e:
+                for handler in self.__listeners_error_handlers:
+                    handler.handle_on_message_error(msg=msg, exception=e)
+                raise
             return msg
 
         raise NoMessagesException
 
-    def _get_queue(self, listener_id: str) -> Queue:
-        return self.__connection_manager.get_queue(listener_id)
+    def _get_connection(self, listener_id: str) -> Connection:
+        return self.__connection_manager.get_connection(listener_id)
 
     def dispatch(self, listener_id: str, msg: MessageContract):
         """Adds a message to listener's queue"""
 
-        queue = self._get_queue(listener_id)
-        queue.push(msg)
+        try:
+            self._get_connection(listener_id).send_message(msg)
+        except Exception:
+            logger.exception("Failed to dispatch message to listener_id=%s", listener_id)
+            raise
+
         logger.debug(f"Dispatched {msg} to {listener_id}")
 
     def broadcast(self, msg: MessageContract):
@@ -193,9 +198,4 @@ class AbstractChannel(ABC):
 
     def get_connections(self) -> Iterable[Connection]:
         return self.__connection_manager.get_connections()
-
-    async def watch(self) -> AsyncIterable[Any]:
-        listener = self.add_listener()
-        listener.start()
-        return self.message_stream(listener)
 

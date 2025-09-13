@@ -14,8 +14,8 @@ pip install eric-sse
 *Features*
 
 * Send to one listener and broadcast
-* SSE format was adopted by design, making the library suitable for such kind of model
 * Callbacks and threading support
+* Support to SSE and concurrency batch process implementation 
 * Sockets server prefab for offline inter process communication
 
 *Possible applications*

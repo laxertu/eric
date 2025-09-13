@@ -142,10 +142,14 @@ class AbstractChannelTestCase(IsolatedAsyncioTestCase):
 
     async def test_error_handling_async(self):
         listener = MessageQueueListener()
-
+        msgs = []
         with pytest.raises(InvalidListenerException):
+            async for msg in self.sut.message_stream(listener):
+                msgs.append(msg)
             async for _ in self.sut.message_stream(listener):
                 pass
+            self.assertEqual(1, len(msgs))
+            self.assertEqual('error', msgs[0].type)
 
     async def test_stream(self):
         listener = MessageQueueListenerMock()
