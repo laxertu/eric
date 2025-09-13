@@ -1,5 +1,5 @@
 from eric_sse.connection import ConnectionsFactory, Connection
-from eric_sse.handlers import ListenerErrorHandler, QueuingErrorHandler
+from eric_sse.handlers import QueuingErrorHandler
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import MessageContract, Message
 from eric_sse.queues import Queue
