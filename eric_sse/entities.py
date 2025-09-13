@@ -34,7 +34,7 @@ class _ConnectionManager:
         try:
             return self.__listeners[listener_id]
         except KeyError:
-            raise InvalidListenerException
+            raise InvalidListenerException(listener_id) from None
 
     def get_connection(self, listener_id: str) -> Connection:
         try:
@@ -183,9 +183,9 @@ class AbstractChannel(ABC):
 
         try:
             self._get_connection(listener_id).send_message(msg)
-        except Exception as e:
-            logger.error(repr(e))
-            raise e from None
+        except Exception:
+            logger.exception("Failed to dispatch message to listener_id=%s", listener_id)
+            raise
 
         logger.debug(f"Dispatched {msg} to {listener_id}")
 
