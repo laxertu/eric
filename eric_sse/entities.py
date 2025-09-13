@@ -40,7 +40,7 @@ class _ConnectionManager:
         try:
             return self.__connections[listener_id]
         except KeyError:
-            raise InvalidListenerException(f"Invalid listener {listener_id}") from None
+            raise InvalidListenerException(listener_id) from None
 
     def get_listeners(self) -> dict[str, MessageQueueListener]:
         """Returns a dict mapping listener ids to listeners"""
