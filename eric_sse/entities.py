@@ -143,7 +143,7 @@ class AbstractChannel(ABC):
 
     def register_connection(self, connection: Connection):
         """
-        Register and existing connection.
+        Register an existing connection.
 
         **Warning**: Listener and queue should belong to the same classes returned by connection factory to avoid compatibility issues with persistence layer
         """

@@ -28,7 +28,7 @@ class KvStorage(ABC):
 
     @abstractmethod
     def fetch_one(self, key: str) -> Any:
-        """Return value correspondant to key"""
+        """Return value corresponding to key"""
         pass
 
     @abstractmethod
@@ -137,7 +137,7 @@ class ConnectionRepository(ConnectionRepositoryInterface):
     Concrete Connection Repository
 
     Relies on :class:`~eric_sse.repository.KvStorage` abstraction for final writes of connections data, and on
-    correspondant repositories for related objects ones.
+    corresponding repositories for related objects ones.
     """
     def __init__(
             self,
