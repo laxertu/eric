@@ -95,6 +95,8 @@ class AbstractChannel(ABC):
 
         A message with type = 'error' is yield on invalid listener
         """
+
+        # check that listener was registered
         _ = self.__connection_manager.get_listener(listener.id)
 
         async def new_messages():
@@ -200,5 +202,6 @@ class AbstractChannel(ABC):
     async def watch(self) -> AsyncIterable[Any]:
         listener = self.add_listener()
         listener.start()
-        return self.message_stream(listener)
+        async for event in self.message_stream(listener):
+            yield event
 
