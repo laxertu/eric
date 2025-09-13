@@ -31,7 +31,7 @@ class BrokenConnectionFactory(ConnectionsFactory):
     def __init__(
             self,
             q_handlers: list[QueuingErrorHandler],
-            queue: Queue = None,
+            queue: Queue | None = None,
     ):
         self.q_handlers = q_handlers
         self.queue = queue or BrokenQueue()
