@@ -199,9 +199,3 @@ class AbstractChannel(ABC):
     def get_connections(self) -> Iterable[Connection]:
         return self.__connection_manager.get_connections()
 
-    async def watch(self) -> AsyncIterable[Any]:
-        listener = self.add_listener()
-        listener.start()
-        async for event in self.message_stream(listener):
-            yield event
-
