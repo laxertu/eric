@@ -11,8 +11,9 @@ class DeadLetterQueueHandler(QueuingErrorHandler):
 
     def handle_push_error(self, msg: MessageContract, exception: Exception):
         try:
+            raise Exception('blah')
             self.__queue.push(msg)
-        except Exception as e:
-            logger.error(e)
+        except Exception as  e:
+            logger.exception(f"Dead-letter push failed. msg type: {msg.type} payload {msg.payload} {repr(e)}")
 
 
