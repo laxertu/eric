@@ -142,14 +142,11 @@ class AbstractChannelTestCase(IsolatedAsyncioTestCase):
 
     async def test_error_handling_async(self):
         listener = MessageQueueListener()
-        msgs = []
+
         with pytest.raises(InvalidListenerException):
-            async for msg in self.sut.message_stream(listener):
-                msgs.append(msg)
-            async for _ in self.sut.message_stream(listener):
-                pass
-            self.assertEqual(1, len(msgs))
-            self.assertEqual('error', msgs[0].type)
+            listener.start()
+            async for _ in self.sut.message_stream(listener.id):
+                listener.stop()
 
     async def test_stream(self):
         listener = MessageQueueListenerMock()
@@ -157,13 +154,13 @@ class AbstractChannelTestCase(IsolatedAsyncioTestCase):
         self.sut.dispatch(listener_id=listener.id, msg=Message(msg_type='test'))
 
         num_dispatched = 0
-        async for _ in self.sut.message_stream(listener):
+        async for _ in self.sut.message_stream(listener.id):
             num_dispatched += 1
 
         self.assertEqual(0, num_dispatched)
         listener.start()
 
-        async for _ in self.sut.message_stream(listener):
+        async for _ in self.sut.message_stream(listener.id):
             num_dispatched += 1
 
         self.assertEqual(1, num_dispatched)

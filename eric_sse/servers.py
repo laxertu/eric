@@ -173,13 +173,7 @@ class SocketServer:
             channel = SocketServer.cc.get(channel_id)
             listener = channel.get_listener(receiver_id)
             listener.start()
-            async for m in channel.message_stream(listener):
-                yield f'{json.dumps(m)}{linesep}'
-
-        elif verb == 'w':
-            logger.info(f"Client watching channel {channel_id}")
-            channel = SocketServer.cc.get(channel_id)
-            async for m in await channel.watch():
+            async for m in channel.message_stream(listener.id):
                 yield f'{json.dumps(m)}{linesep}'
 
     async def shutdown(self):

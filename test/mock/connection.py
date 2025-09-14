@@ -4,11 +4,13 @@ from eric_sse.listener import MessageQueueListener
 from eric_sse.message import MessageContract, Message
 from eric_sse.queues import Queue
 
+class MockException(Exception):
+    pass
 
 class BrokenListener(MessageQueueListener):
 
     def on_message(self, msg: MessageContract) -> None:
-        raise Exception()
+        raise MockException()
 
 
 class BrokenQueue(Queue):
@@ -18,12 +20,12 @@ class BrokenQueue(Queue):
 
     def pop(self) -> MessageContract:
         if self.broken_pop:
-            raise Exception()
+            raise MockException()
         return Message(msg_type='test')
 
     def push(self, message: MessageContract) -> None:
         if self.broken_push:
-            raise Exception()
+            raise MockException()
 
 
 class BrokenConnectionFactory(ConnectionsFactory):

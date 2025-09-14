@@ -19,7 +19,7 @@ async def main():
     input('Starting Press Enter to start stream and Ctrl+C to stop')
 
     try:
-        async for sse_event in channel.message_stream(listener):
+        async for sse_event in channel.message_stream(listener.id):
             print(f'Received message: {sse_event}')
     except KeyboardInterrupt:
         exit(0)

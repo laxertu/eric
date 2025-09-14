@@ -89,19 +89,17 @@ class AbstractChannel(ABC):
         """Models output of channel streams"""
         ...
 
-    async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
+    async def message_stream(self, listener_id: str) -> AsyncIterable[Any]:
         """
         Entry point for message streaming
 
         A message with type = 'error' is yield on invalid listener
         """
-
-        # check that listener was registered
-        _ = self.__connection_manager.get_listener(listener.id)
+        listener = self.get_listener(listener_id)
 
         async def new_messages():
             try:
-                result = self.deliver_next(listener.id)
+                result = self.deliver_next(listener_id)
                 yield result
             except NoMessagesException:
                 ...

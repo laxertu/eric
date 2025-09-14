@@ -49,7 +49,7 @@ async def create_listener(ch: SimpleDistributedApplicationChannel):
     return l
 
 async def do_stuff(buddy: SimpleDistributedApplicationListener, ssc: SimpleDistributedApplicationChannel):
-    async for _ in ssc.message_stream(buddy):
+    async for _ in ssc.message_stream(buddy.id):
         ...
 
 
