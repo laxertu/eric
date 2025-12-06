@@ -15,7 +15,7 @@ Channels and connections
 ========================
 
 .. automodule:: eric_sse.entities
-    :members:
+    :members: AbstractChannel
     :show-inheritance:
     :member-order: bysource
 

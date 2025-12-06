@@ -26,10 +26,20 @@ Base repositories
     :show-inheritance:
     :member-order: bysource
 
+.. automodule:: eric_sse.entities
+    :members: AbstractChannelRepository
+    :member-order: bysource
+    :show-inheritance:
+
 Interoperability
 ================
+
+.. automodule:: eric_sse.entities
+    :members: ChannelRepositoryInterface
+    :show-inheritance:
+    :member-order: bysource
+
 .. automodule:: eric_sse.interfaces
-    :members: ListenerRepositoryInterface, QueueRepositoryInterface, ConnectionRepositoryInterface, ChannelRepositoryInterface
     :undoc-members:
     :member-order: bysource
     :show-inheritance:

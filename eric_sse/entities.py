@@ -57,13 +57,13 @@ class AbstractChannel(ABC):
 
     Provides functionalities for listeners and message delivery management.
 
-    :class:`~eric_sse.connection.InMemoryConnectionsFactory` is the default implementation used for **connections_factory** parameter.
+    :class:`~eric_sse.inmemory.InMemoryConnectionRepository` is the default implementation used for **connections_repository** parameter.
 
     see :class:`~eric_sse.prefabs.SSEChannel`
 
     :param int stream_delay_seconds: Wait time in seconds between message delivery.
     :param str channel_id: Optionally sets the channel id.
-    :param ~eric_sse.repository.ConnectionRepositoryInterface connections_repository: Factory to be used for creating connections instances on channel subscriptions.
+    :param ~eric_sse.interfaces.ConnectionRepositoryInterface connections_repository: Factory to be used for creating connections instances on channel subscriptions.
     """
     def __init__(
             self,
