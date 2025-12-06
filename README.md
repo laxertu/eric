@@ -13,9 +13,9 @@ pip install eric-sse
 
 *Features*
 
-* Send to one listener and broadcast
-* Callbacks and threading support
-* Support to SSE and concurrency batch process implementation 
+* Deliver to one listener and broadcast
+* Callbacks injection and threading support
+* Support to SSE and concurrency batch process 
 * Sockets server prefab for offline inter process communication
 
 *Possible applications*
