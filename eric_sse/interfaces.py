@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Iterable
+from typing import Iterable, Any
 
-from eric_sse.entities import AbstractChannel
 from eric_sse.connection import Connection, ConnectionsFactory
 from eric_sse.listener import MessageQueueListener
 from eric_sse.queues import Queue
@@ -78,37 +77,30 @@ class ConnectionRepositoryInterface(ABC):
         pass
 
 
+class KvStorage(ABC):
+    """Represents a Key Value storage engine. Provides functionalities do load, persist and find by key prefix"""
 
-class ChannelRepositoryInterface(ABC):
-
-    @property
     @abstractmethod
-    def connections_repository(self) -> ConnectionRepositoryInterface:
-        """Repository to be used to persist connections."""
+    def fetch_by_prefix(self, prefix: str) -> Iterable[Any]:
+        """Search by KV prefix"""
         pass
 
     @abstractmethod
-    def load_all(self) -> Iterable[AbstractChannel]:
-        """Loads all channels"""
+    def fetch_all(self) -> Iterable[Any]:
+        """Return all items that have been persisted"""
         pass
 
     @abstractmethod
-    def load_one(self, channel_id: str) -> AbstractChannel:
-        """Loads a channel given its it"""
+    def upsert(self, key: str, value: Any):
+        """Updates or inserts a value given its corresponding key"""
         pass
 
     @abstractmethod
-    def persist(self, channel: AbstractChannel):
-        """Persists a channel"""
+    def fetch_one(self, key: str) -> Any:
+        """Return value corresponding to key"""
         pass
 
     @abstractmethod
-    def delete(self, channel_id: str):
-        """Deletes a channel given its it"""
+    def delete(self, key: str):
+        """Idempotent deletion. Do not throw an error on invalid key"""
         pass
-
-    @abstractmethod
-    def create(self, channel_data: dict) -> AbstractChannel:
-        """Creates a new channel and configures it depending on channel_data."""
-        pass
-

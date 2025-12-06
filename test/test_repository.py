@@ -1,13 +1,14 @@
-from unittest import TestCase
+from unittest import TestCase, IsolatedAsyncioTestCase
 from unittest.mock import MagicMock
 
 from eric_sse.connection import Connection, ConnectionsFactory
 from eric_sse.listener import MessageQueueListener
+from eric_sse.message import Message
 from eric_sse.queues import InMemoryQueue
-from eric_sse.repository import ConnectionRepository, KvStorage
-from eric_sse.interfaces import ListenerRepositoryInterface, QueueRepositoryInterface
-from eric_sse.repository import InMemoryStorage
-from eric_sse.exception import ItemNotFound, InvalidChannelException
+from eric_sse.repository import ConnectionRepository
+from eric_sse.interfaces import ListenerRepositoryInterface, QueueRepositoryInterface, KvStorage
+from eric_sse.inmemory import InMemoryStorage
+from eric_sse.exception import ItemNotFound
 
 from test.mock.channel import FakeChannelRepository, FakeConnectionsFactory, FakeChannel
 
@@ -142,11 +143,8 @@ class AbstractChannelRepositoryInMemoryStorageIntegrationTestCase(TestCase):
 
         channel = sut.load_one(channel_id=channel.id)
         self.assertEqual(0, len([c for c in channel.get_connections()]))
+
 """
-MessageQueueListenerMock
-
-
-
 class FullPathTestCase(IsolatedAsyncioTestCase):
     def setUp(self):
         self.listeners_repository = MagicMock(spec=ListenerRepositoryInterface)
@@ -164,6 +162,7 @@ class FullPathTestCase(IsolatedAsyncioTestCase):
             storage=InMemoryStorage(),
             connections_repository=connections_repository
         )
+
     async def test_one(self):
         sut = self.create_sut()
         channel = FakeChannel()
@@ -179,7 +178,6 @@ class FullPathTestCase(IsolatedAsyncioTestCase):
         channel_clone = sut.load_one(channel_id=channel.id)
         listener_clone = channel_clone.get_listener(listener.id)
 
-        async for received_message in channel_clone.message_stream(listener_clone):
+        async for received_message in channel_clone.message_stream(listener_clone.id):
             self.assertEqual(received_message.msg_type, 'test')
-
 """

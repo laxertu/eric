@@ -2,36 +2,9 @@ from unittest import TestCase
 
 from eric_sse.listener import MessageQueueListener
 from eric_sse.prefabs import SSEChannel, SSEChannelRepository
-from eric_sse.queues import InMemoryQueue
-from eric_sse.repository import ConnectionRepository, InMemoryStorage
-from eric_sse.interfaces import ListenerRepositoryInterface, QueueRepositoryInterface
+from eric_sse.repository import ConnectionRepository
+from eric_sse.inmemory import InMemoryStorage, InMemoryQueueRepository, InMemoryListenerRepository
 from eric_sse.connection import InMemoryConnectionsFactory
-
-class FakeListenerRepository(ListenerRepositoryInterface):
-    def __init__(self, storage: InMemoryStorage):
-        self.storage = storage
-
-    def load(self, connection_id: str) -> MessageQueueListener:
-        return self.storage.fetch_one(connection_id)
-
-    def persist(self, connection_id: str, listener: MessageQueueListener):
-        self.storage.upsert(connection_id, listener)
-
-    def delete(self, connection_id: str):
-        self.storage.delete(connection_id)
-
-class FakeQueueRepository(QueueRepositoryInterface):
-    def __init__(self, storage: InMemoryStorage):
-        self.storage = storage
-
-    def load(self, connection_id: str) -> InMemoryQueue:
-        return self.storage.fetch_one(connection_id)
-
-    def persist(self, connection_id: str, queue: InMemoryQueue):
-        return self.storage.upsert(connection_id, queue)
-
-    def delete(self, connection_id: str):
-        self.storage.delete(connection_id)
 
 
 class FakeConnectionRepository(ConnectionRepository):
@@ -57,8 +30,8 @@ class TestSSEChannelRepository(TestCase):
             storage=channels_storage,
             connections_repository=FakeConnectionRepository(
                 storage=connections_storage,
-                listeners_repository=FakeListenerRepository(listeners_storage),
-                queues_repository=FakeQueueRepository(queues_storage),
+                listeners_repository=InMemoryListenerRepository(listeners_storage),
+                queues_repository=InMemoryQueueRepository(queues_storage),
                 connections_factory=InMemoryConnectionsFactory()
             )
         )

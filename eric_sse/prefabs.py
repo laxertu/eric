@@ -3,11 +3,10 @@ from concurrent.futures import ThreadPoolExecutor, Executor
 from typing import Callable, AsyncIterable
 from eric_sse import get_logger
 from eric_sse.connection import ConnectionsFactory
-from eric_sse.entities import AbstractChannel
+from eric_sse.entities import AbstractChannel, AbstractChannelRepository
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
-from eric_sse.repository import AbstractChannelRepository
 
 logger = get_logger()
 
@@ -25,12 +24,12 @@ class SSEChannel(AbstractChannel):
             stream_delay_seconds: int = 0,
             retry_timeout_milliseconds: int = 5,
             channel_id: str | None = None,
-            connections_factory: ConnectionsFactory | None = None
+            connections_repository: ConnectionsFactory | None = None
     ):
         super().__init__(
             stream_delay_seconds=stream_delay_seconds,
             channel_id=channel_id,
-            connections_factory=connections_factory
+            connections_repository=connections_repository
         )
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
 
@@ -177,7 +176,7 @@ class SSEChannelRepository(AbstractChannelRepository):
         """
         :param dict channel_data: Fill it with SSEChannel constructor arguments, except for connections_factory that wil be injected by repository
         """
-        return SSEChannel(**channel_data, connections_factory=self.connections_repository.connections_factory)
+        return SSEChannel(**channel_data, connections_repository=self.connections_repository.connections_factory)
 
     @staticmethod
     def _channel_to_dict(channel: SSEChannel) -> dict:
