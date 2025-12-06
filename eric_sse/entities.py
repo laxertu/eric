@@ -9,7 +9,7 @@ from eric_sse.listener import MessageQueueListener
 from eric_sse.connection import Connection
 from eric_sse.message import MessageContract, Message
 from eric_sse.handlers import ListenerErrorHandler
-from eric_sse.interfaces import ConnectionRepositoryInterface, KvStorage
+from eric_sse.interfaces import ConnectionRepositoryInterface, KvStorageInterface
 from eric_sse.inmemory import InMemoryConnectionRepository
 
 logger = eric_sse.get_logger()
@@ -242,7 +242,7 @@ class AbstractChannelRepository(ChannelRepositoryInterface, ABC):
     """
     def __init__(
             self,
-            storage: KvStorage,
+            storage: KvStorageInterface,
             connections_repository: ConnectionRepositoryInterface
     ):
         self.__storage = storage

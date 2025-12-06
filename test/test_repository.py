@@ -6,7 +6,7 @@ from eric_sse.listener import MessageQueueListener
 from eric_sse.message import Message
 from eric_sse.queues import InMemoryQueue
 from eric_sse.repository import ConnectionRepository
-from eric_sse.interfaces import ListenerRepositoryInterface, QueueRepositoryInterface, KvStorage
+from eric_sse.interfaces import ListenerRepositoryInterface, QueueRepositoryInterface, KvStorageInterface
 from eric_sse.inmemory import InMemoryStorage
 from eric_sse.exception import ItemNotFound
 
@@ -48,7 +48,7 @@ class ConnectionsRepositoryTestCase(TestCase):
         self.listeners_repository = MagicMock(spec=ListenerRepositoryInterface)
         self.queues_repository = MagicMock(spec=QueueRepositoryInterface)
         self.connections_factory = MagicMock(spec=ConnectionsFactory)
-        self.storage = MagicMock(spec=KvStorage)
+        self.storage = MagicMock(spec=KvStorageInterface)
 
         self.sut = ConnectionRepository(
             storage=self.storage,

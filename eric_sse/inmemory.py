@@ -3,12 +3,12 @@ from typing import Any, Iterable
 from eric_sse.connection import InMemoryConnectionsFactory, ConnectionsFactory, Connection
 from eric_sse.exception import ItemNotFound
 from eric_sse.interfaces import ConnectionRepositoryInterface, QueueRepositoryInterface, ListenerRepositoryInterface, \
-    KvStorage
+    KvStorageInterface
 from eric_sse.listener import MessageQueueListener
 from eric_sse.queues import InMemoryQueue
 
 
-class InMemoryStorage(KvStorage):
+class InMemoryStorage(KvStorageInterface):
     """In memory implementation"""
     def __init__(self, items: dict[str, Any] = None):
         self.items = items or {}

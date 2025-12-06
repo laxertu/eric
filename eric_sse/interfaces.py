@@ -77,7 +77,7 @@ class ConnectionRepositoryInterface(ABC):
         pass
 
 
-class KvStorage(ABC):
+class KvStorageInterface(ABC):
     """Represents a Key Value storage engine. Provides functionalities do load, persist and find by key prefix"""
 
     @abstractmethod

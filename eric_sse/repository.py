@@ -3,7 +3,7 @@ from typing import Iterable
 from eric_sse.connection import Connection, ConnectionsFactory
 from eric_sse.exception import ItemNotFound
 from eric_sse.interfaces import ConnectionRepositoryInterface, ListenerRepositoryInterface, \
-    QueueRepositoryInterface, KvStorage
+    QueueRepositoryInterface, KvStorageInterface
 
 
 class ConnectionRepository(ConnectionRepositoryInterface):
@@ -15,7 +15,7 @@ class ConnectionRepository(ConnectionRepositoryInterface):
     """
     def __init__(
             self,
-            storage: KvStorage,
+            storage: KvStorageInterface,
             listeners_repository: ListenerRepositoryInterface,
             queues_repository: QueueRepositoryInterface,
             connections_factory:ConnectionsFactory
