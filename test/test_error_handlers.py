@@ -7,8 +7,11 @@ from eric_sse.handlers import ListenerErrorHandler, QueuingErrorHandler
 from eric_sse.message import Message
 from test.mock.channel import FakeChannel
 from test.mock.connection import BrokenListener, BrokenQueue, BrokenConnectionFactory
+from eric_sse.inmemory import InMemoryConnectionRepository, InMemoryQueueRepository, InMemoryListenerRepository, \
+    InMemoryStorage
+from eric_sse.repository import ConnectionRepository
 
-@pytest.mark.skip("work in progress")
+#@pytest.mark.skip("work in progress")
 class ErrorsHandlingTestCase(IsolatedAsyncioTestCase):
     def setUp(self):
         self.listeners_handler_mock = MagicMock(ListenerErrorHandler)
@@ -18,13 +21,20 @@ class ErrorsHandlingTestCase(IsolatedAsyncioTestCase):
 
 
     def test_queues_handler(self):
-
-        # Set up broken push
-        channel = FakeChannel(
-            connections_repository=BrokenConnectionFactory(
+        broken_factory = BrokenConnectionFactory(
                 q_handlers=[self.queues_handler_mock, self.queues_handler_mock2],
                 queue=self.queues_handler_mock
             )
+        broken_repository = ConnectionRepository(
+            storage=InMemoryStorage(),
+            connections_factory=broken_factory,
+            listeners_repository=InMemoryListenerRepository(InMemoryStorage()),
+            queues_repository=InMemoryQueueRepository(InMemoryStorage())
+        )
+
+        # Set up broken push
+        channel = FakeChannel(
+            connections_repository=broken_repository
         )
 
         my_listener = BrokenListener()
@@ -37,16 +47,25 @@ class ErrorsHandlingTestCase(IsolatedAsyncioTestCase):
             channel.dispatch(listener_id=my_listener.id, msg=msg)
         self.queues_handler_mock.handle_push_error.assert_called_once_with(msg=msg, exception=context.exception)
 
-
-        # Set up broken pop
-        channel = FakeChannel(
-            connections_repository=BrokenConnectionFactory(
+        broken_factory = BrokenConnectionFactory(
                 q_handlers=[
                     self.queues_handler_mock,
                     self.queues_handler_mock2,
                 ],
                 queue=BrokenQueue(broken_push=False),
             )
+
+        # Set up broken pop
+        broken_repository = ConnectionRepository(
+            storage=InMemoryStorage(),
+            connections_factory=broken_factory,
+            listeners_repository=InMemoryListenerRepository(InMemoryStorage()),
+            queues_repository=InMemoryQueueRepository(InMemoryStorage())
+        )
+
+        # Set up broken push
+        channel = FakeChannel(
+            connections_repository=broken_repository
         )
         my_listener = BrokenListener()
         channel.register_listener(my_listener)
