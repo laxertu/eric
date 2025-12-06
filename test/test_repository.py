@@ -1,6 +1,8 @@
 from unittest import TestCase, IsolatedAsyncioTestCase
 from unittest.mock import MagicMock
 
+import pytest
+
 from eric_sse.connection import Connection, ConnectionsFactory
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import Message
@@ -144,7 +146,7 @@ class AbstractChannelRepositoryInMemoryStorageIntegrationTestCase(TestCase):
         channel = sut.load_one(channel_id=channel.id)
         self.assertEqual(0, len([c for c in channel.get_connections()]))
 
-"""
+@pytest.mark.skip("work in progress")
 class FullPathTestCase(IsolatedAsyncioTestCase):
     def setUp(self):
         self.listeners_repository = MagicMock(spec=ListenerRepositoryInterface)
@@ -180,4 +182,4 @@ class FullPathTestCase(IsolatedAsyncioTestCase):
 
         async for received_message in channel_clone.message_stream(listener_clone.id):
             self.assertEqual(received_message.msg_type, 'test')
-"""
+
