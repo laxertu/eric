@@ -153,20 +153,18 @@ class FullPathTestCase(IsolatedAsyncioTestCase):
         self.queues_repository = InMemoryQueueRepository(InMemoryStorage())
         self.connections_factory = InMemoryConnectionsFactory()
 
-    def create_sut(self):
+
+    async def test_one(self):
         connections_repository = ConnectionRepository(
             listeners_repository=self.listeners_repository,
             queues_repository=self.queues_repository,
             connections_factory=self.connections_factory,
             storage=InMemoryStorage(),
         )
-        return FakeChannelRepository(
+        sut = FakeChannelRepository(
             storage=InMemoryStorage(),
             connections_repository=connections_repository
         )
-
-    async def test_one(self):
-        sut = self.create_sut()
         channel = FakeChannel()
 
 
