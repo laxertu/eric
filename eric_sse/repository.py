@@ -1,6 +1,7 @@
 from typing import Iterable
 
 from eric_sse.connection import Connection, ConnectionsFactory
+from eric_sse.entities import ChannelRepositoryInterface, AbstractChannel
 from eric_sse.exception import ItemNotFound
 from eric_sse.interfaces import ConnectionRepositoryInterface, ListenerRepositoryInterface, \
     QueueRepositoryInterface, KvStorageInterface
@@ -81,3 +82,30 @@ class ConnectionRepository(ConnectionRepositoryInterface):
         self.__storage.delete(key=f'{self.CONNECTIONS_BY_CHANNEL_PREFIX}:{channel_id}:{connection_id}')
 
 
+class ChannelRepository(ChannelRepositoryInterface):
+    def __init__(
+            self,
+            storage: KvStorageInterface,
+            connections_repository: ConnectionRepositoryInterface
+    ):
+        self.__storage = storage
+        self.__connections_repository = connections_repository
+
+    @property
+    def connections_repository(self) -> ConnectionRepositoryInterface:
+        return self.__connections_repository
+
+    def load_all(self) -> Iterable[AbstractChannel]:
+        pass
+
+    def load_one(self, channel_id: str) -> AbstractChannel:
+        pass
+
+    def persist(self, channel: AbstractChannel):
+        pass
+
+    def delete(self, channel_id: str):
+        pass
+
+    def create(self, channel_data: dict) -> AbstractChannel:
+        pass

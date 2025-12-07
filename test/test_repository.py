@@ -3,13 +3,13 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from eric_sse.connection import Connection, ConnectionsFactory
+from eric_sse.connection import Connection, ConnectionsFactory, InMemoryConnectionsFactory
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import Message
 from eric_sse.queues import InMemoryQueue
 from eric_sse.repository import ConnectionRepository
 from eric_sse.interfaces import ListenerRepositoryInterface, QueueRepositoryInterface, KvStorageInterface
-from eric_sse.inmemory import InMemoryStorage
+from eric_sse.inmemory import InMemoryStorage, InMemoryListenerRepository, InMemoryQueueRepository
 from eric_sse.exception import ItemNotFound
 
 from test.mock.channel import FakeChannelRepository, FakeConnectionsFactory, FakeChannel
@@ -146,12 +146,12 @@ class AbstractChannelRepositoryInMemoryStorageIntegrationTestCase(TestCase):
         channel = sut.load_one(channel_id=channel.id)
         self.assertEqual(0, len([c for c in channel.get_connections()]))
 
-@pytest.mark.skip("work in progress")
+#@pytest.mark.skip("work in progress")
 class FullPathTestCase(IsolatedAsyncioTestCase):
     def setUp(self):
-        self.listeners_repository = MagicMock(spec=ListenerRepositoryInterface)
-        self.queues_repository = MagicMock(spec=QueueRepositoryInterface)
-        self.connections_factory = FakeConnectionsFactory()
+        self.listeners_repository = InMemoryListenerRepository(InMemoryStorage())
+        self.queues_repository = InMemoryQueueRepository(InMemoryStorage())
+        self.connections_factory = InMemoryConnectionsFactory()
 
     def create_sut(self):
         connections_repository = ConnectionRepository(
