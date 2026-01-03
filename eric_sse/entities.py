@@ -182,7 +182,7 @@ class AbstractChannel(ABC):
         """Adds a message to listener's queue"""
 
         try:
-            self._get_connection(listener_id).send_message(msg)
+            self._get_connection(listener_id).receive_message(msg)
         except Exception:
             logger.exception("Failed to dispatch message to listener_id=%s", listener_id)
             raise

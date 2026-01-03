@@ -32,7 +32,7 @@ class Connection:
     def id(self) -> str:
         return self.__id
 
-    def send_message(self, msg: MessageContract):
+    def receive_message(self, msg: MessageContract):
         try:
             self.__queue.push(msg)
         except Exception as e:
