@@ -1,9 +1,6 @@
-import abc
-from abc import ABC
 from typing import Iterable
 
 from eric_sse.connection import Connection, ConnectionsFactory
-from eric_sse.entities import ChannelRepositoryInterface, AbstractChannel, AbstractChannelRepository
 from eric_sse.exception import ItemNotFound
 from eric_sse.interfaces import ConnectionRepositoryInterface, ListenerRepositoryInterface, \
     QueueRepositoryInterface, KvStorageInterface

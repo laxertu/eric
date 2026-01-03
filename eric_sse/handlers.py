@@ -1,9 +1,6 @@
 from abc import ABC, abstractmethod
 from eric_sse.message import MessageContract
 
-from eric_sse import get_logger
-logger = get_logger()
-
 class QueuingErrorHandler:
 
     def handle_push_error(self, msg: MessageContract, exception: Exception):

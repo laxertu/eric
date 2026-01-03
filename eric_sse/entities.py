@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import traceback
 from abc import ABC, abstractmethod
 from typing import AsyncIterable, Any, Iterable
@@ -12,7 +13,7 @@ from eric_sse.handlers import ListenerErrorHandler
 from eric_sse.interfaces import ConnectionRepositoryInterface, KvStorageInterface
 from eric_sse.inmemory import InMemoryConnectionRepository
 
-logger = eric_sse.get_logger()
+logger = logging.getLogger(__name__)
 
 class _ConnectionManager:
     """Maintains relationships between listeners and connections."""
