@@ -26,7 +26,7 @@ Base repositories
     :show-inheritance:
     :member-order: bysource
 
-.. automodule:: eric_sse.entities
+.. automodule:: eric_sse.channel
     :no-index:
     :members: AbstractChannelRepository
     :member-order: bysource
@@ -35,7 +35,7 @@ Base repositories
 Interoperability
 ================
 
-.. automodule:: eric_sse.entities
+.. automodule:: eric_sse.channel
     :no-index:
     :members: ChannelRepositoryInterface
     :show-inheritance:

@@ -1,5 +1,8 @@
 Reference
 =========
+Older versions:
+https://github.com/laxertu/eric/tree/master/docs_archive
+
 
 **Introduction**
 

@@ -23,3 +23,18 @@ Prefab servers and clients
     :members:
     :member-order: bysource
 
+Patterns
+========
+.. automodule:: eric_sse.patterns
+    :members:
+    :undoc-members:
+    :member-order: bysource
+    :show-inheritance:
+
+.. automodule:: eric_sse.handlers
+    :members:
+    :undoc-members:
+    :member-order: bysource
+    :show-inheritance:
+
+

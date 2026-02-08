@@ -14,7 +14,7 @@ Messages
 Channels and connections
 ========================
 
-.. automodule:: eric_sse.entities
+.. automodule:: eric_sse.channel
     :members: AbstractChannel
     :show-inheritance:
     :member-order: bysource
