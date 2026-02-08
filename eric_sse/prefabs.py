@@ -3,7 +3,7 @@ from concurrent.futures import ThreadPoolExecutor, Executor
 from typing import Callable, AsyncIterable
 from eric_sse import get_logger
 from eric_sse.connection import ConnectionsFactory
-from eric_sse.entities import AbstractChannel, AbstractChannelRepository
+from eric_sse.channel import AbstractChannel, AbstractChannelRepository
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException

@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import AsyncIterable, Iterable
 
 from eric_sse import get_logger
-from eric_sse.entities import AbstractChannel
+from eric_sse.channel import AbstractChannel
 from eric_sse.message import MessageContract, Message
 from eric_sse.exception import InvalidChannelException, InvalidMessageFormat
 from eric_sse.prefabs import SSEChannel

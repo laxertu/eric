@@ -1,7 +1,7 @@
 from typing import Any
 
 from eric_sse.connection import Connection
-from eric_sse.entities import AbstractChannel, AbstractChannelRepository
+from eric_sse.channel import AbstractChannel, AbstractChannelRepository
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import MessageContract
 from eric_sse.queues import InMemoryQueue
