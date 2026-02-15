@@ -2,8 +2,8 @@ import asyncio
 from concurrent.futures import ThreadPoolExecutor, Executor
 from typing import Callable, AsyncIterable
 from eric_sse import get_logger
-from eric_sse.connection import ConnectionsFactory
 from eric_sse.channel import AbstractChannel, AbstractChannelRepository
+from eric_sse.interfaces import ConnectionRepositoryInterface
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
 from eric_sse.exception import NoMessagesException
@@ -24,7 +24,7 @@ class SSEChannel(AbstractChannel):
             stream_delay_seconds: int = 0,
             retry_timeout_milliseconds: int = 5,
             channel_id: str | None = None,
-            connections_repository: ConnectionsFactory | None = None
+            connections_repository: ConnectionRepositoryInterface | None = None
     ):
         super().__init__(
             stream_delay_seconds=stream_delay_seconds,
