@@ -50,6 +50,9 @@ class Connection:
             raise e
 
     def register_queuing_error_handler(self,  handler: QueuingErrorHandler):
+        """
+        Registers a handler to be called when a push or pop operation fails.
+        """
         self.__queues_error_handlers.append(handler)
 
 
