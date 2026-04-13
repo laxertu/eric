@@ -47,14 +47,6 @@ class InMemoryConnectionRepository(ConnectionRepositoryInterface):
     def connections_factory(self) -> ConnectionsFactory:
         return self.__connections_factory
 
-    @property
-    def queues_repository(self) -> QueueRepositoryInterface:
-        return self.__queues_repository
-
-    @property
-    def listeners_repository(self) -> ListenerRepositoryInterface:
-        return self.__listeners_repository
-
     def load_all(self, channel_id: str) -> Iterable[Connection]:
         pass
 

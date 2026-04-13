@@ -29,14 +29,6 @@ class ConnectionRepository(ConnectionRepositoryInterface):
     CONNECTIONS_PREFIX: str = 'cn_ch'
 
     @property
-    def queues_repository(self) -> QueueRepositoryInterface:
-        return self.__queues_repository
-
-    @property
-    def listeners_repository(self) -> ListenerRepositoryInterface:
-        return self.__listeners_repository
-
-    @property
     def connections_factory(self) -> ConnectionsFactory:
         return self.__connections_factory
 
