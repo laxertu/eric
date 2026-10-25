@@ -75,6 +75,22 @@ class FacadeTestCase(TestCase):
         prefixes = {k.split(':')[0] for k in self.storage.items}
         self.assertEqual({'channel', 'connection', 'listener', 'queue'}, prefixes)
 
+    def test_custom_queue_repository_class(self):
+        deleted = []
+
+        class MyQueueRepository(KvQueueRepository):
+            def delete(self, connection_id: str):
+                deleted.append(connection_id)
+                super().delete(connection_id)
+
+        sut = Facade(storage=InMemoryStorage(), queue_repository_class=MyQueueRepository)
+        channel = sut.create_channel()
+        sut.add_listener(channel.id)
+        connection = next(iter(sut.get_channel(channel.id).get_connections()))
+
+        sut.delete_channel(channel.id)
+        self.assertEqual([connection.id], deleted)
+
 
 class PrefixedStorageTestCase(TestCase):
 

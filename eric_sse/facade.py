@@ -19,20 +19,22 @@ class Facade(Generic[L, Q]):
     :param listener_class: Class of listeners created by :meth:`add_listener`. Defaults to :class:`~eric_sse.listener.MessageQueueListener`.
     :param queue_factory: Called once per connection to create its queue. Defaults to :class:`~eric_sse.queues.InMemoryQueue`.
     :param repository_class: Channel repository to use. Defaults to :class:`~eric_sse.prefabs.SSEChannelRepository`.
+    :param queue_repository_class: Queue repository to use. Defaults to :class:`~eric_sse.repository.KvQueueRepository`. Override it when queues need cleanup on deletion.
     """
     def __init__(
             self,
             storage: KvStorage,
             listener_class: type[L] = MessageQueueListener,
             queue_factory: Callable[[], Q] = InMemoryQueue,
-            repository_class: type[AbstractChannelRepository] = SSEChannelRepository
+            repository_class: type[AbstractChannelRepository] = SSEChannelRepository,
+            queue_repository_class: type[KvQueueRepository] = KvQueueRepository
     ):
         self.__repository = repository_class(
             storage=PrefixedStorage(storage, 'channel:'),
             connections_repository=ConnectionRepository(
                 storage=PrefixedStorage(storage, 'connection:'),
                 listeners_repository=KvListenerRepository[L](PrefixedStorage(storage, 'listener:')),
-                queues_repository=KvQueueRepository[Q](PrefixedStorage(storage, 'queue:'))
+                queues_repository=queue_repository_class(PrefixedStorage(storage, 'queue:'))
             ),
             connections_factory=DefaultConnectionsFactory(listener_class=listener_class, queue_factory=queue_factory)
         )

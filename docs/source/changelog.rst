@@ -8,6 +8,7 @@ Changelog
 * FIX: AbstractChannelRepository.delete no longer fails with InMemoryStorage when channel has connections
 * KvStorage.fetch_by_prefix and fetch_all implementations must now tolerate deletions while results are iterated
 * Added Facade: single entry point that persists channels, connections, listeners and queues in one storage instance
+* Facade accepts a queue_repository_class, for queues that need cleanup on deletion
 * Added PrefixedStorage, a namespaced view of a KvStorage
 * Added DefaultConnectionsFactory, configurable with a listener class and a queue factory. InMemoryConnectionsFactory now extends it
 * Connection, ConnectionsFactory, KvListenerRepository and KvQueueRepository are now generic on listener and queue types
