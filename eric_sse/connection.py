@@ -38,7 +38,6 @@ class ConnectionsFactory(ABC):
 
         :param ~eric_sse.listener.MessageQueueListener listener: If provided, assigns a concrete listener
         """
-        pass
 
 
 class InMemoryConnectionsFactory(ConnectionsFactory):

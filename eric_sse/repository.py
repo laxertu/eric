@@ -1,4 +1,4 @@
-from typing import Iterable, Any
+from typing import Iterable, Generic, TypeVar
 from abc import ABC, abstractmethod
 
 from eric_sse.connection import Connection, ConnectionsFactory
@@ -7,27 +7,29 @@ from eric_sse.exception import ItemNotFound
 from eric_sse.interfaces import ChannelRepositoryInterface, ConnectionRepositoryInterface, ListenerRepositoryInterface, \
     QueueRepositoryInterface
 
+T = TypeVar('T')
 
-class KvStorage(ABC):
+
+class KvStorage(ABC, Generic[T]):
     """Represents a Key Value storage engine. Provides functionalities do load, persist and find by key prefix"""
 
     @abstractmethod
-    def fetch_by_prefix(self, prefix: str) -> Iterable[Any]:
+    def fetch_by_prefix(self, prefix: str) -> Iterable[T]:
         """Search by KV prefix"""
         pass
 
     @abstractmethod
-    def fetch_all(self) -> Iterable[Any]:
+    def fetch_all(self) -> Iterable[T]:
         """Return all items that have been persisted"""
         pass
 
     @abstractmethod
-    def upsert(self, key: str, value: Any):
+    def upsert(self, key: str, value: T):
         """Updates or inserts a value given its corresponding key"""
         pass
 
     @abstractmethod
-    def fetch_one(self, key: str) -> Any:
+    def fetch_one(self, key: str) -> T:
         """Return value correspondant to key"""
         pass
 
@@ -37,24 +39,24 @@ class KvStorage(ABC):
         pass
 
 
-class InMemoryStorage(KvStorage):
+class InMemoryStorage(KvStorage[T]):
     """In memory implementation"""
-    def __init__(self, items: dict[str, Any] = None):
+    def __init__(self, items: dict[str, T] | None = None):
         self.items = items or {}
 
-    def fetch_by_prefix(self, prefix: str) -> Iterable[Any]:
+    def fetch_by_prefix(self, prefix: str) -> Iterable[T]:
         for k, obj in self.items.items():
             if k.startswith(prefix):
                 yield obj
 
-    def fetch_all(self) -> Iterable[Any]:
+    def fetch_all(self) -> Iterable[T]:
         for obj in self.items.values():
             yield obj
 
-    def upsert(self, key: str, value: Any):
+    def upsert(self, key: str, value: T):
         self.items[key] = value
 
-    def fetch_one(self, key: str) -> Any:
+    def fetch_one(self, key: str) -> T:
         try:
             return self.items[key]
         except KeyError:
