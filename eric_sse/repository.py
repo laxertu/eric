@@ -1,11 +1,9 @@
 from typing import Iterable, Generic, TypeVar, Callable
 from abc import ABC, abstractmethod
 
-from eric_sse.connection import Connection, ConnectionsFactory, InMemoryConnectionsFactory
+from eric_sse.connection import Connection, ConnectionsFactory, InMemoryConnectionsFactory, L, Q
 from eric_sse.entities import AbstractChannel
 from eric_sse.exception import ItemNotFound
-from eric_sse.listener import MessageQueueListener
-from eric_sse.queues import Queue
 from eric_sse.interfaces import ChannelRepositoryInterface, ConnectionRepositoryInterface, ListenerRepositoryInterface, \
     QueueRepositoryInterface
 
@@ -77,38 +75,65 @@ class InMemoryStorage(KvStorage[T]):
             return
         del self.items[key]
 
-class KvListenerRepository(ListenerRepositoryInterface):
+class PrefixedStorage(KvStorage[T]):
+    """
+    A namespaced view of another :class:`~eric_sse.repository.KvStorage`. All keys are prefixed with **prefix**.
+
+    Allows several repositories to share a single storage instance.
+    Prefixes of storages sharing the same instance must not be prefixes of each other.
+    """
+    def __init__(self, storage: KvStorage, prefix: str):
+        self.__storage = storage
+        self.__prefix = prefix
+
+    def fetch_by_prefix(self, prefix: str) -> Iterable[T]:
+        return self.__storage.fetch_by_prefix(f'{self.__prefix}{prefix}')
+
+    def fetch_all(self) -> Iterable[T]:
+        return self.__storage.fetch_by_prefix(self.__prefix)
+
+    def upsert(self, key: str, value: T):
+        self.__storage.upsert(f'{self.__prefix}{key}', value)
+
+    def fetch_one(self, key: str) -> T:
+        return self.__storage.fetch_one(f'{self.__prefix}{key}')
+
+    def delete(self, key: str):
+        self.__storage.delete(f'{self.__prefix}{key}')
+
+
+class KvListenerRepository(ListenerRepositoryInterface, Generic[L]):
     """
     Listener repository backed by a :class:`~eric_sse.repository.KvStorage`.
 
     Listeners are stored as they are, keyed by connection id; serialization, if needed, is up to the storage.
     """
-    def __init__(self, storage: KvStorage[MessageQueueListener]):
+    def __init__(self, storage: KvStorage[L]):
         self.__storage = storage
 
-    def load(self, connection_id: str) -> MessageQueueListener:
+    def load(self, connection_id: str) -> L:
         return self.__storage.fetch_one(connection_id)
 
-    def persist(self, connection_id: str, listener: MessageQueueListener):
+    def persist(self, connection_id: str, listener: L):
         self.__storage.upsert(connection_id, listener)
 
     def delete(self, connection_id: str):
         self.__storage.delete(connection_id)
 
 
-class KvQueueRepository(QueueRepositoryInterface):
+class KvQueueRepository(QueueRepositoryInterface, Generic[Q]):
     """
     Queue repository backed by a :class:`~eric_sse.repository.KvStorage`.
 
     Queues are stored as they are, keyed by connection id; serialization, if needed, is up to the storage.
     """
-    def __init__(self, storage: KvStorage[Queue]):
+    def __init__(self, storage: KvStorage[Q]):
         self.__storage = storage
 
-    def load(self, connection_id: str) -> Queue:
+    def load(self, connection_id: str) -> Q:
         return self.__storage.fetch_one(connection_id)
 
-    def persist(self, connection_id: str, queue: Queue):
+    def persist(self, connection_id: str, queue: Q):
         self.__storage.upsert(connection_id, queue)
 
     def delete(self, connection_id: str):
@@ -242,7 +267,7 @@ class ConnectionRepository(ConnectionRepositoryInterface):
         return Connection(listener=listener, queue=queue, connection_id=connection_id)
 
     def load_all(self, channel_id: str) -> Iterable[Connection]:
-        for connection_data in self.__storage.fetch_by_prefix(channel_id):
+        for connection_data in self.__storage.fetch_by_prefix(f'{channel_id}:'):
             yield self._load_connection(connection_data['id'])
 
 
