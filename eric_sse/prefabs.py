@@ -138,8 +138,8 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         Receiving a message with one of these types will fire corresponding action.
 
         """
-        if action in self.__internal_actions:
-            raise KeyError(f'Trying to set an internal action {action}')
+        if name in self.__internal_actions:
+            raise KeyError(f'Trying to set an internal action {name}')
         self.__actions[name] = action
 
     def dispatch_to(self, receiver: MessageQueueListener, msg: MessageContract):

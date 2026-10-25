@@ -1,9 +1,11 @@
-from typing import Iterable, Generic, TypeVar
+from typing import Iterable, Generic, TypeVar, Callable
 from abc import ABC, abstractmethod
 
-from eric_sse.connection import Connection, ConnectionsFactory
+from eric_sse.connection import Connection, ConnectionsFactory, InMemoryConnectionsFactory
 from eric_sse.entities import AbstractChannel
 from eric_sse.exception import ItemNotFound
+from eric_sse.listener import MessageQueueListener
+from eric_sse.queues import Queue
 from eric_sse.interfaces import ChannelRepositoryInterface, ConnectionRepositoryInterface, ListenerRepositoryInterface, \
     QueueRepositoryInterface
 
@@ -15,12 +17,20 @@ class KvStorage(ABC, Generic[T]):
 
     @abstractmethod
     def fetch_by_prefix(self, prefix: str) -> Iterable[T]:
-        """Search by KV prefix"""
+        """
+        Search by KV prefix
+
+        Implementations must tolerate deletions of fetched keys while the result is being iterated.
+        """
         pass
 
     @abstractmethod
     def fetch_all(self) -> Iterable[T]:
-        """Return all items that have been persisted"""
+        """
+        Return all items that have been persisted
+
+        Implementations must tolerate deletions of fetched keys while the result is being iterated.
+        """
         pass
 
     @abstractmethod
@@ -45,12 +55,12 @@ class InMemoryStorage(KvStorage[T]):
         self.items = items or {}
 
     def fetch_by_prefix(self, prefix: str) -> Iterable[T]:
-        for k, obj in self.items.items():
+        for k, obj in list(self.items.items()):
             if k.startswith(prefix):
                 yield obj
 
     def fetch_all(self) -> Iterable[T]:
-        for obj in self.items.values():
+        for obj in list(self.items.values()):
             yield obj
 
     def upsert(self, key: str, value: T):
@@ -67,6 +77,44 @@ class InMemoryStorage(KvStorage[T]):
             return
         del self.items[key]
 
+class KvListenerRepository(ListenerRepositoryInterface):
+    """
+    Listener repository backed by a :class:`~eric_sse.repository.KvStorage`.
+
+    Listeners are stored as they are, keyed by connection id; serialization, if needed, is up to the storage.
+    """
+    def __init__(self, storage: KvStorage[MessageQueueListener]):
+        self.__storage = storage
+
+    def load(self, connection_id: str) -> MessageQueueListener:
+        return self.__storage.fetch_one(connection_id)
+
+    def persist(self, connection_id: str, listener: MessageQueueListener):
+        self.__storage.upsert(connection_id, listener)
+
+    def delete(self, connection_id: str):
+        self.__storage.delete(connection_id)
+
+
+class KvQueueRepository(QueueRepositoryInterface):
+    """
+    Queue repository backed by a :class:`~eric_sse.repository.KvStorage`.
+
+    Queues are stored as they are, keyed by connection id; serialization, if needed, is up to the storage.
+    """
+    def __init__(self, storage: KvStorage[Queue]):
+        self.__storage = storage
+
+    def load(self, connection_id: str) -> Queue:
+        return self.__storage.fetch_one(connection_id)
+
+    def persist(self, connection_id: str, queue: Queue):
+        self.__storage.upsert(connection_id, queue)
+
+    def delete(self, connection_id: str):
+        self.__storage.delete(connection_id)
+
+
 class AbstractChannelRepository(ChannelRepositoryInterface, ABC):
     """
     Abstract base class for channel repositories.
@@ -82,6 +130,28 @@ class AbstractChannelRepository(ChannelRepositoryInterface, ABC):
         self.__storage = storage
         self.__connections_repository = connections_repository
         self.__connections_factory = connections_factory
+
+    @classmethod
+    def from_storage(
+            cls,
+            storage_factory: Callable[[], KvStorage] = InMemoryStorage,
+            connections_factory: ConnectionsFactory | None = None
+    ):
+        """
+        Builds a fully wired repository, using a separate storage for channels, connections, listeners and queues.
+
+        :param storage_factory: Called once per storage needed. Defaults to :class:`~eric_sse.repository.InMemoryStorage`.
+        :param connections_factory: Defaults to :class:`~eric_sse.connection.InMemoryConnectionsFactory`.
+        """
+        return cls(
+            storage=storage_factory(),
+            connections_repository=ConnectionRepository(
+                storage=storage_factory(),
+                listeners_repository=KvListenerRepository(storage_factory()),
+                queues_repository=KvQueueRepository(storage_factory())
+            ),
+            connections_factory=connections_factory or InMemoryConnectionsFactory()
+        )
 
     @property
     def connections_factory(self) -> ConnectionsFactory:

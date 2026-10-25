@@ -3,7 +3,9 @@ from unittest import TestCase
 from eric_sse.listener import MessageQueueListener
 from eric_sse.prefabs import SSEChannel, SSEChannelRepository
 from eric_sse.queues import InMemoryQueue
-from eric_sse.repository import ConnectionRepository, InMemoryStorage
+from eric_sse.repository import ConnectionRepository, InMemoryStorage, KvListenerRepository, KvQueueRepository
+from eric_sse.message import Message
+from eric_sse.exception import ItemNotFound
 from eric_sse.interfaces import ListenerRepositoryInterface, QueueRepositoryInterface
 from eric_sse.connection import InMemoryConnectionsFactory
 
@@ -99,3 +101,58 @@ class TestSSEChannelRepository(TestCase):
         sut.delete(channel_id=channel.id)
         self.assertEqual(0, len([c for c in sut.load_all()]))
 
+
+
+class TestSSEChannelRepositoryFromStorage(TestCase):
+
+    def test_persisted_connections_survive_reload(self):
+        storages = []
+
+        def storage_factory():
+            storages.append(InMemoryStorage())
+            return storages[-1]
+
+        sut = SSEChannelRepository.from_storage(storage_factory=storage_factory)
+        self.assertEqual(4, len(storages))
+
+        channel = SSEChannel(retry_timeout_milliseconds=42)
+        listener = channel.add_listener()
+        channel.dispatch(listener.id, Message(msg_type='test', msg_payload='hi'))
+        sut.persist(channel)
+
+        loaded = sut.load_one(channel.id)
+        self.assertEqual(42, loaded.retry_timeout_milliseconds)
+        self.assertEqual(listener.id, loaded.get_listener(listener.id).id)
+        loaded.get_listener(listener.id).start()
+        self.assertEqual('hi', loaded.deliver_next(listener.id).payload)
+
+    def test_delete(self):
+        sut = SSEChannelRepository.from_storage()
+        channel = SSEChannel()
+        channel.add_listener()
+        sut.persist(channel)
+
+        sut.delete(channel.id)
+        self.assertEqual([], list(sut.load_all()))
+        self.assertEqual([], list(sut.connections_repository.load_all(channel.id)))
+
+
+class TestKvRepositories(TestCase):
+
+    def test_listener_repository(self):
+        sut = KvListenerRepository(InMemoryStorage())
+        listener = MessageQueueListener()
+        sut.persist('c1', listener)
+        self.assertIs(listener, sut.load('c1'))
+        sut.delete('c1')
+        with self.assertRaises(ItemNotFound):
+            sut.load('c1')
+
+    def test_queue_repository(self):
+        sut = KvQueueRepository(InMemoryStorage())
+        queue = InMemoryQueue()
+        sut.persist('c1', queue)
+        self.assertIs(queue, sut.load('c1'))
+        sut.delete('c1')
+        with self.assertRaises(ItemNotFound):
+            sut.load('c1')

@@ -50,6 +50,14 @@ class DistributedListenerTestCase(IsolatedAsyncioTestCase):
         types = [m['event'] async for m in ssc.message_stream(bob)]
         self.assertEqual(['hello_ack', 'stop'], types)
 
+class SetActionTestCase(IsolatedAsyncioTestCase):
+    async def test_internal_actions_cannot_be_overridden(self):
+        listener = SimpleDistributedApplicationListener()
+        for name in ('start', 'stop'):
+            with self.assertRaises(KeyError):
+                listener.set_action(name, hello_response)
+
+
 class DataProcessingChannelTestCase(IsolatedAsyncioTestCase):
     async def test_channel(self):
         channel = DataProcessingChannel(stream_delay_seconds=0, max_workers=2)

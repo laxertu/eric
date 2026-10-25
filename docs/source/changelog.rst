@@ -1,5 +1,13 @@
 Changelog
 =========
+3.0.0 (unreleased)
+
+* Added KvListenerRepository and KvQueueRepository to repository module
+* Added AbstractChannelRepository.from_storage builder, wires a fully working channel repository in one call
+* FIX: SimpleDistributedApplicationListener.set_action now rejects reserved action names 'start' and 'stop'
+* FIX: AbstractChannelRepository.delete no longer fails with InMemoryStorage when channel has connections
+* KvStorage.fetch_by_prefix and fetch_all implementations must now tolerate deletions while results are iterated
+
 2.1.1
 
 * Added InvalidConnectionException and ItemNotFound to exceptions module
