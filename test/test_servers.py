@@ -1,140 +1,193 @@
-import json, asyncio
+import asyncio
+import json
+from pathlib import Path
 from unittest import IsolatedAsyncioTestCase, TestCase
-from unittest.mock import MagicMock
 
+from eric_sse.builder import ChannelRepositoryBuilder
 from eric_sse.clients import SocketClient
-from eric_sse.exception import InvalidChannelException
+from eric_sse.exception import InvalidChannelException, InvalidConnectionException, NoMessagesException
+from eric_sse.message import Message
 from eric_sse.prefabs import SSEChannel
 from eric_sse.servers import SocketServer, ChannelContainer
-from test.mock.channel import FakeChannel
 
 SOCKET_FILE_DESCRIPTOR_PATH = 'socketserver_e2e_test.sock'
 
 
-class TestChannelContainer(TestCase):
-    def test_exceptions(self):
+def create_channel() -> SSEChannel:
+    return ChannelRepositoryBuilder(SSEChannel).build().create({})
+
+
+class ChannelContainerTestCase(TestCase):
+
+    def test_unknown_channels_can_be_neither_fetched_nor_removed(self):
         sut = ChannelContainer()
 
         with self.assertRaises(InvalidChannelException):
-            sut.rm('fake_channel_id')
-
+            sut.get('unknown')
         with self.assertRaises(InvalidChannelException):
-            sut.get('fake_channel_id')
+            sut.rm('unknown')
 
-    def test_register_iterable(self):
+    def test_registered_channels_can_be_fetched_and_listed(self):
         sut = ChannelContainer()
-        ch_1 = SSEChannel()
-        ch_2 = SSEChannel()
+        channel = create_channel()
 
-        sut.register_iterable([ch_1, ch_2])
-
-        self.assertIs(ch_1, sut.get(ch_1.id))
-        self.assertIs(ch_2, sut.get(ch_2.id))
-
-    def test_error_handling(self):
-        sut = ChannelContainer()
-        with self.assertRaises(InvalidChannelException):
-            sut.rm('fake_channel_id')
-
-        channel = FakeChannel()
         sut.register(channel)
+
         self.assertIs(channel, sut.get(channel.id))
-        self.assertEqual([channel.id], [i for i in sut.get_all_ids()])
+        self.assertEqual([channel.id], list(sut.get_all_ids()))
+
+    def test_a_channel_cannot_be_registered_twice(self):
+        sut = ChannelContainer()
+        channel = create_channel()
+        sut.register(channel)
 
         with self.assertRaises(InvalidChannelException):
             sut.register(channel)
 
-class TestSocketServer(IsolatedAsyncioTestCase):
+    def test_registering_many_channels_skips_the_ones_already_registered(self):
+        sut = ChannelContainer()
+        registered, new = create_channel(), create_channel()
+        sut.register(registered)
+
+        sut.register_iterable([registered, new])
+
+        self.assertCountEqual([registered.id, new.id], sut.get_all_ids())
+
+
+class SocketServerTestCase(IsolatedAsyncioTestCase):
+    """Commands sent through a real socket, on channels built by a repository."""
+
     async def asyncSetUp(self):
-        channel_container_mock = MagicMock(ChannelContainer)
-        channel_mock = MagicMock(SSEChannel)
-        channel_container_mock.get = MagicMock(return_value=channel_mock)
-        SocketServer.cc = channel_container_mock
+        self.channel = create_channel()
+        self.server = await self._start_server(self.channel)
+        self.client = SocketClient(SOCKET_FILE_DESCRIPTOR_PATH)
 
-        self.sut = SocketServer(SOCKET_FILE_DESCRIPTOR_PATH)
-        self.channel_mock = channel_mock
-
-        asyncio.get_running_loop().create_task(self.sut.main())
-        await asyncio.sleep(0)
+    async def _start_server(self, *channels: SSEChannel, **kwargs) -> SocketServer:
+        container = ChannelContainer()
+        container.register_iterable(channels)
+        server = SocketServer(SOCKET_FILE_DESCRIPTOR_PATH, channels=container, **kwargs)
+        self.server_task = asyncio.create_task(server.main())
+        while not Path(SOCKET_FILE_DESCRIPTOR_PATH).exists():
+            await asyncio.sleep(0)
+        return server
 
     async def asyncTearDown(self):
-        await self.sut.shutdown()
-        SocketServer.cc = ChannelContainer()
+        await asyncio.wait_for(self.server.shutdown(), timeout=2)
+        await self.server_task
 
-class SocketServerTestCase(TestSocketServer):
+    def _subscribe(self):
+        connection = self.channel.add_connection()
+        connection.listener.start()
+        return connection
 
+    async def test_created_channel_accepts_connections(self):
+        channel_id = await self.client.create_channel()
 
-    async def test_server(self):
+        connection_id = await self.client.register(channel_id)
 
-        client = SocketClient(SOCKET_FILE_DESCRIPTOR_PATH)
-        server_response = await client.send_payload({
-            'v': 'b',
-            'c': '1',
-            't': 'txt',
-            'p': 'Hi there!'
-        })
+        self.assertEqual(connection_id, self.server.cc.get(channel_id).get_connection(connection_id).id)
 
-        self.assertEqual(server_response, SocketServer.ACK)
+    async def test_broadcast_reaches_every_connection(self):
+        first, second = self._subscribe(), self._subscribe()
 
-class SocketServerIntegrationTestCase(TestSocketServer):
+        response = await self.client.broadcast_message(self.channel.id, message_type='txt', payload='Hi there!')
 
+        self.assertEqual(SocketServer.ACK, response)
+        for connection in (first, second):
+            message = self.channel.deliver_next(connection.id)
+            self.assertEqual(('txt', 'Hi there!'), (message.type, message.payload))
 
-    async def test_send(self):
-        payload = json.dumps({
-            'c': '1',
-            'v': 'b',
-            't': 'txt',
-            'p': 'Hi there!'
-        })
+    async def test_dispatch_reaches_only_the_receiver(self):
+        receiver, other = self._subscribe(), self._subscribe()
 
-        async for _ in self.sut.handle_command(payload):
-            ...
+        response = await self.client.dispatch(self.channel.id, receiver.id, message_type='txt', payload={'a': 1})
 
-        self.channel_mock.broadcast.assert_called_once()
+        self.assertEqual(SocketServer.ACK, response)
+        self.assertEqual({'a': 1}, self.channel.deliver_next(receiver.id).payload)
+        with self.assertRaises(NoMessagesException):
+            self.channel.deliver_next(other.id)
 
+    async def test_removed_connection_no_longer_receives_messages(self):
+        connection_id = await self.client.register(self.channel.id)
 
-class ClientIntegrationTestCase(IsolatedAsyncioTestCase):
-    async def asyncSetUp(self):
-        server = SocketServer(SOCKET_FILE_DESCRIPTOR_PATH)
-        asyncio.get_running_loop().create_task(server.main())
-        await asyncio.sleep(0)
-        self.sut = SocketClient(SOCKET_FILE_DESCRIPTOR_PATH)
-        self.server = server
+        response = await self.client.remove_connection(self.channel.id, connection_id)
 
-    async def asyncTearDown(self):
+        self.assertEqual(SocketServer.ACK, response)
+        with self.assertRaises(InvalidConnectionException):
+            self.channel.get_connection(connection_id)
+        error = await self.client.dispatch(self.channel.id, connection_id, message_type='txt', payload={})
+        self.assertIn('InvalidConnectionException', error)
+
+    async def test_removed_channel_no_longer_accepts_commands(self):
+        response = await self.client.remove_channel(self.channel.id)
+
+        self.assertEqual(SocketServer.ACK, response)
+        error = await self.client.broadcast_message(self.channel.id, message_type='txt', payload={})
+        self.assertIn('InvalidChannelException', error)
+
+    async def test_commands_on_unknown_channels_get_an_error(self):
+        error = await self.client.register('unknown')
+
+        self.assertIn('InvalidChannelException', error)
+
+    async def test_client_receives_messages_of_its_connection_as_a_stream(self):
+        self.channel.wait_timeout_seconds = 0.01
+        connection = self.channel.add_connection()
+        self.channel.dispatch(connection.id, Message(msg_type='txt', msg_payload='Hi there!'))
+
+        events = []
+
+        async def consume():
+            async for line in self.client.stream(self.channel.id, connection.id):
+                if line:
+                    events.append(json.loads(line))
+                    connection.listener.stop()
+
+        await asyncio.wait_for(consume(), timeout=2)
+
+        self.assertEqual([('txt', 'Hi there!')], [(event['event'], event['data']) for event in events])
+
+    async def test_channels_are_created_by_the_given_factory(self):
+        await self._restart_server(channel_factory=lambda: ChannelRepositoryBuilder(SSEChannel).build().create(
+            {'retry_timeout_milliseconds': 7}
+        ))
+
+        channel_id = await self.client.create_channel()
+
+        self.assertEqual(7, self.server.cc.get(channel_id).to_dict()['retry_timeout_milliseconds'])
+
+    async def test_servers_do_not_share_channels(self):
+        await self._restart_server()
+
+        error = await self.client.register(self.channel.id)
+
+        self.assertIn('InvalidChannelException', error)
+
+    async def test_shutdown_after_commands_removes_the_socket_and_ends_main(self):
+        await self.client.register(self.channel.id)
+
+        await asyncio.wait_for(self.server.shutdown(), timeout=2)
+
+        self.assertFalse(Path(SOCKET_FILE_DESCRIPTOR_PATH).exists())
+        await asyncio.wait_for(self.server_task, timeout=2)
+
+    async def test_shutdown_ends_open_streams(self):
+        connection = self.channel.add_connection()
+        self.channel.dispatch(connection.id, Message(msg_type='txt', msg_payload='Hi there!'))
+        stream = self.client.stream(self.channel.id, connection.id)
+        self.assertEqual('txt', json.loads(await anext(stream))['event'])  # The stream is open
+
+        await asyncio.wait_for(self.server.shutdown(), timeout=2)
+
+        remaining = await asyncio.wait_for(self._drain(stream), timeout=2)
+        self.assertEqual([], [line for line in remaining if line])
+
+    @staticmethod
+    async def _drain(stream) -> list[str]:
+        return [line async for line in stream]
+
+    async def _restart_server(self, **kwargs):
+        """Replaces the server of setUp with one without channels, built with **kwargs**."""
         await self.server.shutdown()
-
-    async def test_integration(self):
-
-        channel_id = await self.sut.create_channel()
-        self.assertEqual(len(channel_id), 36)
-
-        listener_id = await self.sut.register(channel_id)
-        self.assertEqual(len(listener_id), 36)
-
-        error_message = await self.sut.register('2')
-        self.assertTrue('InvalidChannelException' in error_message)
-
-        response = await self.sut.broadcast_message(channel_id=channel_id, message_type='test', payload={})
-        self.assertEqual(response, SocketServer.ACK)
-
-        listener_id_2 = await self.sut.register(channel_id)
-        response = await self.sut.dispatch(
-            channel_id=channel_id, receiver_id=listener_id_2, message_type='test', payload={}
-        )
-        self.assertEqual(response, SocketServer.ACK)
-
-
-        response = await self.sut.remove_listener(channel_id=channel_id, listener_id=listener_id_2)
-        self.assertEqual(response, SocketServer.ACK)
-
-        error_message = await self.sut.dispatch(
-            channel_id=channel_id, receiver_id=listener_id_2, message_type='test', payload={}
-        )
-        self.assertTrue('InvalidListenerException' in error_message)
-
-        response = await self.sut.remove_channel(channel_id=channel_id)
-        self.assertEqual(response, SocketServer.ACK)
-
-        error_message = await self.sut.broadcast_message(channel_id=channel_id, message_type='test', payload={})
-        self.assertTrue('InvalidChannelException' in error_message)
+        await self.server_task
+        self.server = await self._start_server(**kwargs)

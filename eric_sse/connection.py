@@ -1,28 +1,34 @@
 from abc import ABC, abstractmethod
+from typing import Generic, TypeVar
 
 import eric_sse
 from eric_sse.listener import MessageQueueListener
 from eric_sse.queues import Queue, InMemoryQueue
 
+L = TypeVar('L', bound=MessageQueueListener)
+Q = TypeVar('Q', bound=Queue)
 
-class Connection:
+class Connection(Generic[L, Q]):
     """
-    A connection is just a listener and its related message queue
+    A connection is a listener and its related message queue.
+
+    It's what channels and repositories identify: messages are dispatched to a connection id, and listeners and queues
+    have no identity of their own.
 
     :param ~eric_sse.listener.MessageQueueListener listener:
     :param ~eric_sse.queues.Queue queue:
     """
-    def __init__(self, listener: MessageQueueListener, queue: Queue, connection_id: str | None = None):
+    def __init__(self, listener: L, queue: Q, connection_id: str | None = None):
         self.__listener = listener
         self.__queue = queue
         self.__id = connection_id or eric_sse.generate_uuid()
 
     @property
-    def listener(self) -> MessageQueueListener:
+    def listener(self) -> L:
         return self.__listener
 
     @property
-    def queue(self) -> Queue:
+    def queue(self) -> Q:
         return self.__queue
 
     @property
@@ -30,20 +36,19 @@ class Connection:
         return self.__id
 
 
-class ConnectionsFactory(ABC):
+class ConnectionsFactory(ABC, Generic[L, Q]):
     @abstractmethod
-    def create(self, listener: MessageQueueListener | None = None) -> Connection:
+    def create(self, listener: L | None = None) -> Connection[L, Q]:
         """
         Creates a connection
 
         :param ~eric_sse.listener.MessageQueueListener listener: If provided, assigns a concrete listener
         """
-        pass
 
 
-class InMemoryConnectionsFactory(ConnectionsFactory):
+class InMemoryConnectionsFactory(ConnectionsFactory[MessageQueueListener, InMemoryQueue]):
     """Creates Connections with In memory queues (no persistence support)"""
-    def create(self, listener: MessageQueueListener | None = None) -> Connection:
+    def create(self, listener: MessageQueueListener | None = None) -> Connection[MessageQueueListener, InMemoryQueue]:
         if listener is None:
             listener = MessageQueueListener()
         return Connection(listener=listener, queue=InMemoryQueue())

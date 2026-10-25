@@ -3,6 +3,8 @@
    :hidden:
 
    docs
+   tutorials
+   class_reference
    devs
    changelog
 
@@ -20,7 +22,9 @@ The lightweight library for async messaging nobody expects.
 * SSE format was adopted by design, making the library suitable for such kind of model
 * Callbacks and threading support
 * Sockets server prefab for offline inter process communication
-* Optional persistence layer with Redis as default engine
+* Optional persistence layer, with pluggable storage engines
+* Error handlers, with Dead Letter and Reliable Queue (explicit ack) patterns
+* Profiling decorators for queues and listeners
 
 
 *Possible applications*
@@ -32,6 +36,7 @@ The lightweight library for async messaging nobody expects.
 *Sources*
 
 * Home https://github.com/laxertu/eric
+* Tutorials: :doc:`tutorials`
 * Examples https://github.com/laxertu/eric/tree/master/examples
 * Api service definition: https://github.com/laxertu/eric-api/blob/master/eric_api.py
 

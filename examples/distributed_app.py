@@ -3,6 +3,7 @@ In this example two listeners, Alice and Bob, have a "conversation" using a Simp
 """
 import asyncio
 
+from eric_sse.connection import Connection
 from eric_sse.message import Message, MessageContract
 from eric_sse.prefabs import SimpleDistributedApplicationListener, SimpleDistributedApplicationChannel
 
@@ -44,12 +45,12 @@ async def create_listener(ch: SimpleDistributedApplicationChannel):
     l.set_action('hello', hello_response)
     l.set_action('hello_ack', hello_ack_response)
     l.set_action('bye', bye_handler)
-    ch.register_listener(l)
+    connection = ch.register_listener(l)
     l.start()
-    return l
+    return connection
 
-async def do_stuff(buddy: SimpleDistributedApplicationListener, ssc: SimpleDistributedApplicationChannel):
-    async for _ in ssc.message_stream(buddy):
+async def do_stuff(buddy: Connection, ssc: SimpleDistributedApplicationChannel):
+    async for _ in ssc.message_stream(buddy.id):
         ...
 
 
@@ -60,7 +61,7 @@ async def main():
     bob = await create_listener(ssc)
 
     # Bob says hello to Alice
-    bob.dispatch_to(alice, Message(msg_type='hello', msg_payload='hello!'))
+    bob.listener.dispatch_to(alice.id, Message(msg_type='hello', msg_payload='hello!'))
 
     f2 = asyncio.create_task(do_stuff(alice, ssc))
     f1 = asyncio.create_task(do_stuff(bob, ssc))

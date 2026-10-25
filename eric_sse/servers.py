@@ -3,10 +3,9 @@ import json
 import signal
 
 from asyncio import StreamReader, StreamWriter, start_unix_server
-from asyncio.exceptions import CancelledError
 from os import linesep
 from pathlib import Path
-from typing import AsyncIterable, Iterable
+from typing import AsyncIterable, Callable, Iterable
 
 from eric_sse import get_logger
 from eric_sse.entities import AbstractChannel
@@ -57,12 +56,12 @@ class SocketServer:
 
     **Accepted format**: a plain JSON with the following keys::
 
-        {        
-            "c": "channel id" 
-            "v": "verb" 
-            "t": "message type" 
-            "p": "message payload" 
-            "r": "receiver (listener id when verb is 'rl')"
+        {
+            "c": "channel id"
+            "v": "verb"
+            "t": "message type"
+            "p": "message payload"
+            "r": "receiver (connection id when verb is 'rl')"
         }
 
 
@@ -71,24 +70,34 @@ class SocketServer:
         "d" dispatch
         "b" broadcast
         "c" create channel
-        "r" add listener
+        "r" add connection
         "l" listen (opens a stream)
         "w" watch (opens a stream)
-        "rl" remove a listener
+        "rl" remove a connection
         "rc" remove a channel
 
     See examples
     """
-    cc = ChannelContainer()
     ACK = 'ack'
 
-    def __init__(self, file_descriptor_path: str):
+    def __init__(
+            self,
+            file_descriptor_path: str,
+            channels: ChannelContainer | None = None,
+            channel_factory: Callable[[], AbstractChannel] = SSEChannel
+    ):
         """
         :param file_descriptor_path: See **start** method
+        :param channels: the channels the server works on. A new empty container by default.
+        :param channel_factory: creates the channels requested by the 'c' verb, e.g.
+            ``lambda: repository.create({})`` for channels built by a repository. Creates plain SSEChannel by default.
         """
+        self.cc = channels if channels is not None else ChannelContainer()
+        self.__channel_factory = channel_factory
         self.__file_descriptor_path = file_descriptor_path
-        self.__unix_server: asyncio.Server | None = None
-
+        self.__connections: set[asyncio.Task] = set()
+        self.__stop_requested = asyncio.Event()
+        self.__stopped = asyncio.Event()
 
     @staticmethod
     def start(file_descriptor_path: str):
@@ -98,11 +107,7 @@ class SocketServer:
         :param file_descriptor_path: file descriptor path, all understood by `Path <https://docs.python.org/3/library/pathlib.html#pathlib.Path>`_ is fine
         """
         logger.info('starting')
-        try:
-            server = SocketServer(file_descriptor_path)
-            asyncio.run(server.main())
-        except CancelledError:
-            exit(0)
+        asyncio.run(SocketServer(file_descriptor_path).main())
 
     @staticmethod
     def __parse(json_raw: str) -> (str, str, MessageContract | None, str):
@@ -122,11 +127,16 @@ class SocketServer:
             logger.error(repr(e))
             raise InvalidMessageFormat(json_raw)
 
-    @staticmethod
-    async def connect_callback(reader: StreamReader, writer: StreamWriter):
+    async def connect_callback(self, reader: StreamReader, writer: StreamWriter):
+        """
+        Serves one client connection: runs its command, writes the responses and closes the connection.
+        Tracked until it ends, so that shutdown can end open streams.
+        """
+        connection = asyncio.current_task()
+        self.__connections.add(connection)
         try:
             message_content = await reader.read()
-            async for response in SocketServer.handle_command(message_content.decode()):
+            async for response in self.handle_command(message_content.decode()):
                 writer.write(response.encode())
             writer.write_eof()
             await writer.drain()
@@ -137,69 +147,82 @@ class SocketServer:
             writer.write_eof()
             await writer.drain()
 
-    @staticmethod
-    async def handle_command(raw_command: str) -> AsyncIterable[str]:
+        finally:
+            writer.close()
+            self.__connections.discard(connection)
+
+    async def handle_command(self, raw_command: str) -> AsyncIterable[str]:
         channel_id, verb, message, receiver_id = SocketServer.__parse(raw_command)
 
         logger.info(f'received command {verb}')
 
         if verb == 'd':
-            SocketServer.cc.get(channel_id).dispatch(receiver_id, message)
+            self.cc.get(channel_id).dispatch(receiver_id, message)
             yield SocketServer.ACK
 
         elif verb == 'c':
-            channel = SSEChannel()
-            SocketServer.cc.register(channel)
+            channel = self.__channel_factory()
+            self.cc.register(channel)
             yield channel.id
 
         elif verb == 'b':
-            SocketServer.cc.get(channel_id).broadcast(message)
+            self.cc.get(channel_id).broadcast(message)
             yield SocketServer.ACK
 
         elif verb == 'r':
-            l = SocketServer.cc.get(channel_id).add_listener()
-            yield l.id
+            yield self.cc.get(channel_id).add_connection().id
 
         elif verb == 'rl':
-            SocketServer.cc.get(channel_id).remove_listener(listener_id=receiver_id)
+            self.cc.get(channel_id).remove_connection(connection_id=receiver_id)
             yield SocketServer.ACK
 
         elif verb == 'rc':
-            SocketServer.cc.rm(channel_id)
+            self.cc.rm(channel_id)
             yield SocketServer.ACK
 
         elif verb == 'l':
             logger.info(f"Started listener {receiver_id} on {channel_id}")
-            channel = SocketServer.cc.get(channel_id)
-            listener = channel.get_listener(receiver_id)
-            listener.start()
-            async for m in channel.message_stream(listener):
+            channel = self.cc.get(channel_id)
+            async for m in channel.message_stream(receiver_id):
                 yield f'{json.dumps(m)}{linesep}'
 
         elif verb == 'w':
             logger.info(f"Client watching channel {channel_id}")
-            channel = SocketServer.cc.get(channel_id)
-            async for m in await channel.watch():
+            channel = self.cc.get(channel_id)
+            async for m in channel.watch():
                 yield f'{json.dumps(m)}{linesep}'
 
     async def shutdown(self):
-        """Graceful Shutdown"""
-        server = self.__unix_server
-        logger.info("graceful shutdown")
-        server.close()
-        await server.wait_closed()
-        Path(self.__file_descriptor_path).unlink()
-        logger.info("done")
+        """
+        Graceful Shutdown: stops accepting connections, ends open streams and removes the socket file.
+        Returns when done, and so does **main**. Same as sending SIGINT or SIGTERM to the process.
+        """
+        self.__stop_requested.set()
+        await self.__stopped.wait()
 
     async def main(self):
-        """Starts the server"""
-        server = await start_unix_server(SocketServer.connect_callback, path=Path(self.__file_descriptor_path))
-        self.__unix_server = server
-        addr = server.sockets[0].getsockname()
-        logger.info(f'Serving on {addr}')
+        """Starts the server. Returns after a shutdown."""
+        server = await start_unix_server(self.connect_callback, path=Path(self.__file_descriptor_path))
+        logger.info(f'Serving on {server.sockets[0].getsockname()}')
 
-        async with server:
-            for sig in (signal.SIGINT, signal.SIGTERM):
-                server.get_loop().add_signal_handler(sig, lambda: asyncio.ensure_future(self.shutdown()))
-            await server.serve_forever()
+        loop = asyncio.get_running_loop()
+        signals = (signal.SIGINT, signal.SIGTERM)
+        for sig in signals:
+            loop.add_signal_handler(sig, self.__stop_requested.set)
 
+        try:
+            await self.__stop_requested.wait()
+            logger.info("graceful shutdown")
+            server.close()
+            # Since Python 3.12 wait_closed() also waits for open connections: streams never end by themselves
+            connections = list(self.__connections)
+            for connection in connections:
+                connection.cancel()
+            await asyncio.gather(*connections, return_exceptions=True)
+            await server.wait_closed()
+            Path(self.__file_descriptor_path).unlink(missing_ok=True)
+        finally:
+            for sig in signals:
+                loop.remove_signal_handler(sig)
+            self.__stopped.set()
+        logger.info("done")

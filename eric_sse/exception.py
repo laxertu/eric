@@ -4,8 +4,20 @@ class InvalidChannelException(Exception):
 class InvalidConnectionException(Exception):
     ...
 
-class InvalidListenerException(Exception):
-    ...
+
+class StoppedListenerException(Exception):
+    """Raised when waiting for messages of a listener that is not running, see :meth:`~eric_sse.entities.AbstractChannel.deliver_next` and :meth:`~eric_sse.entities.AbstractChannel.wait_next`."""
+    def __init__(self, connection_id: str):
+        super().__init__(f'Listener of connection {connection_id} is not running')
+
+
+class InternalStreamError(Exception):
+    """
+    Stands for an unexpected error in a channel stream, without its details, that could expose internals to clients.
+    See :meth:`~eric_sse.entities.AbstractChannel.adapt_error`.
+    """
+    def __init__(self):
+        super().__init__('Internal error')
 
 
 class NoMessagesException(Exception):
