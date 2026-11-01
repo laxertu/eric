@@ -151,7 +151,7 @@ class AbstractChannel(ABC):
         """
         Register and existing connection.
 
-        **Warning**: Listener and queue should belong to the same classes returned by connection factory to avoid compatibility issues with persistence layer
+        **Warning**: Listener and queue should belong to the same classes created by the connections factory (the connections repository, for channels built by a channel repository) to avoid compatibility issues with persistence layer
         """
         self.__connection_manager.register_connection(connection)
 

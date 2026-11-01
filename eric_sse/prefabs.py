@@ -177,7 +177,7 @@ class SSEChannelRepository(AbstractChannelRepository):
         """
         :param dict channel_data: Fill it with SSEChannel constructor arguments, except for connections_factory that wil be injected by repository
         """
-        return SSEChannel(**channel_data, connections_factory=self.connections_factory)
+        return SSEChannel(**channel_data, connections_factory=self.connections_repository)
 
     @staticmethod
     def _channel_to_dict(channel: SSEChannel) -> dict:

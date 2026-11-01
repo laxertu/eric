@@ -9,6 +9,11 @@ from eric_sse.queues import Queue
 class QueueRepositoryInterface(ABC):
 
     @abstractmethod
+    def create(self) -> Queue:
+        """Creates a new queue. It is not persisted."""
+        pass
+
+    @abstractmethod
     def load(self, connection_id: str) -> Queue:
         """Loads a queue given the connection id it belongs to."""
         pass
@@ -26,6 +31,11 @@ class QueueRepositoryInterface(ABC):
 
 class ListenerRepositoryInterface(ABC):
     @abstractmethod
+    def create(self) -> MessageQueueListener:
+        """Creates a new listener. It is not persisted."""
+        pass
+
+    @abstractmethod
     def load(self, connection_id: str) -> MessageQueueListener:
         """Loads a listener given the connection id it belongs to."""
         pass
@@ -41,7 +51,12 @@ class ListenerRepositoryInterface(ABC):
         pass
 
 
-class ConnectionRepositoryInterface(ABC):
+class ConnectionRepositoryInterface(ConnectionsFactory, ABC):
+    """
+    Persists connections, and creates them using its listeners and queues repositories.
+
+    Channel repositories inject it as **connections_factory** into the channels they build.
+    """
     @property
     @abstractmethod
     def queues_repository(self) -> QueueRepositoryInterface:
@@ -77,14 +92,8 @@ class ConnectionRepositoryInterface(ABC):
 class ChannelRepositoryInterface(ABC):
     @property
     @abstractmethod
-    def connections_factory(self) -> ConnectionsFactory:
-        """The connections factory that will be injected into concrete channel instances."""
-        pass
-
-    @property
-    @abstractmethod
     def connections_repository(self) -> ConnectionRepositoryInterface:
-        """Repository to be used to persist connections."""
+        """Repository to be used to persist connections. It is also the connections factory injected into the channels it builds."""
         pass
 
     @abstractmethod

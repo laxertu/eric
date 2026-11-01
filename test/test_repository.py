@@ -1,6 +1,6 @@
 from unittest import TestCase
 from unittest.mock import MagicMock
-from eric_sse.connection import Connection, DefaultConnectionsFactory
+from eric_sse.connection import Connection
 from eric_sse.listener import MessageQueueListener
 from eric_sse.queues import InMemoryQueue
 from eric_sse.repository import ConnectionRepository, KvStorage, PrefixedStorage, KvListenerRepository, \
@@ -9,7 +9,7 @@ from eric_sse.interfaces import ListenerRepositoryInterface, QueueRepositoryInte
 
 from eric_sse.repository import InMemoryStorage
 from eric_sse.exception import ItemNotFound
-from test.mock.channel import FakeChannelRepository, FakeConnectionsFactory, FakeChannel
+from test.mock.channel import FakeChannelRepository, FakeChannel
 
 
 class TestInMemoryStorage(TestCase):
@@ -89,7 +89,8 @@ class AbstractChannelRepositoryInMemoryStorageIntegrationTestCase(TestCase):
     def setUp(self):
         self.listeners_repository = MagicMock(spec=ListenerRepositoryInterface)
         self.queues_repository = MagicMock(spec=QueueRepositoryInterface)
-        self.connections_factory = FakeConnectionsFactory()
+        self.listeners_repository.create.side_effect = MessageQueueListener
+        self.queues_repository.create.side_effect = InMemoryQueue
 
 
     def create_sut(self):
@@ -100,8 +101,7 @@ class AbstractChannelRepositoryInMemoryStorageIntegrationTestCase(TestCase):
         )
         return FakeChannelRepository(
             storage=InMemoryStorage(),
-            connections_repository=connections_repository,
-            connections_factory=self.connections_factory
+            connections_repository=connections_repository
         )
 
     def test_persistence(self):
@@ -164,10 +164,14 @@ class PrefixedStorageTestCase(TestCase):
         self.assertEqual(2, b.fetch_one('k'))
 
 
-class DefaultConnectionsFactoryTestCase(TestCase):
+class ConnectionRepositoryCreateTestCase(TestCase):
 
     def test_create(self):
-        sut = DefaultConnectionsFactory(listener_class=MyListener, queue_factory=MyQueue)
+        sut = ConnectionRepository(
+            storage=InMemoryStorage(),
+            listeners_repository=KvListenerRepository(InMemoryStorage(), listener_class=MyListener),
+            queues_repository=KvQueueRepository(InMemoryStorage(), queue_factory=MyQueue)
+        )
         connection = sut.create()
         self.assertIsInstance(connection.listener, MyListener)
         self.assertIsInstance(connection.queue, MyQueue)
@@ -175,6 +179,9 @@ class DefaultConnectionsFactoryTestCase(TestCase):
         listener = MyListener()
         self.assertIs(listener, sut.create(listener=listener).listener)
         self.assertIsNot(sut.create().queue, sut.create().queue)
+
+        # Creating is not persisting
+        self.assertEqual([], list(sut.load_all('any')))
 
 
 class ConnectionRepositoryPrefixTestCase(TestCase):
@@ -186,8 +193,7 @@ class ConnectionRepositoryPrefixTestCase(TestCase):
             listeners_repository=KvListenerRepository(InMemoryStorage()),
             queues_repository=KvQueueRepository(InMemoryStorage())
         )
-        factory = DefaultConnectionsFactory()
-        sut.persist('a', factory.create())
-        sut.persist('ab', factory.create())
+        sut.persist('a', sut.create())
+        sut.persist('ab', sut.create())
 
         self.assertEqual(1, len(list(sut.load_all('a'))))

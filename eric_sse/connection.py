@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Callable, Generic, TypeVar
+from typing import Generic, TypeVar
 
 import eric_sse
 from eric_sse.listener import MessageQueueListener
@@ -43,26 +43,9 @@ class ConnectionsFactory(ABC, Generic[L, Q]):
         """
 
 
-class DefaultConnectionsFactory(ConnectionsFactory[L, Q]):
-    """
-    Creates connections using given listener class and queue factory.
-
-    :param listener_class: Class to instantiate when no listener is provided. Defaults to :class:`~eric_sse.listener.MessageQueueListener`.
-    :param queue_factory: Called once per connection to create its queue. Defaults to :class:`~eric_sse.queues.InMemoryQueue`.
-    """
-    def __init__(
-            self,
-            listener_class: type[L] = MessageQueueListener,
-            queue_factory: Callable[[], Q] = InMemoryQueue
-    ):
-        self.__listener_class = listener_class
-        self.__queue_factory = queue_factory
-
-    def create(self, listener: L | None = None) -> Connection[L, Q]:
-        if listener is None:
-            listener = self.__listener_class()
-        return Connection(listener=listener, queue=self.__queue_factory())
-
-
-class InMemoryConnectionsFactory(DefaultConnectionsFactory[MessageQueueListener, InMemoryQueue]):
+class InMemoryConnectionsFactory(ConnectionsFactory[MessageQueueListener, InMemoryQueue]):
     """Creates Connections with In memory queues (no persistence support)"""
+    def create(self, listener: MessageQueueListener | None = None) -> Connection[MessageQueueListener, InMemoryQueue]:
+        if listener is None:
+            listener = MessageQueueListener()
+        return Connection(listener=listener, queue=InMemoryQueue())

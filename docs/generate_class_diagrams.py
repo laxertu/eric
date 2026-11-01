@@ -315,7 +315,6 @@ MessageQueueListener = listener.MessageQueueListener
 Queue = queues.Queue
 Connection = connection.Connection
 ConnectionsFactory = connection.ConnectionsFactory
-DefaultConnectionsFactory = connection.DefaultConnectionsFactory
 InMemoryConnectionsFactory = connection.InMemoryConnectionsFactory
 
 PUBSUB = Diagram(
@@ -324,7 +323,7 @@ PUBSUB = Diagram(
     layout=[
         [None, prefabs.SimpleDistributedApplicationChannel, prefabs.SSEChannel, prefabs.DataProcessingChannel],
         [ConnectionManager, None, AbstractChannel, None, ConnectionsFactory],
-        [Connection, None, None, None, DefaultConnectionsFactory],
+        [Connection, None, None, None, None],
         [MessageQueueListener, prefabs.SimpleDistributedApplicationListener, Queue, queues.InMemoryQueue, InMemoryConnectionsFactory],
         [message.MessageContract, message.Message, message.SignedMessage, message.UniqueMessage],
     ],
@@ -358,12 +357,11 @@ PERSISTENCE = Diagram(
         [interfaces.ChannelRepositoryInterface, interfaces.ConnectionRepositoryInterface,
          interfaces.ListenerRepositoryInterface, interfaces.QueueRepositoryInterface, repository.AbstractChannelRepository],
         [ConnectionsFactory, repository.ConnectionRepository, repository.KvListenerRepository, repository.KvQueueRepository],
-        [DefaultConnectionsFactory, repository.InMemoryStorage, repository.KvStorage, repository.PrefixedStorage],
+        [None, repository.InMemoryStorage, repository.KvStorage, repository.PrefixedStorage],
         [InMemoryConnectionsFactory, Connection, MessageQueueListener, Queue, AbstractChannel],
     ],
     relations=[
         (interfaces.ChannelRepositoryInterface, interfaces.ConnectionRepositoryInterface, 'aggregation', 'connections_repository'),
-        (interfaces.ChannelRepositoryInterface, ConnectionsFactory, 'aggregation', 'connections_factory'),
         (interfaces.ConnectionRepositoryInterface, interfaces.ListenerRepositoryInterface, 'aggregation', 'listeners_repository'),
         (interfaces.ConnectionRepositoryInterface, interfaces.QueueRepositoryInterface, 'aggregation', 'queues_repository'),
         (repository.AbstractChannelRepository, repository.KvStorage, 'aggregation', 'storage'),
@@ -371,10 +369,10 @@ PERSISTENCE = Diagram(
         (repository.KvListenerRepository, repository.KvStorage, 'aggregation', 'storage'),
         (repository.KvQueueRepository, repository.KvStorage, 'aggregation', 'storage'),
         (repository.PrefixedStorage, repository.KvStorage, 'aggregation', 'wraps'),
-        (interfaces.ChannelRepositoryInterface, AbstractChannel, 'uses', 'load / persist'),
+        (interfaces.ChannelRepositoryInterface, AbstractChannel, 'uses', 'create / load / persist'),
         (interfaces.ConnectionRepositoryInterface, Connection, 'uses', 'load / persist'),
-        (interfaces.ListenerRepositoryInterface, MessageQueueListener, 'uses', 'load / persist'),
-        (interfaces.QueueRepositoryInterface, Queue, 'uses', 'load / persist'),
+        (interfaces.ListenerRepositoryInterface, MessageQueueListener, 'uses', 'create / load / persist'),
+        (interfaces.QueueRepositoryInterface, Queue, 'uses', 'create / load / persist'),
         (ConnectionsFactory, Connection, 'create', '«create»'),
     ],
     stubs={

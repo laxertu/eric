@@ -79,7 +79,7 @@ _Last updated: 2026-11-01, branch `claude-md`._
 - Breaking changes are acceptable while 3.0.0 is in alpha.
 
 ### Next
-1. **Repositories create instances** (see Decisions). Removes `DefaultConnectionsFactory`. Breaking for `eric-redis-queues`: it must implement `create()`, and its Facade-based helper (`repository.py:16`, `:180`) must go.
+1. **Repositories create instances: done in `eric_sse`** (2026-11-01). `DefaultConnectionsFactory` and `AbstractChannelRepository`'s `connections_factory` are gone. Still to do: update `eric-redis-queues`, which must implement `create()` (e.g. `RedisQueuesRepository` creates `RedisQueue` / `BlockingRedisQueue`), drop its `*ConnectionFactory` classes, and remove its Facade-based helper (`repository.py:16`, `:180`).
 2. **Builder**, validated against `eric-api`'s setup (sketch below).
 3. **Point 3: generic channel serialisation.** Channels describe their own state, so one `ChannelRepository(channel_class=...)` covers every channel type, removing `SSEChannelRepository`. Also make all prefabs accept `channel_id` and `connections_factory` (`DataProcessingChannel` doesn't yet).
 4. **Point 4: async waiting queues.**

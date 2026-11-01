@@ -7,11 +7,21 @@ from eric_sse.repository import ConnectionRepository, InMemoryStorage, KvListene
 from eric_sse.message import Message
 from eric_sse.exception import ItemNotFound
 from eric_sse.interfaces import ListenerRepositoryInterface, QueueRepositoryInterface
-from eric_sse.connection import InMemoryConnectionsFactory
+
+class MyListener(MessageQueueListener):
+    pass
+
+
+class MyQueue(InMemoryQueue):
+    pass
+
 
 class FakeListenerRepository(ListenerRepositoryInterface):
     def __init__(self, storage: InMemoryStorage):
         self.storage = storage
+
+    def create(self) -> MessageQueueListener:
+        return MessageQueueListener()
 
     def load(self, connection_id: str) -> MessageQueueListener:
         return self.storage.fetch_one(connection_id)
@@ -25,6 +35,9 @@ class FakeListenerRepository(ListenerRepositoryInterface):
 class FakeQueueRepository(QueueRepositoryInterface):
     def __init__(self, storage: InMemoryStorage):
         self.storage = storage
+
+    def create(self) -> InMemoryQueue:
+        return InMemoryQueue()
 
     def load(self, connection_id: str) -> InMemoryQueue:
         return self.storage.fetch_one(connection_id)
@@ -61,8 +74,7 @@ class TestSSEChannelRepository(TestCase):
                 storage=connections_storage,
                 listeners_repository=FakeListenerRepository(listeners_storage),
                 queues_repository=FakeQueueRepository(queues_storage)
-            ),
-            connections_factory=InMemoryConnectionsFactory()
+            )
         )
         return sut
 
@@ -126,6 +138,28 @@ class TestSSEChannelRepositoryFromStorage(TestCase):
         loaded.get_listener(listener.id).start()
         self.assertEqual('hi', loaded.deliver_next(listener.id).payload)
 
+    def test_channels_create_connections_through_repositories(self):
+        sut = SSEChannelRepository.from_storage(listener_class=MyListener, queue_factory=MyQueue)
+
+        created = sut.create({})
+        self.assertIsInstance(created.add_listener(), MyListener)
+        sut.persist(created)
+
+        loaded = sut.load_one(created.id)
+        self.assertIsInstance(loaded.add_listener(), MyListener)
+        self.assertEqual(2, len(list(loaded.get_connections())))
+        for connection in loaded.get_connections():
+            self.assertIsInstance(connection.listener, MyListener)
+            self.assertIsInstance(connection.queue, MyQueue)
+
+    def test_create_does_not_persist(self):
+        sut = SSEChannelRepository.from_storage()
+        channel = sut.create({})
+        channel.add_listener()
+
+        self.assertEqual([], list(sut.load_all()))
+        self.assertEqual([], list(sut.connections_repository.load_all(channel.id)))
+
     def test_delete(self):
         sut = SSEChannelRepository.from_storage()
         channel = SSEChannel()
@@ -147,6 +181,15 @@ class TestKvRepositories(TestCase):
         sut.delete('c1')
         with self.assertRaises(ItemNotFound):
             sut.load('c1')
+
+    def test_create(self):
+        self.assertIsInstance(KvListenerRepository(InMemoryStorage()).create(), MessageQueueListener)
+        self.assertIsInstance(KvListenerRepository(InMemoryStorage(), listener_class=MyListener).create(), MyListener)
+        self.assertIsInstance(KvQueueRepository(InMemoryStorage()).create(), InMemoryQueue)
+        self.assertIsInstance(KvQueueRepository(InMemoryStorage(), queue_factory=MyQueue).create(), MyQueue)
+
+        sut = KvQueueRepository(InMemoryStorage())
+        self.assertIsNot(sut.create(), sut.create())
 
     def test_queue_repository(self):
         sut = KvQueueRepository(InMemoryStorage())

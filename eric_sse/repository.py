@@ -1,9 +1,11 @@
 from typing import Iterable, Generic, TypeVar, Callable
 from abc import ABC, abstractmethod
 
-from eric_sse.connection import Connection, ConnectionsFactory, InMemoryConnectionsFactory, L, Q
+from eric_sse.connection import Connection, L, Q
 from eric_sse.entities import AbstractChannel
 from eric_sse.exception import ItemNotFound
+from eric_sse.listener import MessageQueueListener
+from eric_sse.queues import InMemoryQueue, Queue
 from eric_sse.interfaces import ChannelRepositoryInterface, ConnectionRepositoryInterface, ListenerRepositoryInterface, \
     QueueRepositoryInterface
 
@@ -107,9 +109,16 @@ class KvListenerRepository(ListenerRepositoryInterface, Generic[L]):
     Listener repository backed by a :class:`~eric_sse.repository.KvStorage`.
 
     Listeners are stored as they are, keyed by connection id; serialization, if needed, is up to the storage.
+
+    :param storage:
+    :param listener_class: Class of listeners created by :meth:`create`. Defaults to :class:`~eric_sse.listener.MessageQueueListener`.
     """
-    def __init__(self, storage: KvStorage[L]):
+    def __init__(self, storage: KvStorage[L], listener_class: type[L] = MessageQueueListener):
         self.__storage = storage
+        self.__listener_class = listener_class
+
+    def create(self) -> L:
+        return self.__listener_class()
 
     def load(self, connection_id: str) -> L:
         return self.__storage.fetch_one(connection_id)
@@ -126,9 +135,16 @@ class KvQueueRepository(QueueRepositoryInterface, Generic[Q]):
     Queue repository backed by a :class:`~eric_sse.repository.KvStorage`.
 
     Queues are stored as they are, keyed by connection id; serialization, if needed, is up to the storage.
+
+    :param storage:
+    :param queue_factory: Called by :meth:`create` to create a queue. Defaults to :class:`~eric_sse.queues.InMemoryQueue`.
     """
-    def __init__(self, storage: KvStorage[Q]):
+    def __init__(self, storage: KvStorage[Q], queue_factory: Callable[[], Q] = InMemoryQueue):
         self.__storage = storage
+        self.__queue_factory = queue_factory
+
+    def create(self) -> Q:
+        return self.__queue_factory()
 
     def load(self, connection_id: str) -> Q:
         return self.__storage.fetch_one(connection_id)
@@ -144,43 +160,41 @@ class AbstractChannelRepository(ChannelRepositoryInterface, ABC):
     """
     Abstract base class for channel repositories.
 
-    Builds channels before return them using injected repositories
+    Builds channels before return them using injected repositories.
+
+    Implementations of :meth:`create` must pass :attr:`connections_repository` as **connections_factory** to channels they build,
+    so that new connections are created by the persistence layer.
     """
     def __init__(
             self,
             storage: KvStorage,
-            connections_repository: ConnectionRepositoryInterface,
-            connections_factory: ConnectionsFactory
+            connections_repository: ConnectionRepositoryInterface
     ):
         self.__storage = storage
         self.__connections_repository = connections_repository
-        self.__connections_factory = connections_factory
 
     @classmethod
     def from_storage(
             cls,
             storage_factory: Callable[[], KvStorage] = InMemoryStorage,
-            connections_factory: ConnectionsFactory | None = None
+            listener_class: type[MessageQueueListener] = MessageQueueListener,
+            queue_factory: Callable[[], Queue] = InMemoryQueue
     ):
         """
         Builds a fully wired repository, using a separate storage for channels, connections, listeners and queues.
 
         :param storage_factory: Called once per storage needed. Defaults to :class:`~eric_sse.repository.InMemoryStorage`.
-        :param connections_factory: Defaults to :class:`~eric_sse.connection.InMemoryConnectionsFactory`.
+        :param listener_class: See :class:`~eric_sse.repository.KvListenerRepository`.
+        :param queue_factory: See :class:`~eric_sse.repository.KvQueueRepository`.
         """
         return cls(
             storage=storage_factory(),
             connections_repository=ConnectionRepository(
                 storage=storage_factory(),
-                listeners_repository=KvListenerRepository(storage_factory()),
-                queues_repository=KvQueueRepository(storage_factory())
-            ),
-            connections_factory=connections_factory or InMemoryConnectionsFactory()
+                listeners_repository=KvListenerRepository(storage_factory(), listener_class=listener_class),
+                queues_repository=KvQueueRepository(storage_factory(), queue_factory=queue_factory)
+            )
         )
-
-    @property
-    def connections_factory(self) -> ConnectionsFactory:
-        return self.__connections_factory
 
     @property
     def connections_repository(self) -> ConnectionRepositoryInterface:
@@ -259,6 +273,12 @@ class ConnectionRepository(ConnectionRepositoryInterface):
     @property
     def listeners_repository(self) -> ListenerRepositoryInterface:
         return self.__listeners_repository
+
+    def create(self, listener: MessageQueueListener | None = None) -> Connection:
+        """Creates a connection. Listener, if not provided, and queue are created by the corresponding repositories."""
+        if listener is None:
+            listener = self.__listeners_repository.create()
+        return Connection(listener=listener, queue=self.__queues_repository.create())
 
     def _load_connection(self, connection_id: str) -> Connection:
         listener = self.__listeners_repository.load(connection_id=connection_id)
