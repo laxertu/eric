@@ -2,11 +2,11 @@ import asyncio
 from concurrent.futures import ThreadPoolExecutor, Executor
 from typing import Callable, AsyncIterable
 from eric_sse import get_logger
-from eric_sse.connection import ConnectionsFactory
+from eric_sse.connection import Connection, ConnectionsFactory
 from eric_sse.entities import AbstractChannel
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract
-from eric_sse.exception import NoMessagesException
+from eric_sse.exception import NoMessagesException, InvalidChannelException
 
 logger = get_logger()
 
@@ -127,7 +127,12 @@ class DataProcessingChannel(AbstractChannel):
         }
 
 class SimpleDistributedApplicationListener(MessageQueueListener):
-    """Listener for distributed applications"""
+    """
+    Listener for distributed applications.
+
+    A :class:`~eric_sse.prefabs.SimpleDistributedApplicationChannel` sets itself as the listener's channel
+    on every connection it registers, including listeners it creates or loads from persistence.
+    """
 
     def __init__(self):
         super().__init__()
@@ -159,7 +164,14 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
 
     def dispatch_to(self, receiver: MessageQueueListener, msg: MessageContract):
         signed_message = SignedMessage(sender_id=self.id, msg_type=msg.type, msg_payload=msg.payload)
-        self.__channel.dispatch(receiver.id, signed_message)
+        self.__get_channel().dispatch(receiver.id, signed_message)
+
+    def __get_channel(self) -> AbstractChannel:
+        if self.__channel is None:
+            raise InvalidChannelException(
+                f'Listener {self.id} has no channel: register it to a SimpleDistributedApplicationChannel'
+            )
+        return self.__channel
 
     def on_message(self, msg: SignedMessage) -> None:
         """Executes action corresponding to message's type"""
@@ -173,12 +185,19 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
             msgs = self.__actions[msg.type](msg)
             for response in msgs:
                 signed_response = SignedMessage(sender_id=self.id, msg_type=response.type, msg_payload=response.payload)
-                self.__channel.dispatch(msg.sender_id, signed_response)
+                self.__get_channel().dispatch(msg.sender_id, signed_response)
         except KeyError:
             logger.debug(f'Unknown action {msg.type}')
 
 class SimpleDistributedApplicationChannel(SSEChannel):
 
-    def register_listener(self, listener: SimpleDistributedApplicationListener):
-        listener.set_channel(self)
-        super().register_listener(listener=listener)
+    """
+    Channel for :class:`~eric_sse.prefabs.SimpleDistributedApplicationListener` instances.
+
+    Use a connections factory or repository that creates them, e.g.
+    ``ChannelRepositoryBuilder().listeners(SimpleDistributedApplicationListener)``.
+    """
+    def register_connection(self, connection: Connection):
+        if isinstance(connection.listener, SimpleDistributedApplicationListener):
+            connection.listener.set_channel(self)
+        super().register_connection(connection)

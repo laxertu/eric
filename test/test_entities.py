@@ -1,3 +1,4 @@
+import asyncio
 from unittest import TestCase, IsolatedAsyncioTestCase
 
 import pytest
@@ -147,21 +148,38 @@ class AbstractChannelTestCase(IsolatedAsyncioTestCase):
             async for _ in self.sut.message_stream(listener):
                 pass
 
-    async def test_stream(self):
-        listener = MessageQueueListenerMock()
+    async def test_stream_starts_listener(self):
+        listener = MessageQueueListenerMock()  # Stops itself after one message
         self.sut.register_listener(listener)
         self.sut.dispatch(listener_id=listener.id, msg=Message(msg_type='test'))
+        self.assertFalse(listener.is_running())
 
-        num_dispatched = 0
-        async for _ in self.sut.message_stream(listener):
-            num_dispatched += 1
+        received = [m async for m in self.sut.message_stream(listener)]
+        self.assertEqual(1, len(received))
+        self.assertFalse(listener.is_running())
 
-        self.assertEqual(0, num_dispatched)
-        listener.start()
+    async def test_stream_ends_with_serialisable_error_when_listener_is_removed(self):
+        import json
+        self.sut.wait_timeout_seconds = 0.05
+        listener = self.sut.add_listener()
+        asyncio.get_running_loop().call_later(0.01, self.sut.remove_listener, listener.id)
 
-        async for _ in self.sut.message_stream(listener):
-            num_dispatched += 1
+        received = [m async for m in self.sut.message_stream(listener)]
+        self.assertEqual(1, len(received))
+        self.assertEqual('error', received[0].type)
+        self.assertEqual('InvalidListenerException', received[0].payload['error'])
+        json.dumps(received[0].payload)
 
-        self.assertEqual(1, num_dispatched)
+    async def test_watch(self):
+        received = []
+        stream = self.sut.watch()
+        asyncio.get_running_loop().call_later(0.01, self.sut.broadcast, Message(msg_type='test'))
+        async for m in stream:
+            received.append(m)
+            break
+        await stream.aclose()
+
+        self.assertEqual(['test'], [m.type for m in received])
+        self.assertEqual(0, len(list(self.sut.get_connections())))  # Its listener is removed
 
 

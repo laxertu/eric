@@ -71,3 +71,36 @@ class DataProcessingChannelTestCase(IsolatedAsyncioTestCase):
         listener.start()
         types = {m['event'] async for m in channel.process_queue(listener)}
         self.assertEqual({'test1', 'test2', 'test3'}, types)
+
+
+class ListenerChannelTestCase(IsolatedAsyncioTestCase):
+
+    async def test_dispatch_without_channel_raises_a_clear_error(self):
+        from eric_sse.exception import InvalidChannelException
+        with self.assertRaises(InvalidChannelException):
+            SimpleDistributedApplicationListener().dispatch_to(MessageQueueListenerMock(), Message(msg_type='hello'))
+
+    async def test_channel_is_set_on_created_and_loaded_listeners(self):
+        from eric_sse.builder import ChannelRepositoryBuilder
+        repository = (
+            ChannelRepositoryBuilder()
+            .channels(SimpleDistributedApplicationChannel)
+            .listeners(SimpleDistributedApplicationListener)
+            .build()
+        )
+        channel = repository.create({})
+        alice = channel.add_listener()
+        bob = channel.add_listener()
+        repository.persist(channel)
+
+        loaded = repository.load_one(channel.id)
+        loaded_alice = loaded.get_listener(alice.id)
+        loaded_alice.set_action('hello', hello_response)
+        loaded_bob = loaded.get_listener(bob.id)
+        loaded_bob.dispatch_to(loaded_alice, Message(msg_type='hello', msg_payload='hi'))
+        loaded_bob.dispatch_to(loaded_alice, Message(msg_type='stop'))
+
+        types = [m['event'] async for m in loaded.message_stream(loaded_alice)]
+        self.assertEqual(['hello', 'stop'], types)
+        # Alice answered through the loaded channel
+        self.assertEqual("hello_ack", loaded._get_queue(bob.id).pop().type)

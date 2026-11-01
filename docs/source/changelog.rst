@@ -22,6 +22,11 @@ Changelog
 * BREAKING: Queue.pop() accepts a timeout (seconds, default 0: return immediately). Queue implementations must accept it
 * Added Queue.wait_pop(timeout), an async wait for the next message. The default runs pop() in a worker thread; InMemoryQueue waits natively, without threads or polling, and its push() wakes waiters from any thread
 * Added AbstractChannel.wait_next(listener_id, timeout), async counterpart of deliver_next()
+* message_stream() starts the listener itself: no more listener.start() before streaming. Stopping the listener still ends the stream
+* BREAKING: watch() is an async generator: use "async for m in channel.watch()". Its listener is removed when the stream ends
+* Error messages yield by message_stream() have a serialisable payload, {'error': exception class name, 'message': str(exception)}, instead of the exception. The stream ends after an invalid listener or channel error, instead of repeating it forever
+* add_listener() and register_listener() go through register_connection(), so subclasses can set up every new connection in one place
+* FIX: SimpleDistributedApplicationChannel sets itself on listeners created by add_listener() or loaded from persistence, not only on register_listener(). dispatch_to() on a listener without channel raises an InvalidChannelException
 * Added ConnectionRepositoryInterface.load_ids(channel_id): connection ids without loading listeners and queues. ChannelRepository.persist() and delete() use it, so they no longer load every listener and queue of the channel
 * ChannelRepository.delete() is idempotent and no longer loads the channel
 * message_stream waits for messages instead of polling, so idle streams no longer consume CPU. It checks whether its listener is still running every AbstractChannel.wait_timeout_seconds (default 1). stream_delay_seconds is now only an optional pause after each delivered message

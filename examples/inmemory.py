@@ -13,7 +13,6 @@ listener = channel.add_listener()
 channel.dispatch(listener.id, Message(msg_type='test1', msg_payload='hi there'))
 channel.dispatch(listener.id, Message(msg_type='test2', msg_payload='hi there!'))
 channel.dispatch(listener.id, Message(msg_type='test3', msg_payload='hi there!!'))
-listener.start()
 
 async def main():
     input('Starting Press Enter to start stream and Ctrl+C to stop')

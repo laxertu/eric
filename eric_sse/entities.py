@@ -123,61 +123,55 @@ class AbstractChannel(ABC):
 
     async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
         """
-        Entry point for message streaming
+        Entry point for message streaming. Starts **listener**, and ends when it is stopped.
 
         Waits for messages through :meth:`wait_next`, so an idle stream doesn't consume CPU.
-        It ends when the listener is stopped, at the latest after :attr:`wait_timeout_seconds`.
+        A stopped listener is noticed at the latest after :attr:`wait_timeout_seconds`.
 
-        A message with type = 'error' is yield on invalid listener
+        Errors are yield as messages of type 'error'. Their payload is serialisable: for an invalid listener or
+        channel it's a dict with 'error' (exception class name) and 'message' keys, and the stream ends;
+        for unexpected errors it's None, and the stream goes on.
         """
-        try:
-            self.__connection_manager.get_listener(listener.id)
-        except InvalidListenerException:
-            raise
+        self.__connection_manager.get_listener(listener.id)
+        listener.start()
 
-        async def event_generator() -> AsyncIterable[dict]:
-
-            while True:
-                # If client closes connection, stop sending events
-                if not listener.is_running():
-                    logger.debug("Listener stopped. Exiting")
-                    break
-
+        while listener.is_running():
+            try:
                 try:
-                    try:
-                        message = await self.wait_next(listener.id, self.wait_timeout_seconds)
-                    except NoMessagesException:
-                        continue
+                    message = await self.wait_next(listener.id, self.wait_timeout_seconds)
+                except NoMessagesException:
+                    continue
 
-                    yield self.adapt(message)
+                yield self.adapt(message)
 
-                    if self.stream_delay_seconds > 0:
-                        await asyncio.sleep(self.stream_delay_seconds)
-                except (InvalidListenerException, InvalidChannelException) as e:
-                    yield self.adapt(Message(msg_type='error', msg_payload=e))
-                except Exception as e:
-                    logger.debug(traceback.format_exc())
-                    logger.error(e)
-                    yield self.adapt(Message(msg_type='error'))
+                if self.stream_delay_seconds > 0:
+                    await asyncio.sleep(self.stream_delay_seconds)
+            except (InvalidListenerException, InvalidChannelException) as e:
+                yield self.adapt(Message(msg_type='error', msg_payload={'error': type(e).__name__, 'message': str(e)}))
+                break
+            except Exception as e:
+                logger.debug(traceback.format_exc())
+                logger.error(e)
+                yield self.adapt(Message(msg_type='error'))
 
-        async for event in event_generator():
-            yield event
+        logger.debug("Listener stopped. Exiting")
 
     def add_listener(self) -> MessageQueueListener:
         """Shortcut that creates a connection and returns correspondant listener"""
         connection = self.__connections_factory.create()
-        self.__connection_manager.register_connection(connection)
+        self.register_connection(connection)
         return connection.listener
 
 
     def register_listener(self, listener: MessageQueueListener):
         """Registers an existing listener"""
         connection = self.__connections_factory.create(listener=listener)
-        self.__connection_manager.register_connection(connection)
+        self.register_connection(connection)
 
     def register_connection(self, connection: Connection):
         """
-        Register and existing connection.
+        Register and existing connection. :meth:`add_listener` and :meth:`register_listener` call it too,
+        so subclasses can override it to set up every new connection.
 
         **Warning**: Listener and queue should belong to the same classes created by the connections factory (the connections repository, for channels built by a channel repository) to avoid compatibility issues with persistence layer
         """
@@ -237,7 +231,19 @@ class AbstractChannel(ABC):
         return self.__connection_manager.get_connections()
 
     async def watch(self) -> AsyncIterable[Any]:
+        """
+        Streams channel messages through a new listener, removed when the stream ends::
+
+            async for message in channel.watch():
+                ...
+        """
         listener = self.add_listener()
-        listener.start()
-        return self.message_stream(listener)
+        try:
+            async for message in self.message_stream(listener):
+                yield message
+        finally:
+            try:
+                self.remove_listener(listener.id)
+            except InvalidListenerException:
+                pass
 
