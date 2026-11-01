@@ -17,6 +17,12 @@ Changelog
 * Connection, ConnectionsFactory, KvListenerRepository and KvQueueRepository are now generic on listener and queue types
 * FIX: ConnectionRepository.load_all no longer returns connections of channels whose id starts with the given channel id
 * Removed facade module
+* KvQueueRepository and InMemoryQueue docs: a queue class decides what of its state is serialised; InMemoryQueue is in-process only
+* Removed unused attribute from InMemoryQueue
+* BREAKING: Queue.pop() accepts a timeout (seconds, default 0: return immediately). Queue implementations must accept it
+* Added Queue.wait_pop(timeout), an async wait for the next message. The default runs pop() in a worker thread; InMemoryQueue waits natively, without threads or polling, and its push() wakes waiters from any thread
+* Added AbstractChannel.wait_next(listener_id, timeout), async counterpart of deliver_next()
+* message_stream waits for messages instead of polling, so idle streams no longer consume CPU. It checks whether its listener is still running every AbstractChannel.wait_timeout_seconds (default 1). stream_delay_seconds is now only an optional pause after each delivered message
 
 2.1.1
 
