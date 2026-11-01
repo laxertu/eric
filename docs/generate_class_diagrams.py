@@ -18,7 +18,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from eric_sse import connection, entities, facade, interfaces, listener, message, prefabs, queues, repository
+from eric_sse import connection, entities, interfaces, listener, message, prefabs, queues, repository
 
 OUTPUT_DIR = Path(__file__).resolve().parent
 
@@ -31,7 +31,6 @@ MODULE_COLORS = {
     'eric_sse.connection': ('#ffe6cc', '#d79b00'),
     'eric_sse.interfaces': ('#f5f5f5', '#666666'),
     'eric_sse.repository': ('#d0e0e3', '#45818e'),
-    'eric_sse.facade': ('#fad9d5', '#ae4132'),
 }
 
 EDGE_STYLES = {
@@ -355,7 +354,7 @@ PERSISTENCE = Diagram(
     file_name='eric_sse_persistence_diagram.drawio',
     title='eric_sse: persistence layer',
     layout=[
-        [None, facade.Facade, None, None, prefabs.SSEChannelRepository],
+        [None, None, None, None, prefabs.SSEChannelRepository],
         [interfaces.ChannelRepositoryInterface, interfaces.ConnectionRepositoryInterface,
          interfaces.ListenerRepositoryInterface, interfaces.QueueRepositoryInterface, repository.AbstractChannelRepository],
         [ConnectionsFactory, repository.ConnectionRepository, repository.KvListenerRepository, repository.KvQueueRepository],
@@ -363,9 +362,6 @@ PERSISTENCE = Diagram(
         [InMemoryConnectionsFactory, Connection, MessageQueueListener, Queue, AbstractChannel],
     ],
     relations=[
-        (facade.Facade, repository.AbstractChannelRepository, 'composition', 'repository'),
-        (facade.Facade, repository.PrefixedStorage, 'create', '«create» one per namespace'),
-        (facade.Facade, DefaultConnectionsFactory, 'create', '«create»'),
         (interfaces.ChannelRepositoryInterface, interfaces.ConnectionRepositoryInterface, 'aggregation', 'connections_repository'),
         (interfaces.ChannelRepositoryInterface, ConnectionsFactory, 'aggregation', 'connections_factory'),
         (interfaces.ConnectionRepositoryInterface, interfaces.ListenerRepositoryInterface, 'aggregation', 'listeners_repository'),

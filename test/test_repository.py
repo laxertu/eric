@@ -1,9 +1,10 @@
 from unittest import TestCase
 from unittest.mock import MagicMock
-from eric_sse.connection import Connection
+from eric_sse.connection import Connection, DefaultConnectionsFactory
 from eric_sse.listener import MessageQueueListener
 from eric_sse.queues import InMemoryQueue
-from eric_sse.repository import ConnectionRepository, KvStorage
+from eric_sse.repository import ConnectionRepository, KvStorage, PrefixedStorage, KvListenerRepository, \
+    KvQueueRepository
 from eric_sse.interfaces import ListenerRepositoryInterface, QueueRepositoryInterface
 
 from eric_sse.repository import InMemoryStorage
@@ -135,4 +136,58 @@ class AbstractChannelRepositoryInMemoryStorageIntegrationTestCase(TestCase):
         self.assertEqual(0, len([c for c in channel.get_connections()]))
 
 
+class MyListener(MessageQueueListener):
+    pass
 
+
+class MyQueue(InMemoryQueue):
+    pass
+
+
+class PrefixedStorageTestCase(TestCase):
+
+    def test_keys_are_namespaced(self):
+        storage = InMemoryStorage()
+        a = PrefixedStorage(storage, 'a:')
+        b = PrefixedStorage(storage, 'b:')
+
+        a.upsert('k', 1)
+        b.upsert('k', 2)
+        self.assertEqual({'a:k': 1, 'b:k': 2}, storage.items)
+        self.assertEqual(1, a.fetch_one('k'))
+        self.assertEqual([2], list(b.fetch_all()))
+        self.assertEqual([1], list(a.fetch_by_prefix('k')))
+
+        a.delete('k')
+        with self.assertRaises(ItemNotFound):
+            a.fetch_one('k')
+        self.assertEqual(2, b.fetch_one('k'))
+
+
+class DefaultConnectionsFactoryTestCase(TestCase):
+
+    def test_create(self):
+        sut = DefaultConnectionsFactory(listener_class=MyListener, queue_factory=MyQueue)
+        connection = sut.create()
+        self.assertIsInstance(connection.listener, MyListener)
+        self.assertIsInstance(connection.queue, MyQueue)
+
+        listener = MyListener()
+        self.assertIs(listener, sut.create(listener=listener).listener)
+        self.assertIsNot(sut.create().queue, sut.create().queue)
+
+
+class ConnectionRepositoryPrefixTestCase(TestCase):
+
+    def test_channel_ids_sharing_a_prefix_do_not_mix(self):
+        storage = InMemoryStorage()
+        sut = ConnectionRepository(
+            storage=storage,
+            listeners_repository=KvListenerRepository(InMemoryStorage()),
+            queues_repository=KvQueueRepository(InMemoryStorage())
+        )
+        factory = DefaultConnectionsFactory()
+        sut.persist('a', factory.create())
+        sut.persist('ab', factory.create())
+
+        self.assertEqual(1, len(list(sut.load_all('a'))))

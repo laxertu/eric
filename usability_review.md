@@ -42,7 +42,7 @@ The rest are small cleanups. I can turn this into a plan or build the first item
 
 ## Progress
 
-_Last updated: 2026-10-25, branch `claude-md`._
+_Last updated: 2026-11-01, branch `claude-md`._
 
 ### Done
 - **Point 1: persistence wiring.**
@@ -50,7 +50,8 @@ _Last updated: 2026-10-25, branch `claude-md`._
   - `AbstractChannelRepository.from_storage(storage_factory)` builds a fully wired repository in one call.
 - **Point 2: single backend, partly done.**
   - `DefaultConnectionsFactory(listener_class, queue_factory)` declares listener and queue classes in one place, so most users no longer subclass `ConnectionsFactory`.
-  - `Facade[L, Q]` (`eric_sse/facade.py`) persists channels, connections, listeners and queues in **one** `KvStorage` instance. Each gets its own namespace through `PrefixedStorage` (`channel:`, `connection:`, `listener:`, `queue:`).
+  - `PrefixedStorage` gives each repository its own namespace in one shared `KvStorage`.
+  - The `Facade` was removed on 2026-11-01: a flat constructor with interdependent arguments, and it persisted implicitly. It will be replaced by repositories that create instances plus a Builder (see Decisions and Next).
   - `Connection`, `ConnectionsFactory`, `KvListenerRepository` and `KvQueueRepository` are generic on listener and queue types. They use `TypeVar`/`Generic` because the project supports Python 3.10.
 - **Point 7: bugs.**
   - `set_action` now rejects the reserved names `start` and `stop`.
@@ -62,15 +63,57 @@ _Last updated: 2026-10-25, branch `claude-md`._
 ### Decisions
 - **`KvStorage` contract:** `fetch_by_prefix` and `fetch_all` implementations must allow deletes while their results are iterated. Callers (e.g. `AbstractChannelRepository.delete`) stay lazy instead of copying results into a list.
 - **Kv repositories store objects as they are.** Any serialisation is up to the `KvStorage` implementation.
-- **The Facade covers wiring and lifecycle only** (channels, adding and removing listeners). `dispatch` and streaming stay on the channel object. After `channel.dispatch()`, callers must `facade.repository.persist(channel)` for storages that serialise. `InMemoryStorage` hides this because it stores references. When queues get written back will be settled with point 4.
+- **Persistence decisions belong to library clients.** The library never persists implicitly: `create()` methods only build objects, and clients call `persist` when they choose.
+- **Persistence boundaries:**
+
+  | Object | What gets persisted | Who triggers it |
+  |---|---|---|
+  | Channel | Configuration (`retry_timeout`…) and references to its connections | Client: `repository.persist(channel)` |
+  | Listener | Its own state (e.g. `is_running`) | Client, through the channel repository |
+  | Queue repository | The queue's identity and configuration (e.g. `queue_id`, Redis connection), **not its messages** | Client, through the channel repository |
+  | Queue | Its messages, on every `push` and `pop` | The queue itself (e.g. `RedisQueue`) |
+
+  So `dispatch` and `broadcast` never require a `persist`. An `InMemoryQueue` isn't durable, by design.
+- **Repositories create the instances they persist.** `QueueRepositoryInterface.create()` and `ListenerRepositoryInterface.create()`. `ConnectionRepository` implements `ConnectionsFactory.create(listener=None)` by delegating to them, and the channel repository injects it into the channels it builds. Channels keep depending only on the narrow `ConnectionsFactory` interface, and `InMemoryConnectionsFactory` stays the default when nothing is persisted. This removes matching pairs such as factory plus repository: e.g. `RedisQueuesRepository` becomes the only place that knows `RedisQueue` and `BlockingRedisQueue`.
+- **A Builder wires the repositories** and returns the channel repository. It never decides when to persist.
 - Breaking changes are acceptable while 3.0.0 is in alpha.
 
 ### Next
-1. **Point 3: generic channel serialisation.** Channels describe their own state, so one `ChannelRepository` covers every channel type. This removes the need for `SSEChannelRepository` and the Facade's `repository_class` parameter. Also make all prefabs accept `channel_id` and `connections_factory` (`DataProcessingChannel` doesn't yet).
-2. **Point 4: async waiting queues**, plus deciding when queues get persisted (see the Facade decision above).
-3. Optional: a `KvStorage.delete_by_prefix`, so a backend can delete a channel's connections without loading them.
-4. Points 5 and 6: lifecycle hooks, listener auto-start, `watch()` signature, serialisable error payloads, `set_channel` coupling.
+1. **Repositories create instances** (see Decisions). Removes `DefaultConnectionsFactory`. Breaking for `eric-redis-queues`: it must implement `create()`, and its Facade-based helper (`repository.py:16`, `:180`) must go.
+2. **Builder**, validated against `eric-api`'s setup (sketch below).
+3. **Point 3: generic channel serialisation.** Channels describe their own state, so one `ChannelRepository(channel_class=...)` covers every channel type, removing `SSEChannelRepository`. Also make all prefabs accept `channel_id` and `connections_factory` (`DataProcessingChannel` doesn't yet).
+4. **Point 4: async waiting queues.**
+5. Optional: a `KvStorage.delete_by_prefix`, so a backend can delete a channel's connections without loading them.
+6. Points 5 and 6: lifecycle hooks, listener auto-start, `watch()` signature, serialisable error payloads, `set_channel` coupling.
+
+#### Sketch: `eric-api` setup with the new API (names not final)
+Today `eric-api` wires `RedisConnectionFactory`, `RedisConnectionRepository` and `RedisSSEChannelRepository` separately, and they must match.
+```python
+redis = RedisConnection(host=..., port=..., db=...)
+channels = (
+    ChannelRepositoryBuilder(storage=RedisStorage(PREFIX, redis))   # default storage, one namespace per repository
+    .channels(SSEChannel)
+    .listeners(MessageQueueListener)                                  # -> KvListenerRepository(..., listener_class=...)
+    .queues(RedisQueuesRepository(redis))                             # creates and reloads RedisQueue
+    .build()
+)
+
+# POST /channel/create
+channel = channels.create({'channel_id': channel_id})
+channels.persist(channel)
+
+# POST /subscribe
+channel = channels.load_one(channel_id)
+listener = channel.add_listener()                          # queue created by RedisQueuesRepository
+channels.persist(channel)
+
+# POST /dispatch: no persist, RedisQueue.push writes the message
+channel.dispatch(listener_id, msg)
+```
+`eric-redis-queues` could ship a one-line helper on top of this, e.g. `redis_channel_repository(redis, blocking=False)`.
 
 ### Open
+- `KvQueueRepository` stores queue objects as they are, so with a serialising storage an `InMemoryQueue` is saved together with its messages. That contradicts the persistence boundaries. Decide whether it should persist only identity and configuration, or be documented as in-memory only.
+- Side observation, for later: `eric-api` keeps its own cache sync on top of the library (`ChannelContainer`, `refresh_channels`, retry in `get_listener`).
 - `docs/source/persistence.rst` embeds `_static/persistence_layer_class_diagram.png`, which is probably out of date. Replace it with an export of the new persistence diagram.
 - The new diagrams' visual layout hasn't been checked, because there's no draw.io renderer on the dev machine.
