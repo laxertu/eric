@@ -90,7 +90,11 @@ _Last updated: 2026-11-01, branch `claude-md`._
    - `watch()` is an async generator and removes its listener when the stream ends.
    - Error payloads: `{'error': class name, 'message': str(e)}`. The stream now ends after an invalid listener/channel error: before, it yielded the same error forever. Unexpected errors still yield an error and go on, so a persistently failing backend (e.g. Redis down) still loops without pause: to be handled with point 5 (`on_error`) or a backoff.
    - `set_channel` coupling: `add_listener()`/`register_listener()` now go through `register_connection()`, which `SimpleDistributedApplicationChannel` overrides, so created and reloaded listeners get the channel too. Missing channel gives an `InvalidChannelException`.
-7. **Point 5: lifecycle hooks** (`on_connect`, `on_disconnect`, `before_dispatch`, `on_error`). `register_connection()` is already a single entry point for new connections.
+7. **Point 5: hooks: done** (2026-11-01). Overridable `AbstractChannel` methods, no-op by default (chosen over a middleware list: simpler, consistent with `adapt()`/`on_message()`; a middleware list could be built on top):
+   - `on_listener_added` / `on_listener_removed`: `add_listener()`, `register_listener()` / `remove_listener()`. Not fired by `register_connection()`, so reloading from persistence isn't a new subscription.
+   - `on_stream_start` / `on_stream_end`: `message_stream()`, end fired on any exit, client disconnection included.
+   - `before_dispatch(listener_id, msg)`: return a message or None to drop it; `broadcast()` included.
+   - `on_error(listener, exc) -> bool`: unexpected stream errors, False ends the stream. The stream now pauses `wait_timeout_seconds` after an error, so a failing backend no longer spins.
 
 #### Sketch: `eric-api` setup with the new API (names not final)
 Today `eric-api` wires `RedisConnectionFactory`, `RedisConnectionRepository` and `RedisSSEChannelRepository` separately, and they must match.

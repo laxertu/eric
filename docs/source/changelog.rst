@@ -22,6 +22,8 @@ Changelog
 * BREAKING: Queue.pop() accepts a timeout (seconds, default 0: return immediately). Queue implementations must accept it
 * Added Queue.wait_pop(timeout), an async wait for the next message. The default runs pop() in a worker thread; InMemoryQueue waits natively, without threads or polling, and its push() wakes waiters from any thread
 * Added AbstractChannel.wait_next(listener_id, timeout), async counterpart of deliver_next()
+* Added channel hooks, overridable methods that do nothing by default: on_listener_added, on_listener_removed, on_stream_start, on_stream_end, before_dispatch (transform or drop messages, broadcast included) and on_error (return False to end the stream)
+* After an unexpected error, message_stream() waits wait_timeout_seconds before trying again, so a failing backend no longer makes it spin
 * message_stream() starts the listener itself: no more listener.start() before streaming. Stopping the listener still ends the stream
 * BREAKING: watch() is an async generator: use "async for m in channel.watch()". Its listener is removed when the stream ends
 * Error messages yield by message_stream() have a serialisable payload, {'error': exception class name, 'message': str(exception)}, instead of the exception. The stream ends after an invalid listener or channel error, instead of repeating it forever

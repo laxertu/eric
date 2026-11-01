@@ -67,6 +67,10 @@ class AbstractChannel(ABC):
 
     see :class:`~eric_sse.prefabs.SSEChannel`
 
+    **Hooks**: subclasses can override :meth:`on_listener_added`, :meth:`on_listener_removed`,
+    :meth:`on_stream_start`, :meth:`on_stream_end`, :meth:`before_dispatch` and :meth:`on_error`.
+    They do nothing by default.
+
     :param int stream_delay_seconds: Pause in seconds after each message delivered by :meth:`message_stream`. Can be used to limit its rate.
     :param str channel_id: Optionally sets the channel id.
     :param ~eric_sse.connection.ConnectionsFactory connections_factory: Factory to be used for creating connections instances on channel subscriptions.
@@ -121,6 +125,48 @@ class AbstractChannel(ABC):
         """Models output of channel streams"""
         ...
 
+    def on_listener_added(self, listener: MessageQueueListener) -> None:
+        """
+        Hook called by :meth:`add_listener` and :meth:`register_listener`.
+
+        Not called when connections are registered with :meth:`register_connection`, e.g. when a channel is
+        loaded from persistence, because that's not a new subscription.
+        """
+        pass
+
+    def on_listener_removed(self, listener: MessageQueueListener) -> None:
+        """Hook called by :meth:`remove_listener`, after the listener has been removed."""
+        pass
+
+    def on_stream_start(self, listener: MessageQueueListener) -> None:
+        """Hook called when :meth:`message_stream` starts, after the listener has been started."""
+        pass
+
+    def on_stream_end(self, listener: MessageQueueListener) -> None:
+        """Hook called when :meth:`message_stream` ends, for any reason: listener stopped, error, or client disconnection."""
+        pass
+
+    def before_dispatch(self, listener_id: str, msg: MessageContract) -> MessageContract | None:
+        """
+        Hook called by :meth:`dispatch`, and so by :meth:`broadcast` for each listener, before enqueuing **msg**.
+
+        :return: The message to enqueue, possibly a different one, or None to drop it.
+        """
+        return msg
+
+    def on_error(self, listener: MessageQueueListener, exception: Exception) -> bool:
+        """
+        Hook called when :meth:`message_stream` catches an unexpected exception, before yielding an 'error' message.
+
+        By default it logs the exception and goes on.
+        The stream waits :attr:`wait_timeout_seconds` before trying again, so a failing backend doesn't make it spin.
+
+        :return: False to end the stream after the 'error' message.
+        """
+        logger.debug(traceback.format_exc())
+        logger.error(exception)
+        return True
+
     async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
         """
         Entry point for message streaming. Starts **listener**, and ends when it is stopped.
@@ -130,36 +176,44 @@ class AbstractChannel(ABC):
 
         Errors are yield as messages of type 'error'. Their payload is serialisable: for an invalid listener or
         channel it's a dict with 'error' (exception class name) and 'message' keys, and the stream ends;
-        for unexpected errors it's None, and the stream goes on.
+        for unexpected errors it's None, and :meth:`on_error` decides whether the stream goes on.
+
+        Calls :meth:`on_stream_start` and :meth:`on_stream_end` hooks.
         """
         self.__connection_manager.get_listener(listener.id)
         listener.start()
+        self.on_stream_start(listener)
 
-        while listener.is_running():
-            try:
+        try:
+            while listener.is_running():
                 try:
-                    message = await self.wait_next(listener.id, self.wait_timeout_seconds)
-                except NoMessagesException:
-                    continue
+                    try:
+                        message = await self.wait_next(listener.id, self.wait_timeout_seconds)
+                    except NoMessagesException:
+                        continue
 
-                yield self.adapt(message)
+                    yield self.adapt(message)
 
-                if self.stream_delay_seconds > 0:
-                    await asyncio.sleep(self.stream_delay_seconds)
-            except (InvalidListenerException, InvalidChannelException) as e:
-                yield self.adapt(Message(msg_type='error', msg_payload={'error': type(e).__name__, 'message': str(e)}))
-                break
-            except Exception as e:
-                logger.debug(traceback.format_exc())
-                logger.error(e)
-                yield self.adapt(Message(msg_type='error'))
-
-        logger.debug("Listener stopped. Exiting")
+                    if self.stream_delay_seconds > 0:
+                        await asyncio.sleep(self.stream_delay_seconds)
+                except (InvalidListenerException, InvalidChannelException) as e:
+                    yield self.adapt(Message(msg_type='error', msg_payload={'error': type(e).__name__, 'message': str(e)}))
+                    break
+                except Exception as e:
+                    go_on = self.on_error(listener, e)
+                    yield self.adapt(Message(msg_type='error'))
+                    if not go_on:
+                        break
+                    await asyncio.sleep(self.wait_timeout_seconds)
+        finally:
+            logger.debug("Stream ended")
+            self.on_stream_end(listener)
 
     def add_listener(self) -> MessageQueueListener:
         """Shortcut that creates a connection and returns correspondant listener"""
         connection = self.__connections_factory.create()
         self.register_connection(connection)
+        self.on_listener_added(connection.listener)
         return connection.listener
 
 
@@ -167,6 +221,7 @@ class AbstractChannel(ABC):
         """Registers an existing listener"""
         connection = self.__connections_factory.create(listener=listener)
         self.register_connection(connection)
+        self.on_listener_added(connection.listener)
 
     def register_connection(self, connection: Connection):
         """
@@ -178,7 +233,9 @@ class AbstractChannel(ABC):
         self.__connection_manager.register_connection(connection)
 
     def remove_listener(self, listener_id: str):
+        listener = self.__connection_manager.get_listener(listener_id)
         self.__connection_manager.remove_listener(listener_id)
+        self.on_listener_removed(listener)
 
     def deliver_next(self, listener_id: str) -> MessageContract:
         """
@@ -213,9 +270,13 @@ class AbstractChannel(ABC):
         return self.__connection_manager.get_queue(listener_id)
 
     def dispatch(self, listener_id: str, msg: MessageContract):
-        """Adds a message to listener's queue"""
+        """Adds a message to listener's queue, unless :meth:`before_dispatch` drops it."""
 
         queue = self._get_queue(listener_id)
+        msg = self.before_dispatch(listener_id, msg)
+        if msg is None:
+            logger.debug(f"Message dropped for {listener_id}")
+            return
         queue.push(msg)
         logger.debug(f"Dispatched {msg} to {listener_id}")
 
