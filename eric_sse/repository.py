@@ -207,16 +207,10 @@ class ChannelRepository(ChannelRepositoryInterface):
 
     def load_all(self) -> Iterable[AbstractChannel]:
         for channel_data in self.__storage.fetch_all():
-            channel = self.create(channel_data)
-            for connection in self.__connections_repository.load_all(channel_id=channel.id):
-                channel.register_connection(connection)
-            yield channel
+            yield self._setup_channel(self.create(channel_data))
 
     def load_one(self, channel_id: str) -> AbstractChannel:
-        channel = self.create(self.__storage.fetch_one(channel_id))
-        for connection in self.__connections_repository.load_all(channel_id=channel.id):
-            channel.register_connection(connection)
-        return channel
+        return self._setup_channel(self.create(self.__storage.fetch_one(channel_id)))
 
     def persist(self, channel: AbstractChannel):
         """Persists channel configuration and its connections. Raises a TypeError if channel is not exactly of **channel_class**."""
@@ -224,7 +218,7 @@ class ChannelRepository(ChannelRepositoryInterface):
             raise TypeError(f'{type(channel).__name__} channels cannot be persisted by a {self.__channel_class.__name__} repository')
         self.__storage.upsert(channel.id, channel.to_dict())
 
-        persisted_connections_ids = {c.id for c in self.__connections_repository.load_all(channel_id=channel.id)}
+        persisted_connections_ids = set(self.__connections_repository.load_ids(channel_id=channel.id))
         current_connections_ids = set()
 
         for connection in channel.get_connections():
@@ -235,12 +229,9 @@ class ChannelRepository(ChannelRepositoryInterface):
             self.__connections_repository.delete(channel_id=channel.id, connection_id=connection_id_to_remove)
 
     def delete(self, channel_id: str):
-        try:
-            channel = self.load_one(channel_id)
-        except ItemNotFound:
-            return
-        for connection in self.__connections_repository.load_all(channel_id=channel.id):
-            self.__connections_repository.delete(channel_id=channel_id, connection_id=connection.id)
+        """Deletes channel configuration and its connections. Idempotent."""
+        for connection_id in self.__connections_repository.load_ids(channel_id=channel_id):
+            self.__connections_repository.delete(channel_id=channel_id, connection_id=connection_id)
         self.__storage.delete(channel_id)
 
 class ConnectionRepository(ConnectionRepositoryInterface):
@@ -280,9 +271,13 @@ class ConnectionRepository(ConnectionRepositoryInterface):
 
         return Connection(listener=listener, queue=queue, connection_id=connection_id)
 
-    def load_all(self, channel_id: str) -> Iterable[Connection]:
+    def load_ids(self, channel_id: str) -> Iterable[str]:
         for connection_data in self.__storage.fetch_by_prefix(f'{channel_id}:'):
-            yield self._load_connection(connection_data['id'])
+            yield connection_data['id']
+
+    def load_all(self, channel_id: str) -> Iterable[Connection]:
+        for connection_id in self.load_ids(channel_id):
+            yield self._load_connection(connection_id)
 
 
     def load_one(self, channel_id: str, connection_id: str) -> Connection:

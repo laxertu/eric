@@ -115,6 +115,40 @@ class TestSSEChannelRepository(TestCase):
         sut.delete(channel_id=channel.id)
         self.assertEqual(0, len([c for c in sut.load_all()]))
 
+    def test_delete_removes_connections_listeners_and_queues(self):
+        sut = self._create_sut()
+        channel = SSEChannel()
+        channel.add_listener()
+        channel.add_listener()
+        sut.persist(channel)
+
+        sut.delete(channel_id=channel.id)
+        for storage in (self.channels_storage, self.connections_storage, self.listeners_storage, self.queues_storage):
+            self.assertEqual({}, storage.items)
+
+        sut.delete(channel_id=channel.id)  # Idempotent
+        sut.delete(channel_id='never-persisted')
+
+    def test_persist_and_delete_do_not_load_listeners_and_queues(self):
+        sut = self._create_sut()
+        channel = SSEChannel()
+        channel.add_listener()
+        removed = channel.add_listener()
+        sut.persist(channel)
+
+        loads = []
+        listeners_repository = sut.connections_repository.listeners_repository
+        queues_repository = sut.connections_repository.queues_repository
+        listeners_repository.load = lambda connection_id: loads.append(connection_id)
+        queues_repository.load = lambda connection_id: loads.append(connection_id)
+
+        channel.remove_listener(removed.id)
+        sut.persist(channel)
+        self.assertEqual([c.id for c in channel.get_connections()], list(sut.connections_repository.load_ids(channel.id)))
+
+        sut.delete(channel_id=channel.id)
+        self.assertEqual([], loads)
+
 
 
 class TestSSEChannelRepositoryBuiltByBuilder(TestCase):

@@ -68,6 +68,11 @@ class ConnectionRepositoryInterface(ConnectionsFactory, ABC):
         pass
 
     @abstractmethod
+    def load_ids(self, channel_id: str) -> Iterable[str]:
+        """Ids of the connections managed by a given channel, without loading their listeners and queues."""
+        pass
+
+    @abstractmethod
     def load_all(self, channel_id: str) -> Iterable[Connection]:
         """Loads all connections managed by a given channel"""
         pass

@@ -22,6 +22,8 @@ Changelog
 * BREAKING: Queue.pop() accepts a timeout (seconds, default 0: return immediately). Queue implementations must accept it
 * Added Queue.wait_pop(timeout), an async wait for the next message. The default runs pop() in a worker thread; InMemoryQueue waits natively, without threads or polling, and its push() wakes waiters from any thread
 * Added AbstractChannel.wait_next(listener_id, timeout), async counterpart of deliver_next()
+* Added ConnectionRepositoryInterface.load_ids(channel_id): connection ids without loading listeners and queues. ChannelRepository.persist() and delete() use it, so they no longer load every listener and queue of the channel
+* ChannelRepository.delete() is idempotent and no longer loads the channel
 * message_stream waits for messages instead of polling, so idle streams no longer consume CPU. It checks whether its listener is still running every AbstractChannel.wait_timeout_seconds (default 1). stream_delay_seconds is now only an optional pause after each delivered message
 
 2.1.1
