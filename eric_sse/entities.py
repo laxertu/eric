@@ -88,6 +88,30 @@ class AbstractChannel(ABC):
         """Unique identifier for this channel, it can be set by **channel_id** constructor parameter"""
         return self.__id
 
+    def to_dict(self) -> dict:
+        """
+        Channel configuration to be persisted. Keys must be constructor parameters, see :meth:`from_dict`.
+
+        Subclasses with additional configuration should extend it::
+
+            def to_dict(self) -> dict:
+                return {**super().to_dict(), 'my_param': self.my_param}
+        """
+        return {
+            'channel_id': self.id,
+            'stream_delay_seconds': self.stream_delay_seconds,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict, connections_factory: ConnectionsFactory | None = None) -> 'AbstractChannel':
+        """
+        Builds a channel from a :meth:`to_dict` representation. Override it if constructor parameters don't match **data** keys.
+
+        :param data: Constructor parameters, except **connections_factory**.
+        :param ~eric_sse.connection.ConnectionsFactory connections_factory:
+        """
+        return cls(**data, connections_factory=connections_factory)
+
 
     @abstractmethod
     def adapt(self, msg: MessageContract) -> Any:

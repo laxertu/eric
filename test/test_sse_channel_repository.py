@@ -3,9 +3,9 @@ from unittest import TestCase
 from eric_sse.builder import ChannelRepositoryBuilder
 
 from eric_sse.listener import MessageQueueListener
-from eric_sse.prefabs import SSEChannel, SSEChannelRepository
+from eric_sse.prefabs import SSEChannel, SimpleDistributedApplicationChannel, DataProcessingChannel
 from eric_sse.queues import InMemoryQueue
-from eric_sse.repository import ConnectionRepository, InMemoryStorage, KvListenerRepository, KvQueueRepository
+from eric_sse.repository import ChannelRepository, ConnectionRepository, InMemoryStorage, KvListenerRepository, KvQueueRepository
 from eric_sse.message import Message
 from eric_sse.exception import ItemNotFound
 from eric_sse.interfaces import ListenerRepositoryInterface, QueueRepositoryInterface
@@ -70,19 +70,19 @@ class TestSSEChannelRepository(TestCase):
         listeners_storage = self.listeners_storage
         queues_storage = self.queues_storage
 
-        sut = SSEChannelRepository(
+        sut = ChannelRepository(
             storage=channels_storage,
             connections_repository=FakeConnectionRepository(
                 storage=connections_storage,
                 listeners_repository=FakeListenerRepository(listeners_storage),
                 queues_repository=FakeQueueRepository(queues_storage)
-            )
+            ),
+            channel_class=SSEChannel
         )
         return sut
 
     def test_load_ome_on_a_persisted_channel(self):
         sut = self._create_sut()
-        self.assertIsInstance(sut, SSEChannelRepository)
 
         channel = SSEChannel()
         sut.persist(channel)
@@ -162,3 +162,41 @@ class TestKvRepositories(TestCase):
         sut.delete('c1')
         with self.assertRaises(ItemNotFound):
             sut.load('c1')
+
+
+class TestChannelSerialisation(TestCase):
+
+    def _round_trip(self, channel):
+        sut = ChannelRepositoryBuilder().channels(type(channel)).build()
+        sut.persist(channel)
+        return sut.load_one(channel.id)
+
+    def test_sse_channel(self):
+        loaded = self._round_trip(SSEChannel(stream_delay_seconds=3, retry_timeout_milliseconds=42))
+        self.assertIsInstance(loaded, SSEChannel)
+        self.assertEqual(3, loaded.stream_delay_seconds)
+        self.assertEqual(42, loaded.retry_timeout_milliseconds)
+
+    def test_simple_distributed_application_channel(self):
+        loaded = self._round_trip(SimpleDistributedApplicationChannel(retry_timeout_milliseconds=42))
+        self.assertIs(SimpleDistributedApplicationChannel, type(loaded))
+        self.assertEqual(42, loaded.retry_timeout_milliseconds)
+
+    def test_data_processing_channel(self):
+        from concurrent.futures import ProcessPoolExecutor
+        loaded = self._round_trip(DataProcessingChannel(max_workers=4, executor_class=ProcessPoolExecutor, channel_id='dp'))
+        self.assertIsInstance(loaded, DataProcessingChannel)
+        self.assertEqual('dp', loaded.id)
+        self.assertEqual(4, loaded.max_workers)
+        self.assertIs(ProcessPoolExecutor, loaded.executor_class)
+
+    def test_from_dict_injects_connections_factory(self):
+        sut = ChannelRepositoryBuilder().listeners(MyListener).build()
+        channel = SSEChannel.from_dict(SSEChannel().to_dict(), connections_factory=sut.connections_repository)
+        self.assertIsInstance(channel.add_listener(), MyListener)
+
+    def test_persist_rejects_other_channel_classes(self):
+        sut = ChannelRepositoryBuilder().channels(SSEChannel).build()
+        with self.assertRaises(TypeError):
+            sut.persist(SimpleDistributedApplicationChannel())
+        self.assertEqual([], list(sut.load_all()))

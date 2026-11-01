@@ -3,13 +3,13 @@ from unittest.mock import MagicMock
 from eric_sse.connection import Connection
 from eric_sse.listener import MessageQueueListener
 from eric_sse.queues import InMemoryQueue
-from eric_sse.repository import ConnectionRepository, KvStorage, PrefixedStorage, KvListenerRepository, \
+from eric_sse.repository import ChannelRepository, ConnectionRepository, KvStorage, PrefixedStorage, KvListenerRepository, \
     KvQueueRepository
 from eric_sse.interfaces import ListenerRepositoryInterface, QueueRepositoryInterface
 
 from eric_sse.repository import InMemoryStorage
 from eric_sse.exception import ItemNotFound
-from test.mock.channel import FakeChannelRepository, FakeChannel
+from test.mock.channel import FakeChannel
 
 
 class TestInMemoryStorage(TestCase):
@@ -85,7 +85,7 @@ class ConnectionsRepositoryTestCase(TestCase):
 
 
 
-class AbstractChannelRepositoryInMemoryStorageIntegrationTestCase(TestCase):
+class ChannelRepositoryInMemoryStorageIntegrationTestCase(TestCase):
     def setUp(self):
         self.listeners_repository = MagicMock(spec=ListenerRepositoryInterface)
         self.queues_repository = MagicMock(spec=QueueRepositoryInterface)
@@ -99,9 +99,10 @@ class AbstractChannelRepositoryInMemoryStorageIntegrationTestCase(TestCase):
             queues_repository=self.queues_repository,
             storage=InMemoryStorage(),
         )
-        return FakeChannelRepository(
+        return ChannelRepository(
             storage=InMemoryStorage(),
-            connections_repository=connections_repository
+            connections_repository=connections_repository,
+            channel_class=FakeChannel
         )
 
     def test_persistence(self):

@@ -4,10 +4,10 @@ from eric_sse.builder import ChannelRepositoryBuilder
 from eric_sse.exception import ItemNotFound
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import Message
-from eric_sse.prefabs import SSEChannel, SSEChannelRepository
+from eric_sse.prefabs import SSEChannel
 from eric_sse.queues import InMemoryQueue
-from eric_sse.repository import InMemoryStorage, KvListenerRepository, KvQueueRepository
-from test.mock.channel import FakeChannel, FakeChannelRepository
+from eric_sse.repository import ChannelRepository, InMemoryStorage, KvListenerRepository, KvQueueRepository
+from test.mock.channel import FakeChannel
 
 
 class MyListener(MessageQueueListener):
@@ -22,7 +22,8 @@ class ChannelRepositoryBuilderTestCase(TestCase):
 
     def test_defaults(self):
         sut = ChannelRepositoryBuilder().build()
-        self.assertIsInstance(sut, SSEChannelRepository)
+        self.assertIsInstance(sut, ChannelRepository)
+        self.assertIs(SSEChannel, sut.channel_class)
 
         channel = sut.create({'retry_timeout_milliseconds': 42})
         self.assertIsInstance(channel, SSEChannel)
@@ -115,9 +116,8 @@ class ChannelRepositoryBuilderTestCase(TestCase):
         for storage, namespace in ((channels, 'channel'), (connections, 'connection'), (listeners, 'listener'), (queues, 'queue')):
             self.assertEqual({namespace}, {k.split(':')[0] for k in storage.items})
 
-    def test_channel_repository_class(self):
-        sut = ChannelRepositoryBuilder().channels(FakeChannelRepository).build()
-        self.assertIsInstance(sut, FakeChannelRepository)
+    def test_channel_class(self):
+        sut = ChannelRepositoryBuilder().channels(FakeChannel).build()
         channel = sut.create({})
         self.assertIsInstance(channel, FakeChannel)
         channel.add_listener()

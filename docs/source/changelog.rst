@@ -10,6 +10,9 @@ Changelog
 * Listener and queue repositories now create the instances they persist: added create() to ListenerRepositoryInterface and QueueRepositoryInterface. KvListenerRepository accepts a listener_class, KvQueueRepository a queue_factory
 * ConnectionRepositoryInterface is now a ConnectionsFactory: ConnectionRepository.create() delegates to listeners and queues repositories. create() methods never persist
 * Channel repositories inject their connections repository as connections_factory into the channels they build. Removed connections_factory from AbstractChannelRepository constructor and ChannelRepositoryInterface
+* Channels describe their own persisted state: added AbstractChannel.to_dict() and from_dict(). SSEChannel and DataProcessingChannel extend to_dict()
+* AbstractChannelRepository and SSEChannelRepository replaced by a concrete ChannelRepository(storage, connections_repository, channel_class), covering every channel type. persist() raises a TypeError on channels of other classes
+* DataProcessingChannel accepts channel_id and connections_factory
 * Added ChannelRepositoryBuilder (builder module): wires channel, connections, listeners and queues repositories over one storage, with per-part overrides
 * Connection, ConnectionsFactory, KvListenerRepository and KvQueueRepository are now generic on listener and queue types
 * FIX: ConnectionRepository.load_all no longer returns connections of channels whose id starts with the given channel id

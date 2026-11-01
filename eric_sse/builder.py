@@ -1,10 +1,11 @@
 from typing import Callable
 
+from eric_sse.entities import AbstractChannel
 from eric_sse.interfaces import ListenerRepositoryInterface, QueueRepositoryInterface
 from eric_sse.listener import MessageQueueListener
-from eric_sse.prefabs import SSEChannelRepository
+from eric_sse.prefabs import SSEChannel
 from eric_sse.queues import Queue, InMemoryQueue
-from eric_sse.repository import AbstractChannelRepository, ConnectionRepository, InMemoryStorage, KvListenerRepository, \
+from eric_sse.repository import ChannelRepository, ConnectionRepository, InMemoryStorage, KvListenerRepository, \
     KvQueueRepository, KvStorage, PrefixedStorage
 
 
@@ -31,7 +32,7 @@ class ChannelRepositoryBuilder:
     """
     def __init__(self, storage: KvStorage | None = None):
         self.__storage = storage if storage is not None else InMemoryStorage()
-        self.__channels_repository_class: type[AbstractChannelRepository] = SSEChannelRepository
+        self.__channel_class: type[AbstractChannel] = SSEChannel
         self.__channels_storage: KvStorage | None = None
         self.__connections_storage: KvStorage | None = None
         self.__listener_class: type[MessageQueueListener] = MessageQueueListener
@@ -43,14 +44,14 @@ class ChannelRepositoryBuilder:
 
     def channels(
             self,
-            repository_class: type[AbstractChannelRepository] = SSEChannelRepository,
+            channel_class: type[AbstractChannel] = SSEChannel,
             storage: KvStorage | None = None
     ) -> 'ChannelRepositoryBuilder':
         """
-        :param repository_class: Class of the channel repository to build. Defaults to :class:`~eric_sse.prefabs.SSEChannelRepository`.
+        :param channel_class: Class of channels the repository creates, loads and persists. Defaults to :class:`~eric_sse.prefabs.SSEChannel`.
         :param storage: Dedicated storage for channels.
         """
-        self.__channels_repository_class = repository_class
+        self.__channel_class = channel_class
         self.__channels_storage = storage
         return self
 
@@ -106,7 +107,7 @@ class ChannelRepositoryBuilder:
     def __storage_for(self, namespace: str, storage: KvStorage | None) -> KvStorage:
         return PrefixedStorage(storage if storage is not None else self.__storage, f'{namespace}:')
 
-    def build(self) -> AbstractChannelRepository:
+    def build(self) -> ChannelRepository:
         """Returns a new channel repository. The builder can be reused."""
         listeners_repository = self.__listeners_repository or KvListenerRepository(
             self.__storage_for('listener', self.__listeners_storage), listener_class=self.__listener_class
@@ -114,8 +115,9 @@ class ChannelRepositoryBuilder:
         queues_repository = self.__queues_repository or KvQueueRepository(
             self.__storage_for('queue', self.__queues_storage), queue_factory=self.__queue_factory
         )
-        return self.__channels_repository_class(
+        return ChannelRepository(
             storage=self.__storage_for('channel', self.__channels_storage),
+            channel_class=self.__channel_class,
             connections_repository=ConnectionRepository(
                 storage=self.__storage_for('connection', self.__connections_storage),
                 listeners_repository=listeners_repository,

@@ -156,35 +156,43 @@ class KvQueueRepository(QueueRepositoryInterface, Generic[Q]):
         self.__storage.delete(connection_id)
 
 
-class AbstractChannelRepository(ChannelRepositoryInterface, ABC):
+class ChannelRepository(ChannelRepositoryInterface):
     """
-    Abstract base class for channel repositories.
+    Persists channels of a given class, using their :meth:`~eric_sse.entities.AbstractChannel.to_dict` and
+    :meth:`~eric_sse.entities.AbstractChannel.from_dict` methods.
 
-    Builds channels before return them using injected repositories.
-
-    Implementations of :meth:`create` must pass :attr:`connections_repository` as **connections_factory** to channels they build,
+    Channels it builds get :attr:`connections_repository` as **connections_factory**,
     so that new connections are created by the persistence layer.
+
+    :param storage: Storage for channels configuration.
+    :param connections_repository:
+    :param channel_class: Class of channels this repository creates, loads and persists, e.g. :class:`~eric_sse.prefabs.SSEChannel`.
     """
     def __init__(
             self,
             storage: KvStorage,
-            connections_repository: ConnectionRepositoryInterface
+            connections_repository: ConnectionRepositoryInterface,
+            channel_class: type[AbstractChannel]
     ):
         self.__storage = storage
         self.__connections_repository = connections_repository
+        self.__channel_class = channel_class
 
     @property
     def connections_repository(self) -> ConnectionRepositoryInterface:
         return self.__connections_repository
 
+    @property
+    def channel_class(self) -> type[AbstractChannel]:
+        return self.__channel_class
 
-    @staticmethod
-    @abstractmethod
-    def _channel_to_dict(channel: AbstractChannel) -> dict:
+    def create(self, channel_data: dict) -> AbstractChannel:
         """
-        Returns a dictionary representation of the channel to be passed to :meth:`eric_sse.interfaces.ChannelRepositoryInterface.create` calls.
+        Creates a channel. It is not persisted.
+
+        :param dict channel_data: Constructor parameters of **channel_class**, except **connections_factory**.
         """
-        pass
+        return self.__channel_class.from_dict(channel_data, connections_factory=self.__connections_repository)
 
     def _setup_channel(self, channel: AbstractChannel):
         for connection in self.__connections_repository.load_all(channel_id=channel.id):
@@ -205,7 +213,10 @@ class AbstractChannelRepository(ChannelRepositoryInterface, ABC):
         return channel
 
     def persist(self, channel: AbstractChannel):
-        self.__storage.upsert(channel.id, self._channel_to_dict(channel))
+        """Persists channel configuration and its connections. Raises a TypeError if channel is not exactly of **channel_class**."""
+        if type(channel) is not self.__channel_class:
+            raise TypeError(f'{type(channel).__name__} channels cannot be persisted by a {self.__channel_class.__name__} repository')
+        self.__storage.upsert(channel.id, channel.to_dict())
 
         persisted_connections_ids = {c.id for c in self.__connections_repository.load_all(channel_id=channel.id)}
         current_connections_ids = set()
