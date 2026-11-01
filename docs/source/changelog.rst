@@ -12,6 +12,7 @@ Changelog
 * ConnectionRepositoryInterface is now a ConnectionsFactory: ConnectionRepository.create() delegates to listeners and queues repositories. create() methods never persist
 * Channel repositories inject their connections repository as connections_factory into the channels they build. Removed connections_factory from AbstractChannelRepository constructor and ChannelRepositoryInterface
 * AbstractChannelRepository.from_storage accepts listener_class and queue_factory instead of connections_factory
+* Added ChannelRepositoryBuilder (builder module): wires channel, connections, listeners and queues repositories over one storage, with per-part overrides
 * Connection, ConnectionsFactory, KvListenerRepository and KvQueueRepository are now generic on listener and queue types
 * FIX: ConnectionRepository.load_all no longer returns connections of channels whose id starts with the given channel id
 * Removed facade module
