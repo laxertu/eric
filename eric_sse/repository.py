@@ -136,6 +136,12 @@ class KvQueueRepository(QueueRepositoryInterface, Generic[Q]):
 
     Queues are stored as they are, keyed by connection id; serialization, if needed, is up to the storage.
 
+    Each queue class decides what of its state is serialised. A durable queue keeps its messages in its own
+    backend and serialises only its identity and configuration (e.g. through ``__getstate__``), because
+    messages are written by the queue itself on every push and pop.
+    :class:`~eric_sse.queues.InMemoryQueue` can't be serialised: use it with a storage that keeps objects in process,
+    such as :class:`~eric_sse.repository.InMemoryStorage`.
+
     :param storage:
     :param queue_factory: Called by :meth:`create` to create a queue. Defaults to :class:`~eric_sse.queues.InMemoryQueue`.
     """

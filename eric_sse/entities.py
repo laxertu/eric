@@ -67,10 +67,13 @@ class AbstractChannel(ABC):
 
     see :class:`~eric_sse.prefabs.SSEChannel`
 
-    :param int stream_delay_seconds: Wait time in seconds between message delivery.
+    :param int stream_delay_seconds: Pause in seconds after each message delivered by :meth:`message_stream`. Can be used to limit its rate.
     :param str channel_id: Optionally sets the channel id.
     :param ~eric_sse.connection.ConnectionsFactory connections_factory: Factory to be used for creating connections instances on channel subscriptions.
     """
+    wait_timeout_seconds: float = 1.0
+    """How long :meth:`message_stream` waits for a message before checking again whether its listener is running."""
+
     def __init__(
             self,
             stream_delay_seconds: int = 0,
@@ -122,19 +125,15 @@ class AbstractChannel(ABC):
         """
         Entry point for message streaming
 
+        Waits for messages through :meth:`wait_next`, so an idle stream doesn't consume CPU.
+        It ends when the listener is stopped, at the latest after :attr:`wait_timeout_seconds`.
+
         A message with type = 'error' is yield on invalid listener
         """
         try:
             self.__connection_manager.get_listener(listener.id)
         except InvalidListenerException:
             raise
-
-        async def new_messages():
-            try:
-                result = self.deliver_next(listener.id)
-                yield result
-            except NoMessagesException:
-                ...
 
         async def event_generator() -> AsyncIterable[dict]:
 
@@ -145,10 +144,15 @@ class AbstractChannel(ABC):
                     break
 
                 try:
-                    async for message in new_messages():
-                        yield self.adapt(message)
+                    try:
+                        message = await self.wait_next(listener.id, self.wait_timeout_seconds)
+                    except NoMessagesException:
+                        continue
 
-                    await asyncio.sleep(self.stream_delay_seconds)
+                    yield self.adapt(message)
+
+                    if self.stream_delay_seconds > 0:
+                        await asyncio.sleep(self.stream_delay_seconds)
                 except (InvalidListenerException, InvalidChannelException) as e:
                     yield self.adapt(Message(msg_type='error', msg_payload=e))
                 except Exception as e:
@@ -196,6 +200,20 @@ class AbstractChannel(ABC):
             return msg
 
         raise NoMessagesException
+
+    async def wait_next(self, listener_id: str, timeout: float) -> MessageContract:
+        """
+        Waits up to **timeout** seconds for the next message for given listener id, without blocking the event loop.
+
+        Raises a NoMessagesException if the listener is not running or no message arrives in time.
+        """
+        listener = self.get_listener(listener_id)
+        if not listener.is_running():
+            raise NoMessagesException
+
+        msg = await self._get_queue(listener.id).wait_pop(timeout)
+        listener.on_message(msg)
+        return msg
 
     def _get_queue(self, listener_id: str) -> Queue:
         return self.__connection_manager.get_queue(listener_id)

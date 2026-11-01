@@ -154,6 +154,12 @@ class TestKvRepositories(TestCase):
         sut = KvQueueRepository(InMemoryStorage())
         self.assertIsNot(sut.create(), sut.create())
 
+    def test_in_memory_queue_is_not_serialisable(self):
+        # Its messages must never be saved by accident through a serialising storage
+        import pickle
+        with self.assertRaises(TypeError):
+            pickle.dumps(InMemoryQueue())
+
     def test_queue_repository(self):
         sut = KvQueueRepository(InMemoryStorage())
         queue = InMemoryQueue()
