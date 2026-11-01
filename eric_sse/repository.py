@@ -5,7 +5,7 @@ from eric_sse.connection import Connection, L, Q
 from eric_sse.entities import AbstractChannel
 from eric_sse.exception import ItemNotFound
 from eric_sse.listener import MessageQueueListener
-from eric_sse.queues import InMemoryQueue, Queue
+from eric_sse.queues import InMemoryQueue
 from eric_sse.interfaces import ChannelRepositoryInterface, ConnectionRepositoryInterface, ListenerRepositoryInterface, \
     QueueRepositoryInterface
 
@@ -172,29 +172,6 @@ class AbstractChannelRepository(ChannelRepositoryInterface, ABC):
     ):
         self.__storage = storage
         self.__connections_repository = connections_repository
-
-    @classmethod
-    def from_storage(
-            cls,
-            storage_factory: Callable[[], KvStorage] = InMemoryStorage,
-            listener_class: type[MessageQueueListener] = MessageQueueListener,
-            queue_factory: Callable[[], Queue] = InMemoryQueue
-    ):
-        """
-        Builds a fully wired repository, using a separate storage for channels, connections, listeners and queues.
-
-        :param storage_factory: Called once per storage needed. Defaults to :class:`~eric_sse.repository.InMemoryStorage`.
-        :param listener_class: See :class:`~eric_sse.repository.KvListenerRepository`.
-        :param queue_factory: See :class:`~eric_sse.repository.KvQueueRepository`.
-        """
-        return cls(
-            storage=storage_factory(),
-            connections_repository=ConnectionRepository(
-                storage=storage_factory(),
-                listeners_repository=KvListenerRepository(storage_factory(), listener_class=listener_class),
-                queues_repository=KvQueueRepository(storage_factory(), queue_factory=queue_factory)
-            )
-        )
 
     @property
     def connections_repository(self) -> ConnectionRepositoryInterface:

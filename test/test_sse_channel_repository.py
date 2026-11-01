@@ -1,5 +1,7 @@
 from unittest import TestCase
 
+from eric_sse.builder import ChannelRepositoryBuilder
+
 from eric_sse.listener import MessageQueueListener
 from eric_sse.prefabs import SSEChannel, SSEChannelRepository
 from eric_sse.queues import InMemoryQueue
@@ -115,17 +117,10 @@ class TestSSEChannelRepository(TestCase):
 
 
 
-class TestSSEChannelRepositoryFromStorage(TestCase):
+class TestSSEChannelRepositoryBuiltByBuilder(TestCase):
 
-    def test_persisted_connections_survive_reload(self):
-        storages = []
-
-        def storage_factory():
-            storages.append(InMemoryStorage())
-            return storages[-1]
-
-        sut = SSEChannelRepository.from_storage(storage_factory=storage_factory)
-        self.assertEqual(4, len(storages))
+    def test_channel_created_outside_repository_survives_reload(self):
+        sut = ChannelRepositoryBuilder().build()
 
         channel = SSEChannel(retry_timeout_milliseconds=42)
         listener = channel.add_listener()
@@ -137,38 +132,6 @@ class TestSSEChannelRepositoryFromStorage(TestCase):
         self.assertEqual(listener.id, loaded.get_listener(listener.id).id)
         loaded.get_listener(listener.id).start()
         self.assertEqual('hi', loaded.deliver_next(listener.id).payload)
-
-    def test_channels_create_connections_through_repositories(self):
-        sut = SSEChannelRepository.from_storage(listener_class=MyListener, queue_factory=MyQueue)
-
-        created = sut.create({})
-        self.assertIsInstance(created.add_listener(), MyListener)
-        sut.persist(created)
-
-        loaded = sut.load_one(created.id)
-        self.assertIsInstance(loaded.add_listener(), MyListener)
-        self.assertEqual(2, len(list(loaded.get_connections())))
-        for connection in loaded.get_connections():
-            self.assertIsInstance(connection.listener, MyListener)
-            self.assertIsInstance(connection.queue, MyQueue)
-
-    def test_create_does_not_persist(self):
-        sut = SSEChannelRepository.from_storage()
-        channel = sut.create({})
-        channel.add_listener()
-
-        self.assertEqual([], list(sut.load_all()))
-        self.assertEqual([], list(sut.connections_repository.load_all(channel.id)))
-
-    def test_delete(self):
-        sut = SSEChannelRepository.from_storage()
-        channel = SSEChannel()
-        channel.add_listener()
-        sut.persist(channel)
-
-        sut.delete(channel.id)
-        self.assertEqual([], list(sut.load_all()))
-        self.assertEqual([], list(sut.connections_repository.load_all(channel.id)))
 
 
 class TestKvRepositories(TestCase):
