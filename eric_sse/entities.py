@@ -174,7 +174,7 @@ class AbstractChannel(ABC):
         Waits for messages through :meth:`wait_next`, so an idle stream doesn't consume CPU.
         A stopped listener is noticed at the latest after :attr:`wait_timeout_seconds`.
 
-        Errors are yield as messages of type 'error'. Their payload is serialisable: for an invalid listener or
+        Errors are yield as messages of type 'error'. Their payload is serializable: for an invalid listener or
         channel it's a dict with 'error' (exception class name) and 'message' keys, and the stream ends;
         for unexpected errors it's None, and :meth:`on_error` decides whether the stream goes on.
 

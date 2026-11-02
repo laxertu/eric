@@ -15,7 +15,6 @@ from eric_sse.prefabs import SSEChannel
 
 channel = SSEChannel()
 listener = channel.add_listener()
-listener.start()
 channel.dispatch(listener.id, Message(msg_type='welcome', msg_payload='Hello!'))
 
 async def main():

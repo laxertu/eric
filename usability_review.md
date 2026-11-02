@@ -58,6 +58,7 @@ _Last updated: 2026-11-01, branch `claude-md`._
 - **Bugs found along the way:**
   - `AbstractChannelRepository.delete` crashed with `InMemoryStorage` because it deleted while iterating. Fixed in `InMemoryStorage`, which now iterates over a snapshot.
   - `ConnectionRepository.load_all` matched channel ids by bare prefix, so channel `a` returned channel `ab`'s connections. It now searches `f'{channel_id}:'`.
+- **Tutorials** (2026-11-01): `docs/source/tutorials.rst` includes `examples/tutorial_in_memory.py` (chat room, hooks) and `examples/tutorial_kv_storage.py` (SQLite `KvStorage` + durable `SqliteQueue`, simulated restart) via `literalinclude`; `test/test_examples.py` runs both.
 - **Docs:** the changelog has a 3.0.0 (unreleased) section. Two generated class diagrams (`docs/eric_sse_pubsub_diagram.drawio`, `docs/eric_sse_persistence_diagram.drawio`) replace the old one. Regenerate them with `python docs/generate_class_diagrams.py`.
 
 ### Decisions

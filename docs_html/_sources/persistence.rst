@@ -18,6 +18,26 @@ If your implementation uses objects that are directly persistable by storage eng
 give an implementation to a :class:`~eric_sse.repository.KvStorage` and just use it in all composite repositories.
 Otherwise you should implement a dump strategy inside repositories themselves. An example is RedisQueues persistence, as Redis client used is not serializable by pickle.
 
+Builder
+=======
+:class:`~eric_sse.builder.ChannelRepositoryBuilder` is the easiest way to get a working persistence layer. By default it
+stores everything in one storage instance, each kind of object under its own namespace::
+
+    from eric_sse.builder import ChannelRepositoryBuilder
+
+    repository = ChannelRepositoryBuilder(my_storage).listeners(MyListener).build()
+
+    channel = repository.create({'retry_timeout_milliseconds': 100})
+    listener = channel.add_listener()
+    repository.persist(channel)
+
+Persistence is always explicit: channels and their connections are stored when you call ``persist``. Messages are
+persisted by queues themselves, so ``dispatch`` and ``broadcast`` do not need a ``persist``.
+
+.. automodule:: eric_sse.builder
+    :members:
+    :member-order: bysource
+
 Base repositories
 =================
 .. automodule:: eric_sse.repository

@@ -31,7 +31,7 @@ Raised to inform that a key was not found in a repository
 #### \_\_init_\_(key)
 
 * **Parameters:**
-  **key** ([*str*](https://docs.python.org/3/library/stdtypes.html#str))
+  **key** ([*str*](https://docs.python.org/3/builtins/stdtypes.html#str))
 
 <a id="eric_sse.exception.NoMessagesException"></a>
 
