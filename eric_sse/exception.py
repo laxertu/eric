@@ -8,6 +8,15 @@ class InvalidListenerException(Exception):
     ...
 
 
+class InternalStreamError(Exception):
+    """
+    Stands for an unexpected error in a channel stream, without its details, that could expose internals to clients.
+    See :meth:`~eric_sse.entities.AbstractChannel.adapt_error`.
+    """
+    def __init__(self):
+        super().__init__('Internal error')
+
+
 class NoMessagesException(Exception):
     """Raised when trying to fetch from an empty queue"""
     ...

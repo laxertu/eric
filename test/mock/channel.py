@@ -6,3 +6,6 @@ from eric_sse.message import MessageContract
 class FakeChannel(AbstractChannel):
     def adapt(self, msg: MessageContract) -> Any:
         return msg
+
+    def adapt_error(self, exception: Exception) -> Any:
+        return exception

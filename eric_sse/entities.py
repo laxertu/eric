@@ -4,11 +4,12 @@ from abc import ABC, abstractmethod
 from typing import AsyncIterable, Any, Iterable, TypeVar
 
 import eric_sse
-from eric_sse.exception import InvalidListenerException, NoMessagesException, InvalidChannelException
+from eric_sse.exception import InvalidListenerException, NoMessagesException, InvalidChannelException, \
+    InternalStreamError
 from eric_sse.handlers import QueuingErrorHandler, ListenerErrorHandler
 from eric_sse.listener import MessageQueueListener
 from eric_sse.connection import Connection, ConnectionsFactory, InMemoryConnectionsFactory
-from eric_sse.message import MessageContract, Message
+from eric_sse.message import MessageContract
 from eric_sse.queues import Queue
 
 logger = eric_sse.get_logger()
@@ -160,6 +161,16 @@ class AbstractChannel(ABC):
         """Models output of channel streams"""
         ...
 
+    @abstractmethod
+    def adapt_error(self, exception: Exception) -> Any:
+        """
+        Models errors in channel streams, see :meth:`message_stream`.
+
+        **exception** is safe to expose to clients: unexpected errors are replaced by an
+        :class:`~eric_sse.exception.InternalStreamError`, that hides their details.
+        """
+        ...
+
     def on_listener_added(self, listener: MessageQueueListener) -> None:
         """
         Hook called by :meth:`add_listener` and :meth:`register_listener`.
@@ -191,12 +202,12 @@ class AbstractChannel(ABC):
 
     def on_error(self, listener: MessageQueueListener, exception: Exception) -> bool:
         """
-        Hook called when :meth:`message_stream` catches an unexpected exception, before yielding an 'error' message.
+        Hook called when :meth:`message_stream` catches an unexpected exception, before yielding an error.
 
         By default it goes on. The exception has already been logged, and, if raised by a queue, passed to error handlers.
         The stream waits :attr:`wait_timeout_seconds` before trying again, so a failing backend doesn't make it spin.
 
-        :return: False to end the stream after the 'error' message.
+        :return: False to end the stream after the error.
         """
         return True
 
@@ -207,9 +218,9 @@ class AbstractChannel(ABC):
         Waits for messages through :meth:`wait_next`, so an idle stream doesn't consume CPU.
         A stopped listener is noticed at the latest after :attr:`wait_timeout_seconds`.
 
-        Errors are yield as messages of type 'error'. Their payload is serializable: for an invalid listener or
-        channel it's a dict with 'error' (exception class name) and 'message' keys, and the stream ends;
-        for unexpected errors it's None, and :meth:`on_error` decides whether the stream goes on.
+        Errors are yielded through :meth:`adapt_error`. After an invalid listener or channel error the stream ends.
+        Unexpected errors are logged and yielded as an :class:`~eric_sse.exception.InternalStreamError`, hiding
+        their details, and :meth:`on_error` decides whether the stream goes on.
 
         Calls :meth:`on_stream_start` and :meth:`on_stream_end` hooks.
         """
@@ -230,12 +241,12 @@ class AbstractChannel(ABC):
                     if self.stream_delay_seconds > 0:
                         await asyncio.sleep(self.stream_delay_seconds)
                 except (InvalidListenerException, InvalidChannelException) as e:
-                    yield self.adapt(Message(msg_type='error', msg_payload={'error': type(e).__name__, 'message': str(e)}))
+                    yield self.adapt_error(e)
                     break
                 except Exception as e:
                     self.__log_error(e)
                     go_on = self.on_error(listener, e)
-                    yield self.adapt(Message(msg_type='error'))
+                    yield self.adapt_error(InternalStreamError())
                     if not go_on:
                         break
                     await asyncio.sleep(self.wait_timeout_seconds)

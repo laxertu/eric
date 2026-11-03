@@ -112,14 +112,14 @@ class StreamHooksTestCase(IsolatedAsyncioTestCase):
         queue.wait_pop = failing_wait_pop
         sut.dispatch(listener.id, Message(msg_type='test'))
         asyncio.get_running_loop().call_later(0.5, listener.stop)
-        return [m.type async for m in sut.message_stream(listener)]
+        return [type(m).__name__ if isinstance(m, Exception) else m.type async for m in sut.message_stream(listener)]
 
     async def test_error_goes_on_with_a_pause(self):
         sut = RecordingChannel()
         start = asyncio.get_running_loop().time()
         received = await self._stream_with_failing_queue(sut, fail_times=2)
 
-        self.assertEqual(['error', 'error', 'test'], received)
+        self.assertEqual(['InternalStreamError', 'InternalStreamError', 'test'], received)
         self.assertEqual(2, len([e for e in sut.events if e == ('error', 'backend down')]))
         self.assertGreaterEqual(asyncio.get_running_loop().time() - start, 2 * sut.wait_timeout_seconds)
 
@@ -128,5 +128,5 @@ class StreamHooksTestCase(IsolatedAsyncioTestCase):
         sut.go_on_after_error = False
         received = await self._stream_with_failing_queue(sut, fail_times=1)
 
-        self.assertEqual(['error'], received)
+        self.assertEqual(['InternalStreamError'], received)
         self.assertEqual('stream_end', sut.events[-1][0])

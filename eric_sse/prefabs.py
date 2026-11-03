@@ -11,6 +11,10 @@ from eric_sse.exception import NoMessagesException, InvalidChannelException
 logger = get_logger()
 
 
+def _error_data(exception: Exception) -> dict:
+    return {'error': type(exception).__name__, 'message': str(exception)}
+
+
 class SSEChannel(AbstractChannel):
     """
     SSE streaming channel.
@@ -59,6 +63,24 @@ class SSEChannel(AbstractChannel):
         if msg.id is not None:
             event["id"] = msg.id
         return event
+
+    def adapt_error(self, exception: Exception) -> dict:
+        """
+        SSE adapter for stream errors.
+
+        Returns::
+
+            {
+                "event": "error",
+                "retry": "channel time out",
+                "data": {"error": "exception class name", "message": "exception message"}
+            }
+        """
+        return {
+            "event": "error",
+            "retry": self.retry_timeout_milliseconds,
+            "data": _error_data(exception)
+        }
 
 
 class DataProcessingChannel(AbstractChannel):
@@ -130,6 +152,20 @@ class DataProcessingChannel(AbstractChannel):
         return {
             "event": msg.type,
             "data": msg.payload
+        }
+
+    def adapt_error(self, exception: Exception) -> dict:
+        """
+        Returns a dictionary in the following format::
+
+            {
+                "event": "error",
+                "data": {"error": "exception class name", "message": "exception message"}
+            }
+        """
+        return {
+            "event": "error",
+            "data": _error_data(exception)
         }
 
 class SimpleDistributedApplicationListener(MessageQueueListener[SignedMessage]):

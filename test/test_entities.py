@@ -153,17 +153,14 @@ class AbstractChannelTestCase(IsolatedAsyncioTestCase):
         self.assertEqual(1, len(received))
         self.assertFalse(listener.is_running())
 
-    async def test_stream_ends_with_serialisable_error_when_listener_is_removed(self):
-        import json
+    async def test_stream_ends_with_error_when_listener_is_removed(self):
         self.sut.wait_timeout_seconds = 0.05
         listener = self.sut.add_listener()
         asyncio.get_running_loop().call_later(0.01, self.sut.remove_listener, listener.id)
 
         received = [m async for m in self.sut.message_stream(listener)]
         self.assertEqual(1, len(received))
-        self.assertEqual('error', received[0].type)
-        self.assertEqual('InvalidListenerException', received[0].payload['error'])
-        json.dumps(received[0].payload)
+        self.assertIsInstance(received[0], InvalidListenerException)
 
     async def test_watch(self):
         received = []

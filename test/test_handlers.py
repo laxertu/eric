@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from eric_sse.builder import ChannelRepositoryBuilder
 from eric_sse.connection import Connection
-from eric_sse.exception import NoMessagesException
+from eric_sse.exception import NoMessagesException, InternalStreamError
 from eric_sse.handlers import QueuingErrorHandler, ListenerErrorHandler
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import Message, MessageContract
@@ -144,7 +144,7 @@ class QueuingErrorHandlerTestCase(IsolatedAsyncioTestCase):
 
         with patch('eric_sse.entities.logger') as logger:
             stream = channel.message_stream(listener)
-            self.assertEqual('error', (await anext(stream)).type)
+            self.assertIsInstance(await anext(stream), InternalStreamError)
             listener.stop()
             await stream.aclose()
 
