@@ -132,7 +132,7 @@ class DataProcessingChannel(AbstractChannel):
             "data": msg.payload
         }
 
-class SimpleDistributedApplicationListener(MessageQueueListener):
+class SimpleDistributedApplicationListener(MessageQueueListener[SignedMessage]):
     """
     Listener for distributed applications.
 

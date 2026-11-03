@@ -1,12 +1,10 @@
 import asyncio
 from abc import ABC, abstractmethod
 from queue import SimpleQueue, Empty, Full
-from typing import Generic, TypeVar
+from typing import Generic
 
-from eric_sse.message import MessageContract
+from eric_sse.message import M
 from eric_sse.exception import NoMessagesException, RepositoryError
-
-M = TypeVar('M', bound=MessageContract)
 
 
 class Queue(ABC, Generic[M]):

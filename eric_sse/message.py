@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import TypeVar
 
 class MessageContract(ABC):
     """
@@ -24,6 +25,10 @@ class MessageContract(ABC):
     def id(self) -> str | None:
         """Optional message identifier, e.g. the "id" field of an SSE event. None if the message has none."""
         return None
+
+
+M = TypeVar('M', bound=MessageContract)
+"""Type of messages handled by generic queues and listeners."""
 
 
 class Message(MessageContract):

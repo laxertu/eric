@@ -1,12 +1,17 @@
+from typing import Generic
+
 import eric_sse
-from eric_sse.message import MessageContract
+from eric_sse.message import M
 
 
 logger = eric_sse.get_logger()
 
-class MessageQueueListener:
+class MessageQueueListener(Generic[M]):
     """
     Base class for listeners.
+
+    Generic on the type of messages it handles, e.g. ``MessageQueueListener[SignedMessage]``. Plain
+    ``MessageQueueListener`` handles any message.
 
     Optionally you can override on_message method if you need to inject code at message delivery time.
     """
@@ -15,7 +20,7 @@ class MessageQueueListener:
         self.id: str = listener_id if listener_id else eric_sse.generate_uuid()
         self.__is_running: bool = False
 
-    def on_message(self, msg: MessageContract) -> None:
+    def on_message(self, msg: M) -> None:
         """Event handler. It executes when a message is delivered to client"""
         pass
 
