@@ -36,6 +36,12 @@ Changelog
 * Added error handlers (handlers module): QueuingErrorHandler (push and pop errors) and ListenerErrorHandler (on_message errors), registered with AbstractChannel.add_queuing_error_handler() and add_listener_error_handler(), or on every channel of a repository with ChannelRepositoryBuilder.queuing_error_handler() and listener_error_handler(). Handler methods receive the listener id. Errors are re-raised after handlers, or logged where the channel swallows them. Handlers are not persisted
 * Added queue_patterns module with the Dead Letter pattern: DeadLetterHandler pushes messages whose push or on_message fails to a dead letter queue, wrapped in a DeadLetter carrying the original message, the listener id it was meant for and the error
 * Docs: added Error handling page
+* BREAKING: removed UniqueMessage. MessageContract has an optional id property (None by default): Message and SignedMessage accept msg_id
+* SSEChannel.adapt() adds the SSE "id" field to messages with an id
+* Queue and InMemoryQueue are generic on the type of messages they hold, e.g. Queue[SignedMessage]. Plain Queue holds any message
+* Added the Reliable Queue pattern to queue_patterns: ReliableQueue keeps popped messages in flight, wrapped in a ReliableMessage with an id, until ack(). nack() and a visibility timeout put them back in the queue. In-flight messages are kept in a KvStorage
+* DeadLetter exposes the original message id
+* Docs: added Queue patterns page, documenting Dead Letter and Reliable Queue
 
 2.1.1
 

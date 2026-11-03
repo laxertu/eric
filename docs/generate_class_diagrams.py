@@ -326,7 +326,7 @@ PUBSUB = Diagram(
         [ConnectionManager, None, AbstractChannel, None, ConnectionsFactory],
         [Connection, None, None, None, None],
         [MessageQueueListener, prefabs.SimpleDistributedApplicationListener, Queue, queues.InMemoryQueue, InMemoryConnectionsFactory],
-        [message.MessageContract, message.Message, message.SignedMessage, message.UniqueMessage],
+        [message.MessageContract, message.Message, message.SignedMessage],
     ],
     relations=[
         (AbstractChannel, ConnectionManager, 'composition', ''),
@@ -338,7 +338,6 @@ PUBSUB = Diagram(
         (Queue, message.MessageContract, 'uses', 'push / pop'),
         (MessageQueueListener, message.MessageContract, 'uses', 'on_message'),
         (AbstractChannel, message.MessageContract, 'uses', 'dispatch / adapt'),
-        (message.UniqueMessage, message.MessageContract, 'aggregation', 'wraps'),
         (prefabs.SimpleDistributedApplicationListener, AbstractChannel, 'aggregation', 'channel'),
         (prefabs.SimpleDistributedApplicationListener, message.SignedMessage, 'create', '«create»'),
         (prefabs.SimpleDistributedApplicationChannel, prefabs.SimpleDistributedApplicationListener, 'uses', 'set_channel'),
