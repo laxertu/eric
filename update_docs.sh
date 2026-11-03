@@ -2,10 +2,11 @@
 # shellcheck disable=SC2164
 
 CURRENT_VERSION="$(poetry version --short)"
+mkdir -p docs_archive
 rm -rf docs_archive/"$CURRENT_VERSION"
 cp -rf docs_markdown/  docs_archive/"$CURRENT_VERSION"
 
-git add docs_html/"$CURRENT_VERSION"/*
+git add docs_archive/"$CURRENT_VERSION"
 
 cd docs
 rm -rf build/html/
