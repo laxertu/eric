@@ -112,9 +112,9 @@ class AbstractChannel(ABC):
         logger.debug(''.join(traceback.format_exception(type(exception), exception, exception.__traceback__)))
         logger.error(exception)
 
-    def __on_pop_error(self, exception: Exception) -> None:
+    def __on_pop_error(self, listener_id: str, exception: Exception) -> None:
         for handler in self.__queuing_error_handlers:
-            handler.handle_pop_error(exception)
+            handler.handle_pop_error(listener_id, exception)
 
     def __notify_listener(self, listener: MessageQueueListener, msg: MessageContract) -> None:
         try:
@@ -122,7 +122,7 @@ class AbstractChannel(ABC):
         except Exception as e:
             self.__log_error(e)
             for handler in self.__listener_error_handlers:
-                handler.handle_on_message_error(msg, e)
+                handler.handle_on_message_error(listener.id, msg, e)
 
 
     @property
@@ -286,7 +286,7 @@ class AbstractChannel(ABC):
             except NoMessagesException:
                 raise
             except Exception as e:
-                self.__on_pop_error(e)
+                self.__on_pop_error(listener.id, e)
                 raise
             self.__notify_listener(listener, msg)
             return msg
@@ -309,7 +309,7 @@ class AbstractChannel(ABC):
         except NoMessagesException:
             raise
         except Exception as e:
-            self.__on_pop_error(e)
+            self.__on_pop_error(listener.id, e)
             raise
         self.__notify_listener(listener, msg)
         return msg
@@ -338,7 +338,7 @@ class AbstractChannel(ABC):
             queue.push(msg)
         except Exception as e:
             for handler in self.__queuing_error_handlers:
-                handler.handle_push_error(msg, e)
+                handler.handle_push_error(listener_id, msg, e)
             return e
         logger.debug(f"Dispatched {msg} to {listener_id}")
         return None

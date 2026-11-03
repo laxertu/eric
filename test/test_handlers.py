@@ -31,19 +31,19 @@ class RecordingQueuingErrorHandler(QueuingErrorHandler):
     def __init__(self):
         self.events = []
 
-    def handle_push_error(self, msg: MessageContract, exception: Exception):
-        self.events.append(('push', msg.type, str(exception)))
+    def handle_push_error(self, listener_id: str, msg: MessageContract, exception: Exception):
+        self.events.append(('push', listener_id, msg.type, str(exception)))
 
-    def handle_pop_error(self, exception: Exception):
-        self.events.append(('pop', str(exception)))
+    def handle_pop_error(self, listener_id: str, exception: Exception):
+        self.events.append(('pop', listener_id, str(exception)))
 
 
 class RecordingListenerErrorHandler(ListenerErrorHandler):
     def __init__(self):
         self.events = []
 
-    def handle_on_message_error(self, msg: MessageContract, exception: Exception):
-        self.events.append(('on_message', msg.type, str(exception)))
+    def handle_on_message_error(self, listener_id: str, msg: MessageContract, exception: Exception):
+        self.events.append(('on_message', listener_id, msg.type, str(exception)))
 
 
 def channel_with_handlers():
@@ -71,18 +71,18 @@ class QueuingErrorHandlerTestCase(IsolatedAsyncioTestCase):
         with self.assertRaises(RuntimeError):
             channel.dispatch(listener.id, Message(msg_type='test'))
 
-        self.assertEqual([('push', 'test', 'push failed')], queuing_handler.events)
+        self.assertEqual([('push', listener.id, 'test', 'push failed')], queuing_handler.events)
 
     async def test_broadcast_goes_on_after_push_error(self):
         channel, queuing_handler, _ = channel_with_handlers()
-        register_broken_queue(channel)
+        broken = register_broken_queue(channel)
         healthy = channel.add_listener()
         healthy.start()
 
         channel.broadcast(Message(msg_type='test'))
 
         self.assertEqual('test', channel.deliver_next(healthy.id).type)
-        self.assertEqual([('push', 'test', 'push failed')], queuing_handler.events)
+        self.assertEqual([('push', broken.id, 'test', 'push failed')], queuing_handler.events)
 
     async def test_pop_error_is_handled_and_reraised(self):
         channel, queuing_handler, _ = channel_with_handlers()
@@ -93,7 +93,7 @@ class QueuingErrorHandlerTestCase(IsolatedAsyncioTestCase):
         with self.assertRaises(RuntimeError):
             await channel.wait_next(listener.id, timeout=0.01)
 
-        self.assertEqual([('pop', 'pop failed'), ('pop', 'wait_pop failed')], queuing_handler.events)
+        self.assertEqual([('pop', listener.id, 'pop failed'), ('pop', listener.id, 'wait_pop failed')], queuing_handler.events)
 
     async def test_no_messages_is_not_handled_nor_logged(self):
         channel, queuing_handler, _ = channel_with_handlers()
@@ -158,7 +158,7 @@ class QueuingErrorHandlerTestCase(IsolatedAsyncioTestCase):
             def __init__(self, name):
                 self.name = name
 
-            def handle_push_error(self, msg, exception):
+            def handle_push_error(self, listener_id, msg, exception):
                 calls.append(self.name)
 
         channel.add_queuing_error_handler(Handler('first'))
@@ -184,7 +184,7 @@ class ListenerErrorHandlerTestCase(IsolatedAsyncioTestCase):
         self.assertEqual('first', channel.deliver_next(listener.id).type)
         self.assertEqual('second', (await channel.wait_next(listener.id, timeout=0.01)).type)
         self.assertEqual(
-            [('on_message', 'first', 'on_message failed'), ('on_message', 'second', 'on_message failed')],
+            [('on_message', listener.id, 'first', 'on_message failed'), ('on_message', listener.id, 'second', 'on_message failed')],
             listener_handler.events
         )
 
@@ -242,4 +242,4 @@ class BuilderErrorHandlersTestCase(IsolatedAsyncioTestCase):
         loaded.dispatch(listener.id, Message(msg_type='test'))
 
         self.assertEqual('test', loaded.deliver_next(listener.id).type)
-        self.assertEqual([('on_message', 'test', 'on_message failed')], handler.events)
+        self.assertEqual([('on_message', listener.id, 'test', 'on_message failed')], handler.events)
