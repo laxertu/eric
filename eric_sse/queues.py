@@ -1,21 +1,26 @@
 import asyncio
 from abc import ABC, abstractmethod
 from queue import SimpleQueue, Empty, Full
+from typing import Generic, TypeVar
 
 from eric_sse.message import MessageContract
 from eric_sse.exception import NoMessagesException, RepositoryError
 
+M = TypeVar('M', bound=MessageContract)
 
-class Queue(ABC):
+
+class Queue(ABC, Generic[M]):
     """
     Abstract base class for queues (FIFO).
+
+    Generic on the type of messages it holds, e.g. ``Queue[SignedMessage]``. Plain ``Queue`` holds any message.
 
     Implementations must provide :meth:`pop` and :meth:`push`. Override :meth:`wait_pop` too if the backend
     can wait for messages without blocking a thread, as :class:`~eric_sse.queues.InMemoryQueue` does.
     """
 
     @abstractmethod
-    def pop(self, timeout: float = 0) -> MessageContract:
+    def pop(self, timeout: float = 0) -> M:
         """
         Next message from the queue.
 
@@ -26,10 +31,10 @@ class Queue(ABC):
         ...
 
     @abstractmethod
-    def push(self, message: MessageContract) -> None:
+    def push(self, message: M) -> None:
         ...
 
-    async def wait_pop(self, timeout: float) -> MessageContract:
+    async def wait_pop(self, timeout: float) -> M:
         """
         Waits for the next message without blocking the event loop.
 
@@ -48,7 +53,7 @@ def _resolve(waiter: asyncio.Future) -> None:
         waiter.set_result(None)
 
 
-class InMemoryQueue(Queue):
+class InMemoryQueue(Queue[M]):
     """
     In memory implementation. Not durable: its messages live in the current process only.
 
@@ -64,13 +69,13 @@ class InMemoryQueue(Queue):
         self.__queue: SimpleQueue = SimpleQueue()
         self.__waiter: tuple[asyncio.AbstractEventLoop, asyncio.Future] | None = None
 
-    def pop(self, timeout: float = 0) -> MessageContract:
+    def pop(self, timeout: float = 0) -> M:
         try:
             return self.__queue.get(block=timeout > 0, timeout=timeout if timeout > 0 else None)
         except Empty:
             raise NoMessagesException
 
-    def push(self, message: MessageContract) -> None:
+    def push(self, message: M) -> None:
         try:
             self.__queue.put(message)
         except Full as e:
@@ -85,7 +90,7 @@ class InMemoryQueue(Queue):
                 # Loop already closed
                 pass
 
-    async def wait_pop(self, timeout: float) -> MessageContract:
+    async def wait_pop(self, timeout: float) -> M:
         try:
             return self.pop()
         except NoMessagesException:

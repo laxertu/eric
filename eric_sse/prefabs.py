@@ -45,14 +45,20 @@ class SSEChannel(AbstractChannel):
             {
                 "event": "message type",
                 "retry": "channel time out",
-                "data": "original payload"
+                "data": "original payload",
+                "id": "message id"
             }
+
+        "id" is optional, as in SSE specs: it's there only if the message has an :attr:`~eric_sse.message.MessageContract.id`.
         """
-        return {
+        event = {
             "event": msg.type,
             "retry": self.retry_timeout_milliseconds,
             "data": msg.payload
         }
+        if msg.id is not None:
+            event["id"] = msg.id
+        return event
 
 
 class DataProcessingChannel(AbstractChannel):

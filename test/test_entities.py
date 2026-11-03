@@ -5,7 +5,7 @@ import pytest
 
 from eric_sse.exception import InvalidListenerException, NoMessagesException
 from eric_sse.listener import MessageQueueListener
-from eric_sse.message import Message, SignedMessage, UniqueMessage
+from eric_sse.message import Message, SignedMessage
 from eric_sse.connection import Connection, InMemoryConnectionsFactory
 from eric_sse.queues import InMemoryQueue
 from eric_sse.prefabs import SSEChannel
@@ -34,20 +34,15 @@ class MessageContractImplementationsTestCase(TestCase):
         self.assertEqual('sender_id', m.sender_id)
         self.assertEqual({'a': 1}, m.payload)
 
-        m = UniqueMessage(message_id='message_id', message=Message(msg_type='test', msg_payload={'a': 1}))
+        m = SignedMessage(msg_type='test', sender_id='sender_id', msg_id='message_id')
+        self.assertEqual('message_id', m.id)
+
+        m = Message(msg_type='test', msg_payload={'a': 1}, msg_id='message_id')
         self.assertEqual('message_id', m.id)
         self.assertEqual('test', m.type)
         self.assertEqual({'a': 1}, m.payload)
 
-        m = UniqueMessage(message_id='message_id', message=Message(msg_type='test', msg_payload={'a': 1}), sender_id='sender_id')
-        self.assertEqual('message_id', m.id)
-        self.assertEqual('test', m.type)
-        self.assertEqual({'a': 1}, m.payload)
-
-        m1 = UniqueMessage(message=Message(msg_type='test', msg_payload={'a': 1}), sender_id='sender_id')
-        m2 = UniqueMessage(message=Message(msg_type='test', msg_payload={'a': 1}), sender_id='sender_id')
-
-        self.assertNotEqual(m1.id, m2.id)
+        self.assertIsNone(Message(msg_type='test').id)
 
     def test_listeners_management(self):
 
