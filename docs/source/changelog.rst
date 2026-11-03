@@ -42,6 +42,11 @@ Changelog
 * Added the Reliable Queue pattern to queue_patterns: ReliableQueue keeps popped messages in flight, wrapped in a ReliableMessage with an id, until ack(). nack() and a visibility timeout put them back in the queue. In-flight messages are kept in a KvStorage
 * DeadLetter exposes the original message id
 * Docs: added Queue patterns page, documenting Dead Letter and Reliable Queue
+* MessageQueueListener is generic on the type of messages it handles, e.g. MessageQueueListener[SignedMessage]. SimpleDistributedApplicationListener is a MessageQueueListener[SignedMessage]
+* AbstractChannel is generic on the type of messages it dispatches and delivers: dispatch, broadcast, adapt, before_dispatch, deliver_next and wait_next use it. SSEChannel and DataProcessingChannel are generic too, SimpleDistributedApplicationChannel is an SSEChannel[SignedMessage]. Plain channels, listeners and queues handle any message
+* BREAKING: stream errors are no longer adapted as 'error' messages: message_stream() yields them through the new abstract AbstractChannel.adapt_error(exception). Channels extending AbstractChannel directly must implement it; SSEChannel and DataProcessingChannel return {'event': 'error', 'data': {'error': exception class name, 'message': str(exception)}}, plus 'retry' for SSEChannel
+* Added InternalStreamError to exceptions module: message_stream() yields it instead of unexpected errors, hiding their details from clients. Before, their payload was None
+* Docs: added Stream errors section to Error handling page
 
 2.1.1
 

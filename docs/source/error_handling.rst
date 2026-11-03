@@ -19,6 +19,29 @@ Handlers are not persisted: register them on each channel, or once on a
 
 See :doc:`queue_patterns` for handlers that implement common patterns, like Dead Letter.
 
+Stream errors
+=============
+
+:meth:`~eric_sse.entities.AbstractChannel.message_stream` doesn't raise: it yields errors to the client, formatted by
+:meth:`~eric_sse.entities.AbstractChannel.adapt_error`, as messages are formatted by
+:meth:`~eric_sse.entities.AbstractChannel.adapt`.
+
+* An invalid listener or channel error is yielded as it is, and the stream ends.
+* Any other error is logged and yielded as an :class:`~eric_sse.exception.InternalStreamError`, so that its details,
+  e.g. a backend address, don't reach clients. :meth:`~eric_sse.entities.AbstractChannel.on_error` decides whether the
+  stream goes on, after a pause of :attr:`~eric_sse.entities.AbstractChannel.wait_timeout_seconds`.
+
+:class:`~eric_sse.prefabs.SSEChannel` sends them as SSE events of type ``error``::
+
+    {
+        "event": "error",
+        "retry": 5,
+        "data": {"error": "InternalStreamError", "message": "Internal error"}
+    }
+
+Channels extending :class:`~eric_sse.entities.AbstractChannel` directly must implement ``adapt_error``; override it in
+prefab subclasses to change the format.
+
 Handlers
 ========
 

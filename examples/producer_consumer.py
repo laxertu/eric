@@ -17,18 +17,18 @@ logger = get_logger()
 class Producer:
 
     @staticmethod
-    async def produce_num(c: DataProcessingChannel, l: MessageQueueListener, num: int):
+    async def produce_num(c: DataProcessingChannel[SignedMessage], l: MessageQueueListener[SignedMessage], num: int):
         for i in range(0, num):
             c.dispatch(l.id, SignedMessage(msg_type='counter', msg_payload=i, sender_id='producer'))
         c.dispatch(l.id, SignedMessage(msg_type=MESSAGE_TYPE_CLOSED, sender_id='producer'))
 
 
-class Consumer(MessageQueueListener):
+class Consumer(MessageQueueListener[SignedMessage]):
     def on_message(self, msg: SignedMessage) -> None:
         sleep(uniform(0, 1))
         logger.info(f"Received {msg.type}: {msg.payload}")
 
-class MyChannel(DataProcessingChannel):
+class MyChannel(DataProcessingChannel[SignedMessage]):
 
     def adapt(self, msg: SignedMessage) -> dict:
         return {'sender_id': msg.sender_id, 'payload': msg.payload}

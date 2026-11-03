@@ -44,7 +44,8 @@ class ChatRoom(SSEChannel):
 async def user_session(room: ChatRoom, user: ChatUser):
     """What a web server does for each client: stream the channel's output for that listener."""
     # message_stream starts the listener, waits for messages without consuming CPU, and ends when the listener stops.
-    # SSEChannel adapts every message to an SSE event: {'event': ..., 'retry': ..., 'data': ...}
+    # SSEChannel adapts every message to an SSE event: {'event': ..., 'retry': ..., 'data': ...}, plus 'id' if the message has one.
+    # Errors become events of type 'error', see adapt_error.
     async for event in room.message_stream(user):
         print(f'[{user.name}] {event["event"]}: {event["data"]}')
 
