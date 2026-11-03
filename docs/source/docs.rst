@@ -59,6 +59,7 @@ Its main components are:
    entities
    prefabs
    persistence
+   error_handling
    exceptions
 
 

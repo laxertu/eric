@@ -33,6 +33,9 @@ Changelog
 * Added ConnectionRepositoryInterface.load_ids(channel_id): connection ids without loading listeners and queues. ChannelRepository.persist() and delete() use it, so they no longer load every listener and queue of the channel
 * ChannelRepository.delete() is idempotent and no longer loads the channel
 * message_stream waits for messages instead of polling, so idle streams no longer consume CPU. It checks whether its listener is still running every AbstractChannel.wait_timeout_seconds (default 1). stream_delay_seconds is now only an optional pause after each delivered message
+* Added error handlers (handlers module): QueuingErrorHandler (push and pop errors) and ListenerErrorHandler (on_message errors), registered with AbstractChannel.add_queuing_error_handler() and add_listener_error_handler(), or on every channel of a repository with ChannelRepositoryBuilder.queuing_error_handler() and listener_error_handler(). Handler methods receive the listener id. Errors are re-raised after handlers, or logged where the channel swallows them. Handlers are not persisted
+* Added queue_patterns module with the Dead Letter pattern: DeadLetterHandler pushes messages whose push or on_message fails to a dead letter queue, wrapped in a DeadLetter carrying the original message, the listener id it was meant for and the error
+* Docs: added Error handling page
 
 2.1.1
 
