@@ -60,6 +60,7 @@ Its main components are:
    prefabs
    persistence
    error_handling
+   queue_patterns
    exceptions
 
 
