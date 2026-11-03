@@ -1,5 +1,4 @@
 import asyncio
-import threading
 from abc import ABC, abstractmethod
 from queue import SimpleQueue, Empty, Full
 
@@ -53,7 +52,9 @@ class InMemoryQueue(Queue):
     """
     In memory implementation. Not durable: its messages live in the current process only.
 
-    :meth:`wait_pop` waits natively, without threads or polling. :meth:`push` can be called from any thread.
+    It has a single consumer, as a queue belongs to one listener: concurrent :meth:`wait_pop` calls on the same
+    queue are not supported. :meth:`wait_pop` waits natively, without threads or polling.
+    :meth:`push` can be called from any thread.
 
     It can't be serialised (e.g. pickled), so it can only be persisted with storages that keep objects
     in process, such as :class:`~eric_sse.repository.InMemoryStorage`.
@@ -61,8 +62,7 @@ class InMemoryQueue(Queue):
     def __init__(self):
         super().__init__()
         self.__queue: SimpleQueue = SimpleQueue()
-        self.__waiters: dict[asyncio.Future, asyncio.AbstractEventLoop] = {}
-        self.__lock = threading.Lock()
+        self.__waiter: tuple[asyncio.AbstractEventLoop, asyncio.Future] | None = None
 
     def pop(self, timeout: float = 0) -> MessageContract:
         try:
@@ -75,43 +75,35 @@ class InMemoryQueue(Queue):
             self.__queue.put(message)
         except Full as e:
             raise RepositoryError(e)
-        self.__wake_waiters()
+
+        waiter = self.__waiter
+        if waiter is not None:
+            loop, future = waiter
+            try:
+                loop.call_soon_threadsafe(_resolve, future)
+            except RuntimeError:
+                # Loop already closed
+                pass
 
     async def wait_pop(self, timeout: float) -> MessageContract:
+        try:
+            return self.pop()
+        except NoMessagesException:
+            pass
+
         loop = asyncio.get_running_loop()
-        deadline = loop.time() + timeout
-        while True:
+        future = loop.create_future()
+        self.__waiter = (loop, future)
+        try:
+            # Checks again: a push between the first pop and the waiter registration would be missed otherwise
             try:
                 return self.pop()
             except NoMessagesException:
                 pass
-
-            remaining = deadline - loop.time()
-            if remaining <= 0:
-                raise NoMessagesException
-
-            waiter = loop.create_future()
-            with self.__lock:
-                self.__waiters[waiter] = loop
-            try:
-                # Checks again: a push between the first pop and the waiter registration would be missed otherwise
-                try:
-                    return self.pop()
-                except NoMessagesException:
-                    pass
-                await asyncio.wait_for(waiter, remaining)
-            except asyncio.TimeoutError:
-                raise NoMessagesException from None
-            finally:
-                with self.__lock:
-                    self.__waiters.pop(waiter, None)
-
-    def __wake_waiters(self) -> None:
-        with self.__lock:
-            waiters = list(self.__waiters.items())
-        for waiter, loop in waiters:
-            try:
-                loop.call_soon_threadsafe(_resolve, waiter)
-            except RuntimeError:
-                # Loop already closed
-                pass
+            await asyncio.wait_for(future, timeout)
+            # Single consumer: the message that woke us up is still there
+            return self.pop()
+        except asyncio.TimeoutError:
+            raise NoMessagesException from None
+        finally:
+            self.__waiter = None

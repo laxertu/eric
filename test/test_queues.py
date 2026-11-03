@@ -53,15 +53,23 @@ class InMemoryQueueWaitPopTestCase(IsolatedAsyncioTestCase):
         with self.assertRaises(NoMessagesException):
             await InMemoryQueue().wait_pop(0.05)
 
-    async def test_each_message_is_delivered_once(self):
+    async def test_consecutive_waits_deliver_messages_in_order(self):
         sut = InMemoryQueue()
-        waiters = [asyncio.create_task(sut.wait_pop(0.3)) for _ in range(3)]
-        await asyncio.sleep(0.01)
-        sut.push(Message(msg_type='only'))
+        loop = asyncio.get_running_loop()
+        loop.call_later(0.05, sut.push, Message(msg_type='first'))
+        loop.call_later(0.05, sut.push, Message(msg_type='second'))
 
-        results = await asyncio.gather(*waiters, return_exceptions=True)
-        self.assertEqual(1, len([r for r in results if isinstance(r, Message)]))
-        self.assertEqual(2, len([r for r in results if isinstance(r, NoMessagesException)]))
+        self.assertEqual('first', (await sut.wait_pop(2)).type)
+        self.assertEqual('second', (await sut.wait_pop(2)).type)
+        with self.assertRaises(NoMessagesException):
+            await sut.wait_pop(0.05)
+
+    async def test_push_after_timeout_is_kept_for_next_wait(self):
+        sut = InMemoryQueue()
+        with self.assertRaises(NoMessagesException):
+            await sut.wait_pop(0.05)
+        sut.push(Message(msg_type='later'))
+        self.assertEqual('later', (await sut.wait_pop(1)).type)
 
 
 class SyncOnlyQueue(Queue):
