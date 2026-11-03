@@ -148,7 +148,7 @@ class SocketServer:
             yield SocketServer.ACK
 
         elif verb == 'c':
-            channel = SSEChannel()
+            channel: SSEChannel[MessageContract] = SSEChannel()
             SocketServer.cc.register(channel)
             yield channel.id
 
