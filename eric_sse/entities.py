@@ -276,9 +276,12 @@ class AbstractChannel(ABC, Generic[M]):
         Register and existing connection. :meth:`add_listener` and :meth:`register_listener` call it too,
         so subclasses can override it to set up every new connection.
 
+        Calls :meth:`~eric_sse.listener.MessageQueueListener.on_registered` on the connection's listener.
+
         **Warning**: Listener and queue should belong to the same classes created by the connections factory (the connections repository, for channels built by a channel repository) to avoid compatibility issues with persistence layer
         """
         self.__connection_manager.register_connection(connection)
+        connection.listener.on_registered(self)
 
     def remove_listener(self, listener_id: str):
         listener = self.__connection_manager.get_listener(listener_id)

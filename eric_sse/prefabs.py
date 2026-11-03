@@ -2,7 +2,7 @@ import asyncio
 from concurrent.futures import ThreadPoolExecutor, Executor
 from typing import Callable, AsyncIterable
 from eric_sse import get_logger
-from eric_sse.connection import Connection, ConnectionsFactory
+from eric_sse.connection import ConnectionsFactory
 from eric_sse.entities import AbstractChannel
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract, M
@@ -172,8 +172,8 @@ class SimpleDistributedApplicationListener(MessageQueueListener[SignedMessage]):
     """
     Listener for distributed applications.
 
-    A :class:`~eric_sse.prefabs.SimpleDistributedApplicationChannel` sets itself as the listener's channel
-    on every connection it registers, including listeners it creates or loads from persistence.
+    It dispatches through the channel it is registered to, see :meth:`on_registered`: any channel, including
+    when listeners are created or loaded from persistence.
     """
 
     def __init__(self):
@@ -185,7 +185,8 @@ class SimpleDistributedApplicationListener(MessageQueueListener[SignedMessage]):
             'stop': self.stop
         }
 
-    def set_channel(self, channel: AbstractChannel[SignedMessage]):
+    def on_registered(self, channel: AbstractChannel[SignedMessage]) -> None:
+        """Keeps **channel**, to dispatch messages through it."""
         self.__channel = channel
 
     def set_action(self, name: str, action: Callable[[SignedMessage], list[MessageContract]]):
@@ -211,7 +212,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener[SignedMessage]):
     def __get_channel(self) -> AbstractChannel[SignedMessage]:
         if self.__channel is None:
             raise InvalidChannelException(
-                f'Listener {self.id} has no channel: register it to a SimpleDistributedApplicationChannel'
+                f'Listener {self.id} has no channel: register it to a channel'
             )
         return self.__channel
 
@@ -239,7 +240,3 @@ class SimpleDistributedApplicationChannel(SSEChannel[SignedMessage]):
     Use a connections factory or repository that creates them, e.g.
     ``ChannelRepositoryBuilder(SimpleDistributedApplicationChannel).listeners(SimpleDistributedApplicationListener)``.
     """
-    def register_connection(self, connection: Connection):
-        if isinstance(connection.listener, SimpleDistributedApplicationListener):
-            connection.listener.set_channel(self)
-        super().register_connection(connection)

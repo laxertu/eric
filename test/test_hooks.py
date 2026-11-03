@@ -61,6 +61,35 @@ class SubscriptionHooksTestCase(IsolatedAsyncioTestCase):
         self.assertEqual([], repository.load_one(channel.id).events)
 
 
+class RegisteredListener(MessageQueueListener):
+    def __init__(self):
+        super().__init__()
+        self.channels = []
+
+    def on_registered(self, channel) -> None:
+        self.channels.append(channel)
+
+
+class ListenerHooksTestCase(IsolatedAsyncioTestCase):
+
+    async def test_on_registered(self):
+        channel = FakeChannel()
+        listener = RegisteredListener()
+        channel.register_listener(listener)
+
+        self.assertEqual([channel], listener.channels)
+
+    async def test_on_registered_for_created_and_loaded_listeners(self):
+        repository = ChannelRepositoryBuilder(FakeChannel).listeners(RegisteredListener).build()
+        channel = repository.create({})
+        listener = channel.add_listener()
+        repository.persist(channel)
+
+        loaded = repository.load_one(channel.id)
+
+        self.assertEqual([channel, loaded], loaded.get_listener(listener.id).channels)
+
+
 class DispatchHookTestCase(IsolatedAsyncioTestCase):
 
     async def test_drop_and_transform(self):

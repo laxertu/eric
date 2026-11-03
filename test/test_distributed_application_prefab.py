@@ -103,3 +103,19 @@ class ListenerChannelTestCase(IsolatedAsyncioTestCase):
         self.assertEqual(['hello', 'stop'], types)
         # Alice answered through the loaded channel
         self.assertEqual("hello_ack", loaded._get_queue(bob.id).pop().type)
+
+
+class DistributedListenerOnAnyChannelTestCase(IsolatedAsyncioTestCase):
+
+    async def test_works_on_a_plain_sse_channel(self):
+        from eric_sse.prefabs import SSEChannel
+        channel = SSEChannel()
+        alice, bob = SimpleDistributedApplicationListener(), SimpleDistributedApplicationListener()
+        channel.register_listener(alice)
+        channel.register_listener(bob)
+        bob.start()
+
+        alice.dispatch_to(bob, Message(msg_type='hello'))
+
+        received = channel.deliver_next(bob.id)
+        self.assertEqual(('hello', alice.id), (received.type, received.sender_id))
