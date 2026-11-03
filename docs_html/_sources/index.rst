@@ -3,7 +3,6 @@
    :hidden:
 
    docs
-   tutorials
    devs
    changelog
 
@@ -33,7 +32,6 @@ The lightweight library for async messaging nobody expects.
 *Sources*
 
 * Home https://github.com/laxertu/eric
-* Tutorials: :doc:`tutorials`
 * Examples https://github.com/laxertu/eric/tree/master/examples
 * Api service definition: https://github.com/laxertu/eric-api/blob/master/eric_api.py
 

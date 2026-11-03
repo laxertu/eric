@@ -160,11 +160,9 @@
 <li class="toctree-l2"><a class="reference internal" href="persistence.html">Persistence</a></li>
 
 
-
 <li class="toctree-l2"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="devs.html">Developers section</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
 </ul>
@@ -340,7 +338,6 @@ document.write(`
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
  | <a href="#U"><strong>U</strong></a>
- | <a href="#W"><strong>W</strong></a>
  
 </div>
 <h2 id="_">_</h2>
@@ -349,11 +346,9 @@ document.write(`
       <li><a href="entities.html#eric_sse.entities.AbstractChannel.__init__">__init__() (AbstractChannel method)</a>
 
       <ul>
+        <li><a href="persistence.html#eric_sse.repository.AbstractChannelRepository.__init__">(AbstractChannelRepository method)</a>
+</li>
         <li><a href="prefabs.html#eric_sse.servers.ChannelContainer.__init__">(ChannelContainer method)</a>
-</li>
-        <li><a href="persistence.html#eric_sse.repository.ChannelRepository.__init__">(ChannelRepository method)</a>
-</li>
-        <li><a href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder.__init__">(ChannelRepositoryBuilder method)</a>
 </li>
         <li><a href="entities.html#eric_sse.connection.Connection.__init__">(Connection method)</a>
 </li>
@@ -367,15 +362,9 @@ document.write(`
 </li>
         <li><a href="exceptions.html#eric_sse.exception.ItemNotFound.__init__">(ItemNotFound method)</a>
 </li>
-        <li><a href="persistence.html#eric_sse.repository.KvListenerRepository.__init__">(KvListenerRepository method)</a>
-</li>
-        <li><a href="persistence.html#eric_sse.repository.KvQueueRepository.__init__">(KvQueueRepository method)</a>
-</li>
         <li><a href="entities.html#eric_sse.message.Message.__init__">(Message method)</a>
 </li>
         <li><a href="entities.html#eric_sse.listener.MessageQueueListener.__init__">(MessageQueueListener method)</a>
-</li>
-        <li><a href="persistence.html#eric_sse.repository.PrefixedStorage.__init__">(PrefixedStorage method)</a>
 </li>
         <li><a href="entities.html#eric_sse.message.SignedMessage.__init__">(SignedMessage method)</a>
 </li>
@@ -391,12 +380,18 @@ document.write(`
 </li>
       </ul></li>
   </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="persistence.html#eric_sse.repository.AbstractChannelRepository._channel_to_dict">_channel_to_dict() (AbstractChannelRepository static method)</a>
+</li>
+  </ul></td>
 </tr></table>
 
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="entities.html#eric_sse.entities.AbstractChannel">AbstractChannel (class in eric_sse.entities)</a>
+</li>
+      <li><a href="persistence.html#eric_sse.repository.AbstractChannelRepository">AbstractChannelRepository (class in eric_sse.repository)</a>
 </li>
       <li><a href="entities.html#eric_sse.entities.AbstractChannel.adapt">adapt() (AbstractChannel method)</a>
 
@@ -416,15 +411,11 @@ document.write(`
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="entities.html#eric_sse.entities.AbstractChannel.before_dispatch">before_dispatch() (AbstractChannel method)</a>
-</li>
       <li><a href="entities.html#eric_sse.entities.AbstractChannel.broadcast">broadcast() (AbstractChannel method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="prefabs.html#eric_sse.clients.SocketClient.broadcast_message">broadcast_message() (SocketClient method)</a>
-</li>
-      <li><a href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder.build">build() (ChannelRepositoryBuilder method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -434,13 +425,7 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="prefabs.html#eric_sse.servers.ChannelContainer">ChannelContainer (class in eric_sse.servers)</a>
 </li>
-      <li><a href="persistence.html#eric_sse.repository.ChannelRepository">ChannelRepository (class in eric_sse.repository)</a>
-</li>
-      <li><a href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder">ChannelRepositoryBuilder (class in eric_sse.builder)</a>
-</li>
       <li><a href="persistence.html#eric_sse.interfaces.ChannelRepositoryInterface">ChannelRepositoryInterface (class in eric_sse.interfaces)</a>
-</li>
-      <li><a href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder.channels">channels() (ChannelRepositoryBuilder method)</a>
 </li>
       <li><a href="entities.html#eric_sse.connection.Connection">Connection (class in eric_sse.connection)</a>
 </li>
@@ -448,36 +433,30 @@ document.write(`
 </li>
       <li><a href="persistence.html#eric_sse.interfaces.ConnectionRepositoryInterface">ConnectionRepositoryInterface (class in eric_sse.interfaces)</a>
 </li>
-      <li><a href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder.connections">connections() (ChannelRepositoryBuilder method)</a>
+      <li><a href="persistence.html#eric_sse.repository.AbstractChannelRepository.connections_factory">connections_factory (AbstractChannelRepository property)</a>
+
+      <ul>
+        <li><a href="persistence.html#eric_sse.interfaces.ChannelRepositoryInterface.connections_factory">(ChannelRepositoryInterface property)</a>
 </li>
-      <li><a href="persistence.html#eric_sse.repository.ChannelRepository.connections_repository">connections_repository (ChannelRepository property)</a>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="persistence.html#eric_sse.repository.AbstractChannelRepository.connections_repository">connections_repository (AbstractChannelRepository property)</a>
 
       <ul>
         <li><a href="persistence.html#eric_sse.interfaces.ChannelRepositoryInterface.connections_repository">(ChannelRepositoryInterface property)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="entities.html#eric_sse.connection.ConnectionsFactory">ConnectionsFactory (class in eric_sse.connection)</a>
 </li>
-      <li><a href="persistence.html#eric_sse.repository.ChannelRepository.create">create() (ChannelRepository method)</a>
+      <li><a href="persistence.html#eric_sse.interfaces.ChannelRepositoryInterface.create">create() (ChannelRepositoryInterface method)</a>
 
       <ul>
-        <li><a href="persistence.html#eric_sse.interfaces.ChannelRepositoryInterface.create">(ChannelRepositoryInterface method)</a>
-</li>
-        <li><a href="persistence.html#eric_sse.repository.ConnectionRepository.create">(ConnectionRepository method)</a>
-</li>
         <li><a href="entities.html#eric_sse.connection.ConnectionsFactory.create">(ConnectionsFactory method)</a>
 </li>
         <li><a href="entities.html#eric_sse.connection.InMemoryConnectionsFactory.create">(InMemoryConnectionsFactory method)</a>
 </li>
-        <li><a href="persistence.html#eric_sse.repository.KvListenerRepository.create">(KvListenerRepository method)</a>
-</li>
-        <li><a href="persistence.html#eric_sse.repository.KvQueueRepository.create">(KvQueueRepository method)</a>
-</li>
-        <li><a href="persistence.html#eric_sse.interfaces.ListenerRepositoryInterface.create">(ListenerRepositoryInterface method)</a>
-</li>
-        <li><a href="persistence.html#eric_sse.interfaces.QueueRepositoryInterface.create">(QueueRepositoryInterface method)</a>
+        <li><a href="prefabs.html#eric_sse.prefabs.SSEChannelRepository.create">(SSEChannelRepository method)</a>
 </li>
       </ul></li>
       <li><a href="prefabs.html#eric_sse.clients.SocketClient.create_channel">create_channel() (SocketClient method)</a>
@@ -490,7 +469,7 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="prefabs.html#eric_sse.prefabs.DataProcessingChannel">DataProcessingChannel (class in eric_sse.prefabs)</a>
 </li>
-      <li><a href="persistence.html#eric_sse.repository.ChannelRepository.delete">delete() (ChannelRepository method)</a>
+      <li><a href="persistence.html#eric_sse.repository.AbstractChannelRepository.delete">delete() (AbstractChannelRepository method)</a>
 
       <ul>
         <li><a href="persistence.html#eric_sse.interfaces.ChannelRepositoryInterface.delete">(ChannelRepositoryInterface method)</a>
@@ -501,15 +480,9 @@ document.write(`
 </li>
         <li><a href="persistence.html#eric_sse.repository.InMemoryStorage.delete">(InMemoryStorage method)</a>
 </li>
-        <li><a href="persistence.html#eric_sse.repository.KvListenerRepository.delete">(KvListenerRepository method)</a>
-</li>
-        <li><a href="persistence.html#eric_sse.repository.KvQueueRepository.delete">(KvQueueRepository method)</a>
-</li>
         <li><a href="persistence.html#eric_sse.repository.KvStorage.delete">(KvStorage method)</a>
 </li>
         <li><a href="persistence.html#eric_sse.interfaces.ListenerRepositoryInterface.delete">(ListenerRepositoryInterface method)</a>
-</li>
-        <li><a href="persistence.html#eric_sse.repository.PrefixedStorage.delete">(PrefixedStorage method)</a>
 </li>
         <li><a href="persistence.html#eric_sse.interfaces.QueueRepositoryInterface.delete">(QueueRepositoryInterface method)</a>
 </li>
@@ -532,13 +505,6 @@ document.write(`
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    eric_sse.builder
-
-      <ul>
-        <li><a href="persistence.html#module-eric_sse.builder">module</a>
-</li>
-      </ul></li>
       <li>
     eric_sse.clients
 
@@ -574,8 +540,6 @@ document.write(`
         <li><a href="persistence.html#module-eric_sse.interfaces">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     eric_sse.listener
 
@@ -583,6 +547,8 @@ document.write(`
         <li><a href="entities.html#module-eric_sse.listener">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     eric_sse.message
 
@@ -629,15 +595,11 @@ document.write(`
       <ul>
         <li><a href="persistence.html#eric_sse.repository.KvStorage.fetch_all">(KvStorage method)</a>
 </li>
-        <li><a href="persistence.html#eric_sse.repository.PrefixedStorage.fetch_all">(PrefixedStorage method)</a>
-</li>
       </ul></li>
       <li><a href="persistence.html#eric_sse.repository.InMemoryStorage.fetch_by_prefix">fetch_by_prefix() (InMemoryStorage method)</a>
 
       <ul>
         <li><a href="persistence.html#eric_sse.repository.KvStorage.fetch_by_prefix">(KvStorage method)</a>
-</li>
-        <li><a href="persistence.html#eric_sse.repository.PrefixedStorage.fetch_by_prefix">(PrefixedStorage method)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -647,11 +609,7 @@ document.write(`
       <ul>
         <li><a href="persistence.html#eric_sse.repository.KvStorage.fetch_one">(KvStorage method)</a>
 </li>
-        <li><a href="persistence.html#eric_sse.repository.PrefixedStorage.fetch_one">(PrefixedStorage method)</a>
-</li>
       </ul></li>
-      <li><a href="entities.html#eric_sse.entities.AbstractChannel.from_dict">from_dict() (AbstractChannel class method)</a>
-</li>
   </ul></td>
 </tr></table>
 
@@ -702,12 +660,6 @@ document.write(`
 <h2 id="K">K</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="persistence.html#eric_sse.repository.KvListenerRepository">KvListenerRepository (class in eric_sse.repository)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="persistence.html#eric_sse.repository.KvQueueRepository">KvQueueRepository (class in eric_sse.repository)</a>
-</li>
       <li><a href="persistence.html#eric_sse.repository.KvStorage">KvStorage (class in eric_sse.repository)</a>
 </li>
   </ul></td>
@@ -718,23 +670,15 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="persistence.html#eric_sse.interfaces.ListenerRepositoryInterface">ListenerRepositoryInterface (class in eric_sse.interfaces)</a>
 </li>
-      <li><a href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder.listeners">listeners() (ChannelRepositoryBuilder method)</a>
-</li>
       <li><a href="persistence.html#eric_sse.interfaces.ConnectionRepositoryInterface.listeners_repository">listeners_repository (ConnectionRepositoryInterface property)</a>
 </li>
-      <li><a href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder.listeners_repository">listeners_repository() (ChannelRepositoryBuilder method)</a>
-</li>
-      <li><a href="persistence.html#eric_sse.repository.KvListenerRepository.load">load() (KvListenerRepository method)</a>
+      <li><a href="persistence.html#eric_sse.interfaces.ListenerRepositoryInterface.load">load() (ListenerRepositoryInterface method)</a>
 
       <ul>
-        <li><a href="persistence.html#eric_sse.repository.KvQueueRepository.load">(KvQueueRepository method)</a>
-</li>
-        <li><a href="persistence.html#eric_sse.interfaces.ListenerRepositoryInterface.load">(ListenerRepositoryInterface method)</a>
-</li>
         <li><a href="persistence.html#eric_sse.interfaces.QueueRepositoryInterface.load">(QueueRepositoryInterface method)</a>
 </li>
       </ul></li>
-      <li><a href="persistence.html#eric_sse.repository.ChannelRepository.load_all">load_all() (ChannelRepository method)</a>
+      <li><a href="persistence.html#eric_sse.repository.AbstractChannelRepository.load_all">load_all() (AbstractChannelRepository method)</a>
 
       <ul>
         <li><a href="persistence.html#eric_sse.interfaces.ChannelRepositoryInterface.load_all">(ChannelRepositoryInterface method)</a>
@@ -746,13 +690,7 @@ document.write(`
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="persistence.html#eric_sse.repository.ConnectionRepository.load_ids">load_ids() (ConnectionRepository method)</a>
-
-      <ul>
-        <li><a href="persistence.html#eric_sse.interfaces.ConnectionRepositoryInterface.load_ids">(ConnectionRepositoryInterface method)</a>
-</li>
-      </ul></li>
-      <li><a href="persistence.html#eric_sse.repository.ChannelRepository.load_one">load_one() (ChannelRepository method)</a>
+      <li><a href="persistence.html#eric_sse.repository.AbstractChannelRepository.load_one">load_one() (AbstractChannelRepository method)</a>
 
       <ul>
         <li><a href="persistence.html#eric_sse.interfaces.ChannelRepositoryInterface.load_one">(ChannelRepositoryInterface method)</a>
@@ -782,8 +720,6 @@ document.write(`
     module
 
       <ul>
-        <li><a href="persistence.html#module-eric_sse.builder">eric_sse.builder</a>
-</li>
         <li><a href="prefabs.html#module-eric_sse.clients">eric_sse.clients</a>
 </li>
         <li><a href="entities.html#module-eric_sse.connection">eric_sse.connection</a>
@@ -821,24 +757,12 @@ document.write(`
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="entities.html#eric_sse.entities.AbstractChannel.on_error">on_error() (AbstractChannel method)</a>
-</li>
-      <li><a href="entities.html#eric_sse.entities.AbstractChannel.on_listener_added">on_listener_added() (AbstractChannel method)</a>
-</li>
-      <li><a href="entities.html#eric_sse.entities.AbstractChannel.on_listener_removed">on_listener_removed() (AbstractChannel method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="entities.html#eric_sse.listener.MessageQueueListener.on_message">on_message() (MessageQueueListener method)</a>
 
       <ul>
         <li><a href="prefabs.html#eric_sse.prefabs.SimpleDistributedApplicationListener.on_message">(SimpleDistributedApplicationListener method)</a>
 </li>
       </ul></li>
-      <li><a href="entities.html#eric_sse.entities.AbstractChannel.on_stream_end">on_stream_end() (AbstractChannel method)</a>
-</li>
-      <li><a href="entities.html#eric_sse.entities.AbstractChannel.on_stream_start">on_stream_start() (AbstractChannel method)</a>
-</li>
   </ul></td>
 </tr></table>
 
@@ -853,7 +777,7 @@ document.write(`
         <li><a href="entities.html#eric_sse.message.UniqueMessage.payload">(UniqueMessage property)</a>
 </li>
       </ul></li>
-      <li><a href="persistence.html#eric_sse.repository.ChannelRepository.persist">persist() (ChannelRepository method)</a>
+      <li><a href="persistence.html#eric_sse.repository.AbstractChannelRepository.persist">persist() (AbstractChannelRepository method)</a>
 
       <ul>
         <li><a href="persistence.html#eric_sse.interfaces.ChannelRepositoryInterface.persist">(ChannelRepositoryInterface method)</a>
@@ -861,10 +785,6 @@ document.write(`
         <li><a href="persistence.html#eric_sse.repository.ConnectionRepository.persist">(ConnectionRepository method)</a>
 </li>
         <li><a href="persistence.html#eric_sse.interfaces.ConnectionRepositoryInterface.persist">(ConnectionRepositoryInterface method)</a>
-</li>
-        <li><a href="persistence.html#eric_sse.repository.KvListenerRepository.persist">(KvListenerRepository method)</a>
-</li>
-        <li><a href="persistence.html#eric_sse.repository.KvQueueRepository.persist">(KvQueueRepository method)</a>
 </li>
         <li><a href="persistence.html#eric_sse.interfaces.ListenerRepositoryInterface.persist">(ListenerRepositoryInterface method)</a>
 </li>
@@ -879,8 +799,6 @@ document.write(`
         <li><a href="entities.html#eric_sse.queues.Queue.pop">(Queue method)</a>
 </li>
       </ul></li>
-      <li><a href="persistence.html#eric_sse.repository.PrefixedStorage">PrefixedStorage (class in eric_sse.repository)</a>
-</li>
       <li><a href="prefabs.html#eric_sse.prefabs.DataProcessingChannel.process_queue">process_queue() (DataProcessingChannel method)</a>
 </li>
       <li><a href="entities.html#eric_sse.queues.InMemoryQueue.push">push() (InMemoryQueue method)</a>
@@ -897,15 +815,11 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="entities.html#eric_sse.queues.Queue">Queue (class in eric_sse.queues)</a>
 </li>
-      <li><a href="persistence.html#eric_sse.interfaces.QueueRepositoryInterface">QueueRepositoryInterface (class in eric_sse.interfaces)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder.queues">queues() (ChannelRepositoryBuilder method)</a>
+      <li><a href="persistence.html#eric_sse.interfaces.QueueRepositoryInterface">QueueRepositoryInterface (class in eric_sse.interfaces)</a>
 </li>
       <li><a href="persistence.html#eric_sse.interfaces.ConnectionRepositoryInterface.queues_repository">queues_repository (ConnectionRepositoryInterface property)</a>
-</li>
-      <li><a href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder.queues_repository">queues_repository() (ChannelRepositoryBuilder method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -920,17 +834,17 @@ document.write(`
 </li>
       </ul></li>
       <li><a href="entities.html#eric_sse.entities.AbstractChannel.register_connection">register_connection() (AbstractChannel method)</a>
-
-      <ul>
-        <li><a href="prefabs.html#eric_sse.prefabs.SimpleDistributedApplicationChannel.register_connection">(SimpleDistributedApplicationChannel method)</a>
 </li>
-      </ul></li>
       <li><a href="prefabs.html#eric_sse.servers.ChannelContainer.register_iterable">register_iterable() (ChannelContainer method)</a>
 </li>
+      <li><a href="entities.html#eric_sse.entities.AbstractChannel.register_listener">register_listener() (AbstractChannel method)</a>
+
+      <ul>
+        <li><a href="prefabs.html#eric_sse.prefabs.SimpleDistributedApplicationChannel.register_listener">(SimpleDistributedApplicationChannel method)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="entities.html#eric_sse.entities.AbstractChannel.register_listener">register_listener() (AbstractChannel method)</a>
-</li>
       <li><a href="prefabs.html#eric_sse.clients.SocketClient.remove_channel">remove_channel() (SocketClient method)</a>
 </li>
       <li><a href="prefabs.html#eric_sse.clients.SocketClient.remove_listener">remove_listener() (SocketClient method)</a>
@@ -961,15 +875,17 @@ document.write(`
 </li>
       <li><a href="prefabs.html#eric_sse.prefabs.SimpleDistributedApplicationChannel">SimpleDistributedApplicationChannel (class in eric_sse.prefabs)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="prefabs.html#eric_sse.prefabs.SimpleDistributedApplicationListener">SimpleDistributedApplicationListener (class in eric_sse.prefabs)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="prefabs.html#eric_sse.clients.SocketClient">SocketClient (class in eric_sse.clients)</a>
 </li>
       <li><a href="prefabs.html#eric_sse.servers.SocketServer">SocketServer (class in eric_sse.servers)</a>
 </li>
       <li><a href="prefabs.html#eric_sse.prefabs.SSEChannel">SSEChannel (class in eric_sse.prefabs)</a>
+</li>
+      <li><a href="prefabs.html#eric_sse.prefabs.SSEChannelRepository">SSEChannelRepository (class in eric_sse.prefabs)</a>
 </li>
       <li><a href="entities.html#eric_sse.listener.MessageQueueListener.start">start() (MessageQueueListener method)</a>
 
@@ -987,16 +903,6 @@ document.write(`
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="entities.html#eric_sse.entities.AbstractChannel.to_dict">to_dict() (AbstractChannel method)</a>
-
-      <ul>
-        <li><a href="prefabs.html#eric_sse.prefabs.DataProcessingChannel.to_dict">(DataProcessingChannel method)</a>
-</li>
-        <li><a href="prefabs.html#eric_sse.prefabs.SSEChannel.to_dict">(SSEChannel method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="entities.html#eric_sse.message.Message.type">type (Message property)</a>
 
       <ul>
@@ -1013,34 +919,14 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="entities.html#eric_sse.message.UniqueMessage">UniqueMessage (class in eric_sse.message)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="persistence.html#eric_sse.repository.InMemoryStorage.upsert">upsert() (InMemoryStorage method)</a>
 
       <ul>
         <li><a href="persistence.html#eric_sse.repository.KvStorage.upsert">(KvStorage method)</a>
 </li>
-        <li><a href="persistence.html#eric_sse.repository.PrefixedStorage.upsert">(PrefixedStorage method)</a>
-</li>
       </ul></li>
-  </ul></td>
-</tr></table>
-
-<h2 id="W">W</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="entities.html#eric_sse.entities.AbstractChannel.wait_next">wait_next() (AbstractChannel method)</a>
-</li>
-      <li><a href="entities.html#eric_sse.queues.InMemoryQueue.wait_pop">wait_pop() (InMemoryQueue method)</a>
-
-      <ul>
-        <li><a href="entities.html#eric_sse.queues.Queue.wait_pop">(Queue method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="entities.html#eric_sse.entities.AbstractChannel.wait_timeout_seconds">wait_timeout_seconds (AbstractChannel attribute)</a>
-</li>
-      <li><a href="entities.html#eric_sse.entities.AbstractChannel.watch">watch() (AbstractChannel method)</a>
-</li>
   </ul></td>
 </tr></table>
 

@@ -160,11 +160,9 @@
 <li class="toctree-l2"><a class="reference internal" href="persistence.html">Persistence</a></li>
 
 
-
 <li class="toctree-l2"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="devs.html">Developers section</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Changelog</a></li>
 </ul>
@@ -318,40 +316,6 @@ document.write(`
                   
   <section id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
-<p>3.0.0 (unreleased)</p>
-<ul class="simple">
-<li><p>Docs: added Tutorials, with a complete in-memory example and a persistence one with a custom KvStorage (SQLite). Both are in examples/ and run by the test suite</p></li>
-<li><p>Added KvListenerRepository and KvQueueRepository to repository module</p></li>
-<li><p>FIX: SimpleDistributedApplicationListener.set_action now rejects reserved action names ‘start’ and ‘stop’</p></li>
-<li><p>FIX: AbstractChannelRepository.delete no longer fails with InMemoryStorage when channel has connections</p></li>
-<li><p>KvStorage.fetch_by_prefix and fetch_all implementations must now tolerate deletions while results are iterated</p></li>
-<li><p>Added PrefixedStorage, a namespaced view of a KvStorage</p></li>
-<li><p>Listener and queue repositories now create the instances they persist: added create() to ListenerRepositoryInterface and QueueRepositoryInterface. KvListenerRepository accepts a listener_class, KvQueueRepository a queue_factory</p></li>
-<li><p>ConnectionRepositoryInterface is now a ConnectionsFactory: ConnectionRepository.create() delegates to listeners and queues repositories. create() methods never persist</p></li>
-<li><p>Channel repositories inject their connections repository as connections_factory into the channels they build. Removed connections_factory from AbstractChannelRepository constructor and ChannelRepositoryInterface</p></li>
-<li><p>Channels describe their own persisted state: added AbstractChannel.to_dict() and from_dict(). SSEChannel and DataProcessingChannel extend to_dict()</p></li>
-<li><p>AbstractChannelRepository and SSEChannelRepository replaced by a concrete ChannelRepository(storage, connections_repository, channel_class), covering every channel type. persist() raises a TypeError on channels of other classes</p></li>
-<li><p>DataProcessingChannel accepts channel_id and connections_factory</p></li>
-<li><p>Added ChannelRepositoryBuilder (builder module): wires channel, connections, listeners and queues repositories over one storage, with per-part overrides</p></li>
-<li><p>Connection, ConnectionsFactory, KvListenerRepository and KvQueueRepository are now generic on listener and queue types</p></li>
-<li><p>FIX: ConnectionRepository.load_all no longer returns connections of channels whose id starts with the given channel id</p></li>
-<li><p>Removed facade module</p></li>
-<li><p>KvQueueRepository and InMemoryQueue docs: a queue class decides what of its state is serialised; InMemoryQueue is in-process only</p></li>
-<li><p>Removed unused attribute from InMemoryQueue</p></li>
-<li><p>BREAKING: Queue.pop() accepts a timeout (seconds, default 0: return immediately). Queue implementations must accept it</p></li>
-<li><p>Added Queue.wait_pop(timeout), an async wait for the next message. The default runs pop() in a worker thread; InMemoryQueue waits natively, without threads or polling, and its push() wakes waiters from any thread</p></li>
-<li><p>Added AbstractChannel.wait_next(listener_id, timeout), async counterpart of deliver_next()</p></li>
-<li><p>Added channel hooks, overridable methods that do nothing by default: on_listener_added, on_listener_removed, on_stream_start, on_stream_end, before_dispatch (transform or drop messages, broadcast included) and on_error (return False to end the stream)</p></li>
-<li><p>After an unexpected error, message_stream() waits wait_timeout_seconds before trying again, so a failing backend no longer makes it spin</p></li>
-<li><p>message_stream() starts the listener itself: no more listener.start() before streaming. Stopping the listener still ends the stream</p></li>
-<li><p>BREAKING: watch() is an async generator: use “async for m in channel.watch()”. Its listener is removed when the stream ends</p></li>
-<li><p>Error messages yield by message_stream() have a serialisable payload, {‘error’: exception class name, ‘message’: str(exception)}, instead of the exception. The stream ends after an invalid listener or channel error, instead of repeating it forever</p></li>
-<li><p>add_listener() and register_listener() go through register_connection(), so subclasses can set up every new connection in one place</p></li>
-<li><p>FIX: SimpleDistributedApplicationChannel sets itself on listeners created by add_listener() or loaded from persistence, not only on register_listener(). dispatch_to() on a listener without channel raises an InvalidChannelException</p></li>
-<li><p>Added ConnectionRepositoryInterface.load_ids(channel_id): connection ids without loading listeners and queues. ChannelRepository.persist() and delete() use it, so they no longer load every listener and queue of the channel</p></li>
-<li><p>ChannelRepository.delete() is idempotent and no longer loads the channel</p></li>
-<li><p>message_stream waits for messages instead of polling, so idle streams no longer consume CPU. It checks whether its listener is still running every AbstractChannel.wait_timeout_seconds (default 1). stream_delay_seconds is now only an optional pause after each delivered message</p></li>
-</ul>
 <p>2.1.1</p>
 <ul class="simple">
 <li><p>Added InvalidConnectionException and ItemNotFound to exceptions module</p></li>
