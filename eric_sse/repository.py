@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 from eric_sse.connection import Connection, L, Q
 from eric_sse.entities import AbstractChannel
 from eric_sse.exception import ItemNotFound
+from eric_sse.handlers import QueuingErrorHandler, ListenerErrorHandler
 from eric_sse.listener import MessageQueueListener
 from eric_sse.queues import InMemoryQueue
 from eric_sse.interfaces import ChannelRepositoryInterface, ConnectionRepositoryInterface, ListenerRepositoryInterface, \
@@ -173,16 +174,22 @@ class ChannelRepository(ChannelRepositoryInterface):
     :param storage: Storage for channels configuration.
     :param connections_repository:
     :param channel_class: Class of channels this repository creates, loads and persists, e.g. :class:`~eric_sse.prefabs.SSEChannel`.
+    :param queuing_error_handlers: Registered on every channel created or loaded, see :meth:`~eric_sse.entities.AbstractChannel.add_queuing_error_handler`.
+    :param listener_error_handlers: Registered on every channel created or loaded, see :meth:`~eric_sse.entities.AbstractChannel.add_listener_error_handler`.
     """
     def __init__(
             self,
             storage: KvStorage,
             connections_repository: ConnectionRepositoryInterface,
-            channel_class: type[AbstractChannel]
+            channel_class: type[AbstractChannel],
+            queuing_error_handlers: Iterable[QueuingErrorHandler] = (),
+            listener_error_handlers: Iterable[ListenerErrorHandler] = ()
     ):
         self.__storage = storage
         self.__connections_repository = connections_repository
         self.__channel_class = channel_class
+        self.__queuing_error_handlers = list(queuing_error_handlers)
+        self.__listener_error_handlers = list(listener_error_handlers)
 
     @property
     def connections_repository(self) -> ConnectionRepositoryInterface:
@@ -198,7 +205,12 @@ class ChannelRepository(ChannelRepositoryInterface):
 
         :param dict channel_data: Constructor parameters of **channel_class**, except **connections_factory**.
         """
-        return self.__channel_class.from_dict(channel_data, connections_factory=self.__connections_repository)
+        channel = self.__channel_class.from_dict(channel_data, connections_factory=self.__connections_repository)
+        for queuing_error_handler in self.__queuing_error_handlers:
+            channel.add_queuing_error_handler(queuing_error_handler)
+        for listener_error_handler in self.__listener_error_handlers:
+            channel.add_listener_error_handler(listener_error_handler)
+        return channel
 
     def _setup_channel(self, channel: AbstractChannel):
         for connection in self.__connections_repository.load_all(channel_id=channel.id):

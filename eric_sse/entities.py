@@ -5,6 +5,7 @@ from typing import AsyncIterable, Any, Iterable
 
 import eric_sse
 from eric_sse.exception import InvalidListenerException, NoMessagesException, InvalidChannelException
+from eric_sse.handlers import QueuingErrorHandler, ListenerErrorHandler
 from eric_sse.listener import MessageQueueListener
 from eric_sse.connection import Connection, ConnectionsFactory, InMemoryConnectionsFactory
 from eric_sse.message import MessageContract, Message
@@ -71,6 +72,11 @@ class AbstractChannel(ABC):
     :meth:`on_stream_start`, :meth:`on_stream_end`, :meth:`before_dispatch` and :meth:`on_error`.
     They do nothing by default.
 
+    **Error handlers**: errors raised by queues and listeners are passed to the handlers registered with
+    :meth:`add_queuing_error_handler` and :meth:`add_listener_error_handler`.
+    Then they are either re-raised or, when the channel swallows them, logged.
+    Control flow exceptions, like :class:`~eric_sse.exception.NoMessagesException`, are neither logged nor handled.
+
     :param int stream_delay_seconds: Pause in seconds after each message delivered by :meth:`message_stream`. Can be used to limit its rate.
     :param str channel_id: Optionally sets the channel id.
     :param ~eric_sse.connection.ConnectionsFactory connections_factory: Factory to be used for creating connections instances on channel subscriptions.
@@ -88,6 +94,33 @@ class AbstractChannel(ABC):
         self.stream_delay_seconds = stream_delay_seconds
         self.__connection_manager: _ConnectionManager = _ConnectionManager(self.__id)
         self.__connections_factory = connections_factory if connections_factory else InMemoryConnectionsFactory()
+        self.__queuing_error_handlers: list[QueuingErrorHandler] = []
+        self.__listener_error_handlers: list[ListenerErrorHandler] = []
+
+    def add_queuing_error_handler(self, handler: QueuingErrorHandler) -> None:
+        """Registers a handler for errors raised by queues. Handlers are called in registration order, and are not persisted."""
+        self.__queuing_error_handlers.append(handler)
+
+    def add_listener_error_handler(self, handler: ListenerErrorHandler) -> None:
+        """Registers a handler for errors raised by listeners. Handlers are called in registration order, and are not persisted."""
+        self.__listener_error_handlers.append(handler)
+
+    @staticmethod
+    def __log_error(exception: Exception) -> None:
+        logger.debug(''.join(traceback.format_exception(type(exception), exception, exception.__traceback__)))
+        logger.error(exception)
+
+    def __on_pop_error(self, exception: Exception) -> None:
+        for handler in self.__queuing_error_handlers:
+            handler.handle_pop_error(exception)
+
+    def __notify_listener(self, listener: MessageQueueListener, msg: MessageContract) -> None:
+        try:
+            listener.on_message(msg)
+        except Exception as e:
+            self.__log_error(e)
+            for handler in self.__listener_error_handlers:
+                handler.handle_on_message_error(msg, e)
 
 
     @property
@@ -158,13 +191,11 @@ class AbstractChannel(ABC):
         """
         Hook called when :meth:`message_stream` catches an unexpected exception, before yielding an 'error' message.
 
-        By default it logs the exception and goes on.
+        By default it goes on. The exception has already been logged, and, if raised by a queue, passed to error handlers.
         The stream waits :attr:`wait_timeout_seconds` before trying again, so a failing backend doesn't make it spin.
 
         :return: False to end the stream after the 'error' message.
         """
-        logger.debug(traceback.format_exc())
-        logger.error(exception)
         return True
 
     async def message_stream(self, listener: MessageQueueListener) -> AsyncIterable[Any]:
@@ -200,6 +231,7 @@ class AbstractChannel(ABC):
                     yield self.adapt(Message(msg_type='error', msg_payload={'error': type(e).__name__, 'message': str(e)}))
                     break
                 except Exception as e:
+                    self.__log_error(e)
                     go_on = self.on_error(listener, e)
                     yield self.adapt(Message(msg_type='error'))
                     if not go_on:
@@ -241,13 +273,20 @@ class AbstractChannel(ABC):
         """
         Returns next message for given listener id.
 
-        Raises a NoMessagesException if queue is empty
+        Raises a NoMessagesException if queue is empty.
+        Queue errors are re-raised after error handlers; listener errors are not, and the message is returned anyway.
         """
         listener = self.get_listener(listener_id)
         if listener.is_running():
             queue = self.__connection_manager.get_queue(listener.id)
-            msg = queue.pop()
-            listener.on_message(msg)
+            try:
+                msg = queue.pop()
+            except NoMessagesException:
+                raise
+            except Exception as e:
+                self.__on_pop_error(e)
+                raise
+            self.__notify_listener(listener, msg)
             return msg
 
         raise NoMessagesException
@@ -257,33 +296,57 @@ class AbstractChannel(ABC):
         Waits up to **timeout** seconds for the next message for given listener id, without blocking the event loop.
 
         Raises a NoMessagesException if the listener is not running or no message arrives in time.
+        Queue errors are re-raised after error handlers; listener errors are not, and the message is returned anyway.
         """
         listener = self.get_listener(listener_id)
         if not listener.is_running():
             raise NoMessagesException
 
-        msg = await self._get_queue(listener.id).wait_pop(timeout)
-        listener.on_message(msg)
+        try:
+            msg = await self._get_queue(listener.id).wait_pop(timeout)
+        except NoMessagesException:
+            raise
+        except Exception as e:
+            self.__on_pop_error(e)
+            raise
+        self.__notify_listener(listener, msg)
         return msg
 
     def _get_queue(self, listener_id: str) -> Queue:
         return self.__connection_manager.get_queue(listener_id)
 
     def dispatch(self, listener_id: str, msg: MessageContract):
-        """Adds a message to listener's queue, unless :meth:`before_dispatch` drops it."""
+        """
+        Adds a message to listener's queue, unless :meth:`before_dispatch` drops it.
 
+        Queue errors are re-raised after error handlers.
+        """
+        push_error = self.__dispatch(listener_id, msg)
+        if push_error is not None:
+            raise push_error
+
+    def __dispatch(self, listener_id: str, msg: MessageContract) -> Exception | None:
+        """Returns the push error, if any, after passing it to error handlers."""
         queue = self._get_queue(listener_id)
         msg = self.before_dispatch(listener_id, msg)
         if msg is None:
             logger.debug(f"Message dropped for {listener_id}")
-            return
-        queue.push(msg)
+            return None
+        try:
+            queue.push(msg)
+        except Exception as e:
+            for handler in self.__queuing_error_handlers:
+                handler.handle_push_error(msg, e)
+            return e
         logger.debug(f"Dispatched {msg} to {listener_id}")
+        return None
 
     def broadcast(self, msg: MessageContract):
-        """Enqueue a message to all listeners"""
+        """Enqueue a message to all listeners. A queue error is logged, and doesn't stop delivery to the other ones."""
         for listener_id in self.__connection_manager.get_listeners():
-            self.dispatch(listener_id, msg=msg)
+            push_error = self.__dispatch(listener_id, msg=msg)
+            if push_error is not None:
+                self.__log_error(push_error)
 
     def get_listener(self, listener_id: str) -> MessageQueueListener:
         return self.__connection_manager.get_listener(listener_id)

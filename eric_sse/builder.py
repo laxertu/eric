@@ -1,6 +1,7 @@
 from typing import Callable
 
 from eric_sse.entities import AbstractChannel
+from eric_sse.handlers import QueuingErrorHandler, ListenerErrorHandler
 from eric_sse.interfaces import ListenerRepositoryInterface, QueueRepositoryInterface
 from eric_sse.listener import MessageQueueListener
 from eric_sse.prefabs import SSEChannel
@@ -26,7 +27,7 @@ class ChannelRepositoryBuilder:
     Channels built by the resulting repository create their listeners and queues through it.
     Nothing is persisted implicitly: call the repository's ``persist`` when needed.
 
-    When a part is configured more than once, the last call wins.
+    When a part is configured more than once, the last call wins, except for error handlers, that are added.
 
     :param ~eric_sse.repository.KvStorage storage: Default storage. Defaults to a new :class:`~eric_sse.repository.InMemoryStorage`.
     """
@@ -41,6 +42,8 @@ class ChannelRepositoryBuilder:
         self.__queue_factory: Callable[[], Queue] = InMemoryQueue
         self.__queues_storage: KvStorage | None = None
         self.__queues_repository: QueueRepositoryInterface | None = None
+        self.__queuing_error_handlers: list[QueuingErrorHandler] = []
+        self.__listener_error_handlers: list[ListenerErrorHandler] = []
 
     def channels(
             self,
@@ -104,6 +107,22 @@ class ChannelRepositoryBuilder:
         self.__queues_repository = repository
         return self
 
+    def queuing_error_handler(self, handler: QueuingErrorHandler) -> 'ChannelRepositoryBuilder':
+        """
+        Adds a handler registered on every channel created or loaded by the repository.
+        Unlike other parts, repeated calls add handlers instead of replacing them.
+        """
+        self.__queuing_error_handlers.append(handler)
+        return self
+
+    def listener_error_handler(self, handler: ListenerErrorHandler) -> 'ChannelRepositoryBuilder':
+        """
+        Adds a handler registered on every channel created or loaded by the repository.
+        Unlike other parts, repeated calls add handlers instead of replacing them.
+        """
+        self.__listener_error_handlers.append(handler)
+        return self
+
     def __storage_for(self, namespace: str, storage: KvStorage | None) -> KvStorage:
         return PrefixedStorage(storage if storage is not None else self.__storage, f'{namespace}:')
 
@@ -122,5 +141,7 @@ class ChannelRepositoryBuilder:
                 storage=self.__storage_for('connection', self.__connections_storage),
                 listeners_repository=listeners_repository,
                 queues_repository=queues_repository
-            )
+            ),
+            queuing_error_handlers=self.__queuing_error_handlers,
+            listener_error_handlers=self.__listener_error_handlers
         )
