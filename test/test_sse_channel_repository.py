@@ -154,7 +154,7 @@ class TestSSEChannelRepository(TestCase):
 class TestSSEChannelRepositoryBuiltByBuilder(TestCase):
 
     def test_channel_created_outside_repository_survives_reload(self):
-        sut = ChannelRepositoryBuilder().build()
+        sut = ChannelRepositoryBuilder(SSEChannel).build()
 
         channel = SSEChannel(retry_timeout_milliseconds=42)
         listener = channel.add_listener()
@@ -207,7 +207,7 @@ class TestKvRepositories(TestCase):
 class TestChannelSerialisation(TestCase):
 
     def _round_trip(self, channel):
-        sut = ChannelRepositoryBuilder().channels(type(channel)).build()
+        sut = ChannelRepositoryBuilder(type(channel)).build()
         sut.persist(channel)
         return sut.load_one(channel.id)
 
@@ -231,12 +231,12 @@ class TestChannelSerialisation(TestCase):
         self.assertIs(ProcessPoolExecutor, loaded.executor_class)
 
     def test_from_dict_injects_connections_factory(self):
-        sut = ChannelRepositoryBuilder().listeners(MyListener).build()
+        sut = ChannelRepositoryBuilder(SSEChannel).listeners(MyListener).build()
         channel = SSEChannel.from_dict(SSEChannel().to_dict(), connections_factory=sut.connections_repository)
         self.assertIsInstance(channel.add_listener(), MyListener)
 
     def test_persist_rejects_other_channel_classes(self):
-        sut = ChannelRepositoryBuilder().channels(SSEChannel).build()
+        sut = ChannelRepositoryBuilder(SSEChannel).build()
         with self.assertRaises(TypeError):
             sut.persist(SimpleDistributedApplicationChannel())
         self.assertEqual([], list(sut.load_all()))

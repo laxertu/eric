@@ -1,16 +1,14 @@
-from typing import Callable
+from typing import Callable, Generic
 
-from eric_sse.entities import AbstractChannel
 from eric_sse.handlers import QueuingErrorHandler, ListenerErrorHandler
-from eric_sse.interfaces import ListenerRepositoryInterface, QueueRepositoryInterface
+from eric_sse.interfaces import C, ListenerRepositoryInterface, QueueRepositoryInterface
 from eric_sse.listener import MessageQueueListener
-from eric_sse.prefabs import SSEChannel
 from eric_sse.queues import Queue, InMemoryQueue
 from eric_sse.repository import ChannelRepository, ConnectionRepository, InMemoryStorage, KvListenerRepository, \
     KvQueueRepository, KvStorage, PrefixedStorage
 
 
-class ChannelRepositoryBuilder:
+class ChannelRepositoryBuilder(Generic[C]):
     """
     Wires a channel repository and its connections, listeners and queues repositories.
 
@@ -18,7 +16,7 @@ class ChannelRepositoryBuilder:
     unless a dedicated storage or repository is given for it. Each method returns the builder, so calls can be chained::
 
         repository = (
-            ChannelRepositoryBuilder(storage)
+            ChannelRepositoryBuilder(SSEChannel, storage)
             .listeners(MyListener)
             .queues_repository(RedisQueuesRepository(redis_connection))
             .build()
@@ -29,11 +27,14 @@ class ChannelRepositoryBuilder:
 
     When a part is configured more than once, the last call wins, except for error handlers, that are added.
 
+    The builder is generic in **channel_class**, so type checkers know which channels the repository returns.
+
+    :param channel_class: Class of channels the repository creates, loads and persists, e.g. :class:`~eric_sse.prefabs.SSEChannel`.
     :param ~eric_sse.repository.KvStorage storage: Default storage. Defaults to a new :class:`~eric_sse.repository.InMemoryStorage`.
     """
-    def __init__(self, storage: KvStorage | None = None):
+    def __init__(self, channel_class: type[C], storage: KvStorage | None = None):
         self.__storage = storage if storage is not None else InMemoryStorage()
-        self.__channel_class: type[AbstractChannel] = SSEChannel
+        self.__channel_class = channel_class
         self.__channels_storage: KvStorage | None = None
         self.__connections_storage: KvStorage | None = None
         self.__listener_class: type[MessageQueueListener] = MessageQueueListener
@@ -45,20 +46,14 @@ class ChannelRepositoryBuilder:
         self.__queuing_error_handlers: list[QueuingErrorHandler] = []
         self.__listener_error_handlers: list[ListenerErrorHandler] = []
 
-    def channels(
-            self,
-            channel_class: type[AbstractChannel] = SSEChannel,
-            storage: KvStorage | None = None
-    ) -> 'ChannelRepositoryBuilder':
+    def channels(self, storage: KvStorage) -> 'ChannelRepositoryBuilder[C]':
         """
-        :param channel_class: Class of channels the repository creates, loads and persists. Defaults to :class:`~eric_sse.prefabs.SSEChannel`.
         :param storage: Dedicated storage for channels.
         """
-        self.__channel_class = channel_class
         self.__channels_storage = storage
         return self
 
-    def connections(self, storage: KvStorage) -> 'ChannelRepositoryBuilder':
+    def connections(self, storage: KvStorage) -> 'ChannelRepositoryBuilder[C]':
         """
         :param storage: Dedicated storage for connections.
         """
@@ -69,7 +64,7 @@ class ChannelRepositoryBuilder:
             self,
             listener_class: type[MessageQueueListener] = MessageQueueListener,
             storage: KvStorage | None = None
-    ) -> 'ChannelRepositoryBuilder':
+    ) -> 'ChannelRepositoryBuilder[C]':
         """
         Uses a :class:`~eric_sse.repository.KvListenerRepository`.
 
@@ -81,7 +76,7 @@ class ChannelRepositoryBuilder:
         self.__listeners_repository = None
         return self
 
-    def listeners_repository(self, repository: ListenerRepositoryInterface) -> 'ChannelRepositoryBuilder':
+    def listeners_repository(self, repository: ListenerRepositoryInterface) -> 'ChannelRepositoryBuilder[C]':
         """Uses a custom listeners repository, that also decides which listeners are created."""
         self.__listeners_repository = repository
         return self
@@ -90,7 +85,7 @@ class ChannelRepositoryBuilder:
             self,
             queue_factory: Callable[[], Queue] = InMemoryQueue,
             storage: KvStorage | None = None
-    ) -> 'ChannelRepositoryBuilder':
+    ) -> 'ChannelRepositoryBuilder[C]':
         """
         Uses a :class:`~eric_sse.repository.KvQueueRepository`.
 
@@ -102,12 +97,12 @@ class ChannelRepositoryBuilder:
         self.__queues_repository = None
         return self
 
-    def queues_repository(self, repository: QueueRepositoryInterface) -> 'ChannelRepositoryBuilder':
+    def queues_repository(self, repository: QueueRepositoryInterface) -> 'ChannelRepositoryBuilder[C]':
         """Uses a custom queues repository, that also decides which queues are created."""
         self.__queues_repository = repository
         return self
 
-    def queuing_error_handler(self, handler: QueuingErrorHandler) -> 'ChannelRepositoryBuilder':
+    def queuing_error_handler(self, handler: QueuingErrorHandler) -> 'ChannelRepositoryBuilder[C]':
         """
         Adds a handler registered on every channel created or loaded by the repository.
         Unlike other parts, repeated calls add handlers instead of replacing them.
@@ -115,7 +110,7 @@ class ChannelRepositoryBuilder:
         self.__queuing_error_handlers.append(handler)
         return self
 
-    def listener_error_handler(self, handler: ListenerErrorHandler) -> 'ChannelRepositoryBuilder':
+    def listener_error_handler(self, handler: ListenerErrorHandler) -> 'ChannelRepositoryBuilder[C]':
         """
         Adds a handler registered on every channel created or loaded by the repository.
         Unlike other parts, repeated calls add handlers instead of replacing them.
@@ -126,7 +121,7 @@ class ChannelRepositoryBuilder:
     def __storage_for(self, namespace: str, storage: KvStorage | None) -> KvStorage:
         return PrefixedStorage(storage if storage is not None else self.__storage, f'{namespace}:')
 
-    def build(self) -> ChannelRepository:
+    def build(self) -> ChannelRepository[C]:
         """Returns a new channel repository. The builder can be reused."""
         listeners_repository = self.__listeners_repository or KvListenerRepository(
             self.__storage_for('listener', self.__listeners_storage), listener_class=self.__listener_class

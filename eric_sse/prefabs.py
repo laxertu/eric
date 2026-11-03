@@ -195,7 +195,7 @@ class SimpleDistributedApplicationChannel(SSEChannel):
     Channel for :class:`~eric_sse.prefabs.SimpleDistributedApplicationListener` instances.
 
     Use a connections factory or repository that creates them, e.g.
-    ``ChannelRepositoryBuilder().listeners(SimpleDistributedApplicationListener)``.
+    ``ChannelRepositoryBuilder(SimpleDistributedApplicationChannel).listeners(SimpleDistributedApplicationListener)``.
     """
     def register_connection(self, connection: Connection):
         if isinstance(connection.listener, SimpleDistributedApplicationListener):

@@ -83,8 +83,7 @@ class ListenerChannelTestCase(IsolatedAsyncioTestCase):
     async def test_channel_is_set_on_created_and_loaded_listeners(self):
         from eric_sse.builder import ChannelRepositoryBuilder
         repository = (
-            ChannelRepositoryBuilder()
-            .channels(SimpleDistributedApplicationChannel)
+            ChannelRepositoryBuilder(SimpleDistributedApplicationChannel)
             .listeners(SimpleDistributedApplicationListener)
             .build()
         )

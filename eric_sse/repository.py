@@ -7,7 +7,7 @@ from eric_sse.exception import ItemNotFound
 from eric_sse.handlers import QueuingErrorHandler, ListenerErrorHandler
 from eric_sse.listener import MessageQueueListener
 from eric_sse.queues import InMemoryQueue
-from eric_sse.interfaces import ChannelRepositoryInterface, ConnectionRepositoryInterface, ListenerRepositoryInterface, \
+from eric_sse.interfaces import C, ChannelRepositoryInterface, ConnectionRepositoryInterface, ListenerRepositoryInterface, \
     QueueRepositoryInterface
 
 T = TypeVar('T')
@@ -163,7 +163,7 @@ class KvQueueRepository(QueueRepositoryInterface, Generic[Q]):
         self.__storage.delete(connection_id)
 
 
-class ChannelRepository(ChannelRepositoryInterface):
+class ChannelRepository(ChannelRepositoryInterface[C]):
     """
     Persists channels of a given class, using their :meth:`~eric_sse.entities.AbstractChannel.to_dict` and
     :meth:`~eric_sse.entities.AbstractChannel.from_dict` methods.
@@ -181,7 +181,7 @@ class ChannelRepository(ChannelRepositoryInterface):
             self,
             storage: KvStorage,
             connections_repository: ConnectionRepositoryInterface,
-            channel_class: type[AbstractChannel],
+            channel_class: type[C],
             queuing_error_handlers: Iterable[QueuingErrorHandler] = (),
             listener_error_handlers: Iterable[ListenerErrorHandler] = ()
     ):
@@ -196,10 +196,10 @@ class ChannelRepository(ChannelRepositoryInterface):
         return self.__connections_repository
 
     @property
-    def channel_class(self) -> type[AbstractChannel]:
+    def channel_class(self) -> type[C]:
         return self.__channel_class
 
-    def create(self, channel_data: dict) -> AbstractChannel:
+    def create(self, channel_data: dict) -> C:
         """
         Creates a channel. It is not persisted.
 
@@ -212,33 +212,35 @@ class ChannelRepository(ChannelRepositoryInterface):
             channel.add_listener_error_handler(listener_error_handler)
         return channel
 
-    def _setup_channel(self, channel: AbstractChannel):
-        for connection in self.__connections_repository.load_all(channel_id=channel.id):
-            channel.register_connection(connection)
+    def _setup_channel(self, channel: C) -> C:
+        stored: AbstractChannel = channel  # see persist
+        for connection in self.__connections_repository.load_all(channel_id=stored.id):
+            stored.register_connection(connection)
         return channel
 
-    def load_all(self) -> Iterable[AbstractChannel]:
+    def load_all(self) -> Iterable[C]:
         for channel_data in self.__storage.fetch_all():
             yield self._setup_channel(self.create(channel_data))
 
-    def load_one(self, channel_id: str) -> AbstractChannel:
+    def load_one(self, channel_id: str) -> C:
         return self._setup_channel(self.create(self.__storage.fetch_one(channel_id)))
 
-    def persist(self, channel: AbstractChannel):
+    def persist(self, channel: C):
         """Persists channel configuration and its connections. Raises a TypeError if channel is not exactly of **channel_class**."""
-        if type(channel) is not self.__channel_class:
-            raise TypeError(f'{type(channel).__name__} channels cannot be persisted by a {self.__channel_class.__name__} repository')
-        self.__storage.upsert(channel.id, channel.to_dict())
+        stored: AbstractChannel = channel  # PyCharm infers properties of TypeVar-typed values as property objects
+        if type(stored) is not self.__channel_class:
+            raise TypeError(f'{type(stored).__name__} channels cannot be persisted by a {self.__channel_class.__name__} repository')
+        self.__storage.upsert(stored.id, stored.to_dict())
 
-        persisted_connections_ids = set(self.__connections_repository.load_ids(channel_id=channel.id))
+        persisted_connections_ids = set(self.__connections_repository.load_ids(channel_id=stored.id))
         current_connections_ids = set()
 
-        for connection in channel.get_connections():
+        for connection in stored.get_connections():
             current_connections_ids.add(connection.id)
-            self.__connections_repository.persist(channel_id=channel.id, connection=connection)
+            self.__connections_repository.persist(channel_id=stored.id, connection=connection)
 
         for connection_id_to_remove in persisted_connections_ids - current_connections_ids:
-            self.__connections_repository.delete(channel_id=channel.id, connection_id=connection_id_to_remove)
+            self.__connections_repository.delete(channel_id=stored.id, connection_id=connection_id_to_remove)
 
     def delete(self, channel_id: str):
         """Deletes channel configuration and its connections. Idempotent."""

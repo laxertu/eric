@@ -1,7 +1,7 @@
 import asyncio
 import traceback
 from abc import ABC, abstractmethod
-from typing import AsyncIterable, Any, Iterable
+from typing import AsyncIterable, Any, Iterable, TypeVar
 
 import eric_sse
 from eric_sse.exception import InvalidListenerException, NoMessagesException, InvalidChannelException
@@ -12,6 +12,8 @@ from eric_sse.message import MessageContract, Message
 from eric_sse.queues import Queue
 
 logger = eric_sse.get_logger()
+
+_Channel = TypeVar('_Channel', bound='AbstractChannel')
 
 MESSAGE_TYPE_CLOSED = '_eric_channel_closed'
 MESSAGE_TYPE_END_OF_STREAM = '_eric_channel_eof'
@@ -143,7 +145,7 @@ class AbstractChannel(ABC):
         }
 
     @classmethod
-    def from_dict(cls, data: dict, connections_factory: ConnectionsFactory | None = None) -> 'AbstractChannel':
+    def from_dict(cls: type[_Channel], data: dict, connections_factory: ConnectionsFactory | None = None) -> _Channel:
         """
         Builds a channel from a :meth:`to_dict` representation. Override it if constructor parameters don't match **data** keys.
 

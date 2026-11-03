@@ -1,10 +1,12 @@
 from abc import ABC, abstractmethod
-from typing import Iterable
+from typing import Generic, Iterable, TypeVar
 
 from eric_sse.entities import AbstractChannel
 from eric_sse.connection import Connection, ConnectionsFactory
 from eric_sse.listener import MessageQueueListener
 from eric_sse.queues import Queue
+
+C = TypeVar('C', bound=AbstractChannel)
 
 class QueueRepositoryInterface(ABC):
 
@@ -94,7 +96,8 @@ class ConnectionRepositoryInterface(ConnectionsFactory, ABC):
 
 
 
-class ChannelRepositoryInterface(ABC):
+class ChannelRepositoryInterface(ABC, Generic[C]):
+    """Generic in the class of channels it handles."""
     @property
     @abstractmethod
     def connections_repository(self) -> ConnectionRepositoryInterface:
@@ -102,17 +105,17 @@ class ChannelRepositoryInterface(ABC):
         pass
 
     @abstractmethod
-    def load_all(self) -> Iterable[AbstractChannel]:
+    def load_all(self) -> Iterable[C]:
         """Loads all channels"""
         pass
 
     @abstractmethod
-    def load_one(self, channel_id: str) -> AbstractChannel:
+    def load_one(self, channel_id: str) -> C:
         """Loads a channel given its it"""
         pass
 
     @abstractmethod
-    def persist(self, channel: AbstractChannel):
+    def persist(self, channel: C):
         """Persists a channel"""
         pass
 
@@ -122,7 +125,7 @@ class ChannelRepositoryInterface(ABC):
         pass
 
     @abstractmethod
-    def create(self, channel_data: dict) -> AbstractChannel:
+    def create(self, channel_data: dict) -> C:
         """Creates a new channel and configures it depending on channel_data."""
         pass
 

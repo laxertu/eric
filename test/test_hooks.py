@@ -53,7 +53,7 @@ class SubscriptionHooksTestCase(IsolatedAsyncioTestCase):
         self.assertEqual([('added', created.id), ('added', registered.id), ('removed', created.id)], sut.events)
 
     async def test_not_called_when_loading_from_persistence(self):
-        repository = ChannelRepositoryBuilder().channels(RecordingChannel).build()
+        repository = ChannelRepositoryBuilder(RecordingChannel).build()
         channel = repository.create({})
         channel.add_listener()
         repository.persist(channel)

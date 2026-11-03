@@ -207,8 +207,7 @@ class BuilderErrorHandlersTestCase(IsolatedAsyncioTestCase):
         first_listener_handler = RecordingListenerErrorHandler()
         second_listener_handler = RecordingListenerErrorHandler()
         repository = (
-            ChannelRepositoryBuilder()
-            .channels(FakeChannel)
+            ChannelRepositoryBuilder(FakeChannel)
             .listeners(BrokenListener)
             .queues(BrokenQueue)
             .queuing_error_handler(queuing_handler)
@@ -229,8 +228,7 @@ class BuilderErrorHandlersTestCase(IsolatedAsyncioTestCase):
     async def test_listener_handlers_on_loaded_channel(self):
         handler = RecordingListenerErrorHandler()
         repository = (
-            ChannelRepositoryBuilder()
-            .channels(FakeChannel)
+            ChannelRepositoryBuilder(FakeChannel)
             .listeners(BrokenListener)
             .listener_error_handler(handler)
             .build()

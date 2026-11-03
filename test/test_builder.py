@@ -21,7 +21,7 @@ class MyQueue(InMemoryQueue):
 class ChannelRepositoryBuilderTestCase(TestCase):
 
     def test_defaults(self):
-        sut = ChannelRepositoryBuilder().build()
+        sut = ChannelRepositoryBuilder(SSEChannel).build()
         self.assertIsInstance(sut, ChannelRepository)
         self.assertIs(SSEChannel, sut.channel_class)
 
@@ -37,7 +37,7 @@ class ChannelRepositoryBuilderTestCase(TestCase):
 
     def test_storage_layout(self):
         storage = InMemoryStorage()
-        sut = ChannelRepositoryBuilder(storage).build()
+        sut = ChannelRepositoryBuilder(SSEChannel, storage).build()
         channel = sut.create({})
         channel.add_listener()
         sut.persist(channel)
@@ -58,12 +58,12 @@ class ChannelRepositoryBuilderTestCase(TestCase):
 
     def test_create_does_not_persist(self):
         storage = InMemoryStorage()
-        sut = ChannelRepositoryBuilder(storage).build()
+        sut = ChannelRepositoryBuilder(SSEChannel, storage).build()
         sut.create({}).add_listener()
         self.assertEqual({}, storage.items)
 
     def test_listener_and_queue_classes(self):
-        sut = ChannelRepositoryBuilder().listeners(MyListener).queues(MyQueue).build()
+        sut = ChannelRepositoryBuilder(SSEChannel).listeners(MyListener).queues(MyQueue).build()
 
         channel = sut.create({})
         self.assertIsInstance(channel.add_listener(), MyListener)
@@ -84,7 +84,7 @@ class ChannelRepositoryBuilderTestCase(TestCase):
                 super().delete(connection_id)
 
         sut = (
-            ChannelRepositoryBuilder()
+            ChannelRepositoryBuilder(SSEChannel)
             .listeners_repository(KvListenerRepository(InMemoryStorage(), listener_class=MyListener))
             .queues_repository(MyQueueRepository(InMemoryStorage(), queue_factory=MyQueue))
             .build()
@@ -101,8 +101,8 @@ class ChannelRepositoryBuilderTestCase(TestCase):
     def test_dedicated_storages(self):
         default, channels, connections, listeners, queues = (InMemoryStorage() for _ in range(5))
         sut = (
-            ChannelRepositoryBuilder(default)
-            .channels(storage=channels)
+            ChannelRepositoryBuilder(SSEChannel, default)
+            .channels(channels)
             .connections(connections)
             .listeners(storage=listeners)
             .queues(storage=queues)
@@ -117,7 +117,7 @@ class ChannelRepositoryBuilderTestCase(TestCase):
             self.assertEqual({namespace}, {k.split(':')[0] for k in storage.items})
 
     def test_channel_class(self):
-        sut = ChannelRepositoryBuilder().channels(FakeChannel).build()
+        sut = ChannelRepositoryBuilder(FakeChannel).build()
         channel = sut.create({})
         self.assertIsInstance(channel, FakeChannel)
         channel.add_listener()
@@ -126,16 +126,16 @@ class ChannelRepositoryBuilderTestCase(TestCase):
 
     def test_last_call_wins(self):
         custom = KvListenerRepository(InMemoryStorage(), listener_class=MyListener)
-        sut = ChannelRepositoryBuilder().listeners_repository(custom).listeners().build()
+        sut = ChannelRepositoryBuilder(SSEChannel).listeners_repository(custom).listeners().build()
         self.assertIs(MessageQueueListener, type(sut.create({}).add_listener()))
 
-        sut = ChannelRepositoryBuilder().listeners().listeners_repository(custom).build()
+        sut = ChannelRepositoryBuilder(SSEChannel).listeners().listeners_repository(custom).build()
         self.assertIsInstance(sut.create({}).add_listener(), MyListener)
 
     def test_repositories_sharing_a_storage(self):
         """Two builds over the same storage simulate producer and consumer sides of an application."""
         storage = InMemoryStorage()
-        builder = ChannelRepositoryBuilder(storage)
+        builder = ChannelRepositoryBuilder(SSEChannel, storage)
         producer, consumer = builder.build(), builder.build()
         self.assertIsNot(producer, consumer)
 
