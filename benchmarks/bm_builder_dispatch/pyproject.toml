@@ -1,0 +1,10 @@
+[project]
+name = "pyperformance_bm_builder_dispatch"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = ["pyperf"]
+urls = {repository = "https://github.com/laxertu/eric"}
+
+[tool.pyperformance]
+name = "builder_dispatch"
+tags = "eric_sse"
