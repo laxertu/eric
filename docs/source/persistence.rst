@@ -32,22 +32,4 @@ stores everything in one storage instance, each kind of object under its own nam
 Persistence is always explicit: channels and their connections are stored when you call ``persist``. Messages are
 persisted by queues themselves, so ``dispatch`` and ``broadcast`` do not need a ``persist``.
 
-.. automodule:: eric_sse.builder
-    :members:
-    :member-order: bysource
-
-Base repositories
-=================
-.. automodule:: eric_sse.repository
-    :members:
-    :private-members:
-    :show-inheritance:
-    :member-order: bysource
-
-Interoperability
-================
-.. automodule:: eric_sse.interfaces
-    :members: ListenerRepositoryInterface, QueueRepositoryInterface, ConnectionRepositoryInterface, ChannelRepositoryInterface
-    :undoc-members:
-    :member-order: bysource
-    :show-inheritance:
+See :doc:`reference/persistence` for the classes.

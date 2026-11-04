@@ -47,9 +47,4 @@ message, then checks whether its listener is still running. Each time, the wait 
 :class:`~eric_sse.exception.TimeoutException`, nothing is yielded, and the
 :meth:`~eric_sse.entities.AbstractChannel.on_wait_timeout` hook is called, e.g. to collect metrics or to end idle streams.
 
-Handlers
-========
-
-.. automodule:: eric_sse.handlers
-    :members:
-    :member-order: bysource
+See :doc:`reference/handlers` for the classes.

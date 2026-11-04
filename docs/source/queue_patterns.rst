@@ -161,11 +161,4 @@ in-flight ones. Both default to in-memory implementations. With durable ones, un
 
 It can be pickled if both can, so it can be persisted by a queue repository.
 
-API
-===
-
-.. automodule:: eric_sse.queue_patterns
-    :members:
-    :private-members: _dead_letter
-    :show-inheritance:
-    :member-order: bysource
+See :doc:`reference/queue_patterns` for the classes.

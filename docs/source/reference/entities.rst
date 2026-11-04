@@ -2,7 +2,7 @@ Entities
 ========
 
 Messages
-========
+--------
 
 .. automodule:: eric_sse.message
     :members:
@@ -12,7 +12,7 @@ Messages
 
 
 Channels and connections
-========================
+------------------------
 
 .. automodule:: eric_sse.entities
     :members:
@@ -25,7 +25,7 @@ Channels and connections
     :member-order: bysource
 
 Queues
-======
+------
 .. automodule:: eric_sse.queues
     :undoc-members:
     :members: Queue, InMemoryQueue
@@ -33,7 +33,7 @@ Queues
     :show-inheritance:
 
 Listeners
-=========
+---------
 .. automodule:: eric_sse.listener
     :undoc-members:
     :members: MessageQueueListener

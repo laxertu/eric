@@ -54,10 +54,4 @@ place. To profile the queues of every channel built by a repository, give the
 
 For whole-scenario timings, see the benchmarks in the :doc:`devs`.
 
-API
-===
-
-.. automodule:: eric_sse.profiling
-    :members:
-    :show-inheritance:
-    :member-order: bysource
+See :doc:`reference/profiling` for the classes.

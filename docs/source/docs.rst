@@ -1,5 +1,5 @@
-Reference
-=========
+Guide
+=====
 
 **Introduction**
 
@@ -60,12 +60,9 @@ Its main components are:
    :maxdepth: 2
    :hidden:
 
-   entities
-   prefabs
    persistence
    error_handling
    queue_patterns
    profiling
-   exceptions
 
 

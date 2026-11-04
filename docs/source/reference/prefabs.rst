@@ -2,7 +2,7 @@ Prefabs
 =======
 
 Prefab channels and listeners
-=============================
+-----------------------------
 .. automodule:: eric_sse.prefabs
     :undoc-members:
     :members:
@@ -10,7 +10,7 @@ Prefab channels and listeners
     :member-order: bysource
 
 Prefab servers and clients
-==========================
+--------------------------
 .. automodule:: eric_sse.servers
     :members:
     :undoc-members:

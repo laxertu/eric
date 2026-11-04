@@ -1,4 +1,3 @@
-
 Exceptions
 ==========
 .. automodule:: eric_sse.exception
