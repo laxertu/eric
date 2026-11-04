@@ -1,4 +1,4 @@
-from typing import Generic, TYPE_CHECKING
+from typing import Any, Generic, TYPE_CHECKING
 
 import eric_sse
 from eric_sse.message import M
@@ -23,7 +23,7 @@ class MessageQueueListener(Generic[M]):
         self.id: str = listener_id if listener_id else eric_sse.generate_uuid()
         self.__is_running: bool = False
 
-    def on_registered(self, channel: 'AbstractChannel[M]') -> None:
+    def on_registered(self, channel: 'AbstractChannel[Any, M]') -> None:
         """
         Hook called when the listener is registered to **channel**, see
         :meth:`~eric_sse.entities.AbstractChannel.register_connection`. Also called when a channel is loaded from

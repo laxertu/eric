@@ -90,11 +90,11 @@ class DeadLetterHandler(QueuingErrorHandler, ListenerErrorHandler):
     :param ~eric_sse.queues.Queue queue: The dead letter queue. Defaults to an :class:`~eric_sse.queues.InMemoryQueue`.
     """
 
-    def __init__(self, queue: Queue[DeadLetter] | None = None):
-        self.__queue: Queue[DeadLetter] = queue if queue is not None else InMemoryQueue()
+    def __init__(self, queue: Queue[DeadLetter, DeadLetter] | None = None):
+        self.__queue: Queue[DeadLetter, DeadLetter] = queue if queue is not None else InMemoryQueue()
 
     @property
-    def queue(self) -> Queue[DeadLetter]:
+    def queue(self) -> Queue[DeadLetter, DeadLetter]:
         """The dead letter queue, e.g. to inspect or redeliver its messages."""
         return self.__queue
 
@@ -153,7 +153,7 @@ class ReliableMessage(MessageContract):
         return self.__message.payload
 
 
-class ReliableQueue(Queue[ReliableMessage]):
+class ReliableQueue(Queue[MessageContract, ReliableMessage]):
     """
     Reliable Queue pattern: a popped message isn't removed, it is moved to an in-flight storage until it is acknowledged.
 
@@ -177,11 +177,11 @@ class ReliableQueue(Queue[ReliableMessage]):
 
     def __init__(
             self,
-            queue: Queue[ReliableMessage] | None = None,
+            queue: Queue[ReliableMessage, ReliableMessage] | None = None,
             visibility_timeout: float | None = 30.0,
             in_flight: KvStorage | None = None,
     ):
-        self.__queue: Queue[ReliableMessage] = queue if queue is not None else InMemoryQueue()
+        self.__queue: Queue[ReliableMessage, ReliableMessage] = queue if queue is not None else InMemoryQueue()
         self.__visibility_timeout = visibility_timeout
         self.__in_flight = in_flight if in_flight is not None else InMemoryStorage()
         self.__lock = threading.Lock()

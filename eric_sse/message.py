@@ -30,6 +30,12 @@ class MessageContract(ABC):
 M = TypeVar('M', bound=MessageContract)
 """Type of messages handled by generic queues and listeners."""
 
+MIn = TypeVar('MIn', bound=MessageContract)
+"""Type of messages pushed to a queue, or dispatched to a channel."""
+
+MOut = TypeVar('MOut', bound=MessageContract)
+"""Type of messages popped from a queue, or delivered by a channel."""
+
 
 class Message(MessageContract):
     """

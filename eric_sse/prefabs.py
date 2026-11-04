@@ -5,7 +5,7 @@ from eric_sse import get_logger
 from eric_sse.connection import ConnectionsFactory
 from eric_sse.entities import AbstractChannel
 from eric_sse.listener import MessageQueueListener
-from eric_sse.message import SignedMessage, MessageContract, M
+from eric_sse.message import SignedMessage, MessageContract, M, MIn, MOut
 from eric_sse.exception import NoMessagesException, InvalidChannelException
 
 logger = get_logger()
@@ -15,7 +15,7 @@ def _error_data(exception: Exception) -> dict:
     return {'error': type(exception).__name__, 'message': str(exception)}
 
 
-class SSEChannel(AbstractChannel[M]):
+class SSEChannel(AbstractChannel[MIn, MOut]):
     """
     SSE streaming channel.
     See `Mozilla docs <https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format>`_
@@ -40,7 +40,7 @@ class SSEChannel(AbstractChannel[M]):
     def to_dict(self) -> dict:
         return {**super().to_dict(), 'retry_timeout_milliseconds': self.retry_timeout_milliseconds}
 
-    def adapt(self, msg: M) -> dict:
+    def adapt(self, msg: MOut) -> dict:
         """
         SSE adapter.
 
@@ -83,7 +83,7 @@ class SSEChannel(AbstractChannel[M]):
         }
 
 
-class DataProcessingChannel(AbstractChannel[M]):
+class DataProcessingChannel(AbstractChannel[MIn, MOut]):
     """
     Channel intended for concurrent processing of data.
 
@@ -114,12 +114,12 @@ class DataProcessingChannel(AbstractChannel[M]):
         """**executor_class** is stored as a class object: the storage engine must be able to serialise it."""
         return {**super().to_dict(), 'max_workers': self.max_workers, 'executor_class': self.executor_class}
 
-    async def process_queue(self, listener: MessageQueueListener[M]) -> AsyncIterable[dict]:
+    async def process_queue(self, listener: MessageQueueListener[MOut]) -> AsyncIterable[dict]:
         """Performs queue processing of a given listener, returns an AsyncIterable of dictionaries containing message process result. See **adapt** method"""
 
         with self.executor_class(max_workers=self.max_workers) as e:
             there_are_pending_messages = True
-            tasks: list[asyncio.Future[M]] = []
+            tasks: list[asyncio.Future[MOut]] = []
             loop = asyncio.get_running_loop()
             while there_are_pending_messages:
                 try:
@@ -138,7 +138,7 @@ class DataProcessingChannel(AbstractChannel[M]):
         callback(msg)
         return msg
 
-    def adapt(self, msg: M) -> dict:
+    def adapt(self, msg: MOut) -> dict:
         """
 
         Returns a dictionary in the following format::
@@ -178,14 +178,14 @@ class SimpleDistributedApplicationListener(MessageQueueListener[SignedMessage]):
 
     def __init__(self):
         super().__init__()
-        self.__channel: AbstractChannel[SignedMessage] | None = None
+        self.__channel: AbstractChannel[SignedMessage, SignedMessage] | None = None
         self.__actions: dict[str, Callable[[SignedMessage], list[MessageContract]]] = dict()
         self.__internal_actions: dict[str, Callable[[], None]] = {
             'start': self.start,
             'stop': self.stop
         }
 
-    def on_registered(self, channel: AbstractChannel[SignedMessage]) -> None:
+    def on_registered(self, channel: AbstractChannel[SignedMessage, SignedMessage]) -> None:
         """Keeps **channel**, to dispatch messages through it."""
         self.__channel = channel
 
@@ -209,7 +209,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener[SignedMessage]):
         signed_message = SignedMessage(sender_id=self.id, msg_type=msg.type, msg_payload=msg.payload)
         self.__get_channel().dispatch(receiver.id, signed_message)
 
-    def __get_channel(self) -> AbstractChannel[SignedMessage]:
+    def __get_channel(self) -> AbstractChannel[SignedMessage, SignedMessage]:
         if self.__channel is None:
             raise InvalidChannelException(
                 f'Listener {self.id} has no channel: register it to a channel'
@@ -232,7 +232,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener[SignedMessage]):
         except KeyError:
             logger.debug(f'Unknown action {msg.type}')
 
-class SimpleDistributedApplicationChannel(SSEChannel[SignedMessage]):
+class SimpleDistributedApplicationChannel(SSEChannel[SignedMessage, SignedMessage]):
 
     """
     Channel for :class:`~eric_sse.prefabs.SimpleDistributedApplicationListener` instances.

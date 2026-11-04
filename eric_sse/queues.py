@@ -3,22 +3,24 @@ from abc import ABC, abstractmethod
 from queue import SimpleQueue, Empty, Full
 from typing import Generic
 
-from eric_sse.message import M
+from eric_sse.message import M, MIn, MOut
 from eric_sse.exception import NoMessagesException, RepositoryError
 
 
-class Queue(ABC, Generic[M]):
+class Queue(ABC, Generic[MIn, MOut]):
     """
     Abstract base class for queues (FIFO).
 
-    Generic on the type of messages it holds, e.g. ``Queue[SignedMessage]``. Plain ``Queue`` holds any message.
+    Generic on the type of messages pushed (**MIn**) and popped (**MOut**), e.g. ``Queue[SignedMessage, SignedMessage]``.
+    They differ when a queue transforms messages, as :class:`~eric_sse.queue_patterns.ReliableQueue` does.
+    Plain ``Queue`` holds any message.
 
     Implementations must provide :meth:`pop` and :meth:`push`. Override :meth:`wait_pop` too if the backend
     can wait for messages without blocking a thread, as :class:`~eric_sse.queues.InMemoryQueue` does.
     """
 
     @abstractmethod
-    def pop(self, timeout: float = 0) -> M:
+    def pop(self, timeout: float = 0) -> MOut:
         """
         Next message from the queue.
 
@@ -29,10 +31,10 @@ class Queue(ABC, Generic[M]):
         ...
 
     @abstractmethod
-    def push(self, message: M) -> None:
+    def push(self, message: MIn) -> None:
         ...
 
-    async def wait_pop(self, timeout: float) -> M:
+    async def wait_pop(self, timeout: float) -> MOut:
         """
         Waits for the next message without blocking the event loop.
 
@@ -51,7 +53,7 @@ def _resolve(waiter: asyncio.Future) -> None:
         waiter.set_result(None)
 
 
-class InMemoryQueue(Queue[M]):
+class InMemoryQueue(Queue[M, M]):
     """
     In memory implementation. Not durable: its messages live in the current process only.
 
