@@ -49,6 +49,7 @@ Changelog
 * Docs: added Stream errors section to Error handling page
 * Added MessageQueueListener.on_registered(channel) hook, called by AbstractChannel.register_connection() for every listener, including listeners created or loaded from persistence. Does nothing by default
 * BREAKING: SimpleDistributedApplicationListener.set_channel() removed: the listener keeps its channel in on_registered(), so it works on any channel, not only on SimpleDistributedApplicationChannel
+* Added benchmarks, run with pyperformance (optional Poetry group "benchmark"): see Developers section. First one: builder_dispatch
 
 2.1.1
 
