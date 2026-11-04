@@ -20,7 +20,8 @@ class SSEChannel(AbstractChannel[MIn, MOut]):
     SSE streaming channel.
     See `Mozilla docs <https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format>`_
 
-    Currently, 'id' field is not supported.
+    Messages are sent as SSE events, see :meth:`adapt`, and stream errors as events of type ``error``, see
+    :meth:`adapt_error`.
     """
 
     def __init__(

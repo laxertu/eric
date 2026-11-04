@@ -18,7 +18,7 @@ class ChannelRepositoryBuilder(Generic[C]):
         repository = (
             ChannelRepositoryBuilder(SSEChannel, storage)
             .listeners(MyListener)
-            .queues_repository(RedisQueuesRepository(redis_connection))
+            .queues_repository(MyQueuesRepository(connection))
             .build()
         )
 

@@ -6,7 +6,8 @@ class MessageContract(ABC):
     Contract class for messages
 
     A message is just a container of information identified by a type.
-    For validation purposes you can override its :meth:`~eric_sse.listener.MessageQueueListener.on_message` method.
+    To validate messages, override :meth:`~eric_sse.entities.AbstractChannel.before_dispatch`, or
+    :meth:`~eric_sse.listener.MessageQueueListener.on_message` to check them on delivery.
 
     """
     @property

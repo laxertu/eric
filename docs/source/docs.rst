@@ -10,6 +10,8 @@ The following code creates a Server Side Events channel and attaches a listener 
 
 .. code-block:: python
 
+    import asyncio
+
     from eric_sse.message import Message
     from eric_sse.prefabs import SSEChannel
 
@@ -39,6 +41,8 @@ Its main components are:
 
 * A core model with a set of abstractions and prefabs that give support to SSE and more.
 * A persistence layer composed by a set of interfaces and base classes for building concrete layers
+* :doc:`error_handling`, and :doc:`queue_patterns` built on it
+* :doc:`profiling` decorators, to measure queues and listeners
 
 :class:`~eric_sse.connection.ConnectionsFactory` is shared between components. Persistence uses it to create objects after data fetch, while channels create connections when receiving new subscriptions.
 

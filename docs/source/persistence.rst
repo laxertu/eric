@@ -10,13 +10,11 @@ The main idea is that a repository relies on some KV storage engine abstraction,
 
 To build a persistence layer is needed to provide an implementation to some of above abstractions, and use them to build a custom ChannelRepository
 
-`Here <https://github.com/laxertu/eric-redis-queues/blob/master/eric_redis_queues/repository.py>`_ is a possible Redis implementation
-
 **Suggestions**
 
 If your implementation uses objects that are directly persistable by storage engine you are using, cleanest manner of implementing your custom layer is to simply
 give an implementation to a :class:`~eric_sse.repository.KvStorage` and just use it in all composite repositories.
-Otherwise you should implement a dump strategy inside repositories themselves. An example is RedisQueues persistence, as Redis client used is not serializable by pickle.
+Otherwise you should implement a dump strategy inside repositories themselves, e.g. when queues hold a client connection that can't be serialised by pickle.
 
 Builder
 =======
