@@ -5,76 +5,76 @@
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="c0" value="ChannelRepositoryBuilder&amp;lt;C&amp;gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;font-weight:normal&quot;&gt;eric_sse.builder&lt;/font&gt;" vertex="1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=52;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fad9d5;strokeColor=#ae4132;swimlaneFillColor=#ffffff;">
-          <mxGeometry as="geometry" x="769.5999999999999" y="40.0" width="761.8" height="500" />
+          <mxGeometry as="geometry" x="769.5999999999999" y="40.0" width="748.5999999999999" height="500" />
         </mxCell>
         <mxCell id="c0a0" value="- __storage" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="52" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="52" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c0a1" value="- __channel_class: type[C]" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="72" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="72" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c0a2" value="- __channels_storage: KvStorage | None" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="92" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="92" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c0a3" value="- __connections_storage: KvStorage | None" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="112" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="112" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c0a4" value="- __listener_class: type[MessageQueueListener]" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="132" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="132" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c0a5" value="- __listeners_storage: KvStorage | None" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="152" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="152" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c0a6" value="- __listeners_repository: ListenerRepositoryInterface | None" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="172" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="172" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c0a7" value="- __queue_factory: Callable[[], Queue]" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="192" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="192" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c0a8" value="- __queues_storage: KvStorage | None" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="212" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="212" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c0a9" value="- __queues_repository: QueueRepositoryInterface | None" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="232" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="232" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c0a10" value="- __queuing_error_handlers: list[QueuingErrorHandler]" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="252" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="252" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c0a11" value="- __listener_error_handlers: list[ListenerErrorHandler]" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="272" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="272" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c0s" value="" vertex="1" parent="c0" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;">
-          <mxGeometry as="geometry" y="292" width="761.8" height="8" />
+          <mxGeometry as="geometry" y="292" width="748.5999999999999" height="8" />
         </mxCell>
-        <mxCell id="c0m0" value="+ channels(storage: KvStorage): &amp;#x27;ChannelRepositoryBuilder[C]&amp;#x27;" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="300" width="761.8" height="20" />
+        <mxCell id="c0m0" value="+ channels(storage: KvStorage): ChannelRepositoryBuilder[C]" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
+          <mxGeometry as="geometry" y="300" width="748.5999999999999" height="20" />
         </mxCell>
-        <mxCell id="c0m1" value="+ connections(storage: KvStorage): &amp;#x27;ChannelRepositoryBuilder[C]&amp;#x27;" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="320" width="761.8" height="20" />
+        <mxCell id="c0m1" value="+ connections(storage: KvStorage): ChannelRepositoryBuilder[C]" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
+          <mxGeometry as="geometry" y="320" width="748.5999999999999" height="20" />
         </mxCell>
-        <mxCell id="c0m2" value="+ listeners(listener_class: type[MessageQueueListener], storage: KvStorage | None): &amp;#x27;ChannelRepositoryBuilder[C]&amp;#x27;" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="340" width="761.8" height="20" />
+        <mxCell id="c0m2" value="+ listeners(listener_class: type[MessageQueueListener], storage: KvStorage | None): ChannelRepositoryBuilder[C]" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
+          <mxGeometry as="geometry" y="340" width="748.5999999999999" height="20" />
         </mxCell>
-        <mxCell id="c0m3" value="+ listeners_repository(repository: ListenerRepositoryInterface): &amp;#x27;ChannelRepositoryBuilder[C]&amp;#x27;" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="360" width="761.8" height="20" />
+        <mxCell id="c0m3" value="+ listeners_repository(repository: ListenerRepositoryInterface): ChannelRepositoryBuilder[C]" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
+          <mxGeometry as="geometry" y="360" width="748.5999999999999" height="20" />
         </mxCell>
-        <mxCell id="c0m4" value="+ queues(queue_factory: Callable[[], Queue], storage: KvStorage | None): &amp;#x27;ChannelRepositoryBuilder[C]&amp;#x27;" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="380" width="761.8" height="20" />
+        <mxCell id="c0m4" value="+ queues(queue_factory: Callable[[], Queue], storage: KvStorage | None): ChannelRepositoryBuilder[C]" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
+          <mxGeometry as="geometry" y="380" width="748.5999999999999" height="20" />
         </mxCell>
-        <mxCell id="c0m5" value="+ queues_repository(repository: QueueRepositoryInterface): &amp;#x27;ChannelRepositoryBuilder[C]&amp;#x27;" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="400" width="761.8" height="20" />
+        <mxCell id="c0m5" value="+ queues_repository(repository: QueueRepositoryInterface): ChannelRepositoryBuilder[C]" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
+          <mxGeometry as="geometry" y="400" width="748.5999999999999" height="20" />
         </mxCell>
-        <mxCell id="c0m6" value="+ queuing_error_handler(handler: QueuingErrorHandler): &amp;#x27;ChannelRepositoryBuilder[C]&amp;#x27;" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="420" width="761.8" height="20" />
+        <mxCell id="c0m6" value="+ queuing_error_handler(handler: QueuingErrorHandler): ChannelRepositoryBuilder[C]" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
+          <mxGeometry as="geometry" y="420" width="748.5999999999999" height="20" />
         </mxCell>
-        <mxCell id="c0m7" value="+ listener_error_handler(handler: ListenerErrorHandler): &amp;#x27;ChannelRepositoryBuilder[C]&amp;#x27;" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="440" width="761.8" height="20" />
+        <mxCell id="c0m7" value="+ listener_error_handler(handler: ListenerErrorHandler): ChannelRepositoryBuilder[C]" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
+          <mxGeometry as="geometry" y="440" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c0m8" value="- _ChannelRepositoryBuilder__storage_for(namespace: str, storage: KvStorage | None): KvStorage" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="460" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="460" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c0m9" value="+ build(): ChannelRepository[C]" vertex="1" parent="c0" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="480" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="480" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c1" value="«interface»&lt;br&gt;&lt;i&gt;ChannelRepositoryInterface&amp;lt;C&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;font-weight:normal&quot;&gt;eric_sse.interfaces&lt;/font&gt;" vertex="1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=52;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;swimlaneFillColor=#ffffff;">
           <mxGeometry as="geometry" x="40.0" y="630.0" width="649.5999999999999" height="180" />
@@ -101,34 +101,34 @@
           <mxGeometry as="geometry" y="160" width="649.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c2" value="«interface»&lt;br&gt;&lt;i&gt;ConnectionRepositoryInterface&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;font-weight:normal&quot;&gt;eric_sse.interfaces&lt;/font&gt;" vertex="1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=52;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;swimlaneFillColor=#ffffff;">
-          <mxGeometry as="geometry" x="769.5999999999999" y="630.0" width="761.8" height="200" />
+          <mxGeometry as="geometry" x="769.5999999999999" y="630.0" width="748.5999999999999" height="200" />
         </mxCell>
         <mxCell id="c2a0" value="+ queues_repository: QueueRepositoryInterface {readOnly}" vertex="1" parent="c2" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=2;">
-          <mxGeometry as="geometry" y="52" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="52" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c2a1" value="+ listeners_repository: ListenerRepositoryInterface {readOnly}" vertex="1" parent="c2" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=2;">
-          <mxGeometry as="geometry" y="72" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="72" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c2s" value="" vertex="1" parent="c2" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;">
-          <mxGeometry as="geometry" y="92" width="761.8" height="8" />
+          <mxGeometry as="geometry" y="92" width="748.5999999999999" height="8" />
         </mxCell>
         <mxCell id="c2m0" value="+ load_ids(channel_id: str): Iterable[str]" vertex="1" parent="c2" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=2;">
-          <mxGeometry as="geometry" y="100" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="100" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c2m1" value="+ load_all(channel_id: str): Iterable[Connection]" vertex="1" parent="c2" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=2;">
-          <mxGeometry as="geometry" y="120" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="120" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c2m2" value="+ load_one(channel_id: str, connection_id: str): Connection" vertex="1" parent="c2" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=2;">
-          <mxGeometry as="geometry" y="140" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="140" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c2m3" value="+ persist(channel_id: str, connection: Connection)" vertex="1" parent="c2" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=2;">
-          <mxGeometry as="geometry" y="160" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="160" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c2m4" value="+ delete(channel_id: str, connection_id: str)" vertex="1" parent="c2" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=2;">
-          <mxGeometry as="geometry" y="180" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="180" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c3" value="«interface»&lt;br&gt;&lt;i&gt;ListenerRepositoryInterface&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;font-weight:normal&quot;&gt;eric_sse.interfaces&lt;/font&gt;" vertex="1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=52;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;swimlaneFillColor=#ffffff;">
-          <mxGeometry as="geometry" x="1611.3999999999999" y="630.0" width="418.59999999999997" height="160" />
+          <mxGeometry as="geometry" x="1598.1999999999998" y="630.0" width="418.59999999999997" height="160" />
         </mxCell>
         <mxCell id="c3a0" value="" vertex="1" parent="c3" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
           <mxGeometry as="geometry" y="52" width="418.59999999999997" height="20" />
@@ -149,7 +149,7 @@
           <mxGeometry as="geometry" y="140" width="418.59999999999997" height="20" />
         </mxCell>
         <mxCell id="c4" value="«interface»&lt;br&gt;&lt;i&gt;QueueRepositoryInterface&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;font-weight:normal&quot;&gt;eric_sse.interfaces&lt;/font&gt;" vertex="1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=52;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;swimlaneFillColor=#ffffff;">
-          <mxGeometry as="geometry" x="2110.0" y="630.0" width="299.8" height="160" />
+          <mxGeometry as="geometry" x="2096.7999999999997" y="630.0" width="299.8" height="160" />
         </mxCell>
         <mxCell id="c4a0" value="" vertex="1" parent="c4" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
           <mxGeometry as="geometry" y="52" width="299.8" height="20" />
@@ -170,7 +170,7 @@
           <mxGeometry as="geometry" y="140" width="299.8" height="20" />
         </mxCell>
         <mxCell id="c5" value="ChannelRepository&amp;lt;C&amp;gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;font-weight:normal&quot;&gt;eric_sse.repository&lt;/font&gt;" vertex="1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=52;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#d0e0e3;strokeColor=#45818e;swimlaneFillColor=#ffffff;">
-          <mxGeometry as="geometry" x="2489.8" y="630.0" width="451.59999999999997" height="320" />
+          <mxGeometry as="geometry" x="2476.6" y="630.0" width="451.59999999999997" height="320" />
         </mxCell>
         <mxCell id="c5a0" value="- __storage: KvStorage" vertex="1" parent="c5" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
           <mxGeometry as="geometry" y="52" width="451.59999999999997" height="20" />
@@ -227,49 +227,49 @@
           <mxGeometry as="geometry" y="80" width="649.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c7" value="ConnectionRepository&lt;br&gt;&lt;font style=&quot;font-size:9px;font-weight:normal&quot;&gt;eric_sse.repository&lt;/font&gt;" vertex="1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=52;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#d0e0e3;strokeColor=#45818e;swimlaneFillColor=#ffffff;">
-          <mxGeometry as="geometry" x="769.5999999999999" y="1040.0" width="761.8" height="300" />
+          <mxGeometry as="geometry" x="769.5999999999999" y="1040.0" width="748.5999999999999" height="300" />
         </mxCell>
         <mxCell id="c7a0" value="- __storage: KvStorage" vertex="1" parent="c7" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="52" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="52" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c7a1" value="- __listeners_repository: ListenerRepositoryInterface" vertex="1" parent="c7" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="72" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="72" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c7a2" value="- __queues_repository: QueueRepositoryInterface" vertex="1" parent="c7" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="92" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="92" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c7a3" value="+ queues_repository: QueueRepositoryInterface {readOnly}" vertex="1" parent="c7" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="112" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="112" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c7a4" value="+ listeners_repository: ListenerRepositoryInterface {readOnly}" vertex="1" parent="c7" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="132" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="132" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c7s" value="" vertex="1" parent="c7" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;">
-          <mxGeometry as="geometry" y="152" width="761.8" height="8" />
+          <mxGeometry as="geometry" y="152" width="748.5999999999999" height="8" />
         </mxCell>
         <mxCell id="c7m0" value="+ create(listener: MessageQueueListener | None): Connection" vertex="1" parent="c7" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="160" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="160" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c7m1" value="- _load_connection(connection_id: str): Connection" vertex="1" parent="c7" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="180" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="180" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c7m2" value="+ load_ids(channel_id: str): Iterable[str]" vertex="1" parent="c7" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="200" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="200" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c7m3" value="+ load_all(channel_id: str): Iterable[Connection]" vertex="1" parent="c7" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="220" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="220" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c7m4" value="+ load_one(channel_id: str, connection_id: str): Connection" vertex="1" parent="c7" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="240" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="240" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c7m5" value="+ persist(channel_id: str, connection: Connection)" vertex="1" parent="c7" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="260" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="260" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c7m6" value="+ delete(channel_id: str, connection_id: str)" vertex="1" parent="c7" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="280" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="280" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c8" value="KvListenerRepository&amp;lt;L&amp;gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;font-weight:normal&quot;&gt;eric_sse.repository&lt;/font&gt;" vertex="1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=52;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#d0e0e3;strokeColor=#45818e;swimlaneFillColor=#ffffff;">
-          <mxGeometry as="geometry" x="1611.3999999999999" y="1040.0" width="418.59999999999997" height="180" />
+          <mxGeometry as="geometry" x="1598.1999999999998" y="1040.0" width="418.59999999999997" height="180" />
         </mxCell>
         <mxCell id="c8a0" value="- __storage: KvStorage[L]" vertex="1" parent="c8" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
           <mxGeometry as="geometry" y="52" width="418.59999999999997" height="20" />
@@ -293,7 +293,7 @@
           <mxGeometry as="geometry" y="160" width="418.59999999999997" height="20" />
         </mxCell>
         <mxCell id="c9" value="KvQueueRepository&amp;lt;Q&amp;gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;font-weight:normal&quot;&gt;eric_sse.repository&lt;/font&gt;" vertex="1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=52;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#d0e0e3;strokeColor=#45818e;swimlaneFillColor=#ffffff;">
-          <mxGeometry as="geometry" x="2110.0" y="1040.0" width="299.8" height="180" />
+          <mxGeometry as="geometry" x="2096.7999999999997" y="1040.0" width="299.8" height="180" />
         </mxCell>
         <mxCell id="c9a0" value="- __storage: KvStorage[Q]" vertex="1" parent="c9" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
           <mxGeometry as="geometry" y="52" width="299.8" height="20" />
@@ -317,31 +317,31 @@
           <mxGeometry as="geometry" y="160" width="299.8" height="20" />
         </mxCell>
         <mxCell id="c10" value="InMemoryStorage&amp;lt;T&amp;gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;font-weight:normal&quot;&gt;eric_sse.repository&lt;/font&gt;" vertex="1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=52;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#d0e0e3;strokeColor=#45818e;swimlaneFillColor=#ffffff;">
-          <mxGeometry as="geometry" x="769.5999999999999" y="1430.0" width="761.8" height="180" />
+          <mxGeometry as="geometry" x="769.5999999999999" y="1430.0" width="748.5999999999999" height="180" />
         </mxCell>
         <mxCell id="c10a0" value="+ items" vertex="1" parent="c10" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="52" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="52" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c10s" value="" vertex="1" parent="c10" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;">
-          <mxGeometry as="geometry" y="72" width="761.8" height="8" />
+          <mxGeometry as="geometry" y="72" width="748.5999999999999" height="8" />
         </mxCell>
         <mxCell id="c10m0" value="+ fetch_by_prefix(prefix: str): Iterable[T]" vertex="1" parent="c10" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="80" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="80" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c10m1" value="+ fetch_all(): Iterable[T]" vertex="1" parent="c10" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="100" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="100" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c10m2" value="+ upsert(key: str, value: T)" vertex="1" parent="c10" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="120" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="120" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c10m3" value="+ fetch_one(key: str): T" vertex="1" parent="c10" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="140" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="140" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c10m4" value="+ delete(key: str)" vertex="1" parent="c10" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="160" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="160" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c11" value="«abstract»&lt;br&gt;&lt;i&gt;KvStorage&amp;lt;T&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;font-weight:normal&quot;&gt;eric_sse.repository&lt;/font&gt;" vertex="1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=52;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#d0e0e3;strokeColor=#45818e;swimlaneFillColor=#ffffff;">
-          <mxGeometry as="geometry" x="1611.3999999999999" y="1430.0" width="418.59999999999997" height="180" />
+          <mxGeometry as="geometry" x="1598.1999999999998" y="1430.0" width="418.59999999999997" height="180" />
         </mxCell>
         <mxCell id="c11a0" value="" vertex="1" parent="c11" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
           <mxGeometry as="geometry" y="52" width="418.59999999999997" height="20" />
@@ -365,7 +365,7 @@
           <mxGeometry as="geometry" y="160" width="418.59999999999997" height="20" />
         </mxCell>
         <mxCell id="c12" value="PrefixedStorage&amp;lt;T&amp;gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;font-weight:normal&quot;&gt;eric_sse.repository&lt;/font&gt;" vertex="1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=52;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#d0e0e3;strokeColor=#45818e;swimlaneFillColor=#ffffff;">
-          <mxGeometry as="geometry" x="2110.0" y="1430.0" width="299.8" height="200" />
+          <mxGeometry as="geometry" x="2096.7999999999997" y="1430.0" width="299.8" height="200" />
         </mxCell>
         <mxCell id="c12a0" value="- __storage: KvStorage" vertex="1" parent="c12" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
           <mxGeometry as="geometry" y="52" width="299.8" height="20" />
@@ -404,34 +404,34 @@
           <mxGeometry as="geometry" y="80" width="649.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c14" value="Connection&amp;lt;L, Q&amp;gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;font-weight:normal&quot;&gt;eric_sse.connection&lt;/font&gt;" vertex="1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=52;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;swimlaneFillColor=#ffffff;">
-          <mxGeometry as="geometry" x="769.5999999999999" y="1720.0" width="761.8" height="200" />
+          <mxGeometry as="geometry" x="769.5999999999999" y="1720.0" width="748.5999999999999" height="200" />
         </mxCell>
         <mxCell id="c14a0" value="- __listener: L" vertex="1" parent="c14" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="52" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="52" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c14a1" value="- __queue: Q" vertex="1" parent="c14" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="72" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="72" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c14a2" value="- __id" vertex="1" parent="c14" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="92" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="92" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c14a3" value="+ listener: L {readOnly}" vertex="1" parent="c14" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="112" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="112" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c14a4" value="+ queue: Q {readOnly}" vertex="1" parent="c14" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="132" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="132" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c14a5" value="+ id: str {readOnly}" vertex="1" parent="c14" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="152" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="152" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c14s" value="" vertex="1" parent="c14" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;">
-          <mxGeometry as="geometry" y="172" width="761.8" height="8" />
+          <mxGeometry as="geometry" y="172" width="748.5999999999999" height="8" />
         </mxCell>
         <mxCell id="c14m0" value="" vertex="1" parent="c14" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
-          <mxGeometry as="geometry" y="180" width="761.8" height="20" />
+          <mxGeometry as="geometry" y="180" width="748.5999999999999" height="20" />
         </mxCell>
         <mxCell id="c15" value="MessageQueueListener&amp;lt;M&amp;gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;font-weight:normal&quot;&gt;eric_sse.listener&lt;/font&gt;" vertex="1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=52;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;swimlaneFillColor=#ffffff;dashed=1;">
-          <mxGeometry as="geometry" x="1611.3999999999999" y="1720.0" width="418.59999999999997" height="100" />
+          <mxGeometry as="geometry" x="1598.1999999999998" y="1720.0" width="418.59999999999997" height="100" />
         </mxCell>
         <mxCell id="c15a0" value="see publish-subscribe diagram" vertex="1" parent="c15" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=2;">
           <mxGeometry as="geometry" y="52" width="418.59999999999997" height="20" />
@@ -442,8 +442,8 @@
         <mxCell id="c15m0" value="" vertex="1" parent="c15" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
           <mxGeometry as="geometry" y="80" width="418.59999999999997" height="20" />
         </mxCell>
-        <mxCell id="c16" value="«abstract»&lt;br&gt;&lt;i&gt;Queue&amp;lt;M&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;font-weight:normal&quot;&gt;eric_sse.queues&lt;/font&gt;" vertex="1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=52;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;swimlaneFillColor=#ffffff;dashed=1;">
-          <mxGeometry as="geometry" x="2110.0" y="1720.0" width="299.8" height="100" />
+        <mxCell id="c16" value="«abstract»&lt;br&gt;&lt;i&gt;Queue&amp;lt;MIn, MOut&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;font-weight:normal&quot;&gt;eric_sse.queues&lt;/font&gt;" vertex="1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=52;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;swimlaneFillColor=#ffffff;dashed=1;">
+          <mxGeometry as="geometry" x="2096.7999999999997" y="1720.0" width="299.8" height="100" />
         </mxCell>
         <mxCell id="c16a0" value="see publish-subscribe diagram" vertex="1" parent="c16" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=2;">
           <mxGeometry as="geometry" y="52" width="299.8" height="20" />
@@ -454,8 +454,8 @@
         <mxCell id="c16m0" value="" vertex="1" parent="c16" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=0;">
           <mxGeometry as="geometry" y="80" width="299.8" height="20" />
         </mxCell>
-        <mxCell id="c17" value="«abstract»&lt;br&gt;&lt;i&gt;AbstractChannel&amp;lt;M&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;font-weight:normal&quot;&gt;eric_sse.entities&lt;/font&gt;" vertex="1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=52;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;dashed=1;">
-          <mxGeometry as="geometry" x="2489.8" y="1720.0" width="451.59999999999997" height="100" />
+        <mxCell id="c17" value="«abstract»&lt;br&gt;&lt;i&gt;AbstractChannel&amp;lt;MIn, MOut&amp;gt;&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px;font-weight:normal&quot;&gt;eric_sse.entities&lt;/font&gt;" vertex="1" parent="1" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=52;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;dashed=1;">
+          <mxGeometry as="geometry" x="2476.6" y="1720.0" width="451.59999999999997" height="100" />
         </mxCell>
         <mxCell id="c17a0" value="see publish-subscribe diagram" vertex="1" parent="c17" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=11;html=1;fontStyle=2;">
           <mxGeometry as="geometry" y="52" width="451.59999999999997" height="20" />

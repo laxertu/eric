@@ -66,6 +66,7 @@ class Diagram:
 
 def clean_annotation(annotation) -> str:
     text = inspect.formatannotation(annotation)
+    text = text.strip("'\"")  # forward references, e.g. 'AbstractChannel[Any, M]'
     text = re.sub(r'\b(?:[a-z_]+\.)+([A-Za-z_]\w*)', r'\1', text)
     text = text.replace('~', '').replace('NoneType', 'None')
     text = re.sub(r'\bOptional\[([^\[\]]+)]', r'\1 | None', text)
@@ -340,7 +341,7 @@ PUBSUB = Diagram(
         (AbstractChannel, message.MessageContract, 'uses', 'dispatch / adapt'),
         (prefabs.SimpleDistributedApplicationListener, AbstractChannel, 'aggregation', 'channel'),
         (prefabs.SimpleDistributedApplicationListener, message.SignedMessage, 'create', '«create»'),
-        (prefabs.SimpleDistributedApplicationChannel, prefabs.SimpleDistributedApplicationListener, 'uses', 'set_channel'),
+        (AbstractChannel, MessageQueueListener, 'uses', 'on_registered'),
     ],
     notes=[
         '',

@@ -38,15 +38,17 @@ Changelog
 * Docs: added Error handling page
 * BREAKING: removed UniqueMessage. MessageContract has an optional id property (None by default): Message and SignedMessage accept msg_id
 * SSEChannel.adapt() adds the SSE "id" field to messages with an id
-* Queue and InMemoryQueue are generic on the type of messages they hold, e.g. Queue[SignedMessage]. Plain Queue holds any message
+* Queue is generic on the type of messages pushed and popped, Queue[MIn, MOut], e.g. Queue[SignedMessage, SignedMessage]. They differ when a queue transforms messages: ReliableQueue is a Queue[MessageContract, ReliableMessage]. InMemoryQueue[M] is a Queue[M, M]. Plain Queue holds any message
 * Added the Reliable Queue pattern to queue_patterns: ReliableQueue keeps popped messages in flight, wrapped in a ReliableMessage with an id, until ack(). nack() and a visibility timeout put them back in the queue. In-flight messages are kept in a KvStorage
 * DeadLetter exposes the original message id
 * Docs: added Queue patterns page, documenting Dead Letter and Reliable Queue
 * MessageQueueListener is generic on the type of messages it handles, e.g. MessageQueueListener[SignedMessage]. SimpleDistributedApplicationListener is a MessageQueueListener[SignedMessage]
-* AbstractChannel is generic on the type of messages it dispatches and delivers: dispatch, broadcast, adapt, before_dispatch, deliver_next and wait_next use it. SSEChannel and DataProcessingChannel are generic too, SimpleDistributedApplicationChannel is an SSEChannel[SignedMessage]. Plain channels, listeners and queues handle any message
+* AbstractChannel is generic on the type of messages it dispatches and delivers, AbstractChannel[MIn, MOut], as its queues are Queue[MIn, MOut] and its listeners MessageQueueListener[MOut]: dispatch, broadcast and before_dispatch use MIn, deliver_next, wait_next and adapt use MOut. SSEChannel and DataProcessingChannel are generic too, SimpleDistributedApplicationChannel is an SSEChannel[SignedMessage, SignedMessage]. Plain channels, listeners and queues handle any message
 * BREAKING: stream errors are no longer adapted as 'error' messages: message_stream() yields them through the new abstract AbstractChannel.adapt_error(exception). Channels extending AbstractChannel directly must implement it; SSEChannel and DataProcessingChannel return {'event': 'error', 'data': {'error': exception class name, 'message': str(exception)}}, plus 'retry' for SSEChannel
 * Added InternalStreamError to exceptions module: message_stream() yields it instead of unexpected errors, hiding their details from clients. Before, their payload was None
 * Docs: added Stream errors section to Error handling page
+* Added MessageQueueListener.on_registered(channel) hook, called by AbstractChannel.register_connection() for every listener, including listeners created or loaded from persistence. Does nothing by default
+* BREAKING: SimpleDistributedApplicationListener.set_channel() removed: the listener keeps its channel in on_registered(), so it works on any channel, not only on SimpleDistributedApplicationChannel
 
 2.1.1
 

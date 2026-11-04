@@ -5,7 +5,6 @@ Prefab channels and listeners
 =============================
 .. automodule:: eric_sse.prefabs
     :undoc-members:
-    :exclude-members: set_channel
     :members:
     :show-inheritance:
     :member-order: bysource
