@@ -3,7 +3,7 @@ import threading
 import time
 from unittest import TestCase, IsolatedAsyncioTestCase
 
-from eric_sse.exception import NoMessagesException
+from eric_sse.exception import NoMessagesException, TimeoutException
 from eric_sse.message import Message, MessageContract
 from eric_sse.queues import Queue, InMemoryQueue
 from test.mock.channel import FakeChannel
@@ -18,8 +18,9 @@ def push_later(queue: Queue, message: MessageContract, delay: float = 0.05):
 class InMemoryQueuePopTestCase(TestCase):
 
     def test_pop_without_timeout_returns_immediately(self):
-        with self.assertRaises(NoMessagesException):
+        with self.assertRaises(NoMessagesException) as raised:
             InMemoryQueue().pop()
+        self.assertNotIsInstance(raised.exception, TimeoutException)
 
     def test_pop_waits_up_to_timeout(self):
         sut = InMemoryQueue()
@@ -27,7 +28,7 @@ class InMemoryQueuePopTestCase(TestCase):
         self.assertEqual('late', sut.pop(timeout=2).type)
 
         start = time.monotonic()
-        with self.assertRaises(NoMessagesException):
+        with self.assertRaises(TimeoutException):
             sut.pop(timeout=0.05)
         self.assertGreaterEqual(time.monotonic() - start, 0.05)
 
@@ -50,7 +51,7 @@ class InMemoryQueueWaitPopTestCase(IsolatedAsyncioTestCase):
         self.assertEqual('late', (await sut.wait_pop(2)).type)
 
     async def test_timeout(self):
-        with self.assertRaises(NoMessagesException):
+        with self.assertRaises(TimeoutException):
             await InMemoryQueue().wait_pop(0.05)
 
     async def test_consecutive_waits_deliver_messages_in_order(self):
@@ -63,6 +64,14 @@ class InMemoryQueueWaitPopTestCase(IsolatedAsyncioTestCase):
         self.assertEqual('second', (await sut.wait_pop(2)).type)
         with self.assertRaises(NoMessagesException):
             await sut.wait_pop(0.05)
+
+    async def test_message_arrived_at_timeout_is_returned(self):
+        # A push whose wake-up hasn't run yet when the timeout fires: the message is queued, the waiter isn't resolved
+        sut = InMemoryQueue()
+        pending_push = sut._InMemoryQueue__queue
+        asyncio.get_running_loop().call_later(0.01, pending_push.put, Message(msg_type='late'))
+
+        self.assertEqual('late', (await sut.wait_pop(0.05)).type)
 
     async def test_push_after_timeout_is_kept_for_next_wait(self):
         sut = InMemoryQueue()
@@ -84,7 +93,20 @@ class SyncOnlyQueue(Queue):
         self.inner.push(message)
 
 
+class PlainNoMessagesQueue(SyncOnlyQueue):
+    """A backend raising a plain NoMessagesException when pop times out."""
+    def pop(self, timeout: float = 0) -> MessageContract:
+        try:
+            return self.inner.pop(timeout)
+        except NoMessagesException:
+            raise NoMessagesException from None
+
+
 class DefaultWaitPopTestCase(IsolatedAsyncioTestCase):
+
+    async def test_timeout_is_a_timeout_exception_whatever_pop_raises(self):
+        with self.assertRaises(TimeoutException):
+            await PlainNoMessagesQueue().wait_pop(0.05)
 
     async def test_waits_in_a_thread_without_blocking_the_loop(self):
         sut = SyncOnlyQueue()

@@ -36,6 +36,9 @@ class RecordingChannel(FakeChannel):
             return Message(msg_type='shout', msg_payload=str(msg.payload).upper())
         return msg
 
+    def on_wait_timeout(self, listener):
+        self.events.append(('wait_timeout', listener.id))
+
     def on_error(self, listener, exception) -> bool:
         self.events.append(('error', str(exception)))
         return self.go_on_after_error
@@ -115,6 +118,17 @@ class StreamHooksTestCase(IsolatedAsyncioTestCase):
 
         [m async for m in sut.message_stream(listener)]
         self.assertEqual([('stream_start', listener.id), ('stream_end', listener.id)], sut.events)
+
+    async def test_wait_timeout_while_idle(self):
+        sut = RecordingChannel()
+        listener = sut.add_listener()
+        asyncio.get_running_loop().call_later(sut.wait_timeout_seconds * 2.5, listener.stop)
+
+        received = [m async for m in sut.message_stream(listener)]
+
+        self.assertEqual([], received)
+        # Timeouts at 1, 2 and 3 cycles: the stop at 2.5 is noticed after the third one
+        self.assertEqual(3, sut.events.count(('wait_timeout', listener.id)))
 
     async def test_end_on_client_disconnection(self):
         sut = RecordingChannel()

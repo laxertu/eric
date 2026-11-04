@@ -22,6 +22,15 @@ class NoMessagesException(Exception):
     ...
 
 
+class TimeoutException(NoMessagesException):
+    """
+    Raised when waiting for a message ends with no message, e.g. by :meth:`~eric_sse.queues.Queue.wait_pop`.
+
+    It is a :class:`NoMessagesException`, so code handling empty queues handles timeouts too.
+    """
+    ...
+
+
 class InvalidMessageFormat(Exception):
     ...
 

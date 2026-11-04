@@ -5,7 +5,7 @@ from typing import AsyncIterable, Any, Iterable, TypeVar, Generic
 
 import eric_sse
 from eric_sse.exception import InvalidListenerException, NoMessagesException, InvalidChannelException, \
-    InternalStreamError
+    InternalStreamError, TimeoutException
 from eric_sse.handlers import QueuingErrorHandler, ListenerErrorHandler
 from eric_sse.listener import MessageQueueListener
 from eric_sse.connection import Connection, ConnectionsFactory, InMemoryConnectionsFactory
@@ -78,7 +78,7 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
     see :class:`~eric_sse.prefabs.SSEChannel`
 
     **Hooks**: subclasses can override :meth:`on_listener_added`, :meth:`on_listener_removed`,
-    :meth:`on_stream_start`, :meth:`on_stream_end`, :meth:`before_dispatch` and :meth:`on_error`.
+    :meth:`on_stream_start`, :meth:`on_stream_end`, :meth:`on_wait_timeout`, :meth:`before_dispatch` and :meth:`on_error`.
     They do nothing by default.
 
     **Error handlers**: errors raised by queues and listeners are passed to the handlers registered with
@@ -206,6 +206,15 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
         """
         return msg
 
+    def on_wait_timeout(self, listener: MessageQueueListener[MOut]) -> None:
+        """
+        Hook called when :meth:`message_stream` waited :attr:`wait_timeout_seconds` for a message and none arrived.
+
+        It is not an error: an idle stream times out periodically, to check whether its listener is still running.
+        Can be used, for example, to collect metrics or to end idle streams by stopping their listener.
+        """
+        pass
+
     def on_error(self, listener: MessageQueueListener[MOut], exception: Exception) -> bool:
         """
         Hook called when :meth:`message_stream` catches an unexpected exception, before yielding an error.
@@ -228,7 +237,7 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
         Unexpected errors are logged and yielded as an :class:`~eric_sse.exception.InternalStreamError`, hiding
         their details, and :meth:`on_error` decides whether the stream goes on.
 
-        Calls :meth:`on_stream_start` and :meth:`on_stream_end` hooks.
+        Calls :meth:`on_stream_start`, :meth:`on_wait_timeout` and :meth:`on_stream_end` hooks.
         """
         self.__connection_manager.get_listener(listener.id)
         listener.start()
@@ -239,6 +248,9 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
                 try:
                     try:
                         message = await self.wait_next(listener.id, self.wait_timeout_seconds)
+                    except TimeoutException:
+                        self.on_wait_timeout(listener)
+                        continue
                     except NoMessagesException:
                         continue
 
@@ -317,7 +329,8 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
         """
         Waits up to **timeout** seconds for the next message for given listener id, without blocking the event loop.
 
-        Raises a NoMessagesException if the listener is not running or no message arrives in time.
+        Raises a NoMessagesException if the listener is not running, or its subclass
+        :class:`~eric_sse.exception.TimeoutException` if no message arrives in time.
         Queue errors are re-raised after error handlers; listener errors are not, and the message is returned anyway.
         """
         listener = self.get_listener(listener_id)

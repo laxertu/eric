@@ -4,7 +4,7 @@ from queue import SimpleQueue, Empty, Full
 from typing import Generic
 
 from eric_sse.message import M, MIn, MOut
-from eric_sse.exception import NoMessagesException, RepositoryError
+from eric_sse.exception import NoMessagesException, RepositoryError, TimeoutException
 
 
 class Queue(ABC, Generic[MIn, MOut]):
@@ -26,7 +26,8 @@ class Queue(ABC, Generic[MIn, MOut]):
 
         :param timeout: Seconds to wait for a message. With 0 it returns immediately.
 
-        Raises a :class:`~eric_sse.exception.NoMessagesException` if no message is available within **timeout**.
+        Raises a :class:`~eric_sse.exception.NoMessagesException` if no message is available: implementations should
+        raise its subclass :class:`~eric_sse.exception.TimeoutException` when they waited, i.e. **timeout** > 0.
         """
         ...
 
@@ -43,9 +44,13 @@ class Queue(ABC, Generic[MIn, MOut]):
 
         :param timeout: Seconds to wait for a message.
 
-        Raises a :class:`~eric_sse.exception.NoMessagesException` if no message arrives within **timeout**.
+        Raises a :class:`~eric_sse.exception.TimeoutException` if no message arrives within **timeout**.
         """
-        return await asyncio.to_thread(self.pop, timeout)
+        try:
+            return await asyncio.to_thread(self.pop, timeout)
+        except NoMessagesException:
+            # pop() implementations may raise a plain NoMessagesException when they time out
+            raise TimeoutException from None
 
 
 def _resolve(waiter: asyncio.Future) -> None:
@@ -73,7 +78,7 @@ class InMemoryQueue(Queue[M, M]):
         try:
             return self.__queue.get(block=timeout > 0, timeout=timeout if timeout > 0 else None)
         except Empty:
-            raise NoMessagesException
+            raise (TimeoutException if timeout > 0 else NoMessagesException) from None
 
     def push(self, message: M) -> None:
         try:
@@ -105,10 +110,15 @@ class InMemoryQueue(Queue[M, M]):
                 return self.pop()
             except NoMessagesException:
                 pass
-            await asyncio.wait_for(future, timeout)
+            try:
+                await asyncio.wait_for(future, timeout)
+            except asyncio.TimeoutError:
+                # A message may have arrived anyway, with its wake-up still pending: the queue decides
+                try:
+                    return self.pop()
+                except NoMessagesException:
+                    raise TimeoutException from None
             # Single consumer: the message that woke us up is still there
             return self.pop()
-        except asyncio.TimeoutError:
-            raise NoMessagesException from None
         finally:
             self.__waiter = None
