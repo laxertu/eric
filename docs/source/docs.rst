@@ -61,6 +61,7 @@ Its main components are:
    persistence
    error_handling
    queue_patterns
+   profiling
    exceptions
 
 

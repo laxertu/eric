@@ -42,6 +42,11 @@ Stream errors
 Channels extending :class:`~eric_sse.entities.AbstractChannel` directly must implement ``adapt_error``; override it in
 prefab subclasses to change the format.
 
+Timeouts are not errors: an idle stream waits :attr:`~eric_sse.entities.AbstractChannel.wait_timeout_seconds` for a
+message, then checks whether its listener is still running. Each time, the wait ends with a
+:class:`~eric_sse.exception.TimeoutException`, nothing is yielded, and the
+:meth:`~eric_sse.entities.AbstractChannel.on_wait_timeout` hook is called, e.g. to collect metrics or to end idle streams.
+
 Handlers
 ========
 

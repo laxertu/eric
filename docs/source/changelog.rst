@@ -50,6 +50,11 @@ Changelog
 * Added MessageQueueListener.on_registered(channel) hook, called by AbstractChannel.register_connection() for every listener, including listeners created or loaded from persistence. Does nothing by default
 * BREAKING: SimpleDistributedApplicationListener.set_channel() removed: the listener keeps its channel in on_registered(), so it works on any channel, not only on SimpleDistributedApplicationChannel
 * Added benchmarks, run with pyperformance (optional Poetry group "benchmark"): see Developers section. First one: builder_dispatch
+* FIX: InMemoryQueue.wait_pop() raised a NoMessagesException on timeout even if a message had just arrived, with its wake-up still pending. It now checks the queue after waiting
+* Added TimeoutException to exceptions module, a NoMessagesException raised when a wait for a message ends empty: by InMemoryQueue.pop(timeout) with timeout > 0 and wait_pop(). The default Queue.wait_pop() raises it also when pop() raises a plain NoMessagesException. pop() without timeout still raises NoMessagesException
+* Added AbstractChannel.on_wait_timeout(listener) hook, called by message_stream() each time it waits wait_timeout_seconds with no message. Not an error: nothing is yielded. Does nothing by default
+* Added profiling module: ProfiledQueue and ProfiledListener wrap a queue or a listener and record number of calls and total time of push, pop, wait_pop and on_message, in CallStats objects
+* Docs: added Profiling page
 
 2.1.1
 
