@@ -6,6 +6,10 @@
 
 pip install eric-sse
 
+*Versioning*
+
+Starting from 3.0.0, the project follows [semantic versioning](https://semver.org/).
+
 *Related packages*
 
 * https://pypi.org/project/eric-redis-queues/ Redis integration
