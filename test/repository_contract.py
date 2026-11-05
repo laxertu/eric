@@ -2,7 +2,8 @@ from abc import ABC, abstractmethod
 from unittest import TestCase
 
 from eric_sse.builder import ChannelRepositoryBuilder
-from eric_sse.exception import ItemNotFound
+from eric_sse.exception import ItemNotFound, NoMessagesException
+from eric_sse.listener import MessageQueueListener
 from eric_sse.message import Message
 
 
@@ -100,3 +101,43 @@ class ChannelRepositoryContract(ABC):
         sut.delete(channel.id)
 
         self.assertEqual([], list(sut.load_all()))
+
+    def test_registered_listeners_are_returned_after_reload(self: 'ChannelRepositoryContract | TestCase'):
+        sut = self.create_builder().build()
+        channel = sut.create({})
+        listener = MessageQueueListener()
+        channel.register_listener(listener)
+        sut.persist(channel)
+
+        loaded = sut.load_one(channel.id)
+
+        self.assertEqual([listener.id], [connection.listener.id for connection in loaded.get_connections()])
+
+    def test_messages_are_kept_per_listener(self: 'ChannelRepositoryContract | TestCase'):
+        sut = self.create_builder().build()
+        channel = sut.create({})
+        recipient = channel.add_listener()
+        other = channel.add_listener()
+        channel.dispatch(recipient.id, Message(msg_type='greeting', msg_payload='hello'))
+        sut.persist(channel)
+
+        queues = {connection.listener.id: connection.queue for connection in sut.load_one(channel.id).get_connections()}
+
+        self.assertEqual('hello', queues[recipient.id].pop().payload)
+        with self.assertRaises(NoMessagesException):
+            queues[other.id].pop()
+
+    def test_channels_whose_ids_share_a_prefix_do_not_mix(self: 'ChannelRepositoryContract | TestCase'):
+        sut = self.create_builder().build()
+        a = sut.create({'channel_id': 'a'})
+        a_listener = a.add_listener()
+        ab = sut.create({'channel_id': 'ab'})
+        ab_listener = ab.add_listener()
+        sut.persist(a)
+        sut.persist(ab)
+
+        self.assertEqual([a_listener.id], [connection.listener.id for connection in sut.load_one('a').get_connections()])
+
+        sut.delete('a')
+
+        self.assertEqual([ab_listener.id], [connection.listener.id for connection in sut.load_one('ab').get_connections()])
