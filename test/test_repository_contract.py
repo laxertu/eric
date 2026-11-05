@@ -9,3 +9,6 @@ from test.repository_contract import ChannelRepositoryContract
 class InMemoryStorageTestCase(ChannelRepositoryContract, TestCase):
     def create_builder(self) -> ChannelRepositoryBuilder:
         return ChannelRepositoryBuilder(FakeChannel, InMemoryStorage())
+
+    def channel_data(self) -> dict:
+        return {}
