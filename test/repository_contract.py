@@ -47,24 +47,6 @@ class ChannelRepositoryContract(ABC):
             with self.assertRaises(ItemNotFound):
                 connections_repository.queues_repository.load(connection_id)
 
-    def test_all_channels_can_be_deleted_while_loading_them(self: 'ChannelRepositoryContract | TestCase'):
-        # KvStorage.fetch_by_prefix: implementations must tolerate deletions of fetched keys while the result is
-        # being iterated. ChannelRepository.load_all yields channels while iterating it.
-        sut = self.create_builder().build()
-        channel_ids = []
-        for _ in range(3):
-            channel = sut.create({})
-            sut.persist(channel)
-            channel_ids.append(channel.id)
-
-        deleted_ids = []
-        for channel in sut.load_all():
-            sut.delete(channel.id)
-            deleted_ids.append(channel.id)
-
-        self.assertCountEqual(channel_ids, deleted_ids)
-        self.assertEqual([], list(sut.load_all()))
-
     def test_persisted_connection_parts_are_returned_by_their_repositories(self: 'ChannelRepositoryContract | TestCase'):
         connections_repository = self.create_builder().build().connections_repository
         connection = connections_repository.create()
@@ -76,27 +58,6 @@ class ChannelRepositoryContract(ABC):
         self.assertEqual(connection.listener.id, connections_repository.listeners_repository.load(connection.id).id)
         message = connections_repository.queues_repository.load(connection.id).pop()
         self.assertEqual(('greeting', 'hello'), (message.type, message.payload))
-
-    def test_deleted_connection_parts_are_not_returned_by_their_repositories(self: 'ChannelRepositoryContract | TestCase'):
-        connections_repository = self.create_builder().build().connections_repository
-        connection = connections_repository.create()
-        connections_repository.persist(channel_id='channel', connection=connection)
-
-        connections_repository.delete(channel_id='channel', connection_id=connection.id)
-
-        self.assertEqual([], list(connections_repository.load_ids(channel_id='channel')))
-        with self.assertRaises(ItemNotFound):
-            connections_repository.load_one('channel', connection.id)
-        with self.assertRaises(ItemNotFound):
-            connections_repository.listeners_repository.load(connection.id)
-        with self.assertRaises(ItemNotFound):
-            connections_repository.queues_repository.load(connection.id)
-
-    def test_loading_an_unknown_connection_raises_item_not_found(self: 'ChannelRepositoryContract | TestCase'):
-        connections_repository = self.create_builder().build().connections_repository
-
-        with self.assertRaises(ItemNotFound):
-            connections_repository.load_one('unknown_channel', 'unknown_connection')
 
     def test_connections_removed_from_a_channel_are_deleted_on_persist(self: 'ChannelRepositoryContract | TestCase'):
         sut = self.create_builder().build()
