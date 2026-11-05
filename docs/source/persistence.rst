@@ -22,8 +22,9 @@ Builder
 stores everything in one storage instance, each kind of object under its own namespace::
 
     from eric_sse.builder import ChannelRepositoryBuilder
+    from eric_sse.prefabs import SSEChannel
 
-    repository = ChannelRepositoryBuilder(my_storage).listeners(MyListener).build()
+    repository = ChannelRepositoryBuilder(SSEChannel, my_storage).listeners(MyListener).build()
 
     channel = repository.create({'retry_timeout_milliseconds': 100})
     listener = channel.add_listener()
