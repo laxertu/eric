@@ -85,7 +85,7 @@ class ChannelRepositoryBuilderTestCase(TestCase):
 
         sut = (
             ChannelRepositoryBuilder(SSEChannel)
-            .listeners_repository(KvListenerRepository(InMemoryStorage(), listener_class=MyListener))
+            .listeners_repository(KvListenerRepository(InMemoryStorage(), listener_factory=MyListener))
             .queues_repository(MyQueueRepository(InMemoryStorage(), queue_factory=MyQueue))
             .build()
         )
@@ -125,7 +125,7 @@ class ChannelRepositoryBuilderTestCase(TestCase):
         self.assertEqual(1, len(list(sut.load_one(channel.id).get_connections())))
 
     def test_last_call_wins(self):
-        custom = KvListenerRepository(InMemoryStorage(), listener_class=MyListener)
+        custom = KvListenerRepository(InMemoryStorage(), listener_factory=MyListener)
         sut = ChannelRepositoryBuilder(SSEChannel).listeners_repository(custom).listeners().build()
         self.assertIs(MessageQueueListener, type(sut.create({}).add_listener()))
 

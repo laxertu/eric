@@ -111,7 +111,7 @@ class ConnectionRepositoryCreateTestCase(TestCase):
     def test_create(self):
         sut = ConnectionRepository(
             storage=InMemoryStorage(),
-            listeners_repository=KvListenerRepository(InMemoryStorage(), listener_class=MyListener),
+            listeners_repository=KvListenerRepository(InMemoryStorage(), listener_factory=MyListener),
             queues_repository=KvQueueRepository(InMemoryStorage(), queue_factory=MyQueue)
         )
         connection = sut.create()

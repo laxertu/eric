@@ -181,7 +181,7 @@ class TestKvRepositories(TestCase):
 
     def test_create(self):
         self.assertIsInstance(KvListenerRepository(InMemoryStorage()).create(), MessageQueueListener)
-        self.assertIsInstance(KvListenerRepository(InMemoryStorage(), listener_class=MyListener).create(), MyListener)
+        self.assertIsInstance(KvListenerRepository(InMemoryStorage(), listener_factory=MyListener).create(), MyListener)
         self.assertIsInstance(KvQueueRepository(InMemoryStorage()).create(), InMemoryQueue)
         self.assertIsInstance(KvQueueRepository(InMemoryStorage(), queue_factory=MyQueue).create(), MyQueue)
 

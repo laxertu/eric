@@ -2,6 +2,7 @@ import pickle
 import time
 from unittest import IsolatedAsyncioTestCase, TestCase
 
+from eric_sse.builder import ChannelRepositoryBuilder
 from eric_sse.connection import Connection
 from eric_sse.exception import NoMessagesException
 from eric_sse.listener import MessageQueueListener
@@ -146,3 +147,24 @@ class ProfiledChannelTestCase(IsolatedAsyncioTestCase):
         self.assertEqual([str(i) for i in range(10)], inner.received)
         self.assertEqual((10, 5, 5), (queue.push_stats.calls, queue.pop_stats.calls, queue.wait_pop_stats.calls))
         self.assertEqual(10, listener.on_message_stats.calls)
+
+
+class ProfiledBuilderTestCase(IsolatedAsyncioTestCase):
+
+    async def test_every_connection_created_by_a_repository_is_profiled(self):
+        repository = (
+            ChannelRepositoryBuilder(FakeChannel)
+            .listeners(lambda: ProfiledListener(RecordingListener()))
+            .queues(lambda: ProfiledQueue(InMemoryQueue()))
+            .build()
+        )
+        channel = repository.create({})
+        listeners: list[ProfiledListener] = [channel.add_listener(), channel.add_listener()]
+
+        for listener in listeners:
+            listener.start()
+        channel.broadcast(Message(msg_type='test'))
+        for listener in listeners:
+            channel.deliver_next(listener.id)
+
+        self.assertEqual([1, 1], [listener.on_message_stats.calls for listener in listeners])

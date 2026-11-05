@@ -96,14 +96,15 @@ class KvListenerRepository(ListenerRepositoryInterface, Generic[L]):
     Listeners are stored as they are, keyed by connection id; serialization, if needed, is up to the storage.
 
     :param storage:
-    :param listener_class: Class of listeners created by :meth:`create`. Defaults to :class:`~eric_sse.listener.MessageQueueListener`.
+    :param listener_factory: Called by :meth:`create` to create a listener, e.g. a listener class.
+        Defaults to :class:`~eric_sse.listener.MessageQueueListener`.
     """
-    def __init__(self, storage: KvStorage[L], listener_class: type[L] = MessageQueueListener):
+    def __init__(self, storage: KvStorage[L], listener_factory: Callable[[], L] = MessageQueueListener):
         self.__storage = storage
-        self.__listener_class = listener_class
+        self.__listener_factory = listener_factory
 
     def create(self) -> L:
-        return self.__listener_class()
+        return self.__listener_factory()
 
     def load(self, connection_id: str) -> L:
         return self.__storage.fetch_one(connection_id)

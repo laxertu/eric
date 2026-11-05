@@ -37,7 +37,7 @@ class ChannelRepositoryBuilder(Generic[C]):
         self.__channel_class = channel_class
         self.__channels_storage: KvStorage | None = None
         self.__connections_storage: KvStorage | None = None
-        self.__listener_class: type[MessageQueueListener] = MessageQueueListener
+        self.__listener_factory: Callable[[], MessageQueueListener] = MessageQueueListener
         self.__listeners_storage: KvStorage | None = None
         self.__listeners_repository: ListenerRepositoryInterface | None = None
         self.__queue_factory: Callable[[], Queue] = InMemoryQueue
@@ -62,16 +62,18 @@ class ChannelRepositoryBuilder(Generic[C]):
 
     def listeners(
             self,
-            listener_class: type[MessageQueueListener] = MessageQueueListener,
+            listener_factory: Callable[[], MessageQueueListener] = MessageQueueListener,
             storage: KvStorage | None = None
     ) -> 'ChannelRepositoryBuilder[C]':
         """
         Uses a :class:`~eric_sse.repository.KvListenerRepository`.
 
-        :param listener_class: Class of listeners created by channels. Defaults to :class:`~eric_sse.listener.MessageQueueListener`.
+        :param listener_factory: Called once per connection to create its listener: a listener class, or any callable
+            returning a listener, e.g. ``lambda: ProfiledListener(MyListener())``.
+            Defaults to :class:`~eric_sse.listener.MessageQueueListener`.
         :param storage: Dedicated storage for listeners.
         """
-        self.__listener_class = listener_class
+        self.__listener_factory = listener_factory
         self.__listeners_storage = storage
         self.__listeners_repository = None
         return self
@@ -124,7 +126,7 @@ class ChannelRepositoryBuilder(Generic[C]):
     def build(self) -> ChannelRepository[C]:
         """Returns a new channel repository. The builder can be reused."""
         listeners_repository = self.__listeners_repository or KvListenerRepository(
-            self.__storage_for('listener', self.__listeners_storage), listener_class=self.__listener_class
+            self.__storage_for('listener', self.__listeners_storage), listener_factory=self.__listener_factory
         )
         queues_repository = self.__queues_repository or KvQueueRepository(
             self.__storage_for('queue', self.__queues_storage), queue_factory=self.__queue_factory
