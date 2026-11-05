@@ -6,7 +6,7 @@ Changelog
 * Added KvListenerRepository and KvQueueRepository to repository module
 * FIX: SimpleDistributedApplicationListener.set_action now rejects reserved action names 'start' and 'stop'
 * FIX: AbstractChannelRepository.delete no longer fails with InMemoryStorage when channel has connections
-* KvStorage.fetch_by_prefix and fetch_all implementations must now tolerate deletions while results are iterated
+* KvStorage.fetch_by_prefix implementations must now tolerate deletions while results are iterated
 * Added PrefixedStorage, a namespaced view of a KvStorage
 * Listener and queue repositories now create the instances they persist: added create() to ListenerRepositoryInterface and QueueRepositoryInterface. KvListenerRepository accepts a listener_class, KvQueueRepository a queue_factory
 * ConnectionRepositoryInterface is now a ConnectionsFactory: ConnectionRepository.create() delegates to listeners and queues repositories. create() methods never persist
@@ -56,6 +56,8 @@ Changelog
 * Added AbstractChannel.on_wait_timeout(listener) hook, called by message_stream() each time it waits wait_timeout_seconds with no message. Not an error: nothing is yielded. Does nothing by default
 * Added profiling module: ProfiledQueue and ProfiledListener wrap a queue or a listener and record number of calls and total time of push, pop, wait_pop and on_message, in CallStats objects
 * Docs: added Profiling page
+* BREAKING: removed KvStorage.fetch_all. fetch_by_prefix('') returns all items: storages wrapped in a PrefixedStorage, as ChannelRepositoryBuilder does, never had their fetch_all called
+* Tests: added ChannelRepositoryContract (test/repository_contract.py), use case tests built from a ChannelRepositoryBuilder that every storage or custom repository has to pass
 
 2.1.1
 

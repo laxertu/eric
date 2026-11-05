@@ -51,9 +51,6 @@ class SqliteStorage(KvStorage):
         rows = self.__query('SELECT value FROM kv WHERE substr(key, 1, ?) = ?', (len(prefix), prefix))
         return [pickle.loads(value) for (value,) in rows]
 
-    def fetch_all(self) -> Iterable[Any]:
-        return [pickle.loads(value) for (value,) in self.__query('SELECT value FROM kv')]
-
     def upsert(self, key: str, value: Any):
         self.__query('INSERT OR REPLACE INTO kv (key, value) VALUES (?, ?)', (key, pickle.dumps(value)))
 

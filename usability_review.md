@@ -62,7 +62,7 @@ _Last updated: 2026-11-01, branch `claude-md`._
 - **Docs:** the changelog has a 3.0.0 (unreleased) section. Two generated class diagrams (`docs/eric_sse_pubsub_diagram.drawio`, `docs/eric_sse_persistence_diagram.drawio`) replace the old one. Regenerate them with `python docs/generate_class_diagrams.py`.
 
 ### Decisions
-- **`KvStorage` contract:** `fetch_by_prefix` and `fetch_all` implementations must allow deletes while their results are iterated. Callers (e.g. `AbstractChannelRepository.delete`) stay lazy instead of copying results into a list.
+- **`KvStorage` contract:** `fetch_by_prefix` implementations must allow deletes while their results are iterated (`fetch_all` removed 2026-11-05: `fetch_by_prefix('')` returns all items). Callers (e.g. `AbstractChannelRepository.delete`) stay lazy instead of copying results into a list.
 - **Kv repositories store objects as they are.** Any serialisation is up to the `KvStorage` implementation.
 - **Persistence decisions belong to library clients.** The library never persists implicitly: `create()` methods only build objects, and clients call `persist` when they choose.
 - **Persistence boundaries:**
