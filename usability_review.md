@@ -42,7 +42,7 @@ The rest are small cleanups. I can turn this into a plan or build the first item
 
 ## Progress
 
-_Last updated: 2026-11-01, branch `claude-md`._
+_Last updated: 2026-11-05, branch `claude-md`._
 
 ### Done
 - **Point 1: persistence wiring.**
@@ -58,8 +58,35 @@ _Last updated: 2026-11-01, branch `claude-md`._
 - **Bugs found along the way:**
   - `AbstractChannelRepository.delete` crashed with `InMemoryStorage` because it deleted while iterating. Fixed in `InMemoryStorage`, which now iterates over a snapshot.
   - `ConnectionRepository.load_all` matched channel ids by bare prefix, so channel `a` returned channel `ab`'s connections. It now searches `f'{channel_id}:'`.
-- **Tutorials** (2026-11-01): `docs/source/tutorials.rst` includes `examples/tutorial_in_memory.py` (chat room, hooks) and `examples/tutorial_kv_storage.py` (SQLite `KvStorage` + durable `SqliteQueue`, simulated restart) via `literalinclude`; `test/test_examples.py` runs both.
+- **Tutorials** (2026-11-01): `docs/source/tutorials.rst` includes `examples/tutorial_in_memory.py` (chat room, hooks) and `examples/tutorial_kv_storage.py` (SQLite `KvStorage` + durable `SqliteQueue`, simulated restart) via `literalinclude`. `test/test_examples.py` ran both until it was removed in `e11cabc`; see Open.
 - **Docs:** the changelog has a 3.0.0 (unreleased) section. Two generated class diagrams (`docs/eric_sse_pubsub_diagram.drawio`, `docs/eric_sse_persistence_diagram.drawio`) replace the old one. Regenerate them with `python docs/generate_class_diagrams.py`.
+- **Error handling** (2026-11-03):
+  - `QueuingErrorHandler` and `ListenerErrorHandler` live on the channel. Every method receives the listener id first. Errors are re-raised after the handlers, or logged where the channel swallows them (e.g. `broadcast`).
+  - Stream errors have their own path: the abstract `AbstractChannel.adapt_error(exception)`. Unexpected errors reach clients as an `InternalStreamError`, so internals don't leak.
+  - `StoppedListenerException` (2026-11-05): `deliver_next` and `wait_next` raise it for a listener that isn't running, and `message_stream` yields it and ends. `NoMessagesException` only means an empty queue. Idle waits call the `on_wait_timeout` hook; they are not errors. (`TimeoutException` was tried and removed.)
+  - `DataProcessingChannel.process_queue` (2026-11-05) uses the protected halves of `deliver_next`, `_pop_next` and `_on_listener_error`, so it no longer bypasses handlers and the stopped check.
+- **Queue patterns** (`queue_patterns.py`, 2026-11-03):
+  - Dead Letter: `DeadLetterHandler` plus the `DeadLetter` wrapper.
+  - Reliable Queue: `ReliableQueue` plus `ReliableMessage`, with explicit `ack` / `nack` and a visibility timeout. In-flight messages live in a `KvStorage`.
+- **Message id:** `MessageContract.id` defaults to `None`, and `SSEChannel.adapt` sends the SSE `id` field when a message has one. `UniqueMessage` was removed.
+- **Generics** (2026-11-03/04):
+  - `Queue[MIn, MOut]`, `InMemoryQueue[M]`, `MessageQueueListener[M]` and `AbstractChannel[MIn, MOut]` (the prefabs too).
+  - `MIn` / `MOut` differ when a queue transforms messages (`ReliableQueue`).
+  - There are no TypeVar defaults: both parameters are always written.
+- **`MessageQueueListener.on_registered(channel)` hook** (2026-11-04): it replaces `set_channel` and the `isinstance` check in `SimpleDistributedApplicationChannel`. The distributed listener works on any channel.
+- **Queue waits** (2026-11-04): fixed an `InMemoryQueue.wait_pop` race, where a message whose wake-up was still pending was lost at timeout.
+- **Profiling** (`profiling.py`, 2026-11-04):
+  - `ProfiledQueue` and `ProfiledListener` decorators, with stats in `CallStats`.
+  - The Builder and `KvListenerRepository` take a `listener_factory` (2026-11-05), as queues already did, so wrapped listeners can be built through the Builder.
+- **Benchmarks** (2026-11-04): pyperformance, as the optional Poetry group `benchmark`. `benchmarks/bm_builder_dispatch`: 10000 messages, with the Builder defaults.
+- **Tests** (2026-11-05):
+  - Rework towards use case tests, with a `ChannelRepositoryBuilder` fixture.
+  - `ChannelRepositoryContract` (`test/repository_contract.py`) is a reusable contract for custom storages and repositories.
+  - `KvStorage.fetch_all` was removed.
+- **Docs** (2026-11-04):
+  - New pages: Error handling, Queue patterns and Profiling.
+  - A Class reference section holds all generated docs, and the narrative page is now called Guide.
+  - The README states semantic versioning from 3.0.0.
 
 ### Decisions
 - **`KvStorage` contract:** `fetch_by_prefix` implementations must allow deletes while their results are iterated (`fetch_all` removed 2026-11-05: `fetch_by_prefix('')` returns all items). Callers (e.g. `AbstractChannelRepository.delete`) stay lazy instead of copying results into a list.
@@ -79,6 +106,10 @@ _Last updated: 2026-11-01, branch `claude-md`._
 - **A Builder wires the repositories** and returns the channel repository. It never decides when to persist.
 - **Error handlers are not persisted** (2026-11-03). They are runtime configuration: the Builder / `ChannelRepository` register them on every channel they create or load, so reloaded channels get them without storing them.
 - Breaking changes are acceptable while 3.0.0 is in alpha.
+- **No type checks as workarounds** (`isinstance`, `getattr`): if one seems needed, the design is wrong. Fix the contract instead: e.g. `MessageContract.id` instead of checking for `UniqueMessage`, and `on_registered` instead of checking the listener class.
+- **Idle stream timeouts are not errors.** Yielding an error on every wait would flood idle clients, so they get a hook instead.
+- **Subclasses reuse delivery steps, they don't copy them.** `AbstractChannel` exposes `_pop_next` and `_on_listener_error`, so custom delivery (e.g. in an executor) keeps the error handling.
+- **Factories, not classes**, wherever the library creates objects (`listener_factory`, `queue_factory`): a class is one kind of factory, and wrappers need another.
 - **`KvQueueRepository` keeps storing queues as they are** (2026-11-01). Each queue class decides what of its state is serialised: `RedisQueue` keeps only identity and configuration via `__getstate__`/`to_dict`. `InMemoryQueue` can't be pickled, so a serialising storage fails loudly instead of saving its messages; it is documented as in-process only and a test pins this. Storing only identity in the repository was rejected: with `InMemoryStorage`, `load` would return an empty queue and lose undelivered messages.
 
 ### Next
@@ -128,3 +159,8 @@ channel.dispatch(listener_id, msg)
 - Side observation, for later: `eric-api` keeps its own cache sync on top of the library (`ChannelContainer`, `refresh_channels`, retry in `get_listener`).
 - `docs/source/persistence.rst` embeds `_static/persistence_layer_class_diagram.png`, which is probably out of date. Replace it with an export of the new persistence diagram.
 - The new diagrams' visual layout hasn't been checked, because there's no draw.io renderer on the dev machine.
+- Class diagrams are regenerated only as the last step (user, 2026-11-05). The persistence diagram still shows `KvStorage.fetch_all`.
+- `docs/source/tutorials.rst` says the test suite runs the tutorial examples, but `test/test_examples.py` was removed in `e11cabc`. Either restore a test, e.g. as a use case test, or reword the page.
+- 9 mypy errors predate this work, in `servers.py`, `repository.py` and `prefabs.py`.
+- Open question from the test rework: move the contract test classes into the package (e.g. `eric_sse/testing.py`), so library users can run them against their own parts.
+- Generated `docs_html` and `docs_markdown` are rebuilt by `update_docs.sh` as the last step of the release.
