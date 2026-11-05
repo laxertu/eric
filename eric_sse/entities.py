@@ -5,7 +5,7 @@ from typing import AsyncIterable, Any, Iterable, TypeVar, Generic
 
 import eric_sse
 from eric_sse.exception import InvalidListenerException, NoMessagesException, InvalidChannelException, \
-    InternalStreamError, TimeoutException
+    InternalStreamError, StoppedListenerException
 from eric_sse.handlers import QueuingErrorHandler, ListenerErrorHandler
 from eric_sse.listener import MessageQueueListener
 from eric_sse.connection import Connection, ConnectionsFactory, InMemoryConnectionsFactory
@@ -233,7 +233,7 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
         Waits for messages through :meth:`wait_next`, so an idle stream doesn't consume CPU.
         A stopped listener is noticed at the latest after :attr:`wait_timeout_seconds`.
 
-        Errors are yielded through :meth:`adapt_error`. After an invalid listener or channel error the stream ends.
+        Errors are yielded through :meth:`adapt_error`. After an invalid listener or channel error, or a :class:`~eric_sse.exception.StoppedListenerException`, the stream ends.
         Unexpected errors are logged and yielded as an :class:`~eric_sse.exception.InternalStreamError`, hiding
         their details, and :meth:`on_error` decides whether the stream goes on.
 
@@ -248,17 +248,15 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
                 try:
                     try:
                         message = await self.wait_next(listener.id, self.wait_timeout_seconds)
-                    except TimeoutException:
-                        self.on_wait_timeout(listener)
-                        continue
                     except NoMessagesException:
+                        self.on_wait_timeout(listener)
                         continue
 
                     yield self.adapt(message)
 
                     if self.stream_delay_seconds > 0:
                         await asyncio.sleep(self.stream_delay_seconds)
-                except (InvalidListenerException, InvalidChannelException) as e:
+                except (InvalidListenerException, InvalidChannelException, StoppedListenerException) as e:
                     yield self.adapt_error(e)
                     break
                 except Exception as e:
@@ -307,35 +305,35 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
         """
         Returns next message for given listener id.
 
-        Raises a NoMessagesException if queue is empty.
+        Raises a :class:`~eric_sse.exception.StoppedListenerException` if the listener is not running, even if its
+        queue is empty, and a NoMessagesException if the queue is empty.
         Queue errors are re-raised after error handlers; listener errors are not, and the message is returned anyway.
         """
         listener = self.get_listener(listener_id)
-        if listener.is_running():
-            queue = self.__connection_manager.get_queue(listener.id)
-            try:
-                msg = queue.pop()
-            except NoMessagesException:
-                raise
-            except Exception as e:
-                self.__on_pop_error(listener.id, e)
-                raise
-            self.__notify_listener(listener, msg)
-            return msg
+        if not listener.is_running():
+            raise StoppedListenerException(listener.id)
 
-        raise NoMessagesException
+        try:
+            msg = self.__connection_manager.get_queue(listener.id).pop()
+        except NoMessagesException:
+            raise
+        except Exception as e:
+            self.__on_pop_error(listener.id, e)
+            raise
+        self.__notify_listener(listener, msg)
+        return msg
 
     async def wait_next(self, listener_id: str, timeout: float) -> MOut:
         """
         Waits up to **timeout** seconds for the next message for given listener id, without blocking the event loop.
 
-        Raises a NoMessagesException if the listener is not running, or its subclass
-        :class:`~eric_sse.exception.TimeoutException` if no message arrives in time.
+        Raises a :class:`~eric_sse.exception.StoppedListenerException` if the listener is not running, as waiting for
+        messages that it won't receive is not allowed, and a NoMessagesException if no message arrives in time.
         Queue errors are re-raised after error handlers; listener errors are not, and the message is returned anyway.
         """
         listener = self.get_listener(listener_id)
         if not listener.is_running():
-            raise NoMessagesException
+            raise StoppedListenerException(listener.id)
 
         try:
             msg = await self._get_queue(listener.id).wait_pop(timeout)

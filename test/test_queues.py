@@ -3,7 +3,9 @@ import threading
 import time
 from unittest import TestCase, IsolatedAsyncioTestCase
 
-from eric_sse.exception import NoMessagesException, TimeoutException
+from eric_sse.connection import Connection
+from eric_sse.exception import NoMessagesException, StoppedListenerException
+from eric_sse.listener import MessageQueueListener
 from eric_sse.message import Message, MessageContract
 from eric_sse.queues import Queue, InMemoryQueue
 from test.mock.channel import FakeChannel
@@ -18,9 +20,8 @@ def push_later(queue: Queue, message: MessageContract, delay: float = 0.05):
 class InMemoryQueuePopTestCase(TestCase):
 
     def test_pop_without_timeout_returns_immediately(self):
-        with self.assertRaises(NoMessagesException) as raised:
+        with self.assertRaises(NoMessagesException):
             InMemoryQueue().pop()
-        self.assertNotIsInstance(raised.exception, TimeoutException)
 
     def test_pop_waits_up_to_timeout(self):
         sut = InMemoryQueue()
@@ -28,7 +29,7 @@ class InMemoryQueuePopTestCase(TestCase):
         self.assertEqual('late', sut.pop(timeout=2).type)
 
         start = time.monotonic()
-        with self.assertRaises(TimeoutException):
+        with self.assertRaises(NoMessagesException):
             sut.pop(timeout=0.05)
         self.assertGreaterEqual(time.monotonic() - start, 0.05)
 
@@ -51,7 +52,7 @@ class InMemoryQueueWaitPopTestCase(IsolatedAsyncioTestCase):
         self.assertEqual('late', (await sut.wait_pop(2)).type)
 
     async def test_timeout(self):
-        with self.assertRaises(TimeoutException):
+        with self.assertRaises(NoMessagesException):
             await InMemoryQueue().wait_pop(0.05)
 
     async def test_consecutive_waits_deliver_messages_in_order(self):
@@ -93,20 +94,7 @@ class SyncOnlyQueue(Queue):
         self.inner.push(message)
 
 
-class PlainNoMessagesQueue(SyncOnlyQueue):
-    """A backend raising a plain NoMessagesException when pop times out."""
-    def pop(self, timeout: float = 0) -> MessageContract:
-        try:
-            return self.inner.pop(timeout)
-        except NoMessagesException:
-            raise NoMessagesException from None
-
-
 class DefaultWaitPopTestCase(IsolatedAsyncioTestCase):
-
-    async def test_timeout_is_a_timeout_exception_whatever_pop_raises(self):
-        with self.assertRaises(TimeoutException):
-            await PlainNoMessagesQueue().wait_pop(0.05)
 
     async def test_waits_in_a_thread_without_blocking_the_loop(self):
         sut = SyncOnlyQueue()
@@ -128,7 +116,7 @@ class ChannelStreamWaitTestCase(IsolatedAsyncioTestCase):
         channel = FakeChannel()
         listener = channel.add_listener()
 
-        with self.assertRaises(NoMessagesException):
+        with self.assertRaises(StoppedListenerException):
             await channel.wait_next(listener.id, 0.05)  # Listener not running
 
         listener.start()
@@ -157,3 +145,26 @@ class ChannelStreamWaitTestCase(IsolatedAsyncioTestCase):
 
         received = [m async for m in channel.message_stream(listener)]
         self.assertEqual([], received)
+
+
+class StoppedAfterCheckListener(MessageQueueListener):
+    """Running for the stream loop check, stopped when the channel waits: as if stopped by another thread in between."""
+    def __init__(self):
+        super().__init__()
+        self.answers = iter([True])
+
+    def is_running(self) -> bool:
+        return next(self.answers, False)
+
+
+class StoppedListenerStreamTestCase(IsolatedAsyncioTestCase):
+
+    async def test_stream_yields_error_and_ends(self):
+        channel = FakeChannel()
+        listener = StoppedAfterCheckListener()
+        channel.register_connection(Connection(listener=listener, queue=InMemoryQueue()))
+
+        events = [event async for event in channel.message_stream(listener)]
+
+        self.assertEqual(1, len(events))
+        self.assertIsInstance(events[0], StoppedListenerException)

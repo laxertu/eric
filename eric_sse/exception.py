@@ -8,6 +8,12 @@ class InvalidListenerException(Exception):
     ...
 
 
+class StoppedListenerException(Exception):
+    """Raised when waiting for messages of a listener that is not running, see :meth:`~eric_sse.entities.AbstractChannel.deliver_next` and :meth:`~eric_sse.entities.AbstractChannel.wait_next`."""
+    def __init__(self, listener_id: str):
+        super().__init__(f'Listener {listener_id} is not running')
+
+
 class InternalStreamError(Exception):
     """
     Stands for an unexpected error in a channel stream, without its details, that could expose internals to clients.
@@ -19,15 +25,6 @@ class InternalStreamError(Exception):
 
 class NoMessagesException(Exception):
     """Raised when trying to fetch from an empty queue"""
-    ...
-
-
-class TimeoutException(NoMessagesException):
-    """
-    Raised when waiting for a message ends with no message, e.g. by :meth:`~eric_sse.queues.Queue.wait_pop`.
-
-    It is a :class:`NoMessagesException`, so code handling empty queues handles timeouts too.
-    """
     ...
 
 

@@ -3,7 +3,7 @@ from unittest import TestCase, IsolatedAsyncioTestCase
 
 import pytest
 
-from eric_sse.exception import InvalidListenerException, NoMessagesException
+from eric_sse.exception import InvalidListenerException, NoMessagesException, StoppedListenerException
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import Message, SignedMessage
 from eric_sse.connection import Connection, InMemoryConnectionsFactory
@@ -49,7 +49,8 @@ class MessageContractImplementationsTestCase(TestCase):
         fake_channel = FakeChannel()
         listener = fake_channel.add_listener()
 
-        with self.assertRaises(NoMessagesException):
+        # Stopped listener with an empty queue: being stopped comes first
+        with self.assertRaises(StoppedListenerException):
             fake_channel.deliver_next(listener.id)
 
         listener.start()
