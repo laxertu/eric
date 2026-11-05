@@ -16,6 +16,7 @@ Channels and connections
 
 .. automodule:: eric_sse.entities
     :members:
+    :private-members: _pop_next, _on_listener_error
     :show-inheritance:
     :member-order: bysource
 

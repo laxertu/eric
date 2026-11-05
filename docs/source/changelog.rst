@@ -59,6 +59,9 @@ Changelog
 * BREAKING: removed KvStorage.fetch_all. fetch_by_prefix('') returns all items: storages wrapped in a PrefixedStorage, as ChannelRepositoryBuilder does, never had their fetch_all called
 * Tests: added ChannelRepositoryContract (test/repository_contract.py), use case tests built from a ChannelRepositoryBuilder that every storage or custom repository has to pass
 * BREAKING: KvListenerRepository and ChannelRepositoryBuilder.listeners() take a listener_factory instead of a listener_class: any callable returning a listener, as queues already do, so listeners needing arguments, e.g. ProfiledListener, can be created through the Builder. Passing a class still works; only the listener_class keyword is gone
+* FIX: DataProcessingChannel.process_queue() bypassed error handlers and processed queues of stopped listeners. It now handles errors as deliver_next() does, in the channel's process also with a ProcessPoolExecutor: listener errors are logged and passed to error handlers, and the message is yielded anyway; queue errors are passed to error handlers and re-raised after the messages already popped are yielded
+* BREAKING: DataProcessingChannel.process_queue() raises a StoppedListenerException if the listener is not running, and listener errors no longer propagate. Removed DataProcessingChannel._invoke_callback_and_return()
+* Added AbstractChannel._pop_next(listener_id) and _on_listener_error(listener_id, msg, exception), the two halves of deliver_next(), for subclasses that notify listeners their own way, e.g. in an executor
 
 2.1.1
 

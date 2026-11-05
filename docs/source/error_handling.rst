@@ -17,6 +17,14 @@ Handlers are not persisted: register them on each channel, or once on a
 
     channel.add_listener_error_handler(AlertOnFailure())
 
+:class:`~eric_sse.prefabs.DataProcessingChannel` handles errors the same way, running listeners in an executor: listener
+errors are handled in the channel's process, and queue errors are re-raised after the messages already popped are
+processed.
+
+Subclasses that notify listeners their own way get the same behaviour by popping with
+:meth:`~eric_sse.entities.AbstractChannel._pop_next` and passing listener errors to
+:meth:`~eric_sse.entities.AbstractChannel._on_listener_error`.
+
 See :doc:`queue_patterns` for handlers that implement common patterns, like Dead Letter.
 
 Stream errors
