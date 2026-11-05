@@ -78,3 +78,25 @@ class ChannelRepositoryContract(ABC):
             connections_repository.listeners_repository.load(removed_connection_id)
         with self.assertRaises(ItemNotFound):
             connections_repository.queues_repository.load(removed_connection_id)
+
+    def test_persisted_channels_are_returned_by_load_all_and_load_one(self: 'ChannelRepositoryContract | TestCase'):
+        sut = self.create_builder().build()
+        channel_ids = []
+        for _ in range(2):
+            channel = sut.create({})
+            sut.persist(channel)
+            channel_ids.append(channel.id)
+
+        self.assertCountEqual(channel_ids, [channel.id for channel in sut.load_all()])
+        for channel_id in channel_ids:
+            self.assertEqual(channel_id, sut.load_one(channel_id).id)
+
+    def test_deleting_a_channel_twice_does_not_fail(self: 'ChannelRepositoryContract | TestCase'):
+        sut = self.create_builder().build()
+        channel = sut.create({})
+        sut.persist(channel)
+
+        sut.delete(channel.id)
+        sut.delete(channel.id)
+
+        self.assertEqual([], list(sut.load_all()))

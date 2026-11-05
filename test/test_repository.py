@@ -1,14 +1,11 @@
 from unittest import TestCase
-from unittest.mock import MagicMock
 from eric_sse.listener import MessageQueueListener
 from eric_sse.queues import InMemoryQueue
-from eric_sse.repository import ChannelRepository, ConnectionRepository, PrefixedStorage, KvListenerRepository, \
+from eric_sse.repository import ConnectionRepository, PrefixedStorage, KvListenerRepository, \
     KvQueueRepository
-from eric_sse.interfaces import ListenerRepositoryInterface, QueueRepositoryInterface
 
 from eric_sse.repository import InMemoryStorage
 from eric_sse.exception import ItemNotFound
-from test.mock.channel import FakeChannel
 
 
 class TestInMemoryStorage(TestCase):
@@ -38,44 +35,6 @@ class TestInMemoryStorage(TestCase):
             sut.delete('fake_key')
         except KeyError:
             self.fail('Delete on nonexistent key raised exception')
-
-
-class ChannelRepositoryInMemoryStorageIntegrationTestCase(TestCase):
-    def setUp(self):
-        self.listeners_repository = MagicMock(spec=ListenerRepositoryInterface)
-        self.queues_repository = MagicMock(spec=QueueRepositoryInterface)
-        self.listeners_repository.create.side_effect = MessageQueueListener
-        self.queues_repository.create.side_effect = InMemoryQueue
-
-
-    def create_sut(self):
-        connections_repository = ConnectionRepository(
-            listeners_repository=self.listeners_repository,
-            queues_repository=self.queues_repository,
-            storage=InMemoryStorage(),
-        )
-        return ChannelRepository(
-            storage=InMemoryStorage(),
-            connections_repository=connections_repository,
-            channel_class=FakeChannel
-        )
-
-    def test_persistence(self):
-        sut = self.create_sut()
-        channel = FakeChannel()
-        sut.persist(channel=channel)
-
-        channels = [c for c in sut.load_all()]
-        self.assertEqual(len(channels), 1)
-
-        self.assertEqual(channels[0].id, channel.id)
-        self.assertEqual(sut.load_one(channel_id=channel.id).id, channel.id)
-
-        sut.delete(channel_id=channel.id)
-        channels = [c for c in sut.load_all()]
-        self.assertEqual(len(channels), 0)
-        # Test delete idempotency
-        sut.delete(channel_id=channel.id)
 
 
 class MyListener(MessageQueueListener):
