@@ -5,7 +5,7 @@ from eric_sse import get_logger
 from eric_sse.connection import ConnectionsFactory
 from eric_sse.entities import AbstractChannel
 from eric_sse.listener import MessageQueueListener
-from eric_sse.message import SignedMessage, MessageContract, M, MIn, MOut
+from eric_sse.message import SignedMessage, MessageContract, MIn, MOut
 from eric_sse.exception import NoMessagesException, InvalidChannelException
 
 logger = get_logger()
@@ -116,27 +116,40 @@ class DataProcessingChannel(AbstractChannel[MIn, MOut]):
         return {**super().to_dict(), 'max_workers': self.max_workers, 'executor_class': self.executor_class}
 
     async def process_queue(self, listener: MessageQueueListener[MOut]) -> AsyncIterable[dict]:
-        """Performs queue processing of a given listener, returns an AsyncIterable of dictionaries containing message process result. See **adapt** method"""
+        """
+        Processes the messages in the queue of a given listener: runs its ``on_message`` concurrently in the executor,
+        and yields each message, adapted, as soon as it's processed. See **adapt** method.
 
-        with self.executor_class(max_workers=self.max_workers) as e:
-            there_are_pending_messages = True
-            tasks: list[asyncio.Future[MOut]] = []
+        Errors are handled as by :meth:`~eric_sse.entities.AbstractChannel.deliver_next`, in the channel's process:
+        listener errors are logged and passed to error handlers, and the message is yielded anyway. Queue errors and a
+        :class:`~eric_sse.exception.StoppedListenerException` are re-raised after the messages already popped are
+        yielded, so they are not lost.
+        """
+        with self.executor_class(max_workers=self.max_workers) as executor:
             loop = asyncio.get_running_loop()
-            while there_are_pending_messages:
+            tasks: list[asyncio.Task[MOut]] = []
+            pop_error: Exception | None = None
+            while True:
                 try:
-                    msg = self._get_queue(listener_id=listener.id).pop()
-                    tasks.append(loop.run_in_executor(e, DataProcessingChannel._invoke_callback_and_return, listener.on_message, msg))
-
+                    msg = self._pop_next(listener.id)
                 except NoMessagesException:
-                    there_are_pending_messages = False
+                    break
+                except Exception as e:
+                    pop_error = e
+                    break
+                tasks.append(loop.create_task(self.__process(executor, listener, msg)))
 
-            for task_dome in asyncio.as_completed(tasks):
-                task_result = await task_dome
-                yield self.adapt(task_result)
+            for task_done in asyncio.as_completed(tasks):
+                yield self.adapt(await task_done)
 
-    @staticmethod
-    def _invoke_callback_and_return(callback: Callable[[M], None], msg: M) -> M:
-        callback(msg)
+            if pop_error is not None:
+                raise pop_error
+
+    async def __process(self, executor: Executor, listener: MessageQueueListener[MOut], msg: MOut) -> MOut:
+        try:
+            await asyncio.get_running_loop().run_in_executor(executor, listener.on_message, msg)
+        except Exception as e:
+            self._on_listener_error(listener.id, msg, e)
         return msg
 
     def adapt(self, msg: MOut) -> dict:

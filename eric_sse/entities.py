@@ -127,9 +127,36 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
         try:
             listener.on_message(msg)
         except Exception as e:
-            self.__log_error(e)
-            for handler in self.__listener_error_handlers:
-                handler.handle_on_message_error(listener.id, msg, e)
+            self._on_listener_error(listener.id, msg, e)
+
+    def __running_listener(self, listener_id: str) -> MessageQueueListener[MOut]:
+        listener = self.get_listener(listener_id)
+        if not listener.is_running():
+            raise StoppedListenerException(listener.id)
+        return listener
+
+    def _pop_next(self, listener_id: str) -> MOut:
+        """
+        Pops the next message for given listener id, without notifying the listener: the first half of
+        :meth:`deliver_next`, for subclasses that notify listeners their own way, e.g. in an executor.
+        Then they must pass listener errors to :meth:`_on_listener_error`.
+
+        Raises as :meth:`deliver_next` does. Queue errors are re-raised after error handlers.
+        """
+        self.__running_listener(listener_id)
+        try:
+            return self.__connection_manager.get_queue(listener_id).pop()
+        except NoMessagesException:
+            raise
+        except Exception as e:
+            self.__on_pop_error(listener_id, e)
+            raise
+
+    def _on_listener_error(self, listener_id: str, msg: MOut, exception: Exception) -> None:
+        """Logs an error raised by a listener's ``on_message``, and passes it to error handlers."""
+        self.__log_error(exception)
+        for handler in self.__listener_error_handlers:
+            handler.handle_on_message_error(listener_id, msg, exception)
 
 
     @property
@@ -309,18 +336,8 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
         queue is empty, and a NoMessagesException if the queue is empty.
         Queue errors are re-raised after error handlers; listener errors are not, and the message is returned anyway.
         """
-        listener = self.get_listener(listener_id)
-        if not listener.is_running():
-            raise StoppedListenerException(listener.id)
-
-        try:
-            msg = self.__connection_manager.get_queue(listener.id).pop()
-        except NoMessagesException:
-            raise
-        except Exception as e:
-            self.__on_pop_error(listener.id, e)
-            raise
-        self.__notify_listener(listener, msg)
+        msg = self._pop_next(listener_id)
+        self.__notify_listener(self.get_listener(listener_id), msg)
         return msg
 
     async def wait_next(self, listener_id: str, timeout: float) -> MOut:
@@ -331,10 +348,7 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
         messages that it won't receive is not allowed, and a NoMessagesException if no message arrives in time.
         Queue errors are re-raised after error handlers; listener errors are not, and the message is returned anyway.
         """
-        listener = self.get_listener(listener_id)
-        if not listener.is_running():
-            raise StoppedListenerException(listener.id)
-
+        listener = self.__running_listener(listener_id)
         try:
             msg = await self._get_queue(listener.id).wait_pop(timeout)
         except NoMessagesException:
