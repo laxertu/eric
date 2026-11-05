@@ -29,7 +29,7 @@ class TestInMemoryStorage(TestCase):
         fetched_items = [i for i in sut.fetch_by_prefix('item1')]
         self.assertEqual([item1, item3], fetched_items)
 
-        fetched_items = [i for i in sut.fetch_all()]
+        fetched_items = [i for i in sut.fetch_by_prefix('')]
         self.assertEqual([item1, item2, item3], fetched_items)
 
         sut.delete('item1')
@@ -156,7 +156,7 @@ class PrefixedStorageTestCase(TestCase):
         b.upsert('k', 2)
         self.assertEqual({'a:k': 1, 'b:k': 2}, storage.items)
         self.assertEqual(1, a.fetch_one('k'))
-        self.assertEqual([2], list(b.fetch_all()))
+        self.assertEqual([2], list(b.fetch_by_prefix('')))
         self.assertEqual([1], list(a.fetch_by_prefix('k')))
 
         a.delete('k')

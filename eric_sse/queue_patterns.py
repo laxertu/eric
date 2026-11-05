@@ -164,7 +164,7 @@ class ReliableQueue(Queue[MessageContract, ReliableMessage]):
       that :meth:`pop` and :meth:`wait_pop` call before popping.
 
     Delivery is *at least once*: a message acknowledged after its visibility timeout may already have been put back,
-    and is delivered again. Requeued messages go to the end of the queue.
+    and is delivered again. Re-queued messages go to the end of the queue.
 
     It wraps another queue, that keeps the messages waiting to be popped, and a :class:`~eric_sse.repository.KvStorage`
     for in-flight messages. With durable ones, unacknowledged messages survive a restart.
@@ -250,11 +250,11 @@ class ReliableQueue(Queue[MessageContract, ReliableMessage]):
             return 0
         now = time.time()
         expired = [
-            entry['message'].id for entry in self.__in_flight.fetch_all()
+            entry['message'].id for entry in self.__in_flight.fetch_by_prefix('')
             if entry['deadline'] is not None and entry['deadline'] <= now
         ]
         return sum(1 for message_id in expired if self.nack(message_id))
 
     def in_flight(self) -> list[ReliableMessage]:
         """Popped messages not yet acknowledged."""
-        return [entry['message'] for entry in self.__in_flight.fetch_all()]
+        return [entry['message'] for entry in self.__in_flight.fetch_by_prefix('')]

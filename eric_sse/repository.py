@@ -19,16 +19,7 @@ class KvStorage(ABC, Generic[T]):
     @abstractmethod
     def fetch_by_prefix(self, prefix: str) -> Iterable[T]:
         """
-        Search by KV prefix
-
-        Implementations must tolerate deletions of fetched keys while the result is being iterated.
-        """
-        pass
-
-    @abstractmethod
-    def fetch_all(self) -> Iterable[T]:
-        """
-        Return all items that have been persisted
+        Search by KV prefix. An empty prefix returns all items.
 
         Implementations must tolerate deletions of fetched keys while the result is being iterated.
         """
@@ -60,10 +51,6 @@ class InMemoryStorage(KvStorage[T]):
             if k.startswith(prefix):
                 yield obj
 
-    def fetch_all(self) -> Iterable[T]:
-        for obj in list(self.items.values()):
-            yield obj
-
     def upsert(self, key: str, value: T):
         self.items[key] = value
 
@@ -91,9 +78,6 @@ class PrefixedStorage(KvStorage[T]):
 
     def fetch_by_prefix(self, prefix: str) -> Iterable[T]:
         return self.__storage.fetch_by_prefix(f'{self.__prefix}{prefix}')
-
-    def fetch_all(self) -> Iterable[T]:
-        return self.__storage.fetch_by_prefix(self.__prefix)
 
     def upsert(self, key: str, value: T):
         self.__storage.upsert(f'{self.__prefix}{key}', value)
@@ -219,7 +203,7 @@ class ChannelRepository(ChannelRepositoryInterface[C]):
         return channel
 
     def load_all(self) -> Iterable[C]:
-        for channel_data in self.__storage.fetch_all():
+        for channel_data in self.__storage.fetch_by_prefix(''):
             yield self._setup_channel(self.create(channel_data))
 
     def load_one(self, channel_id: str) -> C:
