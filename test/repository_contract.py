@@ -3,6 +3,7 @@ from unittest import TestCase
 
 from eric_sse.builder import ChannelRepositoryBuilder
 from eric_sse.exception import ItemNotFound
+from eric_sse.message import Message
 
 
 class ChannelRepositoryContract(ABC):
@@ -63,3 +64,56 @@ class ChannelRepositoryContract(ABC):
 
         self.assertCountEqual(channel_ids, deleted_ids)
         self.assertEqual([], list(sut.load_all()))
+
+    def test_persisted_connection_parts_are_returned_by_their_repositories(self: 'ChannelRepositoryContract | TestCase'):
+        connections_repository = self.create_builder().build().connections_repository
+        connection = connections_repository.create()
+        connection.queue.push(Message(msg_type='greeting', msg_payload='hello'))
+
+        connections_repository.persist(channel_id='channel', connection=connection)
+
+        self.assertEqual(connection.id, connections_repository.load_one('channel', connection.id).id)
+        self.assertEqual(connection.listener.id, connections_repository.listeners_repository.load(connection.id).id)
+        message = connections_repository.queues_repository.load(connection.id).pop()
+        self.assertEqual(('greeting', 'hello'), (message.type, message.payload))
+
+    def test_deleted_connection_parts_are_not_returned_by_their_repositories(self: 'ChannelRepositoryContract | TestCase'):
+        connections_repository = self.create_builder().build().connections_repository
+        connection = connections_repository.create()
+        connections_repository.persist(channel_id='channel', connection=connection)
+
+        connections_repository.delete(channel_id='channel', connection_id=connection.id)
+
+        self.assertEqual([], list(connections_repository.load_ids(channel_id='channel')))
+        with self.assertRaises(ItemNotFound):
+            connections_repository.load_one('channel', connection.id)
+        with self.assertRaises(ItemNotFound):
+            connections_repository.listeners_repository.load(connection.id)
+        with self.assertRaises(ItemNotFound):
+            connections_repository.queues_repository.load(connection.id)
+
+    def test_loading_an_unknown_connection_raises_item_not_found(self: 'ChannelRepositoryContract | TestCase'):
+        connections_repository = self.create_builder().build().connections_repository
+
+        with self.assertRaises(ItemNotFound):
+            connections_repository.load_one('unknown_channel', 'unknown_connection')
+
+    def test_connections_removed_from_a_channel_are_deleted_on_persist(self: 'ChannelRepositoryContract | TestCase'):
+        sut = self.create_builder().build()
+        channel = sut.create({})
+        kept = channel.add_listener()
+        removed = channel.add_listener()
+        connection_ids = {connection.listener.id: connection.id for connection in channel.get_connections()}
+        sut.persist(channel)
+
+        channel.remove_listener(removed.id)
+        sut.persist(channel)
+
+        loaded_listener_ids = [connection.listener.id for connection in sut.load_one(channel.id).get_connections()]
+        self.assertEqual([kept.id], loaded_listener_ids)
+        connections_repository = sut.connections_repository
+        removed_connection_id = connection_ids[removed.id]
+        with self.assertRaises(ItemNotFound):
+            connections_repository.listeners_repository.load(removed_connection_id)
+        with self.assertRaises(ItemNotFound):
+            connections_repository.queues_repository.load(removed_connection_id)
