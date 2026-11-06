@@ -18,10 +18,10 @@ class ChannelRepositoryContract(ABC):
 
         class RedisStorageTestCase(ChannelRepositoryContract, TestCase):
             def create_builder(self):
-                return ChannelRepositoryBuilder(FakeChannel, RedisStorage())
+                return ChannelRepositoryBuilder(SSEChannel, RedisStorage())
 
             def channel_data(self):
-                return {}
+                return {'retry_timeout_milliseconds': 10}
 
     Not a ``TestCase`` itself, so the abstract class is not collected.
     """
@@ -111,6 +111,16 @@ class ChannelRepositoryContract(ABC):
         self.assertCountEqual(channel_ids, [channel.id for channel in sut.load_all()])
         for channel_id in channel_ids:
             self.assertEqual(channel_id, sut.load_one(channel_id).id)
+
+    def test_channel_configuration_is_returned_after_reload(self: 'ChannelRepositoryContract | TestCase'):
+        sut = self.create_builder().build()
+        channel = self._create_channel(sut)
+        sut.persist(channel)
+
+        loaded = sut.load_one(channel.id).to_dict()
+
+        self.assertEqual(channel.to_dict(), loaded)
+        self.assertEqual(self.channel_data(), {key: loaded[key] for key in self.channel_data()})
 
     def test_deleting_a_channel_twice_does_not_fail(self: 'ChannelRepositoryContract | TestCase'):
         sut = self.create_builder().build()
