@@ -1,50 +1,63 @@
-import asyncio
 import pickle
 import time
+from typing import Any, Callable, Iterable
 from unittest import IsolatedAsyncioTestCase
-from unittest.mock import patch
 
 from eric_sse.builder import ChannelRepositoryBuilder
-from eric_sse.exception import NoMessagesException
 from eric_sse.connection import Connection
+from eric_sse.exception import ItemNotFound, NoMessagesException
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import Message, MessageContract, SignedMessage
 from eric_sse.prefabs import SSEChannel
-from eric_sse.queue_patterns import DeadLetter, DeadLetterHandler, ReliableMessage, ReliableQueue
+from eric_sse.queue_patterns import DeadLetterHandler, ReliableQueue
 from eric_sse.queues import InMemoryQueue, Queue
-from eric_sse.repository import InMemoryStorage
-from test.mock.channel import FakeChannel
-from test.test_handlers import BrokenListener, BrokenQueue, register_broken_queue
+from eric_sse.repository import ChannelRepository, InMemoryStorage, KvStorage
+from test.reliable_queue_contract import ReliableQueueContract
+from test.test_handlers import BrokenListener, BrokenQueue
 
 
-def channel_with_dead_letters(handler: DeadLetterHandler | None = None):
-    channel = FakeChannel()
-    dead_letters = handler if handler is not None else DeadLetterHandler()
-    channel.add_queuing_error_handler(dead_letters)
-    channel.add_listener_error_handler(dead_letters)
-    return channel, dead_letters
+def build_channels(
+        dead_letters: DeadLetterHandler,
+        listener_factory: Callable[[], MessageQueueListener] = MessageQueueListener,
+        queue_factory: Callable[[], Queue] = InMemoryQueue
+) -> ChannelRepository[SSEChannel]:
+    return (
+        ChannelRepositoryBuilder(SSEChannel)
+        .listeners(listener_factory)
+        .queues(queue_factory)
+        .queuing_error_handler(dead_letters)
+        .listener_error_handler(dead_letters)
+        .build()
+    )
+
+
+def subscribe(channel: SSEChannel) -> MessageQueueListener:
+    listener = channel.add_listener()
+    listener.start()
+    return listener
 
 
 class DeadLetterHandlerTestCase(IsolatedAsyncioTestCase):
 
-    async def test_failed_push_is_dead_lettered_and_reraised(self):
-        channel, dead_letters = channel_with_dead_letters()
-        listener = register_broken_queue(channel)
+    def test_message_that_cannot_be_queued_is_dead_lettered_and_the_error_raised(self):
+        dead_letters = DeadLetterHandler()
+        channel = build_channels(dead_letters, queue_factory=BrokenQueue).create({})
+        listener = subscribe(channel)
 
         with self.assertRaises(RuntimeError):
             channel.dispatch(listener.id, Message(msg_type='test', msg_payload='hello'))
 
         dead_letter = dead_letters.queue.pop()
-        self.assertIsInstance(dead_letter, DeadLetter)
         self.assertEqual(listener.id, dead_letter.listener_id)
         self.assertEqual(('test', 'hello'), (dead_letter.type, dead_letter.payload))
         self.assertEqual("RuntimeError('push failed')", dead_letter.error)
 
-    async def test_failed_broadcast_push_is_dead_lettered(self):
-        channel, dead_letters = channel_with_dead_letters()
-        broken = register_broken_queue(channel)
-        healthy = channel.add_listener()
-        healthy.start()
+    def test_broadcast_dead_letters_only_messages_that_cannot_be_queued(self):
+        dead_letters = DeadLetterHandler()
+        channel = build_channels(dead_letters).create({})
+        healthy = subscribe(channel)
+        broken = MessageQueueListener()
+        channel.register_connection(Connection(listener=broken, queue=BrokenQueue()))
 
         channel.broadcast(Message(msg_type='test'))
 
@@ -53,14 +66,13 @@ class DeadLetterHandlerTestCase(IsolatedAsyncioTestCase):
         with self.assertRaises(NoMessagesException):
             dead_letters.queue.pop()
 
-    async def test_failed_on_message_is_dead_lettered(self):
-        channel, dead_letters = channel_with_dead_letters()
-        listener = BrokenListener()
-        channel.register_listener(listener)
-        listener.start()
-
+    async def test_messages_the_listener_fails_to_handle_are_dead_lettered(self):
+        dead_letters = DeadLetterHandler()
+        channel = build_channels(dead_letters, listener_factory=BrokenListener).create({})
+        listener = subscribe(channel)
         channel.dispatch(listener.id, Message(msg_type='first'))
         channel.dispatch(listener.id, Message(msg_type='second'))
+
         channel.deliver_next(listener.id)
         await channel.wait_next(listener.id, timeout=0.01)
 
@@ -69,9 +81,10 @@ class DeadLetterHandlerTestCase(IsolatedAsyncioTestCase):
         self.assertEqual(('second', listener.id), (second.type, second.listener_id))
         self.assertEqual("RuntimeError('on_message failed')", first.error)
 
-    async def test_pop_errors_are_not_dead_lettered(self):
-        channel, dead_letters = channel_with_dead_letters()
-        listener = register_broken_queue(channel)
+    def test_failed_reads_are_not_dead_lettered(self):
+        dead_letters = DeadLetterHandler()
+        channel = build_channels(dead_letters, queue_factory=BrokenQueue).create({})
+        listener = subscribe(channel)
 
         with self.assertRaises(RuntimeError):
             channel.deliver_next(listener.id)
@@ -79,73 +92,63 @@ class DeadLetterHandlerTestCase(IsolatedAsyncioTestCase):
         with self.assertRaises(NoMessagesException):
             dead_letters.queue.pop()
 
-    async def test_custom_queue(self):
+    def test_dead_letters_go_to_the_given_queue(self):
         queue = InMemoryQueue()
-        channel, dead_letters = channel_with_dead_letters(DeadLetterHandler(queue))
-        listener = register_broken_queue(channel)
+        channel = build_channels(DeadLetterHandler(queue), queue_factory=BrokenQueue).create({})
+        listener = subscribe(channel)
 
         with self.assertRaises(RuntimeError):
             channel.dispatch(listener.id, Message(msg_type='test'))
 
-        self.assertIs(queue, dead_letters.queue)
         self.assertEqual('test', queue.pop().type)
 
-    async def test_broken_dead_letter_queue_keeps_original_error(self):
-        channel, _ = channel_with_dead_letters(DeadLetterHandler(BrokenQueue()))
-        listener = register_broken_queue(channel)
+    def test_lost_dead_letter_is_logged_and_the_original_error_raised(self):
+        channel = build_channels(DeadLetterHandler(BrokenQueue()), queue_factory=BrokenQueue).create({})
+        listener = subscribe(channel)
 
-        with patch('eric_sse.queue_patterns.logger') as logger:
+        with self.assertLogs(level='ERROR'):
             with self.assertRaises(RuntimeError) as raised:
                 channel.dispatch(listener.id, Message(msg_type='test'))
 
         self.assertEqual('push failed', str(raised.exception))
-        logger.error.assert_called_once()
 
-    async def test_broken_dead_letter_queue_still_delivers_on_message_failure(self):
-        channel, _ = channel_with_dead_letters(DeadLetterHandler(BrokenQueue()))
-        listener = BrokenListener()
-        channel.register_listener(listener)
-        listener.start()
+    def test_lost_dead_letter_does_not_stop_delivery(self):
+        channel = build_channels(DeadLetterHandler(BrokenQueue()), listener_factory=BrokenListener).create({})
+        listener = subscribe(channel)
         channel.dispatch(listener.id, Message(msg_type='test'))
 
-        with patch('eric_sse.queue_patterns.logger'):
+        with self.assertLogs(level='ERROR'):
             self.assertEqual('test', channel.deliver_next(listener.id).type)
 
-    async def test_builder_registers_dead_letters_on_created_channels(self):
+    def test_channels_loaded_from_persistence_dead_letter_too(self):
         dead_letters = DeadLetterHandler()
-        channels = (
-            ChannelRepositoryBuilder(SSEChannel)
-            .queuing_error_handler(dead_letters)
-            .listener_error_handler(dead_letters)
-            .build()
-        )
+        channels = build_channels(dead_letters, listener_factory=BrokenListener)
         channel = channels.create({})
-        listener = BrokenListener()
-        channel.register_listener(listener)
-        listener.start()
-        channel.dispatch(listener.id, Message(msg_type='test'))
+        channels.persist(channel)
+        loaded = channels.load_one(channel.id)
+        listener = subscribe(loaded)
+        loaded.dispatch(listener.id, Message(msg_type='test'))
 
-        channel.deliver_next(listener.id)
+        loaded.deliver_next(listener.id)
 
         self.assertEqual('test', dead_letters.queue.pop().type)
 
-    async def test_original_message_is_kept(self):
-        channel, dead_letters = channel_with_dead_letters()
-        listener = register_broken_queue(channel)
-        original = SignedMessage(sender_id='producer', msg_type='test', msg_id='m1')
+    def test_dead_letter_keeps_the_original_message(self):
+        dead_letters = DeadLetterHandler()
+        channel = build_channels(dead_letters, queue_factory=BrokenQueue).create({})
+        listener = subscribe(channel)
 
         with self.assertRaises(RuntimeError):
-            channel.dispatch(listener.id, original)
+            channel.dispatch(listener.id, SignedMessage(sender_id='producer', msg_type='test', msg_id='m1'))
 
         dead_letter = dead_letters.queue.pop()
-        self.assertIs(original, dead_letter.message)
         self.assertEqual('m1', dead_letter.id)
+        self.assertEqual('producer', dead_letter.message.sender_id)
 
-    async def test_redelivery(self):
-        channel, dead_letters = channel_with_dead_letters()
-        listener = BrokenListener()
-        channel.register_listener(listener)
-        listener.start()
+    def test_dead_letter_can_be_delivered_again(self):
+        dead_letters = DeadLetterHandler()
+        channel = build_channels(dead_letters, listener_factory=BrokenListener).create({})
+        listener = subscribe(channel)
         channel.dispatch(listener.id, Message(msg_type='test', msg_payload='hello'))
         channel.deliver_next(listener.id)
 
@@ -156,151 +159,58 @@ class DeadLetterHandlerTestCase(IsolatedAsyncioTestCase):
         self.assertEqual(('test', 'hello'), (redelivered.type, redelivered.payload))
 
 
-class ReliableQueueTestCase(IsolatedAsyncioTestCase):
+class PicklingStorage(KvStorage):
+    """Keeps values pickled, as an out-of-process storage would."""
+    def __init__(self):
+        self.items: dict[str, bytes] = {}
 
-    def test_pop_wraps_and_keeps_message_in_flight(self):
-        queue = ReliableQueue()
-        original = Message(msg_type='test', msg_payload='hello')
-        queue.push(original)
+    def fetch_by_prefix(self, prefix: str) -> Iterable[Any]:
+        return [pickle.loads(value) for key, value in list(self.items.items()) if key.startswith(prefix)]
 
-        msg = queue.pop()
+    def upsert(self, key: str, value: Any):
+        self.items[key] = pickle.dumps(value)
 
-        self.assertIsInstance(msg, ReliableMessage)
-        self.assertIs(original, msg.message)
-        self.assertEqual(('test', 'hello', 1), (msg.type, msg.payload, msg.deliveries))
-        self.assertEqual([msg.id], [m.id for m in queue.in_flight()])
-        with self.assertRaises(NoMessagesException):
-            queue.pop()
+    def fetch_one(self, key: str) -> Any:
+        try:
+            return pickle.loads(self.items[key])
+        except KeyError:
+            raise ItemNotFound(key=key) from None
 
-    def test_ack_removes_for_good(self):
-        queue = ReliableQueue(visibility_timeout=0)
-        queue.push(Message(msg_type='test'))
-        msg = queue.pop()
-
-        self.assertTrue(queue.ack(msg.id))
-        self.assertFalse(queue.ack(msg.id))
-        self.assertEqual([], queue.in_flight())
-        self.assertEqual(0, queue.requeue_expired())
-        with self.assertRaises(NoMessagesException):
-            queue.pop()
-
-    def test_nack_requeues_at_the_end(self):
-        queue = ReliableQueue()
-        queue.push(Message(msg_type='first'))
-        queue.push(Message(msg_type='second'))
-        first = queue.pop()
-
-        self.assertTrue(queue.nack(first.id))
-        self.assertFalse(queue.nack(first.id))
-
-        self.assertEqual('second', queue.pop().type)
-        redelivered = queue.pop()
-        self.assertEqual((first.id, 'first', 2), (redelivered.id, redelivered.type, redelivered.deliveries))
-
-    def test_unknown_id(self):
-        queue = ReliableQueue()
-        self.assertFalse(queue.ack('nope'))
-        self.assertFalse(queue.nack('nope'))
-
-    def test_expired_messages_are_requeued_on_pop(self):
-        queue = ReliableQueue(visibility_timeout=0.01)
-        queue.push(Message(msg_type='test'))
-        msg = queue.pop()
-
-        time.sleep(0.02)
-
-        redelivered = queue.pop()
-        self.assertEqual((msg.id, 2), (redelivered.id, redelivered.deliveries))
-
-    def test_late_ack_after_requeue(self):
-        queue = ReliableQueue(visibility_timeout=0.01)
-        queue.push(Message(msg_type='test'))
-        msg = queue.pop()
-        time.sleep(0.02)
-
-        self.assertEqual(1, queue.requeue_expired())
-        self.assertFalse(queue.ack(msg.id))
-        self.assertEqual(msg.id, queue.pop().id)
-
-    def test_not_expired_messages_stay_in_flight(self):
-        queue = ReliableQueue(visibility_timeout=60)
-        queue.push(Message(msg_type='test'))
-        queue.pop()
-
-        self.assertEqual(0, queue.requeue_expired())
-        self.assertEqual(1, len(queue.in_flight()))
-
-    def test_no_visibility_timeout(self):
-        queue = ReliableQueue(visibility_timeout=None)
-        queue.push(Message(msg_type='test'))
-        msg = queue.pop()
-
-        self.assertEqual(0, queue.requeue_expired())
-        self.assertTrue(queue.nack(msg.id))
-        self.assertEqual(msg.id, queue.pop().id)
-
-    async def test_wait_pop(self):
-        queue = ReliableQueue()
-        waiting = asyncio.create_task(queue.wait_pop(1))
-        await asyncio.sleep(0)
-        queue.push(Message(msg_type='test'))
-
-        msg = await waiting
-
-        self.assertEqual(('test', 1), (msg.type, msg.deliveries))
-        self.assertEqual([msg.id], [m.id for m in queue.in_flight()])
-
-    async def test_wait_pop_requeues_expired(self):
-        queue = ReliableQueue(visibility_timeout=0.01)
-        queue.push(Message(msg_type='test'))
-        msg = await queue.wait_pop(1)
-        await asyncio.sleep(0.02)
-
-        self.assertEqual(msg.id, (await queue.wait_pop(1)).id)
-
-    def test_custom_queue_and_in_flight_storage(self):
-        inner, in_flight = InMemoryQueue(), InMemoryStorage()
-        queue = ReliableQueue(inner, in_flight=in_flight)
-        queue.push(Message(msg_type='test'))
-
-        self.assertIsInstance(inner.pop(), ReliableMessage)
-        queue.push(Message(msg_type='test'))
-        msg = queue.pop()
-        self.assertEqual([msg.id], list(in_flight.items.keys()))
-
-    def test_pickle(self):
-        queue = ReliableQueue(PicklableQueue())
-        queue.push(Message(msg_type='first'))
-        queue.push(Message(msg_type='second'))
-        popped = queue.pop()
-
-        restored = pickle.loads(pickle.dumps(queue))
-
-        self.assertTrue(restored.ack(popped.id))
-        self.assertEqual('second', restored.pop().type)
-
-    async def test_channel_delivers_reliable_messages(self):
-        channel = FakeChannel()
-        queue = ReliableQueue()
-        listener = MessageQueueListener()
-        channel.register_connection(Connection(listener=listener, queue=queue))
-        listener.start()
-        channel.dispatch(listener.id, Message(msg_type='test'))
-
-        msg = channel.deliver_next(listener.id)
-
-        self.assertIsInstance(msg, ReliableMessage)
-        self.assertTrue(queue.ack(msg.id))
+    def delete(self, key: str):
+        self.items.pop(key, None)
 
 
 class PicklableQueue(Queue):
+    """Waits for messages by polling: no lock to drop when pickled."""
     def __init__(self):
         self.items = []
 
     def pop(self, timeout: float = 0) -> MessageContract:
-        if not self.items:
-            raise NoMessagesException
+        deadline = time.monotonic() + timeout
+        while not self.items:
+            if time.monotonic() >= deadline:
+                raise NoMessagesException
+            time.sleep(0.001)
         return self.items.pop(0)
 
     def push(self, message: MessageContract) -> None:
         self.items.append(message)
+
+
+class DefaultReliableQueueTestCase(ReliableQueueContract, IsolatedAsyncioTestCase):
+    def create_builder(self, visibility_timeout: float | None) -> ChannelRepositoryBuilder:
+        return ChannelRepositoryBuilder(SSEChannel).queues(lambda: ReliableQueue(visibility_timeout=visibility_timeout))
+
+    def channel_data(self) -> dict:
+        return {}
+
+
+class PickledReliableQueueTestCase(ReliableQueueContract, IsolatedAsyncioTestCase):
+    """Custom inner queue and in-flight storage, persisted pickled."""
+    def create_builder(self, visibility_timeout: float | None) -> ChannelRepositoryBuilder:
+        return ChannelRepositoryBuilder(SSEChannel, PicklingStorage()).queues(
+            lambda: ReliableQueue(PicklableQueue(), visibility_timeout=visibility_timeout, in_flight=InMemoryStorage())
+        )
+
+    def channel_data(self) -> dict:
+        return {}
