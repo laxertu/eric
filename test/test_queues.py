@@ -114,36 +114,36 @@ class ChannelStreamWaitTestCase(IsolatedAsyncioTestCase):
 
     async def test_wait_next(self):
         channel = FakeChannel()
-        listener = channel.add_listener()
+        connection = channel.add_connection()
 
         with self.assertRaises(StoppedListenerException):
-            await channel.wait_next(listener.id, 0.05)  # Listener not running
+            await channel.wait_next(connection.id, 0.05)  # Listener not running
 
-        listener.start()
-        asyncio.get_running_loop().call_later(0.05, channel.dispatch, listener.id, Message(msg_type='late'))
-        self.assertEqual('late', (await channel.wait_next(listener.id, 2)).type)
+        connection.listener.start()
+        asyncio.get_running_loop().call_later(0.05, channel.dispatch, connection.id, Message(msg_type='late'))
+        self.assertEqual('late', (await channel.wait_next(connection.id, 2)).type)
 
     async def test_stream_delivers_messages_dispatched_while_waiting(self):
         channel = FakeChannel()
         listener = MessageQueueListenerMock(num_messages_before_disconnect=2)
-        channel.register_listener(listener)
+        connection = channel.register_listener(listener)
         listener.start()
 
         loop = asyncio.get_running_loop()
-        loop.call_later(0.05, channel.dispatch, listener.id, Message(msg_type='first'))
-        loop.call_later(0.1, channel.dispatch, listener.id, Message(msg_type='second'))
+        loop.call_later(0.05, channel.dispatch, connection.id, Message(msg_type='first'))
+        loop.call_later(0.1, channel.dispatch, connection.id, Message(msg_type='second'))
 
-        received = [m.type async for m in channel.message_stream(listener)]
+        received = [m.type async for m in channel.message_stream(connection.id)]
         self.assertEqual(['first', 'second'], received)
 
     async def test_stream_ends_when_listener_is_stopped_while_idle(self):
         channel = FakeChannel()
         channel.wait_timeout_seconds = 0.05
-        listener = channel.add_listener()
-        listener.start()
-        asyncio.get_running_loop().call_later(0.05, listener.stop)
+        connection = channel.add_connection()
+        connection.listener.start()
+        asyncio.get_running_loop().call_later(0.05, connection.listener.stop)
 
-        received = [m async for m in channel.message_stream(listener)]
+        received = [m async for m in channel.message_stream(connection.id)]
         self.assertEqual([], received)
 
 
@@ -161,10 +161,10 @@ class StoppedListenerStreamTestCase(IsolatedAsyncioTestCase):
 
     async def test_stream_yields_error_and_ends(self):
         channel = FakeChannel()
-        listener = StoppedAfterCheckListener()
-        channel.register_connection(Connection(listener=listener, queue=InMemoryQueue()))
+        connection = Connection(listener=StoppedAfterCheckListener(), queue=InMemoryQueue())
+        channel.register_connection(connection)
 
-        events = [event async for event in channel.message_stream(listener)]
+        events = [event async for event in channel.message_stream(connection.id)]
 
         self.assertEqual(1, len(events))
         self.assertIsInstance(events[0], StoppedListenerException)

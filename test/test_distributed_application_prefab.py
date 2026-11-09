@@ -27,8 +27,7 @@ class DistributedListenerTestCase(IsolatedAsyncioTestCase):
         l.set_action('hello', hello_response)
         l.set_action('hello_ack', hello_ack_response)
         l.start()
-        ch.register_listener(l)
-        return l
+        return ch.register_listener(l)
 
 
     async def test_application(self):
@@ -39,15 +38,15 @@ class DistributedListenerTestCase(IsolatedAsyncioTestCase):
 
 
         # Bob says hello to Alice
-        bob.dispatch_to(alice, Message(msg_type='hello', msg_payload='hello!'))
+        bob.listener.dispatch_to(alice.id, Message(msg_type='hello', msg_payload='hello!'))
 
         # Alice will stop after having answered to Bob
-        bob.dispatch_to(alice, Message(msg_type='stop'))
+        bob.listener.dispatch_to(alice.id, Message(msg_type='stop'))
 
-        types = [m['event'] async for m in ssc.message_stream(alice)]
+        types = [m['event'] async for m in ssc.message_stream(alice.id)]
         self.assertEqual(['hello', 'stop'], types)
 
-        types = [m['event'] async for m in ssc.message_stream(bob)]
+        types = [m['event'] async for m in ssc.message_stream(bob.id)]
         self.assertEqual(['hello_ack', 'stop'], types)
 
 class SetActionTestCase(IsolatedAsyncioTestCase):
@@ -62,14 +61,14 @@ class DataProcessingChannelTestCase(IsolatedAsyncioTestCase):
     async def test_channel(self):
         channel = DataProcessingChannel(stream_delay_seconds=0, max_workers=2)
         listener = MessageQueueListenerMock()
-        channel.register_listener(listener=listener)
+        connection = channel.register_listener(listener)
 
-        channel.dispatch(listener.id, Message(msg_type='test1'))
-        channel.dispatch(listener.id, Message(msg_type='test2'))
-        channel.dispatch(listener.id, Message(msg_type='test3'))
+        channel.dispatch(connection.id, Message(msg_type='test1'))
+        channel.dispatch(connection.id, Message(msg_type='test2'))
+        channel.dispatch(connection.id, Message(msg_type='test3'))
 
         listener.start()
-        types = {m['event'] async for m in channel.process_queue(listener)}
+        types = {m['event'] async for m in channel.process_queue(connection.id)}
         self.assertEqual({'test1', 'test2', 'test3'}, types)
 
 
@@ -78,7 +77,7 @@ class ListenerChannelTestCase(IsolatedAsyncioTestCase):
     async def test_dispatch_without_channel_raises_a_clear_error(self):
         from eric_sse.exception import InvalidChannelException
         with self.assertRaises(InvalidChannelException):
-            SimpleDistributedApplicationListener().dispatch_to(MessageQueueListenerMock(), Message(msg_type='hello'))
+            SimpleDistributedApplicationListener().dispatch_to('receiver', Message(msg_type='hello'))
 
     async def test_channel_is_set_on_created_and_loaded_listeners(self):
         from eric_sse.builder import ChannelRepositoryBuilder
@@ -88,21 +87,21 @@ class ListenerChannelTestCase(IsolatedAsyncioTestCase):
             .build()
         )
         channel = repository.create({})
-        alice = channel.add_listener()
-        bob = channel.add_listener()
+        alice = channel.add_connection()
+        bob = channel.add_connection()
         repository.persist(channel)
 
         loaded = repository.load_one(channel.id)
-        loaded_alice = loaded.get_listener(alice.id)
+        loaded_alice = loaded.get_connection(alice.id).listener
         loaded_alice.set_action('hello', hello_response)
-        loaded_bob = loaded.get_listener(bob.id)
-        loaded_bob.dispatch_to(loaded_alice, Message(msg_type='hello', msg_payload='hi'))
-        loaded_bob.dispatch_to(loaded_alice, Message(msg_type='stop'))
+        loaded_bob = loaded.get_connection(bob.id).listener
+        loaded_bob.dispatch_to(alice.id, Message(msg_type='hello', msg_payload='hi'))
+        loaded_bob.dispatch_to(alice.id, Message(msg_type='stop'))
 
-        types = [m['event'] async for m in loaded.message_stream(loaded_alice)]
+        types = [m['event'] async for m in loaded.message_stream(alice.id)]
         self.assertEqual(['hello', 'stop'], types)
         # Alice answered through the loaded channel
-        self.assertEqual("hello_ack", loaded._get_queue(bob.id).pop().type)
+        self.assertEqual("hello_ack", loaded.get_connection(bob.id).queue.pop().type)
 
 
 class DistributedListenerOnAnyChannelTestCase(IsolatedAsyncioTestCase):
@@ -111,11 +110,11 @@ class DistributedListenerOnAnyChannelTestCase(IsolatedAsyncioTestCase):
         from eric_sse.prefabs import SSEChannel
         channel = SSEChannel()
         alice, bob = SimpleDistributedApplicationListener(), SimpleDistributedApplicationListener()
-        channel.register_listener(alice)
-        channel.register_listener(bob)
+        alice_connection = channel.register_listener(alice)
+        bob_connection = channel.register_listener(bob)
         bob.start()
 
-        alice.dispatch_to(bob, Message(msg_type='hello'))
+        alice.dispatch_to(bob_connection.id, Message(msg_type='hello'))
 
-        received = channel.deliver_next(bob.id)
-        self.assertEqual(('hello', alice.id), (received.type, received.sender_id))
+        received = channel.deliver_next(bob_connection.id)
+        self.assertEqual(('hello', alice_connection.id), (received.type, received.sender_id))

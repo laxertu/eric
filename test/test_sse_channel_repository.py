@@ -98,12 +98,12 @@ class TestSSEChannelRepository(TestCase):
         sut = self._create_sut()
 
         channel = SSEChannel()
-        listener = channel.add_listener()
+        connection = channel.add_connection()
         sut.persist(channel)
 
         sut_2 = self._create_sut()
         channel_2 = sut_2.load_one(channel_id=channel.id)
-        self.assertIsInstance(channel_2.get_listener(listener_id=listener.id), MessageQueueListener)
+        self.assertIsInstance(channel_2.get_connection(connection_id=connection.id).listener, MessageQueueListener)
 
     def test_deletions(self):
         sut = self._create_sut()
@@ -118,8 +118,8 @@ class TestSSEChannelRepository(TestCase):
     def test_delete_removes_connections_listeners_and_queues(self):
         sut = self._create_sut()
         channel = SSEChannel()
-        channel.add_listener()
-        channel.add_listener()
+        channel.add_connection()
+        channel.add_connection()
         sut.persist(channel)
 
         sut.delete(channel_id=channel.id)
@@ -132,8 +132,8 @@ class TestSSEChannelRepository(TestCase):
     def test_persist_and_delete_do_not_load_listeners_and_queues(self):
         sut = self._create_sut()
         channel = SSEChannel()
-        channel.add_listener()
-        removed = channel.add_listener()
+        channel.add_connection()
+        removed = channel.add_connection()
         sut.persist(channel)
 
         loads = []
@@ -142,7 +142,7 @@ class TestSSEChannelRepository(TestCase):
         listeners_repository.load = lambda connection_id: loads.append(connection_id)
         queues_repository.load = lambda connection_id: loads.append(connection_id)
 
-        channel.remove_listener(removed.id)
+        channel.remove_connection(removed.id)
         sut.persist(channel)
         self.assertEqual([c.id for c in channel.get_connections()], list(sut.connections_repository.load_ids(channel.id)))
 
@@ -157,15 +157,14 @@ class TestSSEChannelRepositoryBuiltByBuilder(TestCase):
         sut = ChannelRepositoryBuilder(SSEChannel).build()
 
         channel = SSEChannel(retry_timeout_milliseconds=42)
-        listener = channel.add_listener()
-        channel.dispatch(listener.id, Message(msg_type='test', msg_payload='hi'))
+        connection = channel.add_connection()
+        channel.dispatch(connection.id, Message(msg_type='test', msg_payload='hi'))
         sut.persist(channel)
 
         loaded = sut.load_one(channel.id)
         self.assertEqual(42, loaded.retry_timeout_milliseconds)
-        self.assertEqual(listener.id, loaded.get_listener(listener.id).id)
-        loaded.get_listener(listener.id).start()
-        self.assertEqual('hi', loaded.deliver_next(listener.id).payload)
+        loaded.get_connection(connection.id).listener.start()
+        self.assertEqual('hi', loaded.deliver_next(connection.id).payload)
 
 
 class TestKvRepositories(TestCase):
@@ -233,7 +232,7 @@ class TestChannelSerialisation(TestCase):
     def test_from_dict_injects_connections_factory(self):
         sut = ChannelRepositoryBuilder(SSEChannel).listeners(MyListener).build()
         channel = SSEChannel.from_dict(SSEChannel().to_dict(), connections_factory=sut.connections_repository)
-        self.assertIsInstance(channel.add_listener(), MyListener)
+        self.assertIsInstance(channel.add_connection().listener, MyListener)
 
     def test_persist_rejects_other_channel_classes(self):
         sut = ChannelRepositoryBuilder(SSEChannel).build()

@@ -29,7 +29,7 @@ class RecordingListener(MessageQueueListener):
     def on_message(self, msg: MessageContract) -> None:
         self.received.append(msg.type)
 
-    def on_registered(self, channel) -> None:
+    def on_registered(self, channel, connection_id) -> None:
         self.channels.append(channel)
 
 
@@ -109,7 +109,6 @@ class ProfiledListenerTestCase(IsolatedAsyncioTestCase):
         listener.start()
 
         self.assertIs(inner, listener.listener)
-        self.assertEqual(inner.id, listener.id)
         self.assertEqual(['test'], inner.received)
         self.assertTrue(inner.is_running())
         self.assertTrue(listener.is_running())
@@ -133,15 +132,16 @@ class ProfiledChannelTestCase(IsolatedAsyncioTestCase):
         inner = RecordingListener()
         listener = ProfiledListener(inner)
         queue = ProfiledQueue(InMemoryQueue())
-        channel.register_connection(Connection(listener=listener, queue=queue))
+        connection = Connection(listener=listener, queue=queue)
+        channel.register_connection(connection)
         listener.start()
 
         for i in range(10):
-            channel.dispatch(listener.id, Message(msg_type=str(i)))
+            channel.dispatch(connection.id, Message(msg_type=str(i)))
         for _ in range(5):
-            channel.deliver_next(listener.id)
+            channel.deliver_next(connection.id)
         for _ in range(5):
-            await channel.wait_next(listener.id, timeout=1)
+            await channel.wait_next(connection.id, timeout=1)
 
         self.assertEqual([channel], inner.channels)
         self.assertEqual([str(i) for i in range(10)], inner.received)
@@ -159,12 +159,12 @@ class ProfiledBuilderTestCase(IsolatedAsyncioTestCase):
             .build()
         )
         channel = repository.create({})
-        listeners: list[ProfiledListener] = [channel.add_listener(), channel.add_listener()]
+        connections = [channel.add_connection(), channel.add_connection()]
 
-        for listener in listeners:
-            listener.start()
+        for connection in connections:
+            connection.listener.start()
         channel.broadcast(Message(msg_type='test'))
-        for listener in listeners:
-            channel.deliver_next(listener.id)
+        for connection in connections:
+            channel.deliver_next(connection.id)
 
-        self.assertEqual([1, 1], [listener.on_message_stats.calls for listener in listeners])
+        self.assertEqual([1, 1], [connection.listener.on_message_stats.calls for connection in connections])

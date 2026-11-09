@@ -8,12 +8,12 @@ class QueuingErrorHandler:
     Methods do nothing by default: override the ones you need.
     """
 
-    def handle_push_error(self, listener_id: str, msg: MessageContract, exception: Exception) -> None:
-        """Called when pushing **msg** to the queue of listener **listener_id** fails. The exception is re-raised afterwards."""
+    def handle_push_error(self, connection_id: str, msg: MessageContract, exception: Exception) -> None:
+        """Called when pushing **msg** to the queue of connection **connection_id** fails. The exception is re-raised afterwards."""
         pass
 
-    def handle_pop_error(self, listener_id: str, exception: Exception) -> None:
-        """Called when popping from the queue of listener **listener_id** fails. The exception is re-raised afterwards."""
+    def handle_pop_error(self, connection_id: str, exception: Exception) -> None:
+        """Called when popping from the queue of connection **connection_id** fails. The exception is re-raised afterwards."""
         pass
 
 
@@ -24,9 +24,9 @@ class ListenerErrorHandler:
     Methods do nothing by default: override the ones you need.
     """
 
-    def handle_on_message_error(self, listener_id: str, msg: MessageContract, exception: Exception) -> None:
+    def handle_on_message_error(self, connection_id: str, msg: MessageContract, exception: Exception) -> None:
         """
-        Called when :meth:`~eric_sse.listener.MessageQueueListener.on_message` of listener **listener_id** fails.
+        Called when :meth:`~eric_sse.listener.MessageQueueListener.on_message` of connection **connection_id** fails.
         The exception is not re-raised: **msg** is delivered anyway.
         """
         pass

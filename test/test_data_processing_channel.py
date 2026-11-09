@@ -44,47 +44,47 @@ class DataProcessingChannelTestCase(IsolatedAsyncioTestCase):
         return self.builder.build().create({'max_workers': 2})
 
     @staticmethod
-    async def process(channel: DataProcessingChannel, listener: MessageQueueListener) -> list[str]:
-        return sorted([event['event'] async for event in channel.process_queue(listener)])
+    async def process(channel: DataProcessingChannel, connection_id: str) -> list[str]:
+        return sorted([event['event'] async for event in channel.process_queue(connection_id)])
 
     async def test_processes_every_queued_message(self):
         channel = self.create_channel()
-        listener = channel.add_listener()
+        connection = channel.add_connection()
         for i in range(3):
-            channel.dispatch(listener.id, Message(msg_type=f'test{i}'))
-        listener.start()
+            channel.dispatch(connection.id, Message(msg_type=f'test{i}'))
+        connection.listener.start()
 
-        self.assertEqual(['test0', 'test1', 'test2'], await self.process(channel, listener))
+        self.assertEqual(['test0', 'test1', 'test2'], await self.process(channel, connection.id))
 
     async def test_a_stopped_listener_can_not_be_processed(self):
         channel = self.create_channel()
-        listener = channel.add_listener()
-        channel.dispatch(listener.id, Message(msg_type='test'))
+        connection = channel.add_connection()
+        channel.dispatch(connection.id, Message(msg_type='test'))
 
         with self.assertRaises(StoppedListenerException):
-            await self.process(channel, listener)
+            await self.process(channel, connection.id)
 
     async def test_listener_errors_are_handled_and_processing_goes_on(self):
         channel = self.create_channel()
-        listener = channel.add_listener()
+        connection = channel.add_connection()
         for msg_type in ('good', 'bad', 'other'):
-            channel.dispatch(listener.id, Message(msg_type=msg_type))
-        listener.start()
+            channel.dispatch(connection.id, Message(msg_type=msg_type))
+        connection.listener.start()
 
-        self.assertEqual(['bad', 'good', 'other'], await self.process(channel, listener))
-        self.assertEqual([('on_message', listener.id, 'bad', 'on_message failed')], self.listener_handler.events)
+        self.assertEqual(['bad', 'good', 'other'], await self.process(channel, connection.id))
+        self.assertEqual([('on_message', connection.id, 'bad', 'on_message failed')], self.listener_handler.events)
 
     async def test_queue_errors_are_handled_and_raised_after_popped_messages(self):
         channel = self.builder.queues(FailingAfterTwoPopsQueue).build().create({'max_workers': 2})
-        listener = channel.add_listener()
+        connection = channel.add_connection()
         for i in range(3):
-            channel.dispatch(listener.id, Message(msg_type=f'test{i}'))
-        listener.start()
+            channel.dispatch(connection.id, Message(msg_type=f'test{i}'))
+        connection.listener.start()
 
         processed = []
         with self.assertRaises(RuntimeError):
-            async for event in channel.process_queue(listener):
+            async for event in channel.process_queue(connection.id):
                 processed.append(event['event'])
 
         self.assertEqual(['test0', 'test1'], sorted(processed))
-        self.assertEqual([('pop', listener.id, 'pop failed')], self.queuing_handler.events)
+        self.assertEqual([('pop', connection.id, 'pop failed')], self.queuing_handler.events)

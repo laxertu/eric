@@ -52,7 +52,7 @@ class ChannelRepositoryContract(ABC):
         sut = self.create_builder().build()
         channel = self._create_channel(sut)
         for _ in range(3):
-            channel.add_listener()
+            channel.add_connection()
         connection_ids = [connection.id for connection in channel.get_connections()]
         sut.persist(channel)
 
@@ -76,29 +76,26 @@ class ChannelRepositoryContract(ABC):
         connections_repository.persist(channel_id='channel', connection=connection)
 
         self.assertEqual(connection.id, connections_repository.load_one('channel', connection.id).id)
-        self.assertEqual(connection.listener.id, connections_repository.listeners_repository.load(connection.id).id)
+        self.assertIsInstance(connections_repository.listeners_repository.load(connection.id), type(connection.listener))
         message = connections_repository.queues_repository.load(connection.id).pop()
         self.assertEqual(('greeting', 'hello'), (message.type, message.payload))
 
     def test_connections_removed_from_a_channel_are_deleted_on_persist(self: 'ChannelRepositoryContract | TestCase'):
         sut = self.create_builder().build()
         channel = self._create_channel(sut)
-        kept = channel.add_listener()
-        removed = channel.add_listener()
-        connection_ids = {connection.listener.id: connection.id for connection in channel.get_connections()}
+        kept = channel.add_connection()
+        removed = channel.add_connection()
         sut.persist(channel)
 
-        channel.remove_listener(removed.id)
+        channel.remove_connection(removed.id)
         sut.persist(channel)
 
-        loaded_listener_ids = [connection.listener.id for connection in sut.load_one(channel.id).get_connections()]
-        self.assertEqual([kept.id], loaded_listener_ids)
+        self.assertEqual([kept.id], [connection.id for connection in sut.load_one(channel.id).get_connections()])
         connections_repository = sut.connections_repository
-        removed_connection_id = connection_ids[removed.id]
         with self.assertRaises(ItemNotFound):
-            connections_repository.listeners_repository.load(removed_connection_id)
+            connections_repository.listeners_repository.load(removed.id)
         with self.assertRaises(ItemNotFound):
-            connections_repository.queues_repository.load(removed_connection_id)
+            connections_repository.queues_repository.load(removed.id)
 
     def test_persisted_channels_are_returned_by_load_all_and_load_one(self: 'ChannelRepositoryContract | TestCase'):
         sut = self.create_builder().build()
@@ -136,22 +133,22 @@ class ChannelRepositoryContract(ABC):
         sut = self.create_builder().build()
         channel = self._create_channel(sut)
         listener = MessageQueueListener()
-        channel.register_listener(listener)
+        connection = channel.register_listener(listener)
         sut.persist(channel)
 
         loaded = sut.load_one(channel.id)
 
-        self.assertEqual([listener.id], [connection.listener.id for connection in loaded.get_connections()])
+        self.assertEqual([connection.id], [c.id for c in loaded.get_connections()])
 
     def test_messages_are_kept_per_listener(self: 'ChannelRepositoryContract | TestCase'):
         sut = self.create_builder().build()
         channel = self._create_channel(sut)
-        recipient = channel.add_listener()
-        other = channel.add_listener()
+        recipient = channel.add_connection()
+        other = channel.add_connection()
         channel.dispatch(recipient.id, Message(msg_type='greeting', msg_payload='hello'))
         sut.persist(channel)
 
-        queues = {connection.listener.id: connection.queue for connection in sut.load_one(channel.id).get_connections()}
+        queues = {connection.id: connection.queue for connection in sut.load_one(channel.id).get_connections()}
 
         self.assertEqual('hello', queues[recipient.id].pop().payload)
         with self.assertRaises(NoMessagesException):
@@ -160,14 +157,14 @@ class ChannelRepositoryContract(ABC):
     def test_channels_whose_ids_share_a_prefix_do_not_mix(self: 'ChannelRepositoryContract | TestCase'):
         sut = self.create_builder().build()
         a = self._create_channel(sut, channel_id='a')
-        a_listener = a.add_listener()
+        a_connection = a.add_connection()
         ab = self._create_channel(sut, channel_id='ab')
-        ab_listener = ab.add_listener()
+        ab_connection = ab.add_connection()
         sut.persist(a)
         sut.persist(ab)
 
-        self.assertEqual([a_listener.id], [connection.listener.id for connection in sut.load_one('a').get_connections()])
+        self.assertEqual([a_connection.id], [connection.id for connection in sut.load_one('a').get_connections()])
 
         sut.delete('a')
 
-        self.assertEqual([ab_listener.id], [connection.listener.id for connection in sut.load_one('ab').get_connections()])
+        self.assertEqual([ab_connection.id], [connection.id for connection in sut.load_one('ab').get_connections()])

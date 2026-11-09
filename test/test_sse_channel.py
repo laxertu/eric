@@ -1,7 +1,7 @@
 import json
 from unittest import TestCase
 
-from eric_sse.exception import InvalidListenerException, InternalStreamError
+from eric_sse.exception import InvalidConnectionException, InternalStreamError
 
 from eric_sse.message import Message
 from eric_sse.prefabs import SSEChannel, DataProcessingChannel
@@ -36,10 +36,10 @@ class AdaptErrorTestCase(TestCase):
     def test_sse_channel(self):
         channel = SSEChannel(retry_timeout_milliseconds=10)
 
-        event = channel.adapt_error(InvalidListenerException('listener gone'))
+        event = channel.adapt_error(InvalidConnectionException('listener gone'))
 
         self.assertEqual(
-            {'event': 'error', 'retry': 10, 'data': {'error': 'InvalidListenerException', 'message': 'listener gone'}},
+            {'event': 'error', 'retry': 10, 'data': {'error': 'InvalidConnectionException', 'message': 'listener gone'}},
             event
         )
         json.dumps(event)

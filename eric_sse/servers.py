@@ -62,7 +62,7 @@ class SocketServer:
             "v": "verb" 
             "t": "message type" 
             "p": "message payload" 
-            "r": "receiver (listener id when verb is 'rl')"
+            "r": "receiver (connection id when verb is 'rl')"
         }
 
 
@@ -71,10 +71,10 @@ class SocketServer:
         "d" dispatch
         "b" broadcast
         "c" create channel
-        "r" add listener
+        "r" add connection
         "l" listen (opens a stream)
         "w" watch (opens a stream)
-        "rl" remove a listener
+        "rl" remove a connection
         "rc" remove a channel
 
     See examples
@@ -157,11 +157,10 @@ class SocketServer:
             yield SocketServer.ACK
 
         elif verb == 'r':
-            l = SocketServer.cc.get(channel_id).add_listener()
-            yield l.id
+            yield SocketServer.cc.get(channel_id).add_connection().id
 
         elif verb == 'rl':
-            SocketServer.cc.get(channel_id).remove_listener(listener_id=receiver_id)
+            SocketServer.cc.get(channel_id).remove_connection(connection_id=receiver_id)
             yield SocketServer.ACK
 
         elif verb == 'rc':
@@ -171,8 +170,7 @@ class SocketServer:
         elif verb == 'l':
             logger.info(f"Started listener {receiver_id} on {channel_id}")
             channel = SocketServer.cc.get(channel_id)
-            listener = channel.get_listener(receiver_id)
-            async for m in channel.message_stream(listener):
+            async for m in channel.message_stream(receiver_id):
                 yield f'{json.dumps(m)}{linesep}'
 
         elif verb == 'w':

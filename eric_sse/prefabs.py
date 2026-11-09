@@ -2,7 +2,7 @@ import asyncio
 from concurrent.futures import ThreadPoolExecutor, Executor
 from typing import Callable, AsyncIterable
 from eric_sse import get_logger
-from eric_sse.connection import ConnectionsFactory
+from eric_sse.connection import Connection, ConnectionsFactory
 from eric_sse.entities import AbstractChannel
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import SignedMessage, MessageContract, MIn, MOut
@@ -115,9 +115,9 @@ class DataProcessingChannel(AbstractChannel[MIn, MOut]):
         """**executor_class** is stored as a class object: the storage engine must be able to serialise it."""
         return {**super().to_dict(), 'max_workers': self.max_workers, 'executor_class': self.executor_class}
 
-    async def process_queue(self, listener: MessageQueueListener[MOut]) -> AsyncIterable[dict]:
+    async def process_queue(self, connection_id: str) -> AsyncIterable[dict]:
         """
-        Processes the messages in the queue of a given listener: runs its ``on_message`` concurrently in the executor,
+        Processes the messages in the queue of a given connection: runs its listener's ``on_message`` concurrently in the executor,
         and yields each message, adapted, as soon as it's processed. See **adapt** method.
 
         Errors are handled as by :meth:`~eric_sse.entities.AbstractChannel.deliver_next`, in the channel's process:
@@ -125,19 +125,20 @@ class DataProcessingChannel(AbstractChannel[MIn, MOut]):
         :class:`~eric_sse.exception.StoppedListenerException` are re-raised after the messages already popped are
         yielded, so they are not lost.
         """
+        connection = self.get_connection(connection_id)
         with self.executor_class(max_workers=self.max_workers) as executor:
             loop = asyncio.get_running_loop()
             tasks: list[asyncio.Task[MOut]] = []
             pop_error: Exception | None = None
             while True:
                 try:
-                    msg = self._pop_next(listener.id)
+                    msg = self._pop_next(connection.id)
                 except NoMessagesException:
                     break
                 except Exception as e:
                     pop_error = e
                     break
-                tasks.append(loop.create_task(self.__process(executor, listener, msg)))
+                tasks.append(loop.create_task(self.__process(executor, connection, msg)))
 
             for task_done in asyncio.as_completed(tasks):
                 yield self.adapt(await task_done)
@@ -145,11 +146,11 @@ class DataProcessingChannel(AbstractChannel[MIn, MOut]):
             if pop_error is not None:
                 raise pop_error
 
-    async def __process(self, executor: Executor, listener: MessageQueueListener[MOut], msg: MOut) -> MOut:
+    async def __process(self, executor: Executor, connection: Connection, msg: MOut) -> MOut:
         try:
-            await asyncio.get_running_loop().run_in_executor(executor, listener.on_message, msg)
+            await asyncio.get_running_loop().run_in_executor(executor, connection.listener.on_message, msg)
         except Exception as e:
-            self._on_listener_error(listener.id, msg, e)
+            self._on_listener_error(connection.id, msg, e)
         return msg
 
     def adapt(self, msg: MOut) -> dict:
@@ -192,16 +193,16 @@ class SimpleDistributedApplicationListener(MessageQueueListener[SignedMessage]):
 
     def __init__(self):
         super().__init__()
-        self.__channel: AbstractChannel[SignedMessage, SignedMessage] | None = None
+        self.__registration: tuple[AbstractChannel[SignedMessage, SignedMessage], str] | None = None
         self.__actions: dict[str, Callable[[SignedMessage], list[MessageContract]]] = dict()
         self.__internal_actions: dict[str, Callable[[], None]] = {
             'start': self.start,
             'stop': self.stop
         }
 
-    def on_registered(self, channel: AbstractChannel[SignedMessage, SignedMessage]) -> None:
-        """Keeps **channel**, to dispatch messages through it."""
-        self.__channel = channel
+    def on_registered(self, channel: AbstractChannel[SignedMessage, SignedMessage], connection_id: str) -> None:
+        """Keeps **channel**, to dispatch messages through it, and **connection_id**, to sign them."""
+        self.__registration = (channel, connection_id)
 
     def set_action(self, name: str, action: Callable[[SignedMessage], list[MessageContract]]):
         """
@@ -219,16 +220,12 @@ class SimpleDistributedApplicationListener(MessageQueueListener[SignedMessage]):
             raise KeyError(f'Trying to set an internal action {name}')
         self.__actions[name] = action
 
-    def dispatch_to(self, receiver: MessageQueueListener, msg: MessageContract):
-        signed_message = SignedMessage(sender_id=self.id, msg_type=msg.type, msg_payload=msg.payload)
-        self.__get_channel().dispatch(receiver.id, signed_message)
-
-    def __get_channel(self) -> AbstractChannel[SignedMessage, SignedMessage]:
-        if self.__channel is None:
-            raise InvalidChannelException(
-                f'Listener {self.id} has no channel: register it to a channel'
-            )
-        return self.__channel
+    def dispatch_to(self, receiver_id: str, msg: MessageContract):
+        """Dispatches **msg** to connection **receiver_id**, signed with this listener's connection id."""
+        if self.__registration is None:
+            raise InvalidChannelException('Listener has no channel: register it to a channel')
+        channel, connection_id = self.__registration
+        channel.dispatch(receiver_id, SignedMessage(sender_id=connection_id, msg_type=msg.type, msg_payload=msg.payload))
 
     def on_message(self, msg: SignedMessage) -> None:
         """Executes action corresponding to message's type"""
@@ -241,8 +238,7 @@ class SimpleDistributedApplicationListener(MessageQueueListener[SignedMessage]):
 
             msgs = self.__actions[msg.type](msg)
             for response in msgs:
-                signed_response = SignedMessage(sender_id=self.id, msg_type=response.type, msg_payload=response.payload)
-                self.__get_channel().dispatch(msg.sender_id, signed_response)
+                self.dispatch_to(msg.sender_id, response)
         except KeyError:
             logger.debug(f'Unknown action {msg.type}')
 

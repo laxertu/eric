@@ -10,7 +10,10 @@ Q = TypeVar('Q', bound=Queue)
 
 class Connection(Generic[L, Q]):
     """
-    A connection is just a listener and its related message queue
+    A connection is a listener and its related message queue.
+
+    It's what channels and repositories identify: messages are dispatched to a connection id, and listeners and queues
+    have no identity of their own.
 
     :param ~eric_sse.listener.MessageQueueListener listener:
     :param ~eric_sse.queues.Queue queue:

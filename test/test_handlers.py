@@ -31,19 +31,19 @@ class RecordingQueuingErrorHandler(QueuingErrorHandler):
     def __init__(self):
         self.events = []
 
-    def handle_push_error(self, listener_id: str, msg: MessageContract, exception: Exception):
-        self.events.append(('push', listener_id, msg.type, str(exception)))
+    def handle_push_error(self, connection_id: str, msg: MessageContract, exception: Exception):
+        self.events.append(('push', connection_id, msg.type, str(exception)))
 
-    def handle_pop_error(self, listener_id: str, exception: Exception):
-        self.events.append(('pop', listener_id, str(exception)))
+    def handle_pop_error(self, connection_id: str, exception: Exception):
+        self.events.append(('pop', connection_id, str(exception)))
 
 
 class RecordingListenerErrorHandler(ListenerErrorHandler):
     def __init__(self):
         self.events = []
 
-    def handle_on_message_error(self, listener_id: str, msg: MessageContract, exception: Exception):
-        self.events.append(('on_message', listener_id, msg.type, str(exception)))
+    def handle_on_message_error(self, connection_id: str, msg: MessageContract, exception: Exception):
+        self.events.append(('on_message', connection_id, msg.type, str(exception)))
 
 
 def channel_with_handlers():
@@ -55,29 +55,29 @@ def channel_with_handlers():
     return channel, queuing_handler, listener_handler
 
 
-def register_broken_queue(channel: FakeChannel) -> MessageQueueListener:
-    listener = MessageQueueListener()
-    channel.register_connection(Connection(listener=listener, queue=BrokenQueue()))
-    listener.start()
-    return listener
+def register_broken_queue(channel: FakeChannel) -> Connection:
+    connection = Connection(listener=MessageQueueListener(), queue=BrokenQueue())
+    channel.register_connection(connection)
+    connection.listener.start()
+    return connection
 
 
 class QueuingErrorHandlerTestCase(IsolatedAsyncioTestCase):
 
     async def test_push_error_is_handled_and_reraised(self):
         channel, queuing_handler, _ = channel_with_handlers()
-        listener = register_broken_queue(channel)
+        connection = register_broken_queue(channel)
 
         with self.assertRaises(RuntimeError):
-            channel.dispatch(listener.id, Message(msg_type='test'))
+            channel.dispatch(connection.id, Message(msg_type='test'))
 
-        self.assertEqual([('push', listener.id, 'test', 'push failed')], queuing_handler.events)
+        self.assertEqual([('push', connection.id, 'test', 'push failed')], queuing_handler.events)
 
     async def test_broadcast_goes_on_after_push_error(self):
         channel, queuing_handler, _ = channel_with_handlers()
         broken = register_broken_queue(channel)
-        healthy = channel.add_listener()
-        healthy.start()
+        healthy = channel.add_connection()
+        healthy.listener.start()
 
         channel.broadcast(Message(msg_type='test'))
 
@@ -86,40 +86,40 @@ class QueuingErrorHandlerTestCase(IsolatedAsyncioTestCase):
 
     async def test_pop_error_is_handled_and_reraised(self):
         channel, queuing_handler, _ = channel_with_handlers()
-        listener = register_broken_queue(channel)
+        connection = register_broken_queue(channel)
 
         with self.assertRaises(RuntimeError):
-            channel.deliver_next(listener.id)
+            channel.deliver_next(connection.id)
         with self.assertRaises(RuntimeError):
-            await channel.wait_next(listener.id, timeout=0.01)
+            await channel.wait_next(connection.id, timeout=0.01)
 
-        self.assertEqual([('pop', listener.id, 'pop failed'), ('pop', listener.id, 'wait_pop failed')], queuing_handler.events)
+        self.assertEqual([('pop', connection.id, 'pop failed'), ('pop', connection.id, 'wait_pop failed')], queuing_handler.events)
 
     async def test_no_messages_is_not_handled_nor_logged(self):
         channel, queuing_handler, _ = channel_with_handlers()
-        listener = channel.add_listener()
-        listener.start()
+        connection = channel.add_connection()
+        connection.listener.start()
 
         with patch('eric_sse.entities.logger') as logger:
             with self.assertRaises(NoMessagesException):
-                channel.deliver_next(listener.id)
+                channel.deliver_next(connection.id)
             with self.assertRaises(NoMessagesException):
-                await channel.wait_next(listener.id, timeout=0.01)
+                await channel.wait_next(connection.id, timeout=0.01)
 
         logger.error.assert_not_called()
         self.assertEqual([], queuing_handler.events)
 
     async def test_reraised_errors_are_not_logged(self):
         channel, _, _ = channel_with_handlers()
-        listener = register_broken_queue(channel)
+        connection = register_broken_queue(channel)
 
         with patch('eric_sse.entities.logger') as logger:
             with self.assertRaises(RuntimeError):
-                channel.dispatch(listener.id, Message(msg_type='test'))
+                channel.dispatch(connection.id, Message(msg_type='test'))
             with self.assertRaises(RuntimeError):
-                channel.deliver_next(listener.id)
+                channel.deliver_next(connection.id)
             with self.assertRaises(RuntimeError):
-                await channel.wait_next(listener.id, timeout=0.01)
+                await channel.wait_next(connection.id, timeout=0.01)
 
         logger.error.assert_not_called()
 
@@ -127,12 +127,12 @@ class QueuingErrorHandlerTestCase(IsolatedAsyncioTestCase):
         channel, _, _ = channel_with_handlers()
         register_broken_queue(channel)
         listener = BrokenListener()
-        channel.register_listener(listener)
+        connection = channel.register_listener(listener)
         listener.start()
 
         with patch('eric_sse.entities.logger') as logger:
             channel.broadcast(Message(msg_type='test'))
-            channel.deliver_next(listener.id)
+            channel.deliver_next(connection.id)
 
         self.assertEqual(2, logger.error.call_count)
         self.assertIn('push failed', logger.debug.call_args_list[0].args[0])
@@ -140,12 +140,12 @@ class QueuingErrorHandlerTestCase(IsolatedAsyncioTestCase):
     async def test_errors_are_logged_once(self):
         channel, _, _ = channel_with_handlers()
         channel.wait_timeout_seconds = 0.01
-        listener = register_broken_queue(channel)
+        connection = register_broken_queue(channel)
 
         with patch('eric_sse.entities.logger') as logger:
-            stream = channel.message_stream(listener)
+            stream = channel.message_stream(connection.id)
             self.assertIsInstance(await anext(stream), InternalStreamError)
-            listener.stop()
+            connection.listener.stop()
             await stream.aclose()
 
         logger.error.assert_called_once()
@@ -158,15 +158,15 @@ class QueuingErrorHandlerTestCase(IsolatedAsyncioTestCase):
             def __init__(self, name):
                 self.name = name
 
-            def handle_push_error(self, listener_id, msg, exception):
+            def handle_push_error(self, connection_id, msg, exception):
                 calls.append(self.name)
 
         channel.add_queuing_error_handler(Handler('first'))
         channel.add_queuing_error_handler(Handler('second'))
-        listener = register_broken_queue(channel)
+        connection = register_broken_queue(channel)
 
         with self.assertRaises(RuntimeError):
-            channel.dispatch(listener.id, Message(msg_type='test'))
+            channel.dispatch(connection.id, Message(msg_type='test'))
 
         self.assertEqual(['first', 'second'], calls)
 
@@ -176,15 +176,15 @@ class ListenerErrorHandlerTestCase(IsolatedAsyncioTestCase):
     async def test_on_message_error_is_handled_and_message_delivered(self):
         channel, _, listener_handler = channel_with_handlers()
         listener = BrokenListener()
-        channel.register_listener(listener)
+        connection = channel.register_listener(listener)
         listener.start()
-        channel.dispatch(listener.id, Message(msg_type='first'))
-        channel.dispatch(listener.id, Message(msg_type='second'))
+        channel.dispatch(connection.id, Message(msg_type='first'))
+        channel.dispatch(connection.id, Message(msg_type='second'))
 
-        self.assertEqual('first', channel.deliver_next(listener.id).type)
-        self.assertEqual('second', (await channel.wait_next(listener.id, timeout=0.01)).type)
+        self.assertEqual('first', channel.deliver_next(connection.id).type)
+        self.assertEqual('second', (await channel.wait_next(connection.id, timeout=0.01)).type)
         self.assertEqual(
-            [('on_message', listener.id, 'first', 'on_message failed'), ('on_message', listener.id, 'second', 'on_message failed')],
+            [('on_message', connection.id, 'first', 'on_message failed'), ('on_message', connection.id, 'second', 'on_message failed')],
             listener_handler.events
         )
 
@@ -193,11 +193,11 @@ class ListenerErrorHandlerTestCase(IsolatedAsyncioTestCase):
         channel.add_queuing_error_handler(QueuingErrorHandler())
         channel.add_listener_error_handler(ListenerErrorHandler())
         listener = BrokenListener()
-        channel.register_listener(listener)
+        connection = channel.register_listener(listener)
         listener.start()
-        channel.dispatch(listener.id, Message(msg_type='test'))
+        channel.dispatch(connection.id, Message(msg_type='test'))
 
-        self.assertEqual('test', channel.deliver_next(listener.id).type)
+        self.assertEqual('test', channel.deliver_next(connection.id).type)
 
 
 class BuilderErrorHandlersTestCase(IsolatedAsyncioTestCase):
@@ -216,12 +216,12 @@ class BuilderErrorHandlersTestCase(IsolatedAsyncioTestCase):
             .build()
         )
         created = repository.create({})
-        listener = created.add_listener()
+        connection = created.add_connection()
         repository.persist(created)
 
         for channel in (created, repository.load_one(created.id), next(iter(repository.load_all()))):
             with self.assertRaises(RuntimeError):
-                channel.dispatch(listener.id, Message(msg_type='test'))
+                channel.dispatch(connection.id, Message(msg_type='test'))
 
         self.assertEqual(3, len(queuing_handler.events))
 
@@ -234,12 +234,12 @@ class BuilderErrorHandlersTestCase(IsolatedAsyncioTestCase):
             .build()
         )
         channel = repository.create({})
-        listener = channel.add_listener()
+        connection = channel.add_connection()
         repository.persist(channel)
 
         loaded = repository.load_one(channel.id)
-        loaded.get_listener(listener.id).start()
-        loaded.dispatch(listener.id, Message(msg_type='test'))
+        loaded.get_connection(connection.id).listener.start()
+        loaded.dispatch(connection.id, Message(msg_type='test'))
 
-        self.assertEqual('test', loaded.deliver_next(listener.id).type)
-        self.assertEqual([('on_message', listener.id, 'test', 'on_message failed')], handler.events)
+        self.assertEqual('test', loaded.deliver_next(connection.id).type)
+        self.assertEqual([('on_message', connection.id, 'test', 'on_message failed')], handler.events)

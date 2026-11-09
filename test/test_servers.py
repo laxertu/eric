@@ -109,8 +109,8 @@ class ClientIntegrationTestCase(IsolatedAsyncioTestCase):
         channel_id = await self.sut.create_channel()
         self.assertEqual(len(channel_id), 36)
 
-        listener_id = await self.sut.register(channel_id)
-        self.assertEqual(len(listener_id), 36)
+        connection_id = await self.sut.register(channel_id)
+        self.assertEqual(len(connection_id), 36)
 
         error_message = await self.sut.register('2')
         self.assertTrue('InvalidChannelException' in error_message)
@@ -118,20 +118,20 @@ class ClientIntegrationTestCase(IsolatedAsyncioTestCase):
         response = await self.sut.broadcast_message(channel_id=channel_id, message_type='test', payload={})
         self.assertEqual(response, SocketServer.ACK)
 
-        listener_id_2 = await self.sut.register(channel_id)
+        connection_id_2 = await self.sut.register(channel_id)
         response = await self.sut.dispatch(
-            channel_id=channel_id, receiver_id=listener_id_2, message_type='test', payload={}
+            channel_id=channel_id, receiver_id=connection_id_2, message_type='test', payload={}
         )
         self.assertEqual(response, SocketServer.ACK)
 
 
-        response = await self.sut.remove_listener(channel_id=channel_id, listener_id=listener_id_2)
+        response = await self.sut.remove_connection(channel_id=channel_id, connection_id=connection_id_2)
         self.assertEqual(response, SocketServer.ACK)
 
         error_message = await self.sut.dispatch(
-            channel_id=channel_id, receiver_id=listener_id_2, message_type='test', payload={}
+            channel_id=channel_id, receiver_id=connection_id_2, message_type='test', payload={}
         )
-        self.assertTrue('InvalidListenerException' in error_message)
+        self.assertTrue('InvalidConnectionException' in error_message)
 
         response = await self.sut.remove_channel(channel_id=channel_id)
         self.assertEqual(response, SocketServer.ACK)

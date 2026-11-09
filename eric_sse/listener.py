@@ -19,15 +19,15 @@ class MessageQueueListener(Generic[M]):
     Optionally you can override on_message method if you need to inject code at message delivery time.
     """
 
-    def __init__(self, listener_id: str | None = None):
-        self.id: str = listener_id if listener_id else eric_sse.generate_uuid()
+    def __init__(self):
         self.__is_running: bool = False
 
-    def on_registered(self, channel: 'AbstractChannel[Any, M]') -> None:
+    def on_registered(self, channel: 'AbstractChannel[Any, M]', connection_id: str) -> None:
         """
-        Hook called when the listener is registered to **channel**, see
+        Hook called when the listener is registered to **channel**, through connection **connection_id**, see
         :meth:`~eric_sse.entities.AbstractChannel.register_connection`. Also called when a channel is loaded from
-        persistence. Does nothing by default: override it if the listener needs its channel, e.g. to dispatch messages.
+        persistence. Does nothing by default: override it if the listener needs its channel or its address, e.g. to
+        dispatch messages.
         """
         pass
 

@@ -17,29 +17,29 @@ class RecordingChannel(FakeChannel):
         self.events = []
         self.go_on_after_error = True
 
-    def on_listener_added(self, listener):
-        self.events.append(('added', listener.id))
+    def on_connection_added(self, connection):
+        self.events.append(('added', connection.id))
 
-    def on_listener_removed(self, listener):
-        self.events.append(('removed', listener.id))
+    def on_connection_removed(self, connection):
+        self.events.append(('removed', connection.id))
 
-    def on_stream_start(self, listener):
-        self.events.append(('stream_start', listener.id))
+    def on_stream_start(self, connection):
+        self.events.append(('stream_start', connection.id))
 
-    def on_stream_end(self, listener):
-        self.events.append(('stream_end', listener.id))
+    def on_stream_end(self, connection):
+        self.events.append(('stream_end', connection.id))
 
-    def before_dispatch(self, listener_id: str, msg: MessageContract) -> MessageContract | None:
+    def before_dispatch(self, connection_id: str, msg: MessageContract) -> MessageContract | None:
         if msg.type == 'spam':
             return None
         if msg.type == 'shout':
             return Message(msg_type='shout', msg_payload=str(msg.payload).upper())
         return msg
 
-    def on_wait_timeout(self, listener):
-        self.events.append(('wait_timeout', listener.id))
+    def on_wait_timeout(self, connection):
+        self.events.append(('wait_timeout', connection.id))
 
-    def on_error(self, listener, exception) -> bool:
+    def on_error(self, connection, exception) -> bool:
         self.events.append(('error', str(exception)))
         return self.go_on_after_error
 
@@ -48,17 +48,17 @@ class SubscriptionHooksTestCase(IsolatedAsyncioTestCase):
 
     async def test_added_and_removed(self):
         sut = RecordingChannel()
-        created = sut.add_listener()
+        created = sut.add_connection()
         registered = MessageQueueListener()
-        sut.register_listener(registered)
-        sut.remove_listener(created.id)
+        connection = sut.register_listener(registered)
+        sut.remove_connection(created.id)
 
-        self.assertEqual([('added', created.id), ('added', registered.id), ('removed', created.id)], sut.events)
+        self.assertEqual([('added', created.id), ('added', connection.id), ('removed', created.id)], sut.events)
 
     async def test_not_called_when_loading_from_persistence(self):
         repository = ChannelRepositoryBuilder(RecordingChannel).build()
         channel = repository.create({})
-        channel.add_listener()
+        channel.add_connection()
         repository.persist(channel)
 
         self.assertEqual([], repository.load_one(channel.id).events)
@@ -69,7 +69,7 @@ class RegisteredListener(MessageQueueListener):
         super().__init__()
         self.channels = []
 
-    def on_registered(self, channel) -> None:
+    def on_registered(self, channel, connection_id) -> None:
         self.channels.append(channel)
 
 
@@ -85,26 +85,26 @@ class ListenerHooksTestCase(IsolatedAsyncioTestCase):
     async def test_on_registered_for_created_and_loaded_listeners(self):
         repository = ChannelRepositoryBuilder(FakeChannel).listeners(RegisteredListener).build()
         channel = repository.create({})
-        listener = channel.add_listener()
+        connection = channel.add_connection()
         repository.persist(channel)
 
         loaded = repository.load_one(channel.id)
 
-        self.assertEqual([channel, loaded], loaded.get_listener(listener.id).channels)
+        self.assertEqual([channel, loaded], loaded.get_connection(connection.id).listener.channels)
 
 
 class DispatchHookTestCase(IsolatedAsyncioTestCase):
 
     async def test_drop_and_transform(self):
         sut = RecordingChannel()
-        listener = sut.add_listener()
-        listener.start()
-        sut.dispatch(listener.id, Message(msg_type='spam'))
+        connection = sut.add_connection()
+        connection.listener.start()
+        sut.dispatch(connection.id, Message(msg_type='spam'))
         sut.broadcast(Message(msg_type='shout', msg_payload='hi'))
 
-        self.assertEqual('HI', sut.deliver_next(listener.id).payload)
+        self.assertEqual('HI', sut.deliver_next(connection.id).payload)
         with self.assertRaises(NoMessagesException):
-            sut.deliver_next(listener.id)
+            sut.deliver_next(connection.id)
 
 
 class StreamHooksTestCase(IsolatedAsyncioTestCase):
@@ -112,37 +112,37 @@ class StreamHooksTestCase(IsolatedAsyncioTestCase):
     async def test_start_and_end(self):
         sut = RecordingChannel()
         listener = MessageQueueListenerMock()  # Stops itself after one message
-        sut.register_listener(listener)
-        sut.dispatch(listener.id, Message(msg_type='test'))
+        connection = sut.register_listener(listener)
+        sut.dispatch(connection.id, Message(msg_type='test'))
         sut.events.clear()
 
-        [m async for m in sut.message_stream(listener)]
-        self.assertEqual([('stream_start', listener.id), ('stream_end', listener.id)], sut.events)
+        [m async for m in sut.message_stream(connection.id)]
+        self.assertEqual([('stream_start', connection.id), ('stream_end', connection.id)], sut.events)
 
     async def test_wait_timeout_while_idle(self):
         sut = RecordingChannel()
-        listener = sut.add_listener()
-        asyncio.get_running_loop().call_later(sut.wait_timeout_seconds * 2.5, listener.stop)
+        connection = sut.add_connection()
+        asyncio.get_running_loop().call_later(sut.wait_timeout_seconds * 2.5, connection.listener.stop)
 
-        received = [m async for m in sut.message_stream(listener)]
+        received = [m async for m in sut.message_stream(connection.id)]
 
         self.assertEqual([], received)
         # Timeouts at 1, 2 and 3 cycles: the stop at 2.5 is noticed after the third one
-        self.assertEqual(3, sut.events.count(('wait_timeout', listener.id)))
+        self.assertEqual(3, sut.events.count(('wait_timeout', connection.id)))
 
     async def test_end_on_client_disconnection(self):
         sut = RecordingChannel()
-        listener = sut.add_listener()
-        sut.dispatch(listener.id, Message(msg_type='test'))
+        connection = sut.add_connection()
+        sut.dispatch(connection.id, Message(msg_type='test'))
 
-        stream = sut.message_stream(listener)
+        stream = sut.message_stream(connection.id)
         await stream.__anext__()
         await stream.aclose()  # What a server does when the client goes away
-        self.assertEqual(('stream_end', listener.id), sut.events[-1])
+        self.assertEqual(('stream_end', connection.id), sut.events[-1])
 
     async def _stream_with_failing_queue(self, sut: RecordingChannel, fail_times: int):
-        listener = sut.add_listener()
-        queue = sut._get_queue(listener.id)
+        connection = sut.add_connection()
+        queue = sut.get_connection(connection.id).queue
         original_wait_pop = queue.wait_pop
         failures = {'left': fail_times}
 
@@ -153,9 +153,9 @@ class StreamHooksTestCase(IsolatedAsyncioTestCase):
             return await original_wait_pop(timeout)
 
         queue.wait_pop = failing_wait_pop
-        sut.dispatch(listener.id, Message(msg_type='test'))
-        asyncio.get_running_loop().call_later(0.5, listener.stop)
-        return [type(m).__name__ if isinstance(m, Exception) else m.type async for m in sut.message_stream(listener)]
+        sut.dispatch(connection.id, Message(msg_type='test'))
+        asyncio.get_running_loop().call_later(0.5, connection.listener.stop)
+        return [type(m).__name__ if isinstance(m, Exception) else m.type async for m in sut.message_stream(connection.id)]
 
     async def test_error_goes_on_with_a_pause(self):
         sut = RecordingChannel()

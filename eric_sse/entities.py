@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from typing import AsyncIterable, Any, Iterable, TypeVar, Generic
 
 import eric_sse
-from eric_sse.exception import InvalidListenerException, NoMessagesException, InvalidChannelException, \
+from eric_sse.exception import InvalidConnectionException, NoMessagesException, InvalidChannelException, \
     InternalStreamError, StoppedListenerException
 from eric_sse.handlers import QueuingErrorHandler, ListenerErrorHandler
 from eric_sse.listener import MessageQueueListener
@@ -22,41 +22,25 @@ MESSAGE_TYPE_INTERNAL_ERROR = '_eric_error'
 
 
 class _ConnectionManager(Generic[MIn, MOut]):
-    """Maintains relationships between listeners and queues"""
+    """Keeps the connections of a channel, by connection id"""
     def __init__(self, channel_id: str):
         self.__channel_id = channel_id
-        self.__listeners: dict[str, MessageQueueListener[MOut]] = {}
-        self.__queues: dict[str, Queue[MIn, MOut]] = {}
-        self.__connections: dict[str, Connection] = {}
+        self.__connections: dict[str, Connection[MessageQueueListener[MOut], Queue[MIn, MOut]]] = {}
 
     def register_connection(self, connection: Connection):
-        self.__connections[connection.listener.id] = connection
-        self.__queues[connection.listener.id] = connection.queue
-        self.__listeners[connection.listener.id] = connection.listener
+        self.__connections[connection.id] = connection
 
-    def remove_listener(self, listener_id: str):
+    def remove_connection(self, connection_id: str):
         try:
-            del self.__connections[listener_id]
-            del self.__queues[listener_id]
-            del self.__listeners[listener_id]
+            del self.__connections[connection_id]
         except KeyError:
-            raise InvalidListenerException(listener_id) from None
+            raise InvalidConnectionException(connection_id) from None
 
-    def get_queue(self, listener_id: str) -> Queue[MIn, MOut]:
+    def get_connection(self, connection_id: str) -> Connection[MessageQueueListener[MOut], Queue[MIn, MOut]]:
         try:
-            return self.__queues[listener_id]
+            return self.__connections[connection_id]
         except KeyError:
-            raise InvalidListenerException(f"Invalid listener {listener_id}") from None
-
-    def get_listener(self, listener_id: str) -> MessageQueueListener[MOut]:
-        try:
-            return self.__listeners[listener_id]
-        except KeyError:
-            raise InvalidListenerException
-
-    def get_listeners(self) -> dict[str, MessageQueueListener[MOut]]:
-        """Returns a dict mapping listener ids to listeners"""
-        return self.__listeners
+            raise InvalidConnectionException(f"Invalid connection {connection_id}") from None
 
     def get_connections(self) -> Iterable[Connection]:
         return self.__connections.values()
@@ -65,7 +49,8 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
     """
     Base class for channels.
 
-    Provides functionalities for listeners and message delivery management.
+    Provides functionalities for connections and message delivery management. A connection pairs a listener with its
+    queue, and its id is the address messages are dispatched to, see :class:`~eric_sse.connection.Connection`.
 
     Generic on the type of messages it dispatches (**MIn**) and delivers (**MOut**), e.g.
     ``SSEChannel[SignedMessage, SignedMessage]``, as its queues are ``Queue[MIn, MOut]`` and its listeners
@@ -77,7 +62,7 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
 
     see :class:`~eric_sse.prefabs.SSEChannel`
 
-    **Hooks**: subclasses can override :meth:`on_listener_added`, :meth:`on_listener_removed`,
+    **Hooks**: subclasses can override :meth:`on_connection_added`, :meth:`on_connection_removed`,
     :meth:`on_stream_start`, :meth:`on_stream_end`, :meth:`on_wait_timeout`, :meth:`before_dispatch` and :meth:`on_error`.
     They do nothing by default.
 
@@ -119,44 +104,44 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
         logger.debug(''.join(traceback.format_exception(type(exception), exception, exception.__traceback__)))
         logger.error(exception)
 
-    def __on_pop_error(self, listener_id: str, exception: Exception) -> None:
+    def __on_pop_error(self, connection_id: str, exception: Exception) -> None:
         for handler in self.__queuing_error_handlers:
-            handler.handle_pop_error(listener_id, exception)
+            handler.handle_pop_error(connection_id, exception)
 
-    def __notify_listener(self, listener: MessageQueueListener[MOut], msg: MOut) -> None:
+    def __notify_listener(self, connection: Connection, msg: MOut) -> None:
         try:
-            listener.on_message(msg)
+            connection.listener.on_message(msg)
         except Exception as e:
-            self._on_listener_error(listener.id, msg, e)
+            self._on_listener_error(connection.id, msg, e)
 
-    def __running_listener(self, listener_id: str) -> MessageQueueListener[MOut]:
-        listener = self.get_listener(listener_id)
-        if not listener.is_running():
-            raise StoppedListenerException(listener.id)
-        return listener
+    def __running_connection(self, connection_id: str) -> Connection:
+        connection = self.get_connection(connection_id)
+        if not connection.listener.is_running():
+            raise StoppedListenerException(connection_id)
+        return connection
 
-    def _pop_next(self, listener_id: str) -> MOut:
+    def _pop_next(self, connection_id: str) -> MOut:
         """
-        Pops the next message for given listener id, without notifying the listener: the first half of
+        Pops the next message of given connection, without notifying its listener: the first half of
         :meth:`deliver_next`, for subclasses that notify listeners their own way, e.g. in an executor.
         Then they must pass listener errors to :meth:`_on_listener_error`.
 
         Raises as :meth:`deliver_next` does. Queue errors are re-raised after error handlers.
         """
-        self.__running_listener(listener_id)
+        connection = self.__running_connection(connection_id)
         try:
-            return self.__connection_manager.get_queue(listener_id).pop()
+            return connection.queue.pop()
         except NoMessagesException:
             raise
         except Exception as e:
-            self.__on_pop_error(listener_id, e)
+            self.__on_pop_error(connection_id, e)
             raise
 
-    def _on_listener_error(self, listener_id: str, msg: MOut, exception: Exception) -> None:
+    def _on_listener_error(self, connection_id: str, msg: MOut, exception: Exception) -> None:
         """Logs an error raised by a listener's ``on_message``, and passes it to error handlers."""
         self.__log_error(exception)
         for handler in self.__listener_error_handlers:
-            handler.handle_on_message_error(listener_id, msg, exception)
+            handler.handle_on_message_error(connection_id, msg, exception)
 
 
     @property
@@ -204,36 +189,36 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
         """
         ...
 
-    def on_listener_added(self, listener: MessageQueueListener[MOut]) -> None:
+    def on_connection_added(self, connection: Connection) -> None:
         """
-        Hook called by :meth:`add_listener` and :meth:`register_listener`.
+        Hook called by :meth:`add_connection` and :meth:`register_listener`.
 
         Not called when connections are registered with :meth:`register_connection`, e.g. when a channel is
         loaded from persistence, because that's not a new subscription.
         """
         pass
 
-    def on_listener_removed(self, listener: MessageQueueListener[MOut]) -> None:
-        """Hook called by :meth:`remove_listener`, after the listener has been removed."""
+    def on_connection_removed(self, connection: Connection) -> None:
+        """Hook called by :meth:`remove_connection`, after the connection has been removed."""
         pass
 
-    def on_stream_start(self, listener: MessageQueueListener[MOut]) -> None:
+    def on_stream_start(self, connection: Connection) -> None:
         """Hook called when :meth:`message_stream` starts, after the listener has been started."""
         pass
 
-    def on_stream_end(self, listener: MessageQueueListener[MOut]) -> None:
+    def on_stream_end(self, connection: Connection) -> None:
         """Hook called when :meth:`message_stream` ends, for any reason: listener stopped, error, or client disconnection."""
         pass
 
-    def before_dispatch(self, listener_id: str, msg: MIn) -> MIn | None:
+    def before_dispatch(self, connection_id: str, msg: MIn) -> MIn | None:
         """
-        Hook called by :meth:`dispatch`, and so by :meth:`broadcast` for each listener, before enqueuing **msg**.
+        Hook called by :meth:`dispatch`, and so by :meth:`broadcast` for each connection, before enqueuing **msg**.
 
         :return: The message to enqueue, possibly a different one, or None to drop it.
         """
         return msg
 
-    def on_wait_timeout(self, listener: MessageQueueListener[MOut]) -> None:
+    def on_wait_timeout(self, connection: Connection) -> None:
         """
         Hook called when :meth:`message_stream` waited :attr:`wait_timeout_seconds` for a message and none arrived.
 
@@ -242,7 +227,7 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
         """
         pass
 
-    def on_error(self, listener: MessageQueueListener[MOut], exception: Exception) -> bool:
+    def on_error(self, connection: Connection, exception: Exception) -> bool:
         """
         Hook called when :meth:`message_stream` catches an unexpected exception, before yielding an error.
 
@@ -253,9 +238,9 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
         """
         return True
 
-    async def message_stream(self, listener: MessageQueueListener[MOut]) -> AsyncIterable[Any]:
+    async def message_stream(self, connection_id: str) -> AsyncIterable[Any]:
         """
-        Entry point for message streaming. Starts **listener**, and ends when it is stopped.
+        Entry point for message streaming. Starts the connection's listener, and ends when it is stopped.
 
         Waits for messages through :meth:`wait_next`, so an idle stream doesn't consume CPU.
         A stopped listener is noticed at the latest after :attr:`wait_timeout_seconds`.
@@ -266,54 +251,55 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
 
         Calls :meth:`on_stream_start`, :meth:`on_wait_timeout` and :meth:`on_stream_end` hooks.
         """
-        self.__connection_manager.get_listener(listener.id)
+        connection = self.get_connection(connection_id)
+        listener = connection.listener
         listener.start()
-        self.on_stream_start(listener)
+        self.on_stream_start(connection)
 
         try:
             while listener.is_running():
                 try:
                     try:
-                        message = await self.wait_next(listener.id, self.wait_timeout_seconds)
+                        message = await self.wait_next(connection_id, self.wait_timeout_seconds)
                     except NoMessagesException:
-                        self.on_wait_timeout(listener)
+                        self.on_wait_timeout(connection)
                         continue
 
                     yield self.adapt(message)
 
                     if self.stream_delay_seconds > 0:
                         await asyncio.sleep(self.stream_delay_seconds)
-                except (InvalidListenerException, InvalidChannelException, StoppedListenerException) as e:
+                except (InvalidConnectionException, InvalidChannelException, StoppedListenerException) as e:
                     yield self.adapt_error(e)
                     break
                 except Exception as e:
                     self.__log_error(e)
-                    go_on = self.on_error(listener, e)
+                    go_on = self.on_error(connection, e)
                     yield self.adapt_error(InternalStreamError())
                     if not go_on:
                         break
                     await asyncio.sleep(self.wait_timeout_seconds)
         finally:
             logger.debug("Stream ended")
-            self.on_stream_end(listener)
+            self.on_stream_end(connection)
 
-    def add_listener(self) -> MessageQueueListener[MOut]:
-        """Shortcut that creates a connection and returns correspondant listener"""
+    def add_connection(self) -> Connection:
+        """Creates a connection through the connections factory, and registers it."""
         connection = self.__connections_factory.create()
         self.register_connection(connection)
-        self.on_listener_added(connection.listener)
-        return connection.listener
+        self.on_connection_added(connection)
+        return connection
 
-
-    def register_listener(self, listener: MessageQueueListener[MOut]):
-        """Registers an existing listener"""
+    def register_listener(self, listener: MessageQueueListener[MOut]) -> Connection:
+        """Creates a connection for an existing listener, and registers it."""
         connection = self.__connections_factory.create(listener=listener)
         self.register_connection(connection)
-        self.on_listener_added(connection.listener)
+        self.on_connection_added(connection)
+        return connection
 
     def register_connection(self, connection: Connection):
         """
-        Register and existing connection. :meth:`add_listener` and :meth:`register_listener` call it too,
+        Register and existing connection. :meth:`add_connection` and :meth:`register_listener` call it too,
         so subclasses can override it to set up every new connection.
 
         Calls :meth:`~eric_sse.listener.MessageQueueListener.on_registered` on the connection's listener.
@@ -321,100 +307,98 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
         **Warning**: Listener and queue should belong to the same classes created by the connections factory (the connections repository, for channels built by a channel repository) to avoid compatibility issues with persistence layer
         """
         self.__connection_manager.register_connection(connection)
-        connection.listener.on_registered(self)
+        connection.listener.on_registered(self, connection.id)
 
-    def remove_listener(self, listener_id: str):
-        listener = self.__connection_manager.get_listener(listener_id)
-        self.__connection_manager.remove_listener(listener_id)
-        self.on_listener_removed(listener)
+    def remove_connection(self, connection_id: str):
+        connection = self.get_connection(connection_id)
+        self.__connection_manager.remove_connection(connection_id)
+        self.on_connection_removed(connection)
 
-    def deliver_next(self, listener_id: str) -> MOut:
+    def deliver_next(self, connection_id: str) -> MOut:
         """
-        Returns next message for given listener id.
+        Returns next message of given connection.
 
         Raises a :class:`~eric_sse.exception.StoppedListenerException` if the listener is not running, even if its
         queue is empty, and a NoMessagesException if the queue is empty.
         Queue errors are re-raised after error handlers; listener errors are not, and the message is returned anyway.
         """
-        msg = self._pop_next(listener_id)
-        self.__notify_listener(self.get_listener(listener_id), msg)
+        msg = self._pop_next(connection_id)
+        self.__notify_listener(self.get_connection(connection_id), msg)
         return msg
 
-    async def wait_next(self, listener_id: str, timeout: float) -> MOut:
+    async def wait_next(self, connection_id: str, timeout: float) -> MOut:
         """
-        Waits up to **timeout** seconds for the next message for given listener id, without blocking the event loop.
+        Waits up to **timeout** seconds for the next message of given connection, without blocking the event loop.
 
         Raises a :class:`~eric_sse.exception.StoppedListenerException` if the listener is not running, as waiting for
         messages that it won't receive is not allowed, and a NoMessagesException if no message arrives in time.
         Queue errors are re-raised after error handlers; listener errors are not, and the message is returned anyway.
         """
-        listener = self.__running_listener(listener_id)
+        connection = self.__running_connection(connection_id)
         try:
-            msg = await self._get_queue(listener.id).wait_pop(timeout)
+            msg = await connection.queue.wait_pop(timeout)
         except NoMessagesException:
             raise
         except Exception as e:
-            self.__on_pop_error(listener.id, e)
+            self.__on_pop_error(connection_id, e)
             raise
-        self.__notify_listener(listener, msg)
+        self.__notify_listener(connection, msg)
         return msg
 
-    def _get_queue(self, listener_id: str) -> Queue[MIn, MOut]:
-        return self.__connection_manager.get_queue(listener_id)
-
-    def dispatch(self, listener_id: str, msg: MIn):
+    def dispatch(self, connection_id: str, msg: MIn):
         """
-        Adds a message to listener's queue, unless :meth:`before_dispatch` drops it.
+        Adds a message to the connection's queue, unless :meth:`before_dispatch` drops it.
 
         Queue errors are re-raised after error handlers.
         """
-        push_error = self.__dispatch(listener_id, msg)
+        push_error = self.__dispatch(connection_id, msg)
         if push_error is not None:
             raise push_error
 
-    def __dispatch(self, listener_id: str, msg: MIn) -> Exception | None:
+    def __dispatch(self, connection_id: str, msg: MIn) -> Exception | None:
         """Returns the push error, if any, after passing it to error handlers."""
-        queue = self._get_queue(listener_id)
-        to_push = self.before_dispatch(listener_id, msg)
+        queue = self.get_connection(connection_id).queue
+        to_push = self.before_dispatch(connection_id, msg)
         if to_push is None:
-            logger.debug(f"Message dropped for {listener_id}")
+            logger.debug(f"Message dropped for {connection_id}")
             return None
         try:
             queue.push(to_push)
         except Exception as e:
             for handler in self.__queuing_error_handlers:
-                handler.handle_push_error(listener_id, to_push, e)
+                handler.handle_push_error(connection_id, to_push, e)
             return e
-        logger.debug(f"Dispatched {to_push} to {listener_id}")
+        logger.debug(f"Dispatched {to_push} to {connection_id}")
         return None
 
     def broadcast(self, msg: MIn):
-        """Enqueue a message to all listeners. A queue error is logged, and doesn't stop delivery to the other ones."""
-        for listener_id in self.__connection_manager.get_listeners():
-            push_error = self.__dispatch(listener_id, msg=msg)
+        """Enqueue a message to all connections. A queue error is logged, and doesn't stop delivery to the other ones."""
+        for connection in self.__connection_manager.get_connections():
+            push_error = self.__dispatch(connection.id, msg=msg)
             if push_error is not None:
                 self.__log_error(push_error)
 
-    def get_listener(self, listener_id: str) -> MessageQueueListener[MOut]:
-        return self.__connection_manager.get_listener(listener_id)
+    def get_connection(self, connection_id: str) -> Connection:
+        """Raises an :class:`~eric_sse.exception.InvalidConnectionException` if the channel has no such connection."""
+        return self.__connection_manager.get_connection(connection_id)
 
     def get_connections(self) -> Iterable[Connection]:
         return self.__connection_manager.get_connections()
 
     async def watch(self) -> AsyncIterable[Any]:
         """
-        Streams channel messages through a new listener, removed when the stream ends::
+        Streams channel messages through a new connection, removed when the stream ends::
 
             async for message in channel.watch():
                 ...
         """
-        listener = self.add_listener()
+        connection = self.add_connection()
         try:
-            async for message in self.message_stream(listener):
+            async for message in self.message_stream(connection.id):
                 yield message
         finally:
             try:
-                self.remove_listener(listener.id)
-            except InvalidListenerException:
+                self.remove_connection(connection.id)
+            except InvalidConnectionException:
                 pass
 

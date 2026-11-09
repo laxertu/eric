@@ -31,10 +31,10 @@ def build_channels(
     )
 
 
-def subscribe(channel: SSEChannel) -> MessageQueueListener:
-    listener = channel.add_listener()
-    listener.start()
-    return listener
+def subscribe(channel: SSEChannel) -> Connection:
+    connection = channel.add_connection()
+    connection.listener.start()
+    return connection
 
 
 class DeadLetterHandlerTestCase(IsolatedAsyncioTestCase):
@@ -42,13 +42,13 @@ class DeadLetterHandlerTestCase(IsolatedAsyncioTestCase):
     def test_message_that_cannot_be_queued_is_dead_lettered_and_the_error_raised(self):
         dead_letters = DeadLetterHandler()
         channel = build_channels(dead_letters, queue_factory=BrokenQueue).create({})
-        listener = subscribe(channel)
+        connection = subscribe(channel)
 
         with self.assertRaises(RuntimeError):
-            channel.dispatch(listener.id, Message(msg_type='test', msg_payload='hello'))
+            channel.dispatch(connection.id, Message(msg_type='test', msg_payload='hello'))
 
         dead_letter = dead_letters.queue.pop()
-        self.assertEqual(listener.id, dead_letter.listener_id)
+        self.assertEqual(connection.id, dead_letter.connection_id)
         self.assertEqual(('test', 'hello'), (dead_letter.type, dead_letter.payload))
         self.assertEqual("RuntimeError('push failed')", dead_letter.error)
 
@@ -56,38 +56,38 @@ class DeadLetterHandlerTestCase(IsolatedAsyncioTestCase):
         dead_letters = DeadLetterHandler()
         channel = build_channels(dead_letters).create({})
         healthy = subscribe(channel)
-        broken = MessageQueueListener()
-        channel.register_connection(Connection(listener=broken, queue=BrokenQueue()))
+        broken = Connection(listener=MessageQueueListener(), queue=BrokenQueue())
+        channel.register_connection(broken)
 
         channel.broadcast(Message(msg_type='test'))
 
         self.assertEqual('test', channel.deliver_next(healthy.id).type)
-        self.assertEqual(broken.id, dead_letters.queue.pop().listener_id)
+        self.assertEqual(broken.id, dead_letters.queue.pop().connection_id)
         with self.assertRaises(NoMessagesException):
             dead_letters.queue.pop()
 
     async def test_messages_the_listener_fails_to_handle_are_dead_lettered(self):
         dead_letters = DeadLetterHandler()
         channel = build_channels(dead_letters, listener_factory=BrokenListener).create({})
-        listener = subscribe(channel)
-        channel.dispatch(listener.id, Message(msg_type='first'))
-        channel.dispatch(listener.id, Message(msg_type='second'))
+        connection = subscribe(channel)
+        channel.dispatch(connection.id, Message(msg_type='first'))
+        channel.dispatch(connection.id, Message(msg_type='second'))
 
-        channel.deliver_next(listener.id)
-        await channel.wait_next(listener.id, timeout=0.01)
+        channel.deliver_next(connection.id)
+        await channel.wait_next(connection.id, timeout=0.01)
 
         first, second = dead_letters.queue.pop(), dead_letters.queue.pop()
-        self.assertEqual(('first', listener.id), (first.type, first.listener_id))
-        self.assertEqual(('second', listener.id), (second.type, second.listener_id))
+        self.assertEqual(('first', connection.id), (first.type, first.connection_id))
+        self.assertEqual(('second', connection.id), (second.type, second.connection_id))
         self.assertEqual("RuntimeError('on_message failed')", first.error)
 
     def test_failed_reads_are_not_dead_lettered(self):
         dead_letters = DeadLetterHandler()
         channel = build_channels(dead_letters, queue_factory=BrokenQueue).create({})
-        listener = subscribe(channel)
+        connection = subscribe(channel)
 
         with self.assertRaises(RuntimeError):
-            channel.deliver_next(listener.id)
+            channel.deliver_next(connection.id)
 
         with self.assertRaises(NoMessagesException):
             dead_letters.queue.pop()
@@ -95,30 +95,30 @@ class DeadLetterHandlerTestCase(IsolatedAsyncioTestCase):
     def test_dead_letters_go_to_the_given_queue(self):
         queue = InMemoryQueue()
         channel = build_channels(DeadLetterHandler(queue), queue_factory=BrokenQueue).create({})
-        listener = subscribe(channel)
+        connection = subscribe(channel)
 
         with self.assertRaises(RuntimeError):
-            channel.dispatch(listener.id, Message(msg_type='test'))
+            channel.dispatch(connection.id, Message(msg_type='test'))
 
         self.assertEqual('test', queue.pop().type)
 
     def test_lost_dead_letter_is_logged_and_the_original_error_raised(self):
         channel = build_channels(DeadLetterHandler(BrokenQueue()), queue_factory=BrokenQueue).create({})
-        listener = subscribe(channel)
+        connection = subscribe(channel)
 
         with self.assertLogs(level='ERROR'):
             with self.assertRaises(RuntimeError) as raised:
-                channel.dispatch(listener.id, Message(msg_type='test'))
+                channel.dispatch(connection.id, Message(msg_type='test'))
 
         self.assertEqual('push failed', str(raised.exception))
 
     def test_lost_dead_letter_does_not_stop_delivery(self):
         channel = build_channels(DeadLetterHandler(BrokenQueue()), listener_factory=BrokenListener).create({})
-        listener = subscribe(channel)
-        channel.dispatch(listener.id, Message(msg_type='test'))
+        connection = subscribe(channel)
+        channel.dispatch(connection.id, Message(msg_type='test'))
 
         with self.assertLogs(level='ERROR'):
-            self.assertEqual('test', channel.deliver_next(listener.id).type)
+            self.assertEqual('test', channel.deliver_next(connection.id).type)
 
     def test_channels_loaded_from_persistence_dead_letter_too(self):
         dead_letters = DeadLetterHandler()
@@ -126,20 +126,20 @@ class DeadLetterHandlerTestCase(IsolatedAsyncioTestCase):
         channel = channels.create({})
         channels.persist(channel)
         loaded = channels.load_one(channel.id)
-        listener = subscribe(loaded)
-        loaded.dispatch(listener.id, Message(msg_type='test'))
+        connection = subscribe(loaded)
+        loaded.dispatch(connection.id, Message(msg_type='test'))
 
-        loaded.deliver_next(listener.id)
+        loaded.deliver_next(connection.id)
 
         self.assertEqual('test', dead_letters.queue.pop().type)
 
     def test_dead_letter_keeps_the_original_message(self):
         dead_letters = DeadLetterHandler()
         channel = build_channels(dead_letters, queue_factory=BrokenQueue).create({})
-        listener = subscribe(channel)
+        connection = subscribe(channel)
 
         with self.assertRaises(RuntimeError):
-            channel.dispatch(listener.id, SignedMessage(sender_id='producer', msg_type='test', msg_id='m1'))
+            channel.dispatch(connection.id, SignedMessage(sender_id='producer', msg_type='test', msg_id='m1'))
 
         dead_letter = dead_letters.queue.pop()
         self.assertEqual('m1', dead_letter.id)
@@ -148,14 +148,14 @@ class DeadLetterHandlerTestCase(IsolatedAsyncioTestCase):
     def test_dead_letter_can_be_delivered_again(self):
         dead_letters = DeadLetterHandler()
         channel = build_channels(dead_letters, listener_factory=BrokenListener).create({})
-        listener = subscribe(channel)
-        channel.dispatch(listener.id, Message(msg_type='test', msg_payload='hello'))
-        channel.deliver_next(listener.id)
+        connection = subscribe(channel)
+        channel.dispatch(connection.id, Message(msg_type='test', msg_payload='hello'))
+        channel.deliver_next(connection.id)
 
         dead_letter = dead_letters.queue.pop()
-        channel.dispatch(dead_letter.listener_id, dead_letter.message)
+        channel.dispatch(dead_letter.connection_id, dead_letter.message)
 
-        redelivered = channel.deliver_next(listener.id)
+        redelivered = channel.deliver_next(connection.id)
         self.assertEqual(('test', 'hello'), (redelivered.type, redelivered.payload))
 
 

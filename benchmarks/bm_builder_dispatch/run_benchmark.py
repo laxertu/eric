@@ -31,19 +31,19 @@ def dispatch_and_deliver(loops: int) -> float:
     msg = Message(msg_type='test', msg_payload={'value': 42})
     for _ in range(loops):
         channel = ChannelRepositoryBuilder(SSEChannel).build().create({})
-        listener = channel.add_listener()
-        listener.start()
+        connection = channel.add_connection()
+        connection.listener.start()
 
         start = pyperf.perf_counter()
         for _ in range(MESSAGES):
-            channel.dispatch(listener.id, msg)
+            channel.dispatch(connection.id, msg)
         for _ in range(MESSAGES):
-            channel.deliver_next(listener.id)
+            channel.deliver_next(connection.id)
         elapsed += pyperf.perf_counter() - start
     return elapsed
 
 
 if __name__ == '__main__':
     runner = pyperf.Runner()
-    runner.metadata['description'] = f'Builder defaults: dispatch and deliver {MESSAGES} messages to one listener'
+    runner.metadata['description'] = f'Builder defaults: dispatch and deliver {MESSAGES} messages to one connection'
     runner.bench_time_func('builder_dispatch', dispatch_and_deliver)

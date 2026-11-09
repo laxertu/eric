@@ -122,13 +122,13 @@ class ProfiledListener(MessageQueueListener[M]):
     """
     Wraps a listener and profiles its :meth:`on_message`.
 
-    It has the same id as the profiled listener, and delegates every other call to it.
+    It delegates every other call to it.
 
     :param ~eric_sse.listener.MessageQueueListener listener: The profiled listener.
     """
 
     def __init__(self, listener: MessageQueueListener[M]) -> None:
-        super().__init__(listener_id=listener.id)
+        super().__init__()
         self.__listener = listener
         self.__on_message_stats = CallStats()
 
@@ -148,8 +148,8 @@ class ProfiledListener(MessageQueueListener[M]):
         finally:
             self.__on_message_stats.record(time.perf_counter() - start)
 
-    def on_registered(self, channel: 'AbstractChannel[Any, M]') -> None:
-        self.__listener.on_registered(channel)
+    def on_registered(self, channel: 'AbstractChannel[Any, M]', connection_id: str) -> None:
+        self.__listener.on_registered(channel, connection_id)
 
     def start(self) -> None:
         self.__listener.start()

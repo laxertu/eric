@@ -22,22 +22,22 @@ class DeadLetter(MessageContract):
     It wraps the original message: :attr:`id`, :attr:`type` and :attr:`payload` are the original ones,
     and :attr:`message` keeps its class, e.g. a :class:`~eric_sse.message.SignedMessage` with its sender.
 
-    To redeliver it: ``channel.dispatch(dead_letter.listener_id, dead_letter.message)``.
+    To redeliver it: ``channel.dispatch(dead_letter.connection_id, dead_letter.message)``.
 
-    :param str listener_id: Id of the listener the message was meant for.
+    :param str connection_id: Id of the connection the message was meant for.
     :param ~eric_sse.message.MessageContract message: The original message.
     :param str error: Description of the error, e.g. ``repr()`` of the exception.
     """
 
-    def __init__(self, listener_id: str, message: MessageContract, error: str):
-        self.__listener_id = listener_id
+    def __init__(self, connection_id: str, message: MessageContract, error: str):
+        self.__connection_id = connection_id
         self.__message = message
         self.__error = error
 
     @property
-    def listener_id(self) -> str:
-        """Id of the listener the message was meant for."""
-        return self.__listener_id
+    def connection_id(self) -> str:
+        """Id of the connection the message was meant for."""
+        return self.__connection_id
 
     @property
     def message(self) -> MessageContract:
@@ -98,16 +98,16 @@ class DeadLetterHandler(QueuingErrorHandler, ListenerErrorHandler):
         """The dead letter queue, e.g. to inspect or redeliver its messages."""
         return self.__queue
 
-    def handle_push_error(self, listener_id: str, msg: MessageContract, exception: Exception) -> None:
-        self._dead_letter(listener_id, msg, exception)
+    def handle_push_error(self, connection_id: str, msg: MessageContract, exception: Exception) -> None:
+        self._dead_letter(connection_id, msg, exception)
 
-    def handle_on_message_error(self, listener_id: str, msg: MessageContract, exception: Exception) -> None:
-        self._dead_letter(listener_id, msg, exception)
+    def handle_on_message_error(self, connection_id: str, msg: MessageContract, exception: Exception) -> None:
+        self._dead_letter(connection_id, msg, exception)
 
-    def _dead_letter(self, listener_id: str, msg: MessageContract, exception: Exception) -> None:
+    def _dead_letter(self, connection_id: str, msg: MessageContract, exception: Exception) -> None:
         """Pushes **msg** to the dead letter queue, wrapped in a :class:`DeadLetter`. Override to change what is stored."""
         try:
-            self.__queue.push(DeadLetter(listener_id=listener_id, message=msg, error=repr(exception)))
+            self.__queue.push(DeadLetter(connection_id=connection_id, message=msg, error=repr(exception)))
         except Exception as e:
             logger.debug(''.join(traceback.format_exception(type(e), e, e.__traceback__)))
             logger.error(f"Dead letter lost after {exception!r}: {e!r}")
