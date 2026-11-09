@@ -231,7 +231,7 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
         """
         Hook called when :meth:`message_stream` catches an unexpected exception, before yielding an error.
 
-        By default it goes on. The exception has already been logged, and, if raised by a queue, passed to error handlers.
+        By default, it goes on. The exception has already been logged, and, if raised by a queue, passed to error handlers.
         The stream waits :attr:`wait_timeout_seconds` before trying again, so a failing backend doesn't make it spin.
 
         :return: False to end the stream after the error.

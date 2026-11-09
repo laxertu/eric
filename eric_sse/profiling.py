@@ -14,7 +14,6 @@ import threading
 import time
 from typing import Any, TYPE_CHECKING
 
-from eric_sse.exception import NoMessagesException
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import M, MIn, MOut
 from eric_sse.queues import Queue
