@@ -68,6 +68,8 @@ Changelog
 * BREAKING: MessageQueueListener.on_registered(channel, connection_id) also receives the connection id. SimpleDistributedApplicationListener signs messages with it, and dispatch_to() takes the receiver's connection id
 * BREAKING: removed InvalidListenerException: a missing connection raises an InvalidConnectionException
 * ListenerRepositoryInterface and QueueRepositoryInterface are now generic on listener and queue types
+* FIX: channel ids containing ':' no longer mix connections of different channels, e.g. deleting channel a deleted the listeners and queues of channel a:b. ConnectionRepository percent-encodes channel ids in its keys; generated ids are unchanged
+* FIX: AbstractChannel.broadcast() failed when a hook or an error handler removed a connection meanwhile
 * FIX: examples/tutorial_kv_storage.py used ChannelRepositoryBuilder with an outdated signature
 
 2.1.1
