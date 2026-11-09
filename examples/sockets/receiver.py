@@ -6,9 +6,9 @@ from eric_sse.clients import SocketClient
 from examples.sockets import SOCKET_FILE_DESCRIPTOR_PATH
 
 
-async def main(channel_id, listener_id):
+async def main(channel_id, connection_id):
     client = SocketClient(SOCKET_FILE_DESCRIPTOR_PATH)
-    async for m in client.stream(channel_id, listener_id):
+    async for m in client.stream(channel_id, connection_id):
         print(m)
 
 

@@ -8,17 +8,17 @@ from eric_sse.message import Message
 from eric_sse.prefabs import SSEChannel
 
 channel = SSEChannel()
-listener = channel.add_listener()
+connection = channel.add_connection()
 
-channel.dispatch(listener.id, Message(msg_type='test1', msg_payload='hi there'))
-channel.dispatch(listener.id, Message(msg_type='test2', msg_payload='hi there!'))
-channel.dispatch(listener.id, Message(msg_type='test3', msg_payload='hi there!!'))
+channel.dispatch(connection.id, Message(msg_type='test1', msg_payload='hi there'))
+channel.dispatch(connection.id, Message(msg_type='test2', msg_payload='hi there!'))
+channel.dispatch(connection.id, Message(msg_type='test3', msg_payload='hi there!!'))
 
 async def main():
     input('Starting Press Enter to start stream and Ctrl+C to stop')
 
     try:
-        async for sse_event in channel.message_stream(listener):
+        async for sse_event in channel.message_stream(connection.id):
             print(f'Received message: {sse_event}')
     except KeyboardInterrupt:
         exit(0)

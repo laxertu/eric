@@ -16,11 +16,11 @@ The following code creates a Server Side Events channel and attaches a listener 
     from eric_sse.prefabs import SSEChannel
 
     channel = SSEChannel()
-    listener = channel.add_listener()
-    channel.dispatch(listener.id, Message(msg_type='welcome', msg_payload='Hello!'))
+    connection = channel.add_connection()
+    channel.dispatch(connection.id, Message(msg_type='welcome', msg_payload='Hello!'))
 
     async def main():
-        async for sse_event in channel.message_stream(listener):
+        async for sse_event in channel.message_stream(connection.id):
             print(f'Received message: {sse_event}')
 
     if __name__ == '__main__':

@@ -50,7 +50,7 @@ or on every channel created or loaded by a repository:
 
 Each failed message is pushed as a :class:`~eric_sse.queue_patterns.DeadLetter`, that wraps it and adds:
 
-* ``listener_id``: the listener the message was meant for;
+* ``connection_id``: the connection the message was meant for;
 * ``error``: the ``repr()`` of the exception;
 * ``message``: the original message, of its original class (e.g. a :class:`~eric_sse.message.SignedMessage` keeps its sender).
 
@@ -67,10 +67,10 @@ A ``DeadLetter`` is a message itself, with the original ``id``, ``type`` and ``p
             dead_letter = dead_letters.queue.pop()
         except NoMessagesException:
             break
-        print(dead_letter.listener_id, dead_letter.type, dead_letter.error)
-        channel.dispatch(dead_letter.listener_id, dead_letter.message)
+        print(dead_letter.connection_id, dead_letter.type, dead_letter.error)
+        channel.dispatch(dead_letter.connection_id, dead_letter.message)
 
-If the listener no longer exists, ``dispatch`` raises an :class:`~eric_sse.exception.InvalidListenerException`.
+If the connection no longer exists, ``dispatch`` raises an :class:`~eric_sse.exception.InvalidConnectionException`.
 
 **Choosing the dead letter queue**
 
@@ -93,9 +93,9 @@ or to skip some message types:
 .. code-block:: python
 
     class SelectiveDeadLetterHandler(DeadLetterHandler):
-        def _dead_letter(self, listener_id, msg, exception):
+        def _dead_letter(self, connection_id, msg, exception):
             if msg.type != 'heartbeat':
-                super()._dead_letter(listener_id, msg, exception)
+                super()._dead_letter(connection_id, msg, exception)
 
 Reliable Queue
 ==============

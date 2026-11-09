@@ -27,7 +27,7 @@ stores everything in one storage instance, each kind of object under its own nam
     repository = ChannelRepositoryBuilder(SSEChannel, my_storage).listeners(MyListener).build()
 
     channel = repository.create({'retry_timeout_milliseconds': 100})
-    listener = channel.add_listener()
+    connection = channel.add_connection()
     repository.persist(channel)
 
 Persistence is always explicit: channels and their connections are stored when you call ``persist``. Messages are

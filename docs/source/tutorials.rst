@@ -21,7 +21,7 @@ The main concepts:
 * :meth:`~eric_sse.entities.AbstractChannel.message_stream` streams the messages of one listener, adapted to the
   channel's output format. It's what a web server returns to each client. It starts the listener, waits for
   messages without consuming CPU, and ends when the listener is stopped.
-* **Hooks** such as :meth:`~eric_sse.entities.AbstractChannel.on_listener_added` and
+* **Hooks** such as :meth:`~eric_sse.entities.AbstractChannel.on_connection_added` and
   :meth:`~eric_sse.entities.AbstractChannel.before_dispatch` customise a channel by subclassing. They do nothing by
   default.
 

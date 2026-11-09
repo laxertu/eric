@@ -62,6 +62,12 @@ Changelog
 * FIX: DataProcessingChannel.process_queue() bypassed error handlers and processed queues of stopped listeners. It now handles errors as deliver_next() does, in the channel's process also with a ProcessPoolExecutor: listener errors are logged and passed to error handlers, and the message is yielded anyway; queue errors are passed to error handlers and re-raised after the messages already popped are yielded
 * BREAKING: DataProcessingChannel.process_queue() raises a StoppedListenerException if the listener is not running, and listener errors no longer propagate. Removed DataProcessingChannel._invoke_callback_and_return()
 * Added AbstractChannel._pop_next(listener_id) and _on_listener_error(listener_id, msg, exception), the two halves of deliver_next(), for subclasses that notify listeners their own way, e.g. in an executor
+* BREAKING: connections are what channels identify; listeners have no id any more. Removed MessageQueueListener.id and its listener_id parameter. dispatch(), deliver_next(), wait_next(), message_stream(), DataProcessingChannel.process_queue(), before_dispatch() and error handlers take a connection id, DeadLetter.listener_id is DeadLetter.connection_id. Connection.id is also the key used by repositories, so clients can load a listener or a queue with the id they hold, e.g. to acknowledge a ReliableMessage
+* BREAKING: AbstractChannel.add_listener() replaced by add_connection(), returning the Connection. register_listener() returns the Connection too. remove_listener() and get_listener() replaced by remove_connection() and get_connection(). SocketClient.remove_listener() replaced by remove_connection()
+* BREAKING: channel hooks receive the Connection: on_listener_added and on_listener_removed are now on_connection_added and on_connection_removed; on_stream_start, on_stream_end, on_wait_timeout and on_error take a Connection instead of a listener
+* BREAKING: MessageQueueListener.on_registered(channel, connection_id) also receives the connection id. SimpleDistributedApplicationListener signs messages with it, and dispatch_to() takes the receiver's connection id
+* BREAKING: removed InvalidListenerException: a missing connection raises an InvalidConnectionException
+* FIX: examples/tutorial_kv_storage.py used ChannelRepositoryBuilder with an outdated signature
 
 2.1.1
 

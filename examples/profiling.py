@@ -14,16 +14,16 @@ channels = (
 )
 
 channel = channels.create({})
-listener = channel.add_listener()
-listener.start()
+connection = channel.add_connection()
+connection.listener.start()
 
 for _ in range(100):
-    channel.dispatch(listener.id, Message(msg_type="test", msg_payload="test"))
+    channel.dispatch(connection.id, Message(msg_type="test", msg_payload="test"))
 for _ in range(100):
-    channel.deliver_next(listener.id)
+    channel.deliver_next(connection.id)
 
 for connection in channel.get_connections():
-    print(f'listener {connection.listener.id}')
+    print(f'connection {connection.id}')
     print(f'  on_message: {connection.listener.on_message_stats.calls} calls, {connection.listener.on_message_stats.total_time:.6f} s')
     print(f'  push: {connection.queue.push_stats.calls} calls, mean {connection.queue.push_stats.mean_time:.6f} s')
     print(f'  pop: {connection.queue.pop_stats.calls} calls, mean {connection.queue.pop_stats.mean_time:.6f} s')

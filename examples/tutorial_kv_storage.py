@@ -105,38 +105,37 @@ def build_repository(db_path: str):
     # One storage for everything: the builder gives channels, connections, listeners and queues their own key prefix.
     # The default queues repository stores queues as they are; queue_factory decides which queues channels create.
     return (
-        ChannelRepositoryBuilder(SqliteStorage(db_path))
-        .channels(SSEChannel)
+        ChannelRepositoryBuilder(SSEChannel, SqliteStorage(db_path))
         .queues(queue_factory=lambda: SqliteQueue(db_path))
         .build()
     )
 
 
 def first_run(db_path: str) -> tuple[str, str]:
-    """Creates and persists a channel with one listener, then dispatches messages."""
+    """Creates and persists a channel with one connection, then dispatches messages."""
     repository = build_repository(db_path)
 
     # Nothing is persisted implicitly: create() only builds the channel, persist() stores it with its connections
     channel = repository.create({'retry_timeout_milliseconds': 1000})
-    listener = channel.add_listener()
+    connection = channel.add_connection()
     repository.persist(channel)
 
     # No persist needed: SqliteQueue writes messages itself
-    channel.dispatch(listener.id, Message(msg_type='greeting', msg_payload='hello'))
-    channel.dispatch(listener.id, Message(msg_type='greeting', msg_payload='are you still there?'))
+    channel.dispatch(connection.id, Message(msg_type='greeting', msg_payload='hello'))
+    channel.dispatch(connection.id, Message(msg_type='greeting', msg_payload='are you still there?'))
     print(f'First run: persisted channel {channel.id} and dispatched 2 messages')
-    return channel.id, listener.id
+    return channel.id, connection.id
 
 
-async def second_run(db_path: str, channel_id: str, listener_id: str):
+async def second_run(db_path: str, channel_id: str, connection_id: str):
     """A new process would start here: everything is loaded from the database."""
     repository = build_repository(db_path)
     channel = repository.load_one(channel_id)
-    listener = channel.get_listener(listener_id)
+    listener = channel.get_connection(connection_id).listener
     print(f'Second run: loaded channel with retry timeout {channel.retry_timeout_milliseconds} ms')
 
     received = 0
-    async for event in channel.message_stream(listener):
+    async for event in channel.message_stream(connection_id):
         print(f'  {event["event"]}: {event["data"]}')
         received += 1
         if received == 2:
@@ -149,8 +148,8 @@ async def second_run(db_path: str, channel_id: str, listener_id: str):
 def main():
     with tempfile.TemporaryDirectory() as tmp:
         db_path = str(Path(tmp) / 'eric.db')
-        channel_id, listener_id = first_run(db_path)
-        asyncio.run(second_run(db_path, channel_id, listener_id))
+        channel_id, connection_id = first_run(db_path)
+        asyncio.run(second_run(db_path, channel_id, connection_id))
 
 
 if __name__ == '__main__':

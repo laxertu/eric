@@ -23,12 +23,12 @@ async def main():
     server.cc.register(channel)
 
     listener = ExampleServerListener()
-    channel.register_listener(listener)
+    connection = channel.register_listener(listener)
 
     print(f"Test an example delivery on an hello world with:")
     print("")
     print(f'python sender.py {channel.id}')
-    print(f'python receiver.py {channel.id} {listener.id}')
+    print(f'python receiver.py {channel.id} {connection.id}')
     print("")
     await server.main()
 

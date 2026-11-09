@@ -17,10 +17,10 @@ logger = get_logger()
 class Producer:
 
     @staticmethod
-    async def produce_num(c: DataProcessingChannel[SignedMessage, SignedMessage], l: MessageQueueListener[SignedMessage], num: int):
+    async def produce_num(c: DataProcessingChannel[SignedMessage, SignedMessage], connection_id: str, num: int):
         for i in range(0, num):
-            c.dispatch(l.id, SignedMessage(msg_type='counter', msg_payload=i, sender_id='producer'))
-        c.dispatch(l.id, SignedMessage(msg_type=MESSAGE_TYPE_CLOSED, sender_id='producer'))
+            c.dispatch(connection_id, SignedMessage(msg_type='counter', msg_payload=i, sender_id='producer'))
+        c.dispatch(connection_id, SignedMessage(msg_type=MESSAGE_TYPE_CLOSED, sender_id='producer'))
 
 
 class Consumer(MessageQueueListener[SignedMessage]):
@@ -39,12 +39,12 @@ async def main():
 
 
     listener = Consumer()
-    channel.register_listener(listener)
+    connection = channel.register_listener(listener)
 
-    await Producer.produce_num(c=channel, l=listener, num=20)
+    await Producer.produce_num(c=channel, connection_id=connection.id, num=20)
 
     listener.start()
-    async for m in channel.process_queue(listener):
+    async for m in channel.process_queue(connection.id):
         print(m)
 
 asyncio.run(main())

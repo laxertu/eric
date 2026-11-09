@@ -12,8 +12,8 @@ Handlers are not persisted: register them on each channel, or once on a
     from eric_sse.handlers import ListenerErrorHandler
 
     class AlertOnFailure(ListenerErrorHandler):
-        def handle_on_message_error(self, listener_id, msg, exception):
-            send_alert(f'{listener_id} failed on {msg.type}: {exception!r}')
+        def handle_on_message_error(self, connection_id, msg, exception):
+            send_alert(f'{connection_id} failed on {msg.type}: {exception!r}')
 
     channel.add_listener_error_handler(AlertOnFailure())
 
