@@ -164,3 +164,12 @@ channel.dispatch(listener_id, msg)
 - 9 mypy errors predate this work, in `servers.py`, `repository.py` and `prefabs.py`.
 - Open question from the test rework: move the contract test classes into the package (e.g. `eric_sse/testing.py`), so library users can run them against their own parts.
 - Generated `docs_html` and `docs_markdown` are rebuilt by `update_docs.sh` as the last step of the release.
+
+### Pending design limits (found during the test rework, 2026-11-09)
+- **`SocketServer` can't be given a channel class:** the `'c'` command always creates a plain `SSEChannel()`, so a socket client can't get a channel built by a repository. Injecting a channel factory through the constructor would fix it.
+- **`SocketServer.cc` is a class attribute:** every server instance shares one `ChannelContainer`, and tests have to reset it around each run. It should be injected too.
+- **`SocketServer` shutdown doesn't end open streams:** it handles SIGTERM with a graceful shutdown, so a stuck stream keeps the process alive and only `kill -9` stops it.
+- **Running state lives on the listener:** `start()`, `stop()` and `is_running()` are really subscription state, so one listener can't be shared across connections (stopping it would stop them all). Listeners aren't pure behaviour yet.
+- **The Builder can't mix queues on one channel:** one queue factory serves all connections, so tests with healthy and broken connections on the same channel fall back to `register_connection`.
+- **Contracts repeat themselves:** all of them declare `channel_data()` and a create-a-channel step; a small shared base would remove that.
+- **Examples aren't run by the suite:** `test/test_examples.py` no longer exists, though the changelog says the tutorials are run; `examples/tutorial_kv_storage.py` had broken unnoticed.
