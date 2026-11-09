@@ -12,6 +12,16 @@ from eric_sse.queues import InMemoryQueue
 from test.mock.listener import MessageQueueListenerMock
 
 
+class StoppedAfterCheckListener(MessageQueueListener):
+    """Running for the stream loop check, stopped when the channel waits: as if stopped by another thread in between."""
+    def __init__(self):
+        super().__init__()
+        self.answers = iter([True])
+
+    def is_running(self) -> bool:
+        return next(self.answers, False)
+
+
 class ChannelContract(ABC):
     """
     Use cases every channel class has to satisfy: managing connections and delivering messages.
@@ -76,6 +86,21 @@ class ChannelContract(ABC):
         connection.listener.start()
         with self.assertRaises(NoMessagesException):
             channel.deliver_next(connection.id)
+
+    async def test_waiting_requires_a_running_listener(self: 'ChannelContract | IsolatedAsyncioTestCase'):
+        channel = self._create_channel()
+        connection = channel.add_connection()
+
+        with self.assertRaises(StoppedListenerException):
+            await channel.wait_next(connection.id, 0.05)
+
+    async def test_stream_reports_an_error_and_ends_when_the_listener_stops_before_waiting(self: 'ChannelContract | IsolatedAsyncioTestCase'):
+        channel = self._create_channel(self.create_builder().listeners(StoppedAfterCheckListener))
+        connection = channel.add_connection()
+
+        received = [event async for event in channel.message_stream(connection.id)]
+
+        self.assertEqual(1, len(received))
 
     def test_connections_are_added_and_registered_until_removed(self: 'ChannelContract | IsolatedAsyncioTestCase'):
         channel = self._create_channel()
