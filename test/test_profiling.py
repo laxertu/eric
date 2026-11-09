@@ -10,7 +10,7 @@ from eric_sse.message import Message, MessageContract
 from eric_sse.profiling import CallStats, ProfiledListener, ProfiledQueue
 from eric_sse.queues import InMemoryQueue
 from test.mock.channel import FakeChannel
-from test.test_handlers import BrokenListener
+from test.mock.failures import BrokenListener
 from test.test_queue_patterns import PicklableQueue
 
 

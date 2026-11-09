@@ -13,7 +13,7 @@ from eric_sse.queue_patterns import DeadLetterHandler, ReliableQueue
 from eric_sse.queues import InMemoryQueue, Queue
 from eric_sse.repository import ChannelRepository, InMemoryStorage, KvStorage
 from test.reliable_queue_contract import ReliableQueueContract
-from test.test_handlers import BrokenListener, BrokenQueue
+from test.mock.failures import BrokenListener, BrokenQueue
 
 
 def build_channels(
