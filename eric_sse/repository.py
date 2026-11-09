@@ -89,7 +89,7 @@ class PrefixedStorage(KvStorage[T]):
         self.__storage.delete(f'{self.__prefix}{key}')
 
 
-class KvListenerRepository(ListenerRepositoryInterface, Generic[L]):
+class KvListenerRepository(ListenerRepositoryInterface[L]):
     """
     Listener repository backed by a :class:`~eric_sse.repository.KvStorage`.
 
@@ -116,7 +116,7 @@ class KvListenerRepository(ListenerRepositoryInterface, Generic[L]):
         self.__storage.delete(connection_id)
 
 
-class KvQueueRepository(QueueRepositoryInterface, Generic[Q]):
+class KvQueueRepository(QueueRepositoryInterface[Q]):
     """
     Queue repository backed by a :class:`~eric_sse.repository.KvStorage`.
 

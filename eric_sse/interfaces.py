@@ -2,26 +2,25 @@ from abc import ABC, abstractmethod
 from typing import Generic, Iterable, TypeVar
 
 from eric_sse.entities import AbstractChannel
-from eric_sse.connection import Connection, ConnectionsFactory
-from eric_sse.listener import MessageQueueListener
-from eric_sse.queues import Queue
+from eric_sse.connection import Connection, ConnectionsFactory, L, Q
 
 C = TypeVar('C', bound=AbstractChannel)
 
-class QueueRepositoryInterface(ABC):
+class QueueRepositoryInterface(ABC, Generic[Q]):
+    """Generic in the class of queues it creates, loads and persists."""
 
     @abstractmethod
-    def create(self) -> Queue:
+    def create(self) -> Q:
         """Creates a new queue. It is not persisted."""
         pass
 
     @abstractmethod
-    def load(self, connection_id: str) -> Queue:
+    def load(self, connection_id: str) -> Q:
         """Loads a queue given the connection id it belongs to."""
         pass
 
     @abstractmethod
-    def persist(self, connection_id: str, queue: Queue):
+    def persist(self, connection_id: str, queue: Q):
         """Persists queue and assign to connection."""
         pass
 
@@ -31,19 +30,20 @@ class QueueRepositoryInterface(ABC):
         pass
 
 
-class ListenerRepositoryInterface(ABC):
+class ListenerRepositoryInterface(ABC, Generic[L]):
+    """Generic in the class of listeners it creates, loads and persists."""
     @abstractmethod
-    def create(self) -> MessageQueueListener:
+    def create(self) -> L:
         """Creates a new listener. It is not persisted."""
         pass
 
     @abstractmethod
-    def load(self, connection_id: str) -> MessageQueueListener:
+    def load(self, connection_id: str) -> L:
         """Loads a listener given the connection id it belongs to."""
         pass
 
     @abstractmethod
-    def persist(self, connection_id: str, listener: MessageQueueListener):
+    def persist(self, connection_id: str, listener: L):
         """Persists listener and assign to connection."""
         pass
 
