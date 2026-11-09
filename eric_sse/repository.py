@@ -1,5 +1,6 @@
 from typing import Iterable, Generic, TypeVar, Callable
 from abc import ABC, abstractmethod
+from urllib.parse import quote
 
 from eric_sse.connection import Connection, L, Q
 from eric_sse.entities import AbstractChannel
@@ -264,6 +265,11 @@ class ConnectionRepository(ConnectionRepositoryInterface):
             listener = self.__listeners_repository.create()
         return Connection(listener=listener, queue=self.__queues_repository.create())
 
+    @staticmethod
+    def _channel_prefix(channel_id: str) -> str:
+        """Key prefix of a channel's connections. The id is encoded so that it can't contain the separator: otherwise channel ``a`` would match the connections of channel ``a:b``."""
+        return f"{quote(channel_id, safe='')}:"
+
     def _load_connection(self, connection_id: str) -> Connection:
         listener = self.__listeners_repository.load(connection_id=connection_id)
         queue = self.__queues_repository.load(connection_id=connection_id)
@@ -271,7 +277,7 @@ class ConnectionRepository(ConnectionRepositoryInterface):
         return Connection(listener=listener, queue=queue, connection_id=connection_id)
 
     def load_ids(self, channel_id: str) -> Iterable[str]:
-        for connection_data in self.__storage.fetch_by_prefix(f'{channel_id}:'):
+        for connection_data in self.__storage.fetch_by_prefix(self._channel_prefix(channel_id)):
             yield connection_data['id']
 
     def load_all(self, channel_id: str) -> Iterable[Connection]:
@@ -280,15 +286,15 @@ class ConnectionRepository(ConnectionRepositoryInterface):
 
 
     def load_one(self, channel_id: str, connection_id: str) -> Connection:
-        return self._load_connection(self.__storage.fetch_one(f'{channel_id}:{connection_id}')['id'])
+        return self._load_connection(self.__storage.fetch_one(f'{self._channel_prefix(channel_id)}{connection_id}')['id'])
 
     def persist(self, channel_id: str, connection: Connection):
         self.__listeners_repository.persist(connection_id=connection.id, listener=connection.listener)
         self.__queues_repository.persist(connection_id=connection.id, queue=connection.queue)
-        self.__storage.upsert(f'{channel_id}:{connection.id}', {'id': connection.id})
+        self.__storage.upsert(f'{self._channel_prefix(channel_id)}{connection.id}', {'id': connection.id})
 
     def delete(self, channel_id: str, connection_id: str):
         self.__listeners_repository.delete(connection_id=connection_id)
         self.__queues_repository.delete(connection_id=connection_id)
-        self.__storage.delete(key=f'{channel_id}:{connection_id}')
+        self.__storage.delete(key=f'{self._channel_prefix(channel_id)}{connection_id}')
 

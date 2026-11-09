@@ -351,30 +351,32 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
 
         Queue errors are re-raised after error handlers.
         """
-        push_error = self.__dispatch(connection_id, msg)
+        push_error = self.__dispatch(self.get_connection(connection_id), msg)
         if push_error is not None:
             raise push_error
 
-    def __dispatch(self, connection_id: str, msg: MIn) -> Exception | None:
+    def __dispatch(self, connection: Connection, msg: MIn) -> Exception | None:
         """Returns the push error, if any, after passing it to error handlers."""
-        queue = self.get_connection(connection_id).queue
-        to_push = self.before_dispatch(connection_id, msg)
+        to_push = self.before_dispatch(connection.id, msg)
         if to_push is None:
-            logger.debug(f"Message dropped for {connection_id}")
+            logger.debug(f"Message dropped for {connection.id}")
             return None
         try:
-            queue.push(to_push)
+            connection.queue.push(to_push)
         except Exception as e:
             for handler in self.__queuing_error_handlers:
-                handler.handle_push_error(connection_id, to_push, e)
+                handler.handle_push_error(connection.id, to_push, e)
             return e
-        logger.debug(f"Dispatched {to_push} to {connection_id}")
+        logger.debug(f"Dispatched {to_push} to {connection.id}")
         return None
 
     def broadcast(self, msg: MIn):
-        """Enqueue a message to all connections. A queue error is logged, and doesn't stop delivery to the other ones."""
-        for connection in self.__connection_manager.get_connections():
-            push_error = self.__dispatch(connection.id, msg=msg)
+        """
+        Enqueue a message to the connections registered when it starts. A queue error is logged, and doesn't stop
+        delivery to the other ones. Hooks and error handlers can remove connections meanwhile.
+        """
+        for connection in list(self.__connection_manager.get_connections()):
+            push_error = self.__dispatch(connection, msg=msg)
             if push_error is not None:
                 self.__log_error(push_error)
 

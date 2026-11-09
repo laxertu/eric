@@ -92,6 +92,38 @@ class ChannelErrorHandlingContract(ABC):
         self.assertEqual('test', channel.deliver_next(healthy.id).type)
         self.assertEqual([('push', broken.id, 'test', 'push failed')], scenario.queuing_errors.events)
 
+    async def test_handler_can_remove_the_failing_connection_during_a_broadcast(self: 'ChannelErrorHandlingContract | IsolatedAsyncioTestCase'):
+        class RemovesFailingConnection(QueuingErrorHandler):
+            def handle_push_error(self, connection_id, msg, exception):
+                channel.remove_connection(connection_id)
+
+        repository = self.create_builder().queuing_error_handler(RemovesFailingConnection()).build()
+        channel = repository.create(self.channel_data())
+        for _ in range(2):
+            channel.register_connection(Connection(listener=MessageQueueListener(), queue=BrokenQueue()))
+        healthy = subscribe(channel)
+
+        channel.broadcast(Message(msg_type='test'))
+
+        self.assertEqual('test', channel.deliver_next(healthy.id).type)
+        self.assertEqual([healthy], list(channel.get_connections()))
+
+    async def test_handler_can_remove_other_connections_during_a_broadcast(self: 'ChannelErrorHandlingContract | IsolatedAsyncioTestCase'):
+        class RemovesEveryConnection(QueuingErrorHandler):
+            def handle_push_error(self, connection_id, msg, exception):
+                for connection in list(channel.get_connections()):
+                    channel.remove_connection(connection.id)
+
+        repository = self.create_builder().queuing_error_handler(RemovesEveryConnection()).build()
+        channel = repository.create(self.channel_data())
+        for _ in range(2):
+            channel.register_connection(Connection(listener=MessageQueueListener(), queue=BrokenQueue()))
+        subscribe(channel)
+
+        channel.broadcast(Message(msg_type='test'))
+
+        self.assertEqual([], list(channel.get_connections()))
+
     async def test_failed_read_is_reported_and_raised(self: 'ChannelErrorHandlingContract | IsolatedAsyncioTestCase'):
         scenario = self._scenario(queues=BrokenQueue)
         connection = subscribe(scenario.channel)

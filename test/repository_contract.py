@@ -168,3 +168,18 @@ class ChannelRepositoryContract(ABC):
         sut.delete('a')
 
         self.assertEqual([ab_connection.id], [connection.id for connection in sut.load_one('ab').get_connections()])
+
+    def test_channel_ids_containing_the_key_separator_do_not_mix(self: 'ChannelRepositoryContract | TestCase'):
+        sut = self.create_builder().build()
+        parent = self._create_channel(sut, channel_id='a')
+        parent_connection = parent.add_connection()
+        child = self._create_channel(sut, channel_id='a:b')
+        child_connection = child.add_connection()
+        sut.persist(parent)
+        sut.persist(child)
+
+        self.assertEqual([parent_connection.id], [c.id for c in sut.load_one('a').get_connections()])
+
+        sut.delete('a')
+
+        self.assertEqual([child_connection.id], [c.id for c in sut.load_one('a:b').get_connections()])
