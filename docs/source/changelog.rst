@@ -67,6 +67,7 @@ Changelog
 * BREAKING: channel hooks receive the Connection: on_listener_added and on_listener_removed are now on_connection_added and on_connection_removed; on_stream_start, on_stream_end, on_wait_timeout and on_error take a Connection instead of a listener
 * BREAKING: MessageQueueListener.on_registered(channel, connection_id) also receives the connection id. SimpleDistributedApplicationListener signs messages with it, and dispatch_to() takes the receiver's connection id
 * BREAKING: removed InvalidListenerException: a missing connection raises an InvalidConnectionException
+* ListenerRepositoryInterface and QueueRepositoryInterface are now generic on listener and queue types
 * FIX: examples/tutorial_kv_storage.py used ChannelRepositoryBuilder with an outdated signature
 
 2.1.1
