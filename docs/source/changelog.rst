@@ -2,6 +2,7 @@ Changelog
 =========
 3.0.0 (unreleased)
 
+* Contracts ship with the library: ChannelRepositoryContract moved from test/repository_contract.py to eric_sse.contracts.repository. Docs: added Verifying custom implementations page
 * Docs: added Tutorials, with a complete in-memory example and a persistence one with a custom KvStorage (SQLite). Both are in examples/ and run by the test suite
 * Added KvListenerRepository and KvQueueRepository to repository module
 * FIX: SimpleDistributedApplicationListener.set_action now rejects reserved action names 'start' and 'stop'

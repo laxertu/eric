@@ -81,7 +81,7 @@ _Last updated: 2026-11-05, branch `claude-md`._
 - **Benchmarks** (2026-11-04): pyperformance, as the optional Poetry group `benchmark`. `benchmarks/bm_builder_dispatch`: 10000 messages, with the Builder defaults.
 - **Tests** (2026-11-05):
   - Rework towards use case tests, with a `ChannelRepositoryBuilder` fixture.
-  - `ChannelRepositoryContract` (`test/repository_contract.py`) is a reusable contract for custom storages and repositories.
+  - `ChannelRepositoryContract` (`eric_sse/contracts/repository.py`, since 2026-11-14 shipped with the library) is a reusable contract for custom storages and repositories.
   - `KvStorage.fetch_all` was removed.
 - **Docs** (2026-11-04):
   - New pages: Error handling, Queue patterns and Profiling.

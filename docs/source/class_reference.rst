@@ -12,4 +12,5 @@ Generated from the source code.
    reference/handlers
    reference/queue_patterns
    reference/profiling
+   reference/contracts
    reference/exceptions

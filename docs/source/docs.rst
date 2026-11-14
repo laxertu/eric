@@ -43,6 +43,7 @@ Its main components are:
 * A persistence layer composed by a set of interfaces and base classes for building concrete layers
 * :doc:`error_handling`, and :doc:`queue_patterns` built on it
 * :doc:`profiling` decorators, to measure queues and listeners
+* :doc:`contracts`, test suites that verify custom implementations
 
 :class:`~eric_sse.connection.ConnectionsFactory` is shared between components. Persistence uses it to create objects after data fetch, while channels create connections when receiving new subscriptions.
 
@@ -64,5 +65,6 @@ Its main components are:
    error_handling
    queue_patterns
    profiling
+   contracts
 
 
