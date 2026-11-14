@@ -3,7 +3,7 @@ from unittest import TestCase
 from eric_sse.builder import ChannelRepositoryBuilder
 from eric_sse.prefabs import SSEChannel
 from eric_sse.repository import InMemoryStorage
-from test.repository_contract import ChannelRepositoryContract
+from eric_sse.contracts.repository import ChannelRepositoryContract
 
 
 class InMemoryStorageTestCase(ChannelRepositoryContract, TestCase):
