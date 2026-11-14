@@ -1,3 +1,4 @@
+"""Test doubles used by contracts, e.g. parts that always fail and error handlers recording what they handle."""
 from eric_sse.handlers import QueuingErrorHandler, ListenerErrorHandler
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import MessageContract

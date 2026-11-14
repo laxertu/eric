@@ -6,7 +6,7 @@ from eric_sse.message import Message, MessageContract
 from eric_sse.prefabs import SSEChannel
 from eric_sse.queue_patterns import ReliableQueue
 from eric_sse.queues import InMemoryQueue, Queue
-from test.queue_contract import QueueContract
+from eric_sse.contracts.queue import QueueContract
 
 
 class SyncOnlyQueue(Queue):

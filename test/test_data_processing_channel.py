@@ -6,7 +6,7 @@ from eric_sse.listener import MessageQueueListener
 from eric_sse.message import Message, MessageContract
 from eric_sse.prefabs import DataProcessingChannel
 from eric_sse.queues import InMemoryQueue
-from test.mock.failures import RecordingListenerErrorHandler, RecordingQueuingErrorHandler
+from eric_sse.contracts.doubles import RecordingListenerErrorHandler, RecordingQueuingErrorHandler
 
 
 class FailingOnTypeListener(MessageQueueListener):

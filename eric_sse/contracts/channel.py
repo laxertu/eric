@@ -7,9 +7,8 @@ from eric_sse.connection import Connection
 from eric_sse.entities import AbstractChannel
 from eric_sse.exception import InvalidConnectionException, NoMessagesException, StoppedListenerException
 from eric_sse.listener import MessageQueueListener
-from eric_sse.message import Message, SignedMessage
+from eric_sse.message import Message, MessageContract, SignedMessage
 from eric_sse.queues import InMemoryQueue
-from test.mock.listener import MessageQueueListenerMock
 
 
 class StoppedAfterCheckListener(MessageQueueListener):
@@ -20,6 +19,11 @@ class StoppedAfterCheckListener(MessageQueueListener):
 
     def is_running(self) -> bool:
         return next(self.answers, False)
+
+
+class StopsAfterOneMessage(MessageQueueListener):
+    def on_message(self, msg: MessageContract) -> None:
+        self.stop()
 
 
 class ChannelContract(ABC):
@@ -138,7 +142,7 @@ class ChannelContract(ABC):
                 pass
 
     async def test_stream_starts_the_listener_and_ends_when_it_stops(self: 'ChannelContract | IsolatedAsyncioTestCase'):
-        channel = self._create_channel(self.create_builder().listeners(MessageQueueListenerMock))  # Stops after one message
+        channel = self._create_channel(self.create_builder().listeners(StopsAfterOneMessage))
         connection = channel.add_connection()
         message = Message(msg_type='test')
         channel.dispatch(connection.id, message)

@@ -4,7 +4,7 @@ from eric_sse.builder import ChannelRepositoryBuilder
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import Message
 from eric_sse.prefabs import DataProcessingChannel, SSEChannel
-from test.channel_contract import ChannelContract
+from eric_sse.contracts.channel import ChannelContract
 
 
 class SSEChannelTestCase(ChannelContract, IsolatedAsyncioTestCase):

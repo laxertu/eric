@@ -2,7 +2,7 @@ from unittest import IsolatedAsyncioTestCase
 
 from eric_sse.builder import ChannelRepositoryBuilder
 from eric_sse.prefabs import DataProcessingChannel, SSEChannel
-from test.error_handling_contract import ChannelErrorHandlingContract
+from eric_sse.contracts.error_handling import ChannelErrorHandlingContract
 
 
 class SSEChannelErrorHandlingTestCase(ChannelErrorHandlingContract, IsolatedAsyncioTestCase):

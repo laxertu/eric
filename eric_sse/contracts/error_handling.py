@@ -13,7 +13,7 @@ from eric_sse.listener import MessageQueueListener
 from eric_sse.message import Message
 from eric_sse.queues import Queue
 from eric_sse.repository import ChannelRepository
-from test.mock.failures import BrokenListener, BrokenQueue, RecordingListenerErrorHandler, RecordingQueuingErrorHandler
+from eric_sse.contracts.doubles import BrokenListener, BrokenQueue, RecordingListenerErrorHandler, RecordingQueuingErrorHandler
 
 
 @dataclass
