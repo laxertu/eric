@@ -141,7 +141,6 @@ Overview
 
    persistence
    error_handling
-   dead_letter
-   reliable_queue
+   queuing_patterns
    contracts
    howto_repository
