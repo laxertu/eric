@@ -2,7 +2,7 @@ Changelog
 =========
 3.0.0 (unreleased)
 
-* Python 3.12 support, tested in CI
+* Python 3.12, 3.13 and 3.14 support, tested in CI
 * FIX: SocketServer shutdown no longer hangs on Python 3.12+ (SIGTERM was ignored): it closes every client connection when its command is done, and ends open streams ('l', 'w') on shutdown. SocketClient.stream closes its connection when the stream ends
 * SocketServer.shutdown() returns when the shutdown is complete, and main() returns after it instead of raising CancelledError. Signal handlers are removed on shutdown
 * BREAKING: SocketServer.cc is an instance attribute, so servers no longer share channels. Pass a ChannelContainer as channels to the constructor to give a server existing channels. connect_callback and handle_command are instance methods
