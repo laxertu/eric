@@ -6,17 +6,23 @@ from pathlib import Path
 from unittest import TestCase
 
 ROOT = Path(__file__).parent.parent
-TUTORIALS_PAGE = ROOT / 'docs' / 'source' / 'tutorials.rst'
+DOCS = ROOT / 'docs' / 'source'
 UUID = re.compile(r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}')
 
 
 def documented_outputs() -> dict[str, list[str]]:
     """
-    Maps each example included in the tutorials page to the lines of the ``Output::`` block that follows it.
+    Maps each example included in a docs page to the lines of the ``Output::`` block that follows it.
     """
     outputs = {}
+    for page in sorted(DOCS.glob('**/*.rst')):
+        outputs.update(_page_outputs(page.read_text().splitlines()))
+    return outputs
+
+
+def _page_outputs(lines: list[str]) -> dict[str, list[str]]:
+    outputs = {}
     example = None
-    lines = TUTORIALS_PAGE.read_text().splitlines()
     for i, line in enumerate(lines):
         if match := re.match(r'\.\. literalinclude:: \.\./\.\./(\S+)', line):
             example = match.group(1)
@@ -37,10 +43,10 @@ def normalise(lines: list[str]) -> list[str]:
 
 
 class TutorialsTestCase(TestCase):
-    """The tutorials page shows each example and its output: both must match what the example does."""
+    """Docs pages show examples and their output: both must match what the example does."""
 
-    def test_the_tutorials_page_documents_examples(self):
-        self.assertGreater(len(documented_outputs()), 0)
+    def test_both_tutorials_are_documented_with_their_output(self):
+        self.assertTrue({'examples/tutorial_in_memory.py', 'examples/tutorial_kv_storage.py'} <= set(documented_outputs()))
 
     def test_every_tutorial_prints_its_documented_output(self):
         for example, expected in documented_outputs().items():
