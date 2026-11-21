@@ -160,6 +160,7 @@ channel.dispatch(listener_id, msg)
 - Side observation, for later: `eric-api` keeps its own cache sync on top of the library (`ChannelContainer`, `refresh_channels`, retry in `get_listener`).
 - `docs/source/persistence.rst` embeds `_static/persistence_layer_class_diagram.png`, which is probably out of date. Replace it with an export of the new persistence diagram.
 - The new diagrams' visual layout hasn't been checked, because there's no draw.io renderer on the dev machine.
+- `docs/source/_static/overview.png` (from `docs/source/overview.excalidraw`, shown in the Guide) has stale labels: `add_listener` (now `add_connection` / `register_listener`), and a separate `ConnectionFactory` (the connection repository is the channels' connections factory). Update it with the other diagrams.
 - Class diagrams are regenerated only as the last step (user, 2026-11-05). The persistence diagram still shows `KvStorage.fetch_all`.
 - 9 mypy errors predate this work, in `servers.py`, `repository.py` and `prefabs.py`.
 - Open question from the test rework: move the contract test classes into the package (e.g. `eric_sse/testing.py`), so library users can run them against their own parts.
