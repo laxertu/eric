@@ -34,8 +34,8 @@ Stream errors
 :meth:`~eric_sse.entities.AbstractChannel.adapt_error`, as messages are formatted by
 :meth:`~eric_sse.entities.AbstractChannel.adapt`.
 
-* An invalid listener or channel error, or a :class:`~eric_sse.exception.StoppedListenerException`, is yielded as it is,
-  and the stream ends. A listener stopped while the stream waits ends it with no error: the stream notices it after
+* An :class:`~eric_sse.exception.InvalidConnectionException`, an :class:`~eric_sse.exception.InvalidChannelException`
+  or a :class:`~eric_sse.exception.StoppedListenerException` is yielded as it is, and the stream ends. A listener stopped while the stream waits ends it with no error: the stream notices it after
   the wait.
 * Any other error is logged and yielded as an :class:`~eric_sse.exception.InternalStreamError`, so that its details,
   e.g. a backend address, don't reach clients. :meth:`~eric_sse.entities.AbstractChannel.on_error` decides whether the

@@ -58,7 +58,7 @@ _Last updated: 2026-11-05, branch `claude-md`._
 - **Bugs found along the way:**
   - `AbstractChannelRepository.delete` crashed with `InMemoryStorage` because it deleted while iterating. Fixed in `InMemoryStorage`, which now iterates over a snapshot.
   - `ConnectionRepository.load_all` matched channel ids by bare prefix, so channel `a` returned channel `ab`'s connections. It now searches `f'{channel_id}:'`.
-- **Tutorials** (2026-11-01): `docs/source/tutorials.rst` includes `examples/tutorial_in_memory.py` (chat room, hooks) and `examples/tutorial_kv_storage.py` (SQLite `KvStorage` + durable `SqliteQueue`, simulated restart) via `literalinclude`. `test/test_examples.py` ran both until it was removed in `e11cabc`; see Open.
+- **Tutorials** (2026-11-01): `docs/source/tutorials.rst` includes `examples/tutorial_in_memory.py` (chat room, hooks) and `examples/tutorial_kv_storage.py` (SQLite `KvStorage` + durable `SqliteQueue`, simulated restart) via `literalinclude`. `test/test_examples.py` ran both until it was removed in `e11cabc`; restored 2026-11-21, now also comparing their output with the page.
 - **Docs:** the changelog has a 3.0.0 (unreleased) section. Two generated class diagrams (`docs/eric_sse_pubsub_diagram.drawio`, `docs/eric_sse_persistence_diagram.drawio`) replace the old one. Regenerate them with `python docs/generate_class_diagrams.py`.
 - **Error handling** (2026-11-03):
   - `QueuingErrorHandler` and `ListenerErrorHandler` live on the channel. Every method receives the listener id first. Errors are re-raised after the handlers, or logged where the channel swallows them (e.g. `broadcast`).
@@ -161,7 +161,6 @@ channel.dispatch(listener_id, msg)
 - `docs/source/persistence.rst` embeds `_static/persistence_layer_class_diagram.png`, which is probably out of date. Replace it with an export of the new persistence diagram.
 - The new diagrams' visual layout hasn't been checked, because there's no draw.io renderer on the dev machine.
 - Class diagrams are regenerated only as the last step (user, 2026-11-05). The persistence diagram still shows `KvStorage.fetch_all`.
-- `docs/source/tutorials.rst` says the test suite runs the tutorial examples, but `test/test_examples.py` was removed in `e11cabc`. Either restore a test, e.g. as a use case test, or reword the page.
 - 9 mypy errors predate this work, in `servers.py`, `repository.py` and `prefabs.py`.
 - Open question from the test rework: move the contract test classes into the package (e.g. `eric_sse/testing.py`), so library users can run them against their own parts.
 - Generated `docs_html` and `docs_markdown` are rebuilt by `update_docs.sh` as the last step of the release.
@@ -171,4 +170,4 @@ channel.dispatch(listener_id, msg)
 - **Running state lives on the listener:** `start()`, `stop()` and `is_running()` are really subscription state, so one listener can't be shared across connections (stopping it would stop them all). Listeners aren't pure behaviour yet. Discussed 2026-11-21, postponed by the user. Proposed direction: move the state to `Connection` (the subject, in Observer terms), so listeners become stateless observers; a full Observer with several listeners per connection has no use case yet (a composite listener would cover one). Open question: how a shared listener ends its own subscription. Preferred: `on_message(msg, connection)`, then `connection.stop()`. Rejected: a return value to stop (implicit) or a `StopListening` exception (clashes with listener error handling). About 41 call sites; breaking, so 3.0.0 or 4.0.0.
 - **The Builder can't mix queues on one channel:** one queue factory serves all connections, so tests with healthy and broken connections on the same channel fall back to `register_connection`.
 - **Contracts repeat themselves:** all of them declare `channel_data()` and a create-a-channel step; a small shared base would remove that.
-- **Examples aren't run by the suite:** `test/test_examples.py` no longer exists, though the changelog says the tutorials are run; `examples/tutorial_kv_storage.py` had broken unnoticed.
+- **Examples run by the suite: fixed** (2026-11-21). `test/test_examples.py` runs every example included in `tutorials.rst` and compares its output with the page's Output block.

@@ -34,8 +34,8 @@ Stats are exposed by these getters:
     print(queue.push_stats.calls, queue.push_stats.mean_time)
     print(listener.on_message_stats.total_time)
 
-A :class:`~eric_sse.profiling.ProfiledListener` has the same id as the listener it wraps, so it can be used in its
-place. To profile every connection of the channels built by a repository, give the
+A :class:`~eric_sse.profiling.ProfiledListener` delegates ``on_registered``, ``start``, ``stop`` and ``is_running`` to
+the listener it wraps, so it can be used in its place. To profile every connection of the channels built by a repository, give the
 :class:`~eric_sse.builder.ChannelRepositoryBuilder` factories of profiled listeners and queues:
 
 .. code-block:: python
