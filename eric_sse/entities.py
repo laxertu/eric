@@ -245,7 +245,7 @@ class AbstractChannel(ABC, Generic[MIn, MOut]):
         Waits for messages through :meth:`wait_next`, so an idle stream doesn't consume CPU.
         A stopped listener is noticed at the latest after :attr:`wait_timeout_seconds`.
 
-        Errors are yielded through :meth:`adapt_error`. After an invalid listener or channel error, or a :class:`~eric_sse.exception.StoppedListenerException`, the stream ends.
+        Errors are yielded through :meth:`adapt_error`. After an :class:`~eric_sse.exception.InvalidConnectionException`, an :class:`~eric_sse.exception.InvalidChannelException` or a :class:`~eric_sse.exception.StoppedListenerException`, the stream ends.
         Unexpected errors are logged and yielded as an :class:`~eric_sse.exception.InternalStreamError`, hiding
         their details, and :meth:`on_error` decides whether the stream goes on.
 

@@ -26,7 +26,7 @@ class ChatUser(MessageQueueListener):
             self.stop()
 
 
-# 2. A channel delivers messages to its listeners. Hooks let you customise it without touching its internals.
+# 2. A channel delivers messages to its connections. Hooks let you customise it without touching its internals.
 class ChatRoom(SSEChannel):
 
     def on_connection_added(self, connection: Connection) -> None:
