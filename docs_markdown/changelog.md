@@ -57,7 +57,6 @@
 * Docs: added Stream errors section to Error handling page
 * Added MessageQueueListener.on_registered(channel) hook, called by AbstractChannel.register_connection() for every listener, including listeners created or loaded from persistence. Does nothing by default
 * BREAKING: SimpleDistributedApplicationListener.set_channel() removed: the listener keeps its channel in on_registered(), so it works on any channel, not only on SimpleDistributedApplicationChannel
-* Added benchmarks, run with pyperformance (optional Poetry group “benchmark”): see Developers section. First one: builder_dispatch
 * FIX: InMemoryQueue.wait_pop() raised a NoMessagesException on timeout even if a message had just arrived, with its wake-up still pending. It now checks the queue after waiting
 * BREAKING: added StoppedListenerException to exceptions module. AbstractChannel.deliver_next() and wait_next() raise it when the listener is not running, also if its queue is empty: before, they raised a NoMessagesException. NoMessagesException now only means an empty queue
 * message_stream() yields a StoppedListenerException through adapt_error() and ends, as for invalid listener or channel errors

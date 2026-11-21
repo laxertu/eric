@@ -54,6 +54,4 @@ channels = (
   timeout, lasts until a message arrives or the timeout expires. In a stream, `wait_pop_stats` includes idle time.
 * Calls that raise are counted and timed too, e.g. empty pops, then the exception is re-raised.
 
-For whole-scenario timings, see the benchmarks in the [Developers section](devs.md).
-
 See [Profiling](reference/profiling.md) for the classes.
