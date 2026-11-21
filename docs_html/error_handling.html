@@ -43,7 +43,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'error_handling';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Queue patterns" href="queue_patterns.html" />
+    <link rel="next" title="Dead Letter" href="dead_letter.html" />
     <link rel="prev" title="Persistence" href="persistence.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -154,9 +154,8 @@
 
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Error handling</a></li>
 
-<li class="toctree-l2"><a class="reference internal" href="queue_patterns.html">Queue patterns</a></li>
-
-
+<li class="toctree-l2"><a class="reference internal" href="dead_letter.html">Dead Letter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reliable_queue.html">Reliable Queue</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contracts.html">Verifying custom implementations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="howto_repository.html">How to test a custom channel repository</a></li>
 </ul>
@@ -357,7 +356,7 @@ processed.</p>
 <p>Subclasses that notify listeners their own way get the same behaviour by popping with
 <a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel._pop_next" title="eric_sse.entities.AbstractChannel._pop_next"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_pop_next()</span></code></a> and passing listener errors to
 <a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel._on_listener_error" title="eric_sse.entities.AbstractChannel._on_listener_error"><code class="xref py py-meth docutils literal notranslate"><span class="pre">_on_listener_error()</span></code></a>.</p>
-<p>See <a class="reference internal" href="queue_patterns.html"><span class="doc">Queue patterns</span></a> for handlers that implement common patterns, like Dead Letter.</p>
+<p>See <a class="reference internal" href="dead_letter.html"><span class="doc">Dead Letter</span></a> for a handler that implements a common pattern.</p>
 </section>
 <section id="stream-errors">
 <h1>Stream errors<a class="headerlink" href="#stream-errors" title="Link to this heading">#</a></h1>
@@ -410,11 +409,11 @@ message, then checks whether its listener is still running. Each time, the wait 
       </div>
     </a>
     <a class="right-next"
-       href="queue_patterns.html"
+       href="dead_letter.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Queue patterns</p>
+        <p class="prev-next-title">Dead Letter</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

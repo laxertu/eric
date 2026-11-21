@@ -103,7 +103,7 @@ Each part has its own extension point, so you only replace what you need:
 | Channel behaviour: subscriptions, streams, filtering, errors | Override the channel’s hooks, e.g. `on_connection_added`, `on_stream_end`, `before_dispatch`,<br/>`on_error`. They do nothing by default                                                                                                                                       |
 | Where messages wait, e.g. a durable backend                  | Implement a [`Queue`](reference/entities.md#eric_sse.queues.Queue): only `push` and `pop(timeout)` are required                                                                                                                                                                |
 | Where channels and connections are stored                    | Implement a [`KvStorage`](reference/persistence.md#eric_sse.repository.KvStorage) and give it to a<br/>[`ChannelRepositoryBuilder`](reference/persistence.md#eric_sse.builder.ChannelRepositoryBuilder), see [Persistence](persistence.md)                                     |
-| What happens when a queue or a listener fails                | Register error handlers, or use the Dead Letter and Reliable Queue patterns, see [Error handling](error_handling.md) and<br/>[Queue patterns](queue_patterns.md)                                                                                                               |
+| What happens when a queue or a listener fails                | Register error handlers, see [Error handling](error_handling.md), or use the [Dead Letter](dead_letter.md) and [Reliable Queue](reliable_queue.md)<br/>patterns                                                                                                                |
 
 Persistence is always explicit: channels and their connections are stored when you call `persist` on a repository,
 never implicitly. Messages are stored by queues themselves, so sending never needs a `persist`.
@@ -116,7 +116,8 @@ shows how, step by step.
 ## Where to go next
 
 * [Tutorials](tutorials.md): two complete programs, in memory and persisted with SQLite.
-* [Persistence](persistence.md), [Error handling](error_handling.md), [Queue patterns](queue_patterns.md) and [Verifying custom implementations](contracts.md): one topic each.
+* [Persistence](persistence.md), [Error handling](error_handling.md), [Dead Letter](dead_letter.md), [Reliable Queue](reliable_queue.md) and [Verifying custom implementations](contracts.md): one
+  topic each.
 * [Class reference](class_reference.md): every class, generated from the source code.
 
 <a id="overview"></a>

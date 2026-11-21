@@ -26,7 +26,7 @@ Subclasses that notify listeners their own way get the same behaviour by popping
 [`_pop_next()`](reference/entities.md#eric_sse.entities.AbstractChannel._pop_next) and passing listener errors to
 [`_on_listener_error()`](reference/entities.md#eric_sse.entities.AbstractChannel._on_listener_error).
 
-See [Queue patterns](queue_patterns.md) for handlers that implement common patterns, like Dead Letter.
+See [Dead Letter](dead_letter.md) for a handler that implements a common pattern.
 
 <a id="stream-errors"></a>
 

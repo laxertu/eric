@@ -110,8 +110,8 @@ Each part has its own extension point, so you only replace what you need:
      - Implement a :class:`~eric_sse.repository.KvStorage` and give it to a
        :class:`~eric_sse.builder.ChannelRepositoryBuilder`, see :doc:`persistence`
    * - What happens when a queue or a listener fails
-     - Register error handlers, or use the Dead Letter and Reliable Queue patterns, see :doc:`error_handling` and
-       :doc:`queue_patterns`
+     - Register error handlers, see :doc:`error_handling`, or use the :doc:`dead_letter` and :doc:`reliable_queue`
+       patterns
 
 Persistence is always explicit: channels and their connections are stored when you call ``persist`` on a repository,
 never implicitly. Messages are stored by queues themselves, so sending never needs a ``persist``.
@@ -123,7 +123,8 @@ Where to go next
 ----------------
 
 * :doc:`tutorials`: two complete programs, in memory and persisted with SQLite.
-* :doc:`persistence`, :doc:`error_handling`, :doc:`queue_patterns` and :doc:`contracts`: one topic each.
+* :doc:`persistence`, :doc:`error_handling`, :doc:`dead_letter`, :doc:`reliable_queue` and :doc:`contracts`: one
+  topic each.
 * :doc:`class_reference`: every class, generated from the source code.
 
 Overview
@@ -140,6 +141,7 @@ Overview
 
    persistence
    error_handling
-   queue_patterns
+   dead_letter
+   reliable_queue
    contracts
    howto_repository
