@@ -163,7 +163,11 @@
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">How to test a custom channel repository</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="tutorials.html">Tutorials</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_in_memory.html">In-memory application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_kv_storage.html">Persistence with a custom KvStorage</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="class_reference.html">Class reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="reference/entities.html">Entities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reference/prefabs.html">Prefabs</a></li>
@@ -492,7 +496,7 @@ collect the keys first.</p></li>
 <li><p><strong>Queues can’t be stored.</strong> If your storage serialises values, e.g. with <code class="docutils literal notranslate"><span class="pre">pickle</span></code>, the default
 <a class="reference internal" href="reference/entities.html#eric_sse.queues.InMemoryQueue" title="eric_sse.queues.InMemoryQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">InMemoryQueue</span></code></a> fails, as it can only live in memory. Give the builder a durable queue with
 <code class="docutils literal notranslate"><span class="pre">.queues(factory)</span></code>, that stores its messages itself, and test it with
-<a class="reference internal" href="reference/contracts.html#eric_sse.contracts.queue.QueueContract" title="eric_sse.contracts.queue.QueueContract"><code class="xref py py-class docutils literal notranslate"><span class="pre">QueueContract</span></code></a>. See the <code class="docutils literal notranslate"><span class="pre">SqliteQueue</span></code> of the <a class="reference internal" href="tutorials.html"><span class="doc">Tutorials</span></a> for an example.</p></li>
+<a class="reference internal" href="reference/contracts.html#eric_sse.contracts.queue.QueueContract" title="eric_sse.contracts.queue.QueueContract"><code class="xref py py-class docutils literal notranslate"><span class="pre">QueueContract</span></code></a>. See the <code class="docutils literal notranslate"><span class="pre">SqliteQueue</span></code> of <a class="reference internal" href="tutorial_kv_storage.html"><span class="doc">Persistence with a custom KvStorage</span></a> for an example.</p></li>
 </ul>
 </section>
 <section id="keep-it-in-your-suite">
