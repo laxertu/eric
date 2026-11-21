@@ -1,0 +1,1728 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Persistence &#8212; eric-sse  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/persistence';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Error handlers" href="handlers.html" />
+    <link rel="prev" title="Prefabs" href="prefabs.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">eric-sse  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../docs.html">Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../persistence.html">Persistence</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../error_handling.html">Error handling</a></li>
+
+<li class="toctree-l2 has-children"><a class="reference internal" href="../queuing_patterns.html">Queuing patterns</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../dead_letter.html">Dead Letter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../reliable_queue.html">Reliable Queue</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../contracts.html">Verifying custom implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../howto_repository.html">How to test a custom channel repository</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tutorials.html">Tutorials</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial_in_memory.html">In-memory application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorial_kv_storage.html">Persistence with a custom KvStorage</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../class_reference.html">Class reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="entities.html">Entities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prefabs.html">Prefabs</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Persistence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handlers.html">Error handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="queue_patterns.html">Queue patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profiling.html">Profiling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../devs.html">Developers section</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/laxertu/eric" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/laxertu/eric/issues/new?title=Issue%20on%20page%20%2Freference/persistence.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Persistence</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.builder">Builder</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder"><code class="docutils literal notranslate"><span class="pre">ChannelRepositoryBuilder</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder.channels"><code class="docutils literal notranslate"><span class="pre">channels()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder.connections"><code class="docutils literal notranslate"><span class="pre">connections()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder.listeners"><code class="docutils literal notranslate"><span class="pre">listeners()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder.listeners_repository"><code class="docutils literal notranslate"><span class="pre">listeners_repository()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder.queues"><code class="docutils literal notranslate"><span class="pre">queues()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder.queues_repository"><code class="docutils literal notranslate"><span class="pre">queues_repository()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder.queuing_error_handler"><code class="docutils literal notranslate"><span class="pre">queuing_error_handler()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder.listener_error_handler"><code class="docutils literal notranslate"><span class="pre">listener_error_handler()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder.build"><code class="docutils literal notranslate"><span class="pre">build()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.repository">Base repositories</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage"><code class="docutils literal notranslate"><span class="pre">KvStorage</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage.fetch_by_prefix"><code class="docutils literal notranslate"><span class="pre">fetch_by_prefix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage.upsert"><code class="docutils literal notranslate"><span class="pre">upsert()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage.fetch_one"><code class="docutils literal notranslate"><span class="pre">fetch_one()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage"><code class="docutils literal notranslate"><span class="pre">InMemoryStorage</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.fetch_by_prefix"><code class="docutils literal notranslate"><span class="pre">fetch_by_prefix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.upsert"><code class="docutils literal notranslate"><span class="pre">upsert()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.fetch_one"><code class="docutils literal notranslate"><span class="pre">fetch_one()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.PrefixedStorage"><code class="docutils literal notranslate"><span class="pre">PrefixedStorage</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.PrefixedStorage.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.PrefixedStorage.fetch_by_prefix"><code class="docutils literal notranslate"><span class="pre">fetch_by_prefix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.PrefixedStorage.upsert"><code class="docutils literal notranslate"><span class="pre">upsert()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.PrefixedStorage.fetch_one"><code class="docutils literal notranslate"><span class="pre">fetch_one()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.PrefixedStorage.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvListenerRepository"><code class="docutils literal notranslate"><span class="pre">KvListenerRepository</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvListenerRepository.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvListenerRepository.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvListenerRepository.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvListenerRepository.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvListenerRepository.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvQueueRepository"><code class="docutils literal notranslate"><span class="pre">KvQueueRepository</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvQueueRepository.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvQueueRepository.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvQueueRepository.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvQueueRepository.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvQueueRepository.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ChannelRepository"><code class="docutils literal notranslate"><span class="pre">ChannelRepository</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ChannelRepository.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ChannelRepository.connections_repository"><code class="docutils literal notranslate"><span class="pre">connections_repository</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ChannelRepository.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ChannelRepository.load_all"><code class="docutils literal notranslate"><span class="pre">load_all()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ChannelRepository.load_one"><code class="docutils literal notranslate"><span class="pre">load_one()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ChannelRepository.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ChannelRepository.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ConnectionRepository"><code class="docutils literal notranslate"><span class="pre">ConnectionRepository</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ConnectionRepository.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ConnectionRepository.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ConnectionRepository._channel_prefix"><code class="docutils literal notranslate"><span class="pre">_channel_prefix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ConnectionRepository.load_ids"><code class="docutils literal notranslate"><span class="pre">load_ids()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ConnectionRepository.load_all"><code class="docutils literal notranslate"><span class="pre">load_all()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ConnectionRepository.load_one"><code class="docutils literal notranslate"><span class="pre">load_one()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ConnectionRepository.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ConnectionRepository.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.interfaces">Interoperability</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.QueueRepositoryInterface"><code class="docutils literal notranslate"><span class="pre">QueueRepositoryInterface</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.QueueRepositoryInterface.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.QueueRepositoryInterface.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.QueueRepositoryInterface.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.QueueRepositoryInterface.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ListenerRepositoryInterface"><code class="docutils literal notranslate"><span class="pre">ListenerRepositoryInterface</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ListenerRepositoryInterface.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ListenerRepositoryInterface.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ListenerRepositoryInterface.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ListenerRepositoryInterface.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ConnectionRepositoryInterface"><code class="docutils literal notranslate"><span class="pre">ConnectionRepositoryInterface</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ConnectionRepositoryInterface.queues_repository"><code class="docutils literal notranslate"><span class="pre">queues_repository</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ConnectionRepositoryInterface.listeners_repository"><code class="docutils literal notranslate"><span class="pre">listeners_repository</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ConnectionRepositoryInterface.load_ids"><code class="docutils literal notranslate"><span class="pre">load_ids()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ConnectionRepositoryInterface.load_all"><code class="docutils literal notranslate"><span class="pre">load_all()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ConnectionRepositoryInterface.load_one"><code class="docutils literal notranslate"><span class="pre">load_one()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ConnectionRepositoryInterface.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ConnectionRepositoryInterface.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ChannelRepositoryInterface"><code class="docutils literal notranslate"><span class="pre">ChannelRepositoryInterface</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ChannelRepositoryInterface.connections_repository"><code class="docutils literal notranslate"><span class="pre">connections_repository</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ChannelRepositoryInterface.load_all"><code class="docutils literal notranslate"><span class="pre">load_all()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ChannelRepositoryInterface.load_one"><code class="docutils literal notranslate"><span class="pre">load_one()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ChannelRepositoryInterface.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ChannelRepositoryInterface.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ChannelRepositoryInterface.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="persistence">
+<h1>Persistence<a class="headerlink" href="#persistence" title="Link to this heading">#</a></h1>
+<section id="module-eric_sse.builder">
+<span id="builder"></span><h2>Builder<a class="headerlink" href="#module-eric_sse.builder" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.builder.ChannelRepositoryBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ChannelRepositoryBuilder</span></span><a class="headerlink" href="#eric_sse.builder.ChannelRepositoryBuilder" title="Link to this definition">#</a></dt>
+<dd><p>Wires a channel repository and its connections, listeners and queues repositories.</p>
+<p>Every part is stored in <strong>storage</strong> under its own namespace (<code class="docutils literal notranslate"><span class="pre">channel:</span></code>, <code class="docutils literal notranslate"><span class="pre">connection:</span></code>, <code class="docutils literal notranslate"><span class="pre">listener:</span></code>, <code class="docutils literal notranslate"><span class="pre">queue:</span></code>),
+unless a dedicated storage or repository is given for it. Each method returns the builder, so calls can be chained:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">repository</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">ChannelRepositoryBuilder</span><span class="p">(</span><span class="n">SSEChannel</span><span class="p">,</span> <span class="n">storage</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">listeners</span><span class="p">(</span><span class="n">MyListener</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">queues_repository</span><span class="p">(</span><span class="n">MyQueuesRepository</span><span class="p">(</span><span class="n">connection</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Channels built by the resulting repository create their listeners and queues through it.
+Nothing is persisted implicitly: call the repository’s <code class="docutils literal notranslate"><span class="pre">persist</span></code> when needed.</p>
+<p>When a part is configured more than once, the last call wins, except for error handlers, that are added.</p>
+<p>The builder is generic in <strong>channel_class</strong>, so type checkers know which channels the repository returns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_class</strong> – Class of channels the repository creates, loads and persists, e.g. <a class="reference internal" href="prefabs.html#eric_sse.prefabs.SSEChannel" title="eric_sse.prefabs.SSEChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SSEChannel</span></code></a>.</p></li>
+<li><p><strong>storage</strong> (<a class="reference internal" href="#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><em>KvStorage</em></a>) – Default storage. Defaults to a new <a class="reference internal" href="#eric_sse.repository.InMemoryStorage" title="eric_sse.repository.InMemoryStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">InMemoryStorage</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.builder.ChannelRepositoryBuilder.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_class</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.builder.ChannelRepositoryBuilder.__init__" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_class</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#type" title="(in Python v3.15)"><em>type</em></a><em>[</em><em>C</em><em>]</em>)</p></li>
+<li><p><strong>storage</strong> (<a class="reference internal" href="#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><em>KvStorage</em></a><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.builder.ChannelRepositoryBuilder.channels">
+<span class="sig-name descname"><span class="pre">channels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">storage</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.builder.ChannelRepositoryBuilder.channels" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>storage</strong> (<a class="reference internal" href="#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><em>KvStorage</em></a>) – Dedicated storage for channels.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><em>ChannelRepositoryBuilder</em></a>[<em>C</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.builder.ChannelRepositoryBuilder.connections">
+<span class="sig-name descname"><span class="pre">connections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">storage</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.builder.ChannelRepositoryBuilder.connections" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>storage</strong> (<a class="reference internal" href="#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><em>KvStorage</em></a>) – Dedicated storage for connections.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><em>ChannelRepositoryBuilder</em></a>[<em>C</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.builder.ChannelRepositoryBuilder.listeners">
+<span class="sig-name descname"><span class="pre">listeners</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener_factory=&lt;class</span> <span class="pre">'eric_sse.listener.MessageQueueListener'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storage=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.builder.ChannelRepositoryBuilder.listeners" title="Link to this definition">#</a></dt>
+<dd><p>Uses a <a class="reference internal" href="#eric_sse.repository.KvListenerRepository" title="eric_sse.repository.KvListenerRepository"><code class="xref py py-class docutils literal notranslate"><span class="pre">KvListenerRepository</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>listener_factory</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.15)"><em>Callable</em></a><em>[</em><em>[</em><em>]</em><em>, </em><a class="reference internal" href="entities.html#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a><em>]</em>) – Called once per connection to create its listener: a listener class, or any callable
+returning a listener, e.g. <code class="docutils literal notranslate"><span class="pre">lambda:</span> <span class="pre">ProfiledListener(MyListener())</span></code>.
+Defaults to <a class="reference internal" href="entities.html#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a>.</p></li>
+<li><p><strong>storage</strong> (<a class="reference internal" href="#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><em>KvStorage</em></a><em> | </em><em>None</em>) – Dedicated storage for listeners.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><em>ChannelRepositoryBuilder</em></a>[<em>C</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.builder.ChannelRepositoryBuilder.listeners_repository">
+<span class="sig-name descname"><span class="pre">listeners_repository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.builder.ChannelRepositoryBuilder.listeners_repository" title="Link to this definition">#</a></dt>
+<dd><p>Uses a custom listeners repository, that also decides which listeners are created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>repository</strong> (<a class="reference internal" href="#eric_sse.interfaces.ListenerRepositoryInterface" title="eric_sse.interfaces.ListenerRepositoryInterface"><em>ListenerRepositoryInterface</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><em>ChannelRepositoryBuilder</em></a>[<em>C</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.builder.ChannelRepositoryBuilder.queues">
+<span class="sig-name descname"><span class="pre">queues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queue_factory=&lt;class</span> <span class="pre">'eric_sse.queues.InMemoryQueue'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storage=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.builder.ChannelRepositoryBuilder.queues" title="Link to this definition">#</a></dt>
+<dd><p>Uses a <a class="reference internal" href="#eric_sse.repository.KvQueueRepository" title="eric_sse.repository.KvQueueRepository"><code class="xref py py-class docutils literal notranslate"><span class="pre">KvQueueRepository</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>queue_factory</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.15)"><em>Callable</em></a><em>[</em><em>[</em><em>]</em><em>, </em><a class="reference internal" href="entities.html#eric_sse.queues.Queue" title="eric_sse.queues.Queue"><em>Queue</em></a><em>]</em>) – Called once per connection to create its queue. Defaults to <a class="reference internal" href="entities.html#eric_sse.queues.InMemoryQueue" title="eric_sse.queues.InMemoryQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">InMemoryQueue</span></code></a>.</p></li>
+<li><p><strong>storage</strong> (<a class="reference internal" href="#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><em>KvStorage</em></a><em> | </em><em>None</em>) – Dedicated storage for queues.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><em>ChannelRepositoryBuilder</em></a>[<em>C</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.builder.ChannelRepositoryBuilder.queues_repository">
+<span class="sig-name descname"><span class="pre">queues_repository</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repository</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.builder.ChannelRepositoryBuilder.queues_repository" title="Link to this definition">#</a></dt>
+<dd><p>Uses a custom queues repository, that also decides which queues are created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>repository</strong> (<a class="reference internal" href="#eric_sse.interfaces.QueueRepositoryInterface" title="eric_sse.interfaces.QueueRepositoryInterface"><em>QueueRepositoryInterface</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><em>ChannelRepositoryBuilder</em></a>[<em>C</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.builder.ChannelRepositoryBuilder.queuing_error_handler">
+<span class="sig-name descname"><span class="pre">queuing_error_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.builder.ChannelRepositoryBuilder.queuing_error_handler" title="Link to this definition">#</a></dt>
+<dd><p>Adds a handler registered on every channel created or loaded by the repository.
+Unlike other parts, repeated calls add handlers instead of replacing them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>handler</strong> (<a class="reference internal" href="handlers.html#eric_sse.handlers.QueuingErrorHandler" title="eric_sse.handlers.QueuingErrorHandler"><em>QueuingErrorHandler</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><em>ChannelRepositoryBuilder</em></a>[<em>C</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.builder.ChannelRepositoryBuilder.listener_error_handler">
+<span class="sig-name descname"><span class="pre">listener_error_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handler</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.builder.ChannelRepositoryBuilder.listener_error_handler" title="Link to this definition">#</a></dt>
+<dd><p>Adds a handler registered on every channel created or loaded by the repository.
+Unlike other parts, repeated calls add handlers instead of replacing them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>handler</strong> (<a class="reference internal" href="handlers.html#eric_sse.handlers.ListenerErrorHandler" title="eric_sse.handlers.ListenerErrorHandler"><em>ListenerErrorHandler</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><em>ChannelRepositoryBuilder</em></a>[<em>C</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.builder.ChannelRepositoryBuilder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.builder.ChannelRepositoryBuilder.build" title="Link to this definition">#</a></dt>
+<dd><p>Returns a new channel repository. The builder can be reused.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#eric_sse.repository.ChannelRepository" title="eric_sse.repository.ChannelRepository"><em>ChannelRepository</em></a>[<em>C</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-eric_sse.repository">
+<span id="base-repositories"></span><h2>Base repositories<a class="headerlink" href="#module-eric_sse.repository" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.repository.KvStorage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">KvStorage</span></span><a class="headerlink" href="#eric_sse.repository.KvStorage" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Generic" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">T</span></code>]</p>
+<p>Represents a Key Value storage engine. Provides functionalities do load, persist and find by key prefix</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.KvStorage.fetch_by_prefix">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_by_prefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvStorage.fetch_by_prefix" title="Link to this definition">#</a></dt>
+<dd><p>Search by KV prefix. An empty prefix returns all items.</p>
+<p>Implementations must tolerate deletions of fetched keys while the result is being iterated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.15)"><em>Iterable</em></a>[<em>T</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.KvStorage.upsert">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">upsert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvStorage.upsert" title="Link to this definition">#</a></dt>
+<dd><p>Updates or inserts a value given its corresponding key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>value</strong> (<em>T</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.KvStorage.fetch_one">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvStorage.fetch_one" title="Link to this definition">#</a></dt>
+<dd><p>Return value correspondant to key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>T</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.KvStorage.delete">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvStorage.delete" title="Link to this definition">#</a></dt>
+<dd><p>Idempotent deletion. Do not throw an error on invalid key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.repository.InMemoryStorage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">InMemoryStorage</span></span><a class="headerlink" href="#eric_sse.repository.InMemoryStorage" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">KvStorage</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">T</span></code>]</p>
+<p>In memory implementation</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.InMemoryStorage.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.InMemoryStorage.__init__" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>items</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><em>dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a><em>, </em><em>T</em><em>] </em><em>| </em><em>None</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.InMemoryStorage.fetch_by_prefix">
+<span class="sig-name descname"><span class="pre">fetch_by_prefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.InMemoryStorage.fetch_by_prefix" title="Link to this definition">#</a></dt>
+<dd><p>Search by KV prefix. An empty prefix returns all items.</p>
+<p>Implementations must tolerate deletions of fetched keys while the result is being iterated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.15)"><em>Iterable</em></a>[<em>T</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.InMemoryStorage.upsert">
+<span class="sig-name descname"><span class="pre">upsert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.InMemoryStorage.upsert" title="Link to this definition">#</a></dt>
+<dd><p>Updates or inserts a value given its corresponding key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>value</strong> (<em>T</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.InMemoryStorage.fetch_one">
+<span class="sig-name descname"><span class="pre">fetch_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.InMemoryStorage.fetch_one" title="Link to this definition">#</a></dt>
+<dd><p>Return value correspondant to key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>T</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.InMemoryStorage.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.InMemoryStorage.delete" title="Link to this definition">#</a></dt>
+<dd><p>Idempotent deletion. Do not throw an error on invalid key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.repository.PrefixedStorage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PrefixedStorage</span></span><a class="headerlink" href="#eric_sse.repository.PrefixedStorage" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">KvStorage</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">T</span></code>]</p>
+<p>A namespaced view of another <a class="reference internal" href="#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">KvStorage</span></code></a>. All keys are prefixed with <strong>prefix</strong>.</p>
+<p>Allows several repositories to share a single storage instance.
+Prefixes of storages sharing the same instance must not be prefixes of each other.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.PrefixedStorage.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">storage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.PrefixedStorage.__init__" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>storage</strong> (<a class="reference internal" href="#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><em>KvStorage</em></a>)</p></li>
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.PrefixedStorage.fetch_by_prefix">
+<span class="sig-name descname"><span class="pre">fetch_by_prefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.PrefixedStorage.fetch_by_prefix" title="Link to this definition">#</a></dt>
+<dd><p>Search by KV prefix. An empty prefix returns all items.</p>
+<p>Implementations must tolerate deletions of fetched keys while the result is being iterated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.15)"><em>Iterable</em></a>[<em>T</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.PrefixedStorage.upsert">
+<span class="sig-name descname"><span class="pre">upsert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.PrefixedStorage.upsert" title="Link to this definition">#</a></dt>
+<dd><p>Updates or inserts a value given its corresponding key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>value</strong> (<em>T</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.PrefixedStorage.fetch_one">
+<span class="sig-name descname"><span class="pre">fetch_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.PrefixedStorage.fetch_one" title="Link to this definition">#</a></dt>
+<dd><p>Return value correspondant to key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>T</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.PrefixedStorage.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.PrefixedStorage.delete" title="Link to this definition">#</a></dt>
+<dd><p>Idempotent deletion. Do not throw an error on invalid key</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.repository.KvListenerRepository">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">KvListenerRepository</span></span><a class="headerlink" href="#eric_sse.repository.KvListenerRepository" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eric_sse.interfaces.ListenerRepositoryInterface" title="eric_sse.interfaces.ListenerRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ListenerRepositoryInterface</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">L</span></code>]</p>
+<p>Listener repository backed by a <a class="reference internal" href="#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">KvStorage</span></code></a>.</p>
+<p>Listeners are stored as they are, keyed by connection id; serialization, if needed, is up to the storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>storage</strong></p></li>
+<li><p><strong>listener_factory</strong> – Called by <a class="reference internal" href="#eric_sse.repository.KvListenerRepository.create" title="eric_sse.repository.KvListenerRepository.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create()</span></code></a> to create a listener, e.g. a listener class.
+Defaults to <a class="reference internal" href="entities.html#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.KvListenerRepository.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">storage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listener_factory=&lt;class</span> <span class="pre">'eric_sse.listener.MessageQueueListener'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvListenerRepository.__init__" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>storage</strong> (<a class="reference internal" href="#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><em>KvStorage</em></a><em>[</em><em>L</em><em>]</em>)</p></li>
+<li><p><strong>listener_factory</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.15)"><em>Callable</em></a><em>[</em><em>[</em><em>]</em><em>, </em><em>L</em><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.KvListenerRepository.create">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvListenerRepository.create" title="Link to this definition">#</a></dt>
+<dd><p>Creates a new listener. It is not persisted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>L</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.KvListenerRepository.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvListenerRepository.load" title="Link to this definition">#</a></dt>
+<dd><p>Loads a listener given the connection id it belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>L</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.KvListenerRepository.persist">
+<span class="sig-name descname"><span class="pre">persist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listener</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvListenerRepository.persist" title="Link to this definition">#</a></dt>
+<dd><p>Persists listener and assign to connection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>listener</strong> (<em>L</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.KvListenerRepository.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvListenerRepository.delete" title="Link to this definition">#</a></dt>
+<dd><p>Deleted a listener given the connection id it belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.repository.KvQueueRepository">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">KvQueueRepository</span></span><a class="headerlink" href="#eric_sse.repository.KvQueueRepository" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eric_sse.interfaces.QueueRepositoryInterface" title="eric_sse.interfaces.QueueRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">QueueRepositoryInterface</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">Q</span></code>]</p>
+<p>Queue repository backed by a <a class="reference internal" href="#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">KvStorage</span></code></a>.</p>
+<p>Queues are stored as they are, keyed by connection id; serialization, if needed, is up to the storage.</p>
+<p>Each queue class decides what of its state is serialised. A durable queue keeps its messages in its own
+backend and serialises only its identity and configuration (e.g. through <code class="docutils literal notranslate"><span class="pre">__getstate__</span></code>), because
+messages are written by the queue itself on every push and pop.
+<a class="reference internal" href="entities.html#eric_sse.queues.InMemoryQueue" title="eric_sse.queues.InMemoryQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">InMemoryQueue</span></code></a> can’t be serialised: use it with a storage that keeps objects in process,
+such as <a class="reference internal" href="#eric_sse.repository.InMemoryStorage" title="eric_sse.repository.InMemoryStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">InMemoryStorage</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>storage</strong></p></li>
+<li><p><strong>queue_factory</strong> – Called by <a class="reference internal" href="#eric_sse.repository.KvQueueRepository.create" title="eric_sse.repository.KvQueueRepository.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create()</span></code></a> to create a queue. Defaults to <a class="reference internal" href="entities.html#eric_sse.queues.InMemoryQueue" title="eric_sse.queues.InMemoryQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">InMemoryQueue</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.KvQueueRepository.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">storage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue_factory=&lt;class</span> <span class="pre">'eric_sse.queues.InMemoryQueue'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvQueueRepository.__init__" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>storage</strong> (<a class="reference internal" href="#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><em>KvStorage</em></a><em>[</em><em>Q</em><em>]</em>)</p></li>
+<li><p><strong>queue_factory</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.15)"><em>Callable</em></a><em>[</em><em>[</em><em>]</em><em>, </em><em>Q</em><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.KvQueueRepository.create">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvQueueRepository.create" title="Link to this definition">#</a></dt>
+<dd><p>Creates a new queue. It is not persisted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>Q</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.KvQueueRepository.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvQueueRepository.load" title="Link to this definition">#</a></dt>
+<dd><p>Loads a queue given the connection id it belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Q</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.KvQueueRepository.persist">
+<span class="sig-name descname"><span class="pre">persist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvQueueRepository.persist" title="Link to this definition">#</a></dt>
+<dd><p>Persists queue and assign to connection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>queue</strong> (<em>Q</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.KvQueueRepository.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.KvQueueRepository.delete" title="Link to this definition">#</a></dt>
+<dd><p>Deletes a queue given the connection id it belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.repository.ChannelRepository">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ChannelRepository</span></span><a class="headerlink" href="#eric_sse.repository.ChannelRepository" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eric_sse.interfaces.ChannelRepositoryInterface" title="eric_sse.interfaces.ChannelRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelRepositoryInterface</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">C</span></code>]</p>
+<p>Persists channels of a given class, using their <a class="reference internal" href="entities.html#eric_sse.entities.AbstractChannel.to_dict" title="eric_sse.entities.AbstractChannel.to_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">to_dict()</span></code></a> and
+<a class="reference internal" href="entities.html#eric_sse.entities.AbstractChannel.from_dict" title="eric_sse.entities.AbstractChannel.from_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_dict()</span></code></a> methods.</p>
+<p>Channels it builds get <a class="reference internal" href="#eric_sse.repository.ChannelRepository.connections_repository" title="eric_sse.repository.ChannelRepository.connections_repository"><code class="xref py py-attr docutils literal notranslate"><span class="pre">connections_repository</span></code></a> as <strong>connections_factory</strong>,
+so that new connections are created by the persistence layer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>storage</strong> – Storage for channels configuration.</p></li>
+<li><p><strong>connections_repository</strong></p></li>
+<li><p><strong>channel_class</strong> – Class of channels this repository creates, loads and persists, e.g. <a class="reference internal" href="prefabs.html#eric_sse.prefabs.SSEChannel" title="eric_sse.prefabs.SSEChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SSEChannel</span></code></a>.</p></li>
+<li><p><strong>queuing_error_handlers</strong> – Registered on every channel created or loaded, see <a class="reference internal" href="entities.html#eric_sse.entities.AbstractChannel.add_queuing_error_handler" title="eric_sse.entities.AbstractChannel.add_queuing_error_handler"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_queuing_error_handler()</span></code></a>.</p></li>
+<li><p><strong>listener_error_handlers</strong> – Registered on every channel created or loaded, see <a class="reference internal" href="entities.html#eric_sse.entities.AbstractChannel.add_listener_error_handler" title="eric_sse.entities.AbstractChannel.add_listener_error_handler"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_listener_error_handler()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.ChannelRepository.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">storage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connections_repository</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_class</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queuing_error_handlers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listener_error_handlers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.ChannelRepository.__init__" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>storage</strong> (<a class="reference internal" href="#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><em>KvStorage</em></a>)</p></li>
+<li><p><strong>connections_repository</strong> (<a class="reference internal" href="#eric_sse.interfaces.ConnectionRepositoryInterface" title="eric_sse.interfaces.ConnectionRepositoryInterface"><em>ConnectionRepositoryInterface</em></a>)</p></li>
+<li><p><strong>channel_class</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#type" title="(in Python v3.15)"><em>type</em></a><em>[</em><em>C</em><em>]</em>)</p></li>
+<li><p><strong>queuing_error_handlers</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.15)"><em>Iterable</em></a><em>[</em><a class="reference internal" href="handlers.html#eric_sse.handlers.QueuingErrorHandler" title="eric_sse.handlers.QueuingErrorHandler"><em>QueuingErrorHandler</em></a><em>]</em>)</p></li>
+<li><p><strong>listener_error_handlers</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.15)"><em>Iterable</em></a><em>[</em><a class="reference internal" href="handlers.html#eric_sse.handlers.ListenerErrorHandler" title="eric_sse.handlers.ListenerErrorHandler"><em>ListenerErrorHandler</em></a><em>]</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.repository.ChannelRepository.connections_repository">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connections_repository</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#eric_sse.interfaces.ConnectionRepositoryInterface" title="eric_sse.interfaces.ConnectionRepositoryInterface"><span class="pre">ConnectionRepositoryInterface</span></a></em><a class="headerlink" href="#eric_sse.repository.ChannelRepository.connections_repository" title="Link to this definition">#</a></dt>
+<dd><p>Repository to be used to persist connections. It is also the connections factory injected into the channels it builds.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.ChannelRepository.create">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.ChannelRepository.create" title="Link to this definition">#</a></dt>
+<dd><p>Creates a channel. It is not persisted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel_data</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><em>dict</em></a>) – Constructor parameters of <strong>channel_class</strong>, except <strong>connections_factory</strong>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>C</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.ChannelRepository.load_all">
+<span class="sig-name descname"><span class="pre">load_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.ChannelRepository.load_all" title="Link to this definition">#</a></dt>
+<dd><p>Loads all channels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.15)"><em>Iterable</em></a>[<em>C</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.ChannelRepository.load_one">
+<span class="sig-name descname"><span class="pre">load_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.ChannelRepository.load_one" title="Link to this definition">#</a></dt>
+<dd><p>Loads a channel given its it</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>C</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.ChannelRepository.persist">
+<span class="sig-name descname"><span class="pre">persist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.ChannelRepository.persist" title="Link to this definition">#</a></dt>
+<dd><p>Persists channel configuration and its connections. Raises a TypeError if channel is not exactly of <strong>channel_class</strong>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel</strong> (<em>C</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.ChannelRepository.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.ChannelRepository.delete" title="Link to this definition">#</a></dt>
+<dd><p>Deletes channel configuration and its connections. Idempotent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.repository.ConnectionRepository">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConnectionRepository</span></span><a class="headerlink" href="#eric_sse.repository.ConnectionRepository" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#eric_sse.interfaces.ConnectionRepositoryInterface" title="eric_sse.interfaces.ConnectionRepositoryInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectionRepositoryInterface</span></code></a></p>
+<p>Concrete Connection Repository</p>
+<p>Relies on <a class="reference internal" href="#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">KvStorage</span></code></a> abstraction for final writes of connections data, and on
+correspondant repositories for related objects ones.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.ConnectionRepository.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">storage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listeners_repository</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queues_repository</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.ConnectionRepository.__init__" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>storage</strong> (<a class="reference internal" href="#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><em>KvStorage</em></a>)</p></li>
+<li><p><strong>listeners_repository</strong> (<a class="reference internal" href="#eric_sse.interfaces.ListenerRepositoryInterface" title="eric_sse.interfaces.ListenerRepositoryInterface"><em>ListenerRepositoryInterface</em></a>)</p></li>
+<li><p><strong>queues_repository</strong> (<a class="reference internal" href="#eric_sse.interfaces.QueueRepositoryInterface" title="eric_sse.interfaces.QueueRepositoryInterface"><em>QueueRepositoryInterface</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.ConnectionRepository.create">
+<span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">listener</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.ConnectionRepository.create" title="Link to this definition">#</a></dt>
+<dd><p>Creates a connection. Listener, if not provided, and queue are created by the corresponding repositories.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>listener</strong> (<a class="reference internal" href="entities.html#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><em>MessageQueueListener</em></a><em> | </em><em>None</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="entities.html#eric_sse.connection.Connection" title="eric_sse.connection.Connection"><em>Connection</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.ConnectionRepository._channel_prefix">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_channel_prefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.ConnectionRepository._channel_prefix" title="Link to this definition">#</a></dt>
+<dd><p>Key prefix of a channel’s connections. The id is encoded so that it can’t contain the separator: otherwise channel <code class="docutils literal notranslate"><span class="pre">a</span></code> would match the connections of channel <code class="docutils literal notranslate"><span class="pre">a:b</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.ConnectionRepository.load_ids">
+<span class="sig-name descname"><span class="pre">load_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.ConnectionRepository.load_ids" title="Link to this definition">#</a></dt>
+<dd><p>Ids of the connections managed by a given channel, without loading their listeners and queues.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.15)"><em>Iterable</em></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.ConnectionRepository.load_all">
+<span class="sig-name descname"><span class="pre">load_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.ConnectionRepository.load_all" title="Link to this definition">#</a></dt>
+<dd><p>Loads all connections managed by a given channel</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.15)"><em>Iterable</em></a>[<a class="reference internal" href="entities.html#eric_sse.connection.Connection" title="eric_sse.connection.Connection"><em>Connection</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.ConnectionRepository.load_one">
+<span class="sig-name descname"><span class="pre">load_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.ConnectionRepository.load_one" title="Link to this definition">#</a></dt>
+<dd><p>Loads a connection given the connection and channel id it belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="entities.html#eric_sse.connection.Connection" title="eric_sse.connection.Connection"><em>Connection</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.ConnectionRepository.persist">
+<span class="sig-name descname"><span class="pre">persist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.ConnectionRepository.persist" title="Link to this definition">#</a></dt>
+<dd><p>Persists a connection and assign it to a channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>connection</strong> (<a class="reference internal" href="entities.html#eric_sse.connection.Connection" title="eric_sse.connection.Connection"><em>Connection</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.repository.ConnectionRepository.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.repository.ConnectionRepository.delete" title="Link to this definition">#</a></dt>
+<dd><p>Deletes a connection given the connection and channel id it belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-eric_sse.interfaces">
+<span id="interoperability"></span><h2>Interoperability<a class="headerlink" href="#module-eric_sse.interfaces" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.interfaces.QueueRepositoryInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">QueueRepositoryInterface</span></span><a class="headerlink" href="#eric_sse.interfaces.QueueRepositoryInterface" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Generic" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">Q</span></code>]</p>
+<p>Generic in the class of queues it creates, loads and persists.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.interfaces.QueueRepositoryInterface.create">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.QueueRepositoryInterface.create" title="Link to this definition">#</a></dt>
+<dd><p>Creates a new queue. It is not persisted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>Q</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.interfaces.QueueRepositoryInterface.load">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.QueueRepositoryInterface.load" title="Link to this definition">#</a></dt>
+<dd><p>Loads a queue given the connection id it belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Q</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.interfaces.QueueRepositoryInterface.persist">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">persist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.QueueRepositoryInterface.persist" title="Link to this definition">#</a></dt>
+<dd><p>Persists queue and assign to connection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>queue</strong> (<em>Q</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.interfaces.QueueRepositoryInterface.delete">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.QueueRepositoryInterface.delete" title="Link to this definition">#</a></dt>
+<dd><p>Deletes a queue given the connection id it belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.interfaces.ListenerRepositoryInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ListenerRepositoryInterface</span></span><a class="headerlink" href="#eric_sse.interfaces.ListenerRepositoryInterface" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Generic" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">L</span></code>]</p>
+<p>Generic in the class of listeners it creates, loads and persists.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.interfaces.ListenerRepositoryInterface.create">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ListenerRepositoryInterface.create" title="Link to this definition">#</a></dt>
+<dd><p>Creates a new listener. It is not persisted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>L</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.interfaces.ListenerRepositoryInterface.load">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ListenerRepositoryInterface.load" title="Link to this definition">#</a></dt>
+<dd><p>Loads a listener given the connection id it belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>L</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.interfaces.ListenerRepositoryInterface.persist">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">persist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listener</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ListenerRepositoryInterface.persist" title="Link to this definition">#</a></dt>
+<dd><p>Persists listener and assign to connection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>listener</strong> (<em>L</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.interfaces.ListenerRepositoryInterface.delete">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ListenerRepositoryInterface.delete" title="Link to this definition">#</a></dt>
+<dd><p>Deleted a listener given the connection id it belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.interfaces.ConnectionRepositoryInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConnectionRepositoryInterface</span></span><a class="headerlink" href="#eric_sse.interfaces.ConnectionRepositoryInterface" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="entities.html#eric_sse.connection.ConnectionsFactory" title="eric_sse.connection.ConnectionsFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectionsFactory</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a></p>
+<p>Persists connections, and creates them using its listeners and queues repositories.</p>
+<p>Channel repositories inject it as <strong>connections_factory</strong> into the channels they build.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.interfaces.ConnectionRepositoryInterface.queues_repository">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">queues_repository</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#eric_sse.interfaces.QueueRepositoryInterface" title="eric_sse.interfaces.QueueRepositoryInterface"><span class="pre">QueueRepositoryInterface</span></a></em><a class="headerlink" href="#eric_sse.interfaces.ConnectionRepositoryInterface.queues_repository" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.interfaces.ConnectionRepositoryInterface.listeners_repository">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">listeners_repository</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#eric_sse.interfaces.ListenerRepositoryInterface" title="eric_sse.interfaces.ListenerRepositoryInterface"><span class="pre">ListenerRepositoryInterface</span></a></em><a class="headerlink" href="#eric_sse.interfaces.ConnectionRepositoryInterface.listeners_repository" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.interfaces.ConnectionRepositoryInterface.load_ids">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_ids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ConnectionRepositoryInterface.load_ids" title="Link to this definition">#</a></dt>
+<dd><p>Ids of the connections managed by a given channel, without loading their listeners and queues.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.15)"><em>Iterable</em></a>[<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)">str</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.interfaces.ConnectionRepositoryInterface.load_all">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ConnectionRepositoryInterface.load_all" title="Link to this definition">#</a></dt>
+<dd><p>Loads all connections managed by a given channel</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.15)"><em>Iterable</em></a>[<a class="reference internal" href="entities.html#eric_sse.connection.Connection" title="eric_sse.connection.Connection"><em>Connection</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.interfaces.ConnectionRepositoryInterface.load_one">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ConnectionRepositoryInterface.load_one" title="Link to this definition">#</a></dt>
+<dd><p>Loads a connection given the connection and channel id it belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="entities.html#eric_sse.connection.Connection" title="eric_sse.connection.Connection"><em>Connection</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.interfaces.ConnectionRepositoryInterface.persist">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">persist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ConnectionRepositoryInterface.persist" title="Link to this definition">#</a></dt>
+<dd><p>Persists a connection and assign it to a channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>connection</strong> (<a class="reference internal" href="entities.html#eric_sse.connection.Connection" title="eric_sse.connection.Connection"><em>Connection</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.interfaces.ConnectionRepositoryInterface.delete">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ConnectionRepositoryInterface.delete" title="Link to this definition">#</a></dt>
+<dd><p>Deletes a connection given the connection and channel id it belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.interfaces.ChannelRepositoryInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ChannelRepositoryInterface</span></span><a class="headerlink" href="#eric_sse.interfaces.ChannelRepositoryInterface" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Generic" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">C</span></code>]</p>
+<p>Generic in the class of channels it handles.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.interfaces.ChannelRepositoryInterface.connections_repository">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connections_repository</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#eric_sse.interfaces.ConnectionRepositoryInterface" title="eric_sse.interfaces.ConnectionRepositoryInterface"><span class="pre">ConnectionRepositoryInterface</span></a></em><a class="headerlink" href="#eric_sse.interfaces.ChannelRepositoryInterface.connections_repository" title="Link to this definition">#</a></dt>
+<dd><p>Repository to be used to persist connections. It is also the connections factory injected into the channels it builds.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.interfaces.ChannelRepositoryInterface.load_all">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ChannelRepositoryInterface.load_all" title="Link to this definition">#</a></dt>
+<dd><p>Loads all channels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.15)"><em>Iterable</em></a>[<em>C</em>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.interfaces.ChannelRepositoryInterface.load_one">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ChannelRepositoryInterface.load_one" title="Link to this definition">#</a></dt>
+<dd><p>Loads a channel given its it</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>C</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.interfaces.ChannelRepositoryInterface.persist">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">persist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ChannelRepositoryInterface.persist" title="Link to this definition">#</a></dt>
+<dd><p>Persists a channel</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel</strong> (<em>C</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.interfaces.ChannelRepositoryInterface.delete">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ChannelRepositoryInterface.delete" title="Link to this definition">#</a></dt>
+<dd><p>Deletes a channel given its it</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.interfaces.ChannelRepositoryInterface.create">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channel_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.interfaces.ChannelRepositoryInterface.create" title="Link to this definition">#</a></dt>
+<dd><p>Creates a new channel and configures it depending on channel_data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>channel_data</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><em>dict</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>C</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="prefabs.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Prefabs</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="handlers.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Error handlers</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.builder">Builder</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder"><code class="docutils literal notranslate"><span class="pre">ChannelRepositoryBuilder</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder.channels"><code class="docutils literal notranslate"><span class="pre">channels()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder.connections"><code class="docutils literal notranslate"><span class="pre">connections()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder.listeners"><code class="docutils literal notranslate"><span class="pre">listeners()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder.listeners_repository"><code class="docutils literal notranslate"><span class="pre">listeners_repository()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder.queues"><code class="docutils literal notranslate"><span class="pre">queues()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder.queues_repository"><code class="docutils literal notranslate"><span class="pre">queues_repository()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder.queuing_error_handler"><code class="docutils literal notranslate"><span class="pre">queuing_error_handler()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder.listener_error_handler"><code class="docutils literal notranslate"><span class="pre">listener_error_handler()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.builder.ChannelRepositoryBuilder.build"><code class="docutils literal notranslate"><span class="pre">build()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.repository">Base repositories</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage"><code class="docutils literal notranslate"><span class="pre">KvStorage</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage.fetch_by_prefix"><code class="docutils literal notranslate"><span class="pre">fetch_by_prefix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage.upsert"><code class="docutils literal notranslate"><span class="pre">upsert()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage.fetch_one"><code class="docutils literal notranslate"><span class="pre">fetch_one()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvStorage.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage"><code class="docutils literal notranslate"><span class="pre">InMemoryStorage</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.fetch_by_prefix"><code class="docutils literal notranslate"><span class="pre">fetch_by_prefix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.upsert"><code class="docutils literal notranslate"><span class="pre">upsert()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.fetch_one"><code class="docutils literal notranslate"><span class="pre">fetch_one()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.InMemoryStorage.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.PrefixedStorage"><code class="docutils literal notranslate"><span class="pre">PrefixedStorage</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.PrefixedStorage.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.PrefixedStorage.fetch_by_prefix"><code class="docutils literal notranslate"><span class="pre">fetch_by_prefix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.PrefixedStorage.upsert"><code class="docutils literal notranslate"><span class="pre">upsert()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.PrefixedStorage.fetch_one"><code class="docutils literal notranslate"><span class="pre">fetch_one()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.PrefixedStorage.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvListenerRepository"><code class="docutils literal notranslate"><span class="pre">KvListenerRepository</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvListenerRepository.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvListenerRepository.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvListenerRepository.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvListenerRepository.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvListenerRepository.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvQueueRepository"><code class="docutils literal notranslate"><span class="pre">KvQueueRepository</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvQueueRepository.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvQueueRepository.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvQueueRepository.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvQueueRepository.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.KvQueueRepository.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ChannelRepository"><code class="docutils literal notranslate"><span class="pre">ChannelRepository</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ChannelRepository.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ChannelRepository.connections_repository"><code class="docutils literal notranslate"><span class="pre">connections_repository</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ChannelRepository.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ChannelRepository.load_all"><code class="docutils literal notranslate"><span class="pre">load_all()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ChannelRepository.load_one"><code class="docutils literal notranslate"><span class="pre">load_one()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ChannelRepository.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ChannelRepository.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ConnectionRepository"><code class="docutils literal notranslate"><span class="pre">ConnectionRepository</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ConnectionRepository.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ConnectionRepository.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ConnectionRepository._channel_prefix"><code class="docutils literal notranslate"><span class="pre">_channel_prefix()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ConnectionRepository.load_ids"><code class="docutils literal notranslate"><span class="pre">load_ids()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ConnectionRepository.load_all"><code class="docutils literal notranslate"><span class="pre">load_all()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ConnectionRepository.load_one"><code class="docutils literal notranslate"><span class="pre">load_one()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ConnectionRepository.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.repository.ConnectionRepository.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.interfaces">Interoperability</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.QueueRepositoryInterface"><code class="docutils literal notranslate"><span class="pre">QueueRepositoryInterface</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.QueueRepositoryInterface.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.QueueRepositoryInterface.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.QueueRepositoryInterface.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.QueueRepositoryInterface.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ListenerRepositoryInterface"><code class="docutils literal notranslate"><span class="pre">ListenerRepositoryInterface</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ListenerRepositoryInterface.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ListenerRepositoryInterface.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ListenerRepositoryInterface.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ListenerRepositoryInterface.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ConnectionRepositoryInterface"><code class="docutils literal notranslate"><span class="pre">ConnectionRepositoryInterface</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ConnectionRepositoryInterface.queues_repository"><code class="docutils literal notranslate"><span class="pre">queues_repository</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ConnectionRepositoryInterface.listeners_repository"><code class="docutils literal notranslate"><span class="pre">listeners_repository</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ConnectionRepositoryInterface.load_ids"><code class="docutils literal notranslate"><span class="pre">load_ids()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ConnectionRepositoryInterface.load_all"><code class="docutils literal notranslate"><span class="pre">load_all()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ConnectionRepositoryInterface.load_one"><code class="docutils literal notranslate"><span class="pre">load_one()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ConnectionRepositoryInterface.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ConnectionRepositoryInterface.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ChannelRepositoryInterface"><code class="docutils literal notranslate"><span class="pre">ChannelRepositoryInterface</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ChannelRepositoryInterface.connections_repository"><code class="docutils literal notranslate"><span class="pre">connections_repository</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ChannelRepositoryInterface.load_all"><code class="docutils literal notranslate"><span class="pre">load_all()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ChannelRepositoryInterface.load_one"><code class="docutils literal notranslate"><span class="pre">load_one()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ChannelRepositoryInterface.persist"><code class="docutils literal notranslate"><span class="pre">persist()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ChannelRepositoryInterface.delete"><code class="docutils literal notranslate"><span class="pre">delete()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.interfaces.ChannelRepositoryInterface.create"><code class="docutils literal notranslate"><span class="pre">create()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Luca Stretti
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

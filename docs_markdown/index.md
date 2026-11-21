@@ -8,23 +8,30 @@
 
 *Features*
 
-* Send to one listener and broadcast
+* Send to one connection or broadcast to all of them
 * SSE format was adopted by design, making the library suitable for such kind of model
-* Callbacks and threading support
+* Async streaming that waits for messages without polling, and hooks to customise channels
+* Listener callbacks, and parallel message processing in an executor
+* Optional persistence layer, with pluggable storage engines and a builder that wires it
+* Error handlers, with Dead Letter and Reliable Queue (explicit ack) patterns
 * Sockets server prefab for offline inter process communication
-* Optional persistence layer with Redis as default engine
+* Profiling decorators for queues and listeners
+* Contracts: test suites to verify your own storages, queues and channels
+* Python 3.10 to 3.14
 
 *Possible applications*
 
 * Message delivery mechanisms based on SSE
 * Message queue processing (logging, etc)
-* See [https://github.com/laxertu/eric-api](https://github.com/laxertu/eric-api)
+* See [https://github.com/laxertu/eric-api](https://github.com/laxertu/eric-api) (not yet updated for 3.0.0)
 
 *Sources*
 
 * Home [https://github.com/laxertu/eric](https://github.com/laxertu/eric)
+* Tutorials: [Tutorials](tutorials.md)
 * Examples [https://github.com/laxertu/eric/tree/master/examples](https://github.com/laxertu/eric/tree/master/examples)
-* Api service definition: [https://github.com/laxertu/eric-api/blob/master/eric_api.py](https://github.com/laxertu/eric-api/blob/master/eric_api.py)
+* Docs archive, previous versions: [https://github.com/laxertu/eric/tree/master/docs_archive](https://github.com/laxertu/eric/tree/master/docs_archive)
+* Api service definition: [https://github.com/laxertu/eric-api/blob/master/eric_api.py](https://github.com/laxertu/eric-api/blob/master/eric_api.py) (eric-sse 2.x)
 
 *Trivia*
 

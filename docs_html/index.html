@@ -43,7 +43,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Reference" href="docs.html" />
+    <link rel="next" title="Guide" href="docs.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -150,19 +150,34 @@
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="docs.html">Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="entities.html">Entities</a></li>
-
-
-
-
-<li class="toctree-l2"><a class="reference internal" href="prefabs.html">Prefabs</a></li>
-
-
+<li class="toctree-l1 has-children"><a class="reference internal" href="docs.html">Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="persistence.html">Persistence</a></li>
 
+<li class="toctree-l2"><a class="reference internal" href="error_handling.html">Error handling</a></li>
 
-<li class="toctree-l2"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="queuing_patterns.html">Queuing patterns</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="dead_letter.html">Dead Letter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reliable_queue.html">Reliable Queue</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html">Verifying custom implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_repository.html">How to test a custom channel repository</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="tutorials.html">Tutorials</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_in_memory.html">In-memory application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_kv_storage.html">Persistence with a custom KvStorage</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="class_reference.html">Class reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/entities.html">Entities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/prefabs.html">Prefabs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/persistence.html">Persistence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/handlers.html">Error handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/queue_patterns.html">Queue patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/profiling.html">Profiling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/exceptions.html">Exceptions</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="devs.html">Developers section</a></li>
@@ -326,23 +341,30 @@ document.write(`
 </ul>
 <p><em>Features</em></p>
 <ul class="simple">
-<li><p>Send to one listener and broadcast</p></li>
+<li><p>Send to one connection or broadcast to all of them</p></li>
 <li><p>SSE format was adopted by design, making the library suitable for such kind of model</p></li>
-<li><p>Callbacks and threading support</p></li>
+<li><p>Async streaming that waits for messages without polling, and hooks to customise channels</p></li>
+<li><p>Listener callbacks, and parallel message processing in an executor</p></li>
+<li><p>Optional persistence layer, with pluggable storage engines and a builder that wires it</p></li>
+<li><p>Error handlers, with Dead Letter and Reliable Queue (explicit ack) patterns</p></li>
 <li><p>Sockets server prefab for offline inter process communication</p></li>
-<li><p>Optional persistence layer with Redis as default engine</p></li>
+<li><p>Profiling decorators for queues and listeners</p></li>
+<li><p>Contracts: test suites to verify your own storages, queues and channels</p></li>
+<li><p>Python 3.10 to 3.14</p></li>
 </ul>
 <p><em>Possible applications</em></p>
 <ul class="simple">
 <li><p>Message delivery mechanisms based on SSE</p></li>
 <li><p>Message queue processing (logging, etc)</p></li>
-<li><p>See <a class="github reference external" href="https://github.com/laxertu/eric-api">laxertu/eric-api</a></p></li>
+<li><p>See <a class="github reference external" href="https://github.com/laxertu/eric-api">laxertu/eric-api</a> (not yet updated for 3.0.0)</p></li>
 </ul>
 <p><em>Sources</em></p>
 <ul class="simple">
 <li><p>Home <a class="github reference external" href="https://github.com/laxertu/eric">laxertu/eric</a></p></li>
+<li><p>Tutorials: <a class="reference internal" href="tutorials.html"><span class="doc">Tutorials</span></a></p></li>
 <li><p>Examples <a class="github reference external" href="https://github.com/laxertu/eric/tree/master/examples">laxertu/eric</a></p></li>
-<li><p>Api service definition: <a class="github reference external" href="https://github.com/laxertu/eric-api/blob/master/eric_api.py">laxertu/eric-api</a></p></li>
+<li><p>Docs archive, previous versions: <a class="github reference external" href="https://github.com/laxertu/eric/tree/master/docs_archive">laxertu/eric</a></p></li>
+<li><p>Api service definition: <a class="github reference external" href="https://github.com/laxertu/eric-api/blob/master/eric_api.py">laxertu/eric-api</a> (eric-sse 2.x)</p></li>
 </ul>
 <p><em>Trivia</em></p>
 <ul class="simple">
@@ -366,7 +388,7 @@ document.write(`
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Reference</p>
+        <p class="prev-next-title">Guide</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

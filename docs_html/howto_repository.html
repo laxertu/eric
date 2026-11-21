@@ -1,0 +1,609 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>How to test a custom channel repository &#8212; eric-sse  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'howto_repository';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorials" href="tutorials.html" />
+    <link rel="prev" title="Verifying custom implementations" href="contracts.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">eric-sse  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="docs.html">Guide</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="persistence.html">Persistence</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="error_handling.html">Error handling</a></li>
+
+<li class="toctree-l2 has-children"><a class="reference internal" href="queuing_patterns.html">Queuing patterns</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="dead_letter.html">Dead Letter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reliable_queue.html">Reliable Queue</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html">Verifying custom implementations</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">How to test a custom channel repository</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="tutorials.html">Tutorials</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_in_memory.html">In-memory application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial_kv_storage.html">Persistence with a custom KvStorage</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="class_reference.html">Class reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/entities.html">Entities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/prefabs.html">Prefabs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/persistence.html">Persistence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/handlers.html">Error handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/queue_patterns.html">Queue patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/profiling.html">Profiling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/exceptions.html">Exceptions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="devs.html">Developers section</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/laxertu/eric" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/laxertu/eric/issues/new?title=Issue%20on%20page%20%2Fhowto_repository.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>How to test a custom channel repository</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#start-from-the-library-s-test-case">1. Start from the library’s test case</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#put-your-part-in-the-builder">2. Put your part in the builder</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#start-every-test-from-empty-storage">3. Start every test from empty storage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-it">4. Run it</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#read-the-failures">5. Read the failures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#keep-it-in-your-suite">6. Keep it in your suite</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="how-to-test-a-custom-channel-repository">
+<h1>How to test a custom channel repository<a class="headerlink" href="#how-to-test-a-custom-channel-repository" title="Link to this heading">#</a></h1>
+<p>You wrote your own persistence part, e.g. a <a class="reference internal" href="reference/persistence.html#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">KvStorage</span></code></a> for your database, or a
+listeners or queues repository, and you want to know whether eric can rely on it. Test it against
+<a class="reference internal" href="reference/contracts.html#eric_sse.contracts.repository.ChannelRepositoryContract" title="eric_sse.contracts.repository.ChannelRepositoryContract"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelRepositoryContract</span></code></a>: the use cases every channel repository has to
+satisfy, whatever its parts. Your part is valid when all of them pass.</p>
+<p>The library tests its own <a class="reference internal" href="reference/persistence.html#eric_sse.repository.InMemoryStorage" title="eric_sse.repository.InMemoryStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">InMemoryStorage</span></code></a> this way, and so will you.</p>
+<section id="start-from-the-library-s-test-case">
+<h2>1. Start from the library’s test case<a class="headerlink" href="#start-from-the-library-s-test-case" title="Link to this heading">#</a></h2>
+<p>This is the whole test of <a class="reference internal" href="reference/persistence.html#eric_sse.repository.InMemoryStorage" title="eric_sse.repository.InMemoryStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">InMemoryStorage</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">unittest</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestCase</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">eric_sse.builder</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChannelRepositoryBuilder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">eric_sse.prefabs</span><span class="w"> </span><span class="kn">import</span> <span class="n">SSEChannel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">eric_sse.repository</span><span class="w"> </span><span class="kn">import</span> <span class="n">InMemoryStorage</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">eric_sse.contracts.repository</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChannelRepositoryContract</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">InMemoryStorageTestCase</span><span class="p">(</span><span class="n">ChannelRepositoryContract</span><span class="p">,</span> <span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_builder</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChannelRepositoryBuilder</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ChannelRepositoryBuilder</span><span class="p">(</span><span class="n">SSEChannel</span><span class="p">,</span> <span class="n">InMemoryStorage</span><span class="p">())</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">channel_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;stream_delay_seconds&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;retry_timeout_milliseconds&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>You extend <a class="reference internal" href="reference/contracts.html#eric_sse.contracts.repository.ChannelRepositoryContract" title="eric_sse.contracts.repository.ChannelRepositoryContract"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelRepositoryContract</span></code></a> together with <code class="docutils literal notranslate"><span class="pre">unittest.TestCase</span></code>,
+and implement two methods:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">create_builder()</span></code> returns a <a class="reference internal" href="reference/persistence.html#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelRepositoryBuilder</span></code></a> that uses your part. The
+contract builds the repository under test from it, once per test.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">channel_data()</span></code> returns the data the repository’s <code class="docutils literal notranslate"><span class="pre">create</span></code> needs to create a channel of the builder’s channel
+class. Leave <code class="docutils literal notranslate"><span class="pre">channel_id</span></code> out: the tests that need given ids add them.</p></li>
+</ul>
+<p>The contract is not a <code class="docutils literal notranslate"><span class="pre">TestCase</span></code> itself, so your test runner only collects your class.</p>
+</section>
+<section id="put-your-part-in-the-builder">
+<h2>2. Put your part in the builder<a class="headerlink" href="#put-your-part-in-the-builder" title="Link to this heading">#</a></h2>
+<p>Write the same class for your part. What <code class="docutils literal notranslate"><span class="pre">create_builder()</span></code> returns depends on what you replace:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">unittest</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestCase</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">eric_sse.builder</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChannelRepositoryBuilder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">eric_sse.contracts.repository</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChannelRepositoryContract</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">eric_sse.prefabs</span><span class="w"> </span><span class="kn">import</span> <span class="n">SSEChannel</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">my_package</span><span class="w"> </span><span class="kn">import</span> <span class="n">MyStorage</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyStorageTestCase</span><span class="p">(</span><span class="n">ChannelRepositoryContract</span><span class="p">,</span> <span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_builder</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChannelRepositoryBuilder</span><span class="p">:</span>
+        <span class="c1"># A storage for everything: channels, connections, listeners and queues</span>
+        <span class="k">return</span> <span class="n">ChannelRepositoryBuilder</span><span class="p">(</span><span class="n">SSEChannel</span><span class="p">,</span> <span class="n">MyStorage</span><span class="p">())</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">channel_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;retry_timeout_milliseconds&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>To test only some parts, keep the defaults for the others and give the builder yours:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">.channels(storage)</span></code> or <code class="docutils literal notranslate"><span class="pre">.connections(storage)</span></code>: a storage for channels or connections only;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.listeners_repository(repository)</span></code> or <code class="docutils literal notranslate"><span class="pre">.queues_repository(repository)</span></code>: your own listeners or queues
+repository;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.listeners(factory)</span></code> or <code class="docutils literal notranslate"><span class="pre">.queues(factory)</span></code>: the listeners or queues your repositories create, e.g. a durable
+queue.</p></li>
+</ul>
+<p>If you persist your own channel class, build with it, <code class="docutils literal notranslate"><span class="pre">ChannelRepositoryBuilder(MyChannel,</span> <span class="pre">...)</span></code>, and return its
+constructor arguments from <code class="docutils literal notranslate"><span class="pre">channel_data()</span></code>.</p>
+</section>
+<section id="start-every-test-from-empty-storage">
+<h2>3. Start every test from empty storage<a class="headerlink" href="#start-every-test-from-empty-storage" title="Link to this heading">#</a></h2>
+<p>Some use cases check that the repository returns <em>exactly</em> what was persisted, so leftovers of a previous test make
+them fail. <code class="docutils literal notranslate"><span class="pre">InMemoryStorage</span></code> is new for every test. With a database or a file, clean up around each test:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyStorageTestCase</span><span class="p">(</span><span class="n">ChannelRepositoryContract</span><span class="p">,</span> <span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="n">create_test_database</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">drop</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_builder</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ChannelRepositoryBuilder</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ChannelRepositoryBuilder</span><span class="p">(</span><span class="n">SSEChannel</span><span class="p">,</span> <span class="n">MyStorage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>If cleaning up is not possible, e.g. a shared server, give each builder its own namespace instead, such as a random
+key prefix.</p>
+</section>
+<section id="run-it">
+<h2>4. Run it<a class="headerlink" href="#run-it" title="Link to this heading">#</a></h2>
+<p>Run it as any other test:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pytest</span> <span class="n">test_my_storage</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>and a single use case with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pytest</span> <span class="n">test_my_storage</span><span class="o">.</span><span class="n">py</span><span class="p">::</span><span class="n">MyStorageTestCase</span><span class="p">::</span><span class="n">test_deleting_a_channel_twice_does_not_fail</span>
+</pre></div>
+</div>
+</section>
+<section id="read-the-failures">
+<h2>5. Read the failures<a class="headerlink" href="#read-the-failures" title="Link to this heading">#</a></h2>
+<p>Each test is a use case, and its name says what your part must do:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Test</p></th>
+<th class="head"><p>What it requires</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_persisted_channels_are_returned_by_load_all_and_load_one</span></code></p></td>
+<td><p>Persisted channels can be loaded, all together or by id, and nothing else is returned.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_channel_configuration_is_returned_after_reload</span></code></p></td>
+<td><p>A reloaded channel has the configuration it was persisted with.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_registered_listeners_are_returned_after_reload</span></code></p></td>
+<td><p>A reloaded channel has the connections it was persisted with.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_persisted_connection_parts_are_returned_by_their_repositories</span></code></p></td>
+<td><p>A persisted connection, its listener and its queue, pending messages included, can be loaded back.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_messages_are_kept_per_listener</span></code></p></td>
+<td><p>Pending messages are kept for their own connection only.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_connections_removed_from_a_channel_are_deleted_on_persist</span></code></p></td>
+<td><p>Persisting a channel deletes the connections removed from it, listeners and queues included.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_deleting_a_channel_deletes_all_its_connections</span></code></p></td>
+<td><p>Deleting a channel deletes its connections, listeners and queues too.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_deleting_a_channel_twice_does_not_fail</span></code></p></td>
+<td><p>Deleting is idempotent.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">test_channels_whose_ids_share_a_prefix_do_not_mix</span></code></p></td>
+<td><p>Channels <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">ab</span></code> keep their own connections.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">test_channel_ids_containing_the_key_separator_do_not_mix</span></code></p></td>
+<td><p>Channels <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">a:b</span></code> keep their own connections.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Common causes</strong></p>
+<ul class="simple">
+<li><p><strong>A missing key raises the wrong error.</strong> <a class="reference internal" href="reference/persistence.html#eric_sse.repository.KvStorage.fetch_one" title="eric_sse.repository.KvStorage.fetch_one"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fetch_one()</span></code></a> must raise
+<a class="reference internal" href="reference/exceptions.html#eric_sse.exception.ItemNotFound" title="eric_sse.exception.ItemNotFound"><code class="xref py py-class docutils literal notranslate"><span class="pre">ItemNotFound</span></code></a>, not your database’s own error, e.g. a <code class="docutils literal notranslate"><span class="pre">KeyError</span></code>.</p></li>
+<li><p><strong>Deleting a missing key raises.</strong> <a class="reference internal" href="reference/persistence.html#eric_sse.repository.KvStorage.delete" title="eric_sse.repository.KvStorage.delete"><code class="xref py py-meth docutils literal notranslate"><span class="pre">delete()</span></code></a> must do nothing instead.</p></li>
+<li><p><strong>Deletions break a running search.</strong> Repositories delete keys while iterating the results of
+<a class="reference internal" href="reference/persistence.html#eric_sse.repository.KvStorage.fetch_by_prefix" title="eric_sse.repository.KvStorage.fetch_by_prefix"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fetch_by_prefix()</span></code></a>, so it must not iterate over a live view of your data, e.g.
+collect the keys first.</p></li>
+<li><p><strong>Queues can’t be stored.</strong> If your storage serialises values, e.g. with <code class="docutils literal notranslate"><span class="pre">pickle</span></code>, the default
+<a class="reference internal" href="reference/entities.html#eric_sse.queues.InMemoryQueue" title="eric_sse.queues.InMemoryQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">InMemoryQueue</span></code></a> fails, as it can only live in memory. Give the builder a durable queue with
+<code class="docutils literal notranslate"><span class="pre">.queues(factory)</span></code>, that stores its messages itself, and test it with
+<a class="reference internal" href="reference/contracts.html#eric_sse.contracts.queue.QueueContract" title="eric_sse.contracts.queue.QueueContract"><code class="xref py py-class docutils literal notranslate"><span class="pre">QueueContract</span></code></a>. See the <code class="docutils literal notranslate"><span class="pre">SqliteQueue</span></code> of <a class="reference internal" href="tutorial_kv_storage.html"><span class="doc">Persistence with a custom KvStorage</span></a> for an example.</p></li>
+</ul>
+</section>
+<section id="keep-it-in-your-suite">
+<h2>6. Keep it in your suite<a class="headerlink" href="#keep-it-in-your-suite" title="Link to this heading">#</a></h2>
+<p>Once everything passes, keep the test case in your suite: it checks your part against every new eric release.
+You can add your own tests to the same class, they don’t affect the contract. Don’t redefine or skip contract tests:
+a skipped test is not a passed one.</p>
+<p>See <a class="reference internal" href="contracts.html"><span class="doc">Verifying custom implementations</span></a> for the other contracts, e.g. for your own queues or channels.</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="contracts.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Verifying custom implementations</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="tutorials.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Tutorials</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#start-from-the-library-s-test-case">1. Start from the library’s test case</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#put-your-part-in-the-builder">2. Put your part in the builder</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#start-every-test-from-empty-storage">3. Start every test from empty storage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-it">4. Run it</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#read-the-failures">5. Read the failures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#keep-it-in-your-suite">6. Keep it in your suite</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Luca Stretti
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

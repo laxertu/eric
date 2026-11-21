@@ -40,6 +40,7 @@ The lightweight library for async messaging nobody expects.
 * Home https://github.com/laxertu/eric
 * Tutorials: :doc:`tutorials`
 * Examples https://github.com/laxertu/eric/tree/master/examples
+* Docs archive, previous versions: https://github.com/laxertu/eric/tree/master/docs_archive
 * Api service definition: https://github.com/laxertu/eric-api/blob/master/eric_api.py (eric-sse 2.x)
 
 
