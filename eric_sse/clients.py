@@ -38,20 +38,23 @@ class SocketClient:
             'c': channel_id,
         })
 
-    async def stream(self, channel_id, listener_id) -> AsyncIterable[str]:
+    async def stream(self, channel_id, connection_id) -> AsyncIterable[str]:
         r, w = await open_unix_connection(self.__descriptor_path)
         payload = {
             'c': channel_id,
-            'r': listener_id,
+            'r': connection_id,
             'v': 'l',
         }
-        w.write(json.dumps(payload).encode())
-        w.write_eof()
-        await w.drain()
+        try:
+            w.write(json.dumps(payload).encode())
+            w.write_eof()
+            await w.drain()
 
-        while not r.at_eof():
-            m = await r.readline()
-            yield m.decode()
+            while not r.at_eof():
+                m = await r.readline()
+                yield m.decode()
+        finally:
+            w.close()
 
     async def broadcast_message(self, channel_id: str, message_type: str, payload: str | dict | int | float):
         return await self.send_payload({
@@ -70,11 +73,11 @@ class SocketClient:
             'p': payload
         })
 
-    async def remove_listener(self, channel_id: str, listener_id: str):
+    async def remove_connection(self, channel_id: str, connection_id: str):
         return await self.send_payload({
             'v': 'rl',
             'c': channel_id,
-            'r': listener_id
+            'r': connection_id
         })
 
     async def remove_channel(self, channel_id: str):

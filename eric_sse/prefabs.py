@@ -2,22 +2,26 @@ import asyncio
 from concurrent.futures import ThreadPoolExecutor, Executor
 from typing import Callable, AsyncIterable
 from eric_sse import get_logger
-from eric_sse.connection import ConnectionsFactory
+from eric_sse.connection import Connection, ConnectionsFactory
 from eric_sse.entities import AbstractChannel
 from eric_sse.listener import MessageQueueListener
-from eric_sse.message import SignedMessage, MessageContract
-from eric_sse.exception import NoMessagesException
-from eric_sse.repository import AbstractChannelRepository
+from eric_sse.message import SignedMessage, MessageContract, MIn, MOut
+from eric_sse.exception import NoMessagesException, InvalidChannelException
 
 logger = get_logger()
 
 
-class SSEChannel(AbstractChannel):
+def _error_data(exception: Exception) -> dict:
+    return {'error': type(exception).__name__, 'message': str(exception)}
+
+
+class SSEChannel(AbstractChannel[MIn, MOut]):
     """
     SSE streaming channel.
     See `Mozilla docs <https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#event_stream_format>`_
 
-    Currently, 'id' field is not supported.
+    Messages are sent as SSE events, see :meth:`adapt`, and stream errors as events of type ``error``, see
+    :meth:`adapt_error`.
     """
 
     def __init__(
@@ -34,7 +38,10 @@ class SSEChannel(AbstractChannel):
         )
         self.retry_timeout_milliseconds = retry_timeout_milliseconds
 
-    def adapt(self, msg: MessageContract) -> dict:
+    def to_dict(self) -> dict:
+        return {**super().to_dict(), 'retry_timeout_milliseconds': self.retry_timeout_milliseconds}
+
+    def adapt(self, msg: MOut) -> dict:
         """
         SSE adapter.
 
@@ -43,17 +50,41 @@ class SSEChannel(AbstractChannel):
             {
                 "event": "message type",
                 "retry": "channel time out",
-                "data": "original payload"
+                "data": "original payload",
+                "id": "message id"
             }
+
+        "id" is optional, as in SSE specs: it's there only if the message has an :attr:`~eric_sse.message.MessageContract.id`.
         """
-        return {
+        event = {
             "event": msg.type,
             "retry": self.retry_timeout_milliseconds,
             "data": msg.payload
         }
+        if msg.id is not None:
+            event["id"] = msg.id
+        return event
+
+    def adapt_error(self, exception: Exception) -> dict:
+        """
+        SSE adapter for stream errors.
+
+        Returns::
+
+            {
+                "event": "error",
+                "retry": "channel time out",
+                "data": {"error": "exception class name", "message": "exception message"}
+            }
+        """
+        return {
+            "event": "error",
+            "retry": self.retry_timeout_milliseconds,
+            "data": _error_data(exception)
+        }
 
 
-class DataProcessingChannel(AbstractChannel):
+class DataProcessingChannel(AbstractChannel[MIn, MOut]):
     """
     Channel intended for concurrent processing of data.
 
@@ -61,41 +92,68 @@ class DataProcessingChannel(AbstractChannel):
     Just override **adapt** method to control output returned to clients
     """
 
-    def __init__(self, max_workers: int, stream_delay_seconds: int = 0, executor_class: Executor.__class__ = ThreadPoolExecutor):
+    def __init__(
+            self,
+            max_workers: int,
+            stream_delay_seconds: int = 0,
+            executor_class: Executor.__class__ = ThreadPoolExecutor,
+            channel_id: str | None = None,
+            connections_factory: ConnectionsFactory | None = None
+    ):
         """
         :param max_workers: Num of workers to use
         :param stream_delay_seconds: Can be used to limit response rate of streaming. Only applies to message_stream calls.
         :param executor_class: The constructor of some Executor class. Defaults to  `ThreadPoolExecutor  <https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.ThreadPoolExecutor>`_.
+        :param channel_id: Optionally sets the channel id.
+        :param connections_factory: See :class:`~eric_sse.entities.AbstractChannel`.
         """
-        super().__init__(stream_delay_seconds=stream_delay_seconds)
+        super().__init__(stream_delay_seconds=stream_delay_seconds, channel_id=channel_id, connections_factory=connections_factory)
         self.max_workers = max_workers
         self.executor_class = executor_class
 
-    async def process_queue(self, listener: MessageQueueListener) -> AsyncIterable[dict]:
-        """Performs queue processing of a given listener, returns an AsyncIterable of dictionaries containing message process result. See **adapt** method"""
+    def to_dict(self) -> dict:
+        """**executor_class** is stored as a class object: the storage engine must be able to serialise it."""
+        return {**super().to_dict(), 'max_workers': self.max_workers, 'executor_class': self.executor_class}
 
-        with self.executor_class(max_workers=self.max_workers) as e:
-            there_are_pending_messages = True
-            tasks = []
+    async def process_queue(self, connection_id: str) -> AsyncIterable[dict]:
+        """
+        Processes the messages in the queue of a given connection: runs its listener's ``on_message`` concurrently in the executor,
+        and yields each message, adapted, as soon as it's processed. See **adapt** method.
+
+        Errors are handled as by :meth:`~eric_sse.entities.AbstractChannel.deliver_next`, in the channel's process:
+        listener errors are logged and passed to error handlers, and the message is yielded anyway. Queue errors and a
+        :class:`~eric_sse.exception.StoppedListenerException` are re-raised after the messages already popped are
+        yielded, so they are not lost.
+        """
+        connection = self.get_connection(connection_id)
+        with self.executor_class(max_workers=self.max_workers) as executor:
             loop = asyncio.get_running_loop()
-            while there_are_pending_messages:
+            tasks: list[asyncio.Task[MOut]] = []
+            pop_error: Exception | None = None
+            while True:
                 try:
-                    msg = self._get_queue(listener_id=listener.id).pop()
-                    tasks.append(loop.run_in_executor(e, DataProcessingChannel._invoke_callback_and_return, listener.on_message, msg))
-
+                    msg = self._pop_next(connection.id)
                 except NoMessagesException:
-                    there_are_pending_messages = False
+                    break
+                except Exception as e:
+                    pop_error = e
+                    break
+                tasks.append(loop.create_task(self.__process(executor, connection, msg)))
 
-            for task_dome in asyncio.as_completed(tasks):
-                task_result = await task_dome
-                yield self.adapt(task_result)
+            for task_done in asyncio.as_completed(tasks):
+                yield self.adapt(await task_done)
 
-    @staticmethod
-    def _invoke_callback_and_return(callback: Callable[[MessageContract], None], msg: MessageContract):
-        callback(msg)
+            if pop_error is not None:
+                raise pop_error
+
+    async def __process(self, executor: Executor, connection: Connection, msg: MOut) -> MOut:
+        try:
+            await asyncio.get_running_loop().run_in_executor(executor, connection.listener.on_message, msg)
+        except Exception as e:
+            self._on_listener_error(connection.id, msg, e)
         return msg
 
-    def adapt(self, msg: MessageContract) -> dict:
+    def adapt(self, msg: MOut) -> dict:
         """
 
         Returns a dictionary in the following format::
@@ -111,22 +169,42 @@ class DataProcessingChannel(AbstractChannel):
             "data": msg.payload
         }
 
-class SimpleDistributedApplicationListener(MessageQueueListener):
-    """Listener for distributed applications"""
+    def adapt_error(self, exception: Exception) -> dict:
+        """
+        Returns a dictionary in the following format::
+
+            {
+                "event": "error",
+                "data": {"error": "exception class name", "message": "exception message"}
+            }
+        """
+        return {
+            "event": "error",
+            "data": _error_data(exception)
+        }
+
+class SimpleDistributedApplicationListener(MessageQueueListener[SignedMessage]):
+    """
+    Listener for distributed applications.
+
+    It dispatches through the channel it is registered to, see :meth:`on_registered`: any channel, including
+    when listeners are created or loaded from persistence.
+    """
 
     def __init__(self):
         super().__init__()
-        self.__channel: AbstractChannel | None = None
-        self.__actions: dict[str, Callable[[MessageContract], list[MessageContract]]] = dict()
+        self.__registration: tuple[AbstractChannel[SignedMessage, SignedMessage], str] | None = None
+        self.__actions: dict[str, Callable[[SignedMessage], list[MessageContract]]] = dict()
         self.__internal_actions: dict[str, Callable[[], None]] = {
             'start': self.start,
             'stop': self.stop
         }
 
-    def set_channel(self, channel: AbstractChannel):
-        self.__channel = channel
+    def on_registered(self, channel: AbstractChannel[SignedMessage, SignedMessage], connection_id: str) -> None:
+        """Keeps **channel**, to dispatch messages through it, and **connection_id**, to sign them."""
+        self.__registration = (channel, connection_id)
 
-    def set_action(self, name: str, action: Callable[[MessageContract], list[MessageContract]]):
+    def set_action(self, name: str, action: Callable[[SignedMessage], list[MessageContract]]):
         """
         Hooks a callable to a string key.
 
@@ -138,13 +216,16 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
         Receiving a message with one of these types will fire corresponding action.
 
         """
-        if action in self.__internal_actions:
-            raise KeyError(f'Trying to set an internal action {action}')
+        if name in self.__internal_actions:
+            raise KeyError(f'Trying to set an internal action {name}')
         self.__actions[name] = action
 
-    def dispatch_to(self, receiver: MessageQueueListener, msg: MessageContract):
-        signed_message = SignedMessage(sender_id=self.id, msg_type=msg.type, msg_payload=msg.payload)
-        self.__channel.dispatch(receiver.id, signed_message)
+    def dispatch_to(self, receiver_id: str, msg: MessageContract):
+        """Dispatches **msg** to connection **receiver_id**, signed with this listener's connection id."""
+        if self.__registration is None:
+            raise InvalidChannelException('Listener has no channel: register it to a channel')
+        channel, connection_id = self.__registration
+        channel.dispatch(receiver_id, SignedMessage(sender_id=connection_id, msg_type=msg.type, msg_payload=msg.payload))
 
     def on_message(self, msg: SignedMessage) -> None:
         """Executes action corresponding to message's type"""
@@ -157,35 +238,15 @@ class SimpleDistributedApplicationListener(MessageQueueListener):
 
             msgs = self.__actions[msg.type](msg)
             for response in msgs:
-                signed_response = SignedMessage(sender_id=self.id, msg_type=response.type, msg_payload=response.payload)
-                self.__channel.dispatch(msg.sender_id, signed_response)
+                self.dispatch_to(msg.sender_id, response)
         except KeyError:
             logger.debug(f'Unknown action {msg.type}')
 
-class SimpleDistributedApplicationChannel(SSEChannel):
+class SimpleDistributedApplicationChannel(SSEChannel[SignedMessage, SignedMessage]):
 
-    def register_listener(self, listener: SimpleDistributedApplicationListener):
-        listener.set_channel(self)
-        super().register_listener(listener=listener)
-
-
-class SSEChannelRepository(AbstractChannelRepository):
     """
-    Enable SSE channels persistence
-    """
-    def create(self, channel_data: dict) -> SSEChannel:
-        """
-        :param dict channel_data: Fill it with SSEChannel constructor arguments, except for connections_factory that wil be injected by repository
-        """
-        return SSEChannel(**channel_data, connections_factory=self.connections_factory)
+    Channel for :class:`~eric_sse.prefabs.SimpleDistributedApplicationListener` instances.
 
-    @staticmethod
-    def _channel_to_dict(channel: SSEChannel) -> dict:
-        """
-        Returns a dictionary representation of the SSE channel to be passed to create() calls.
-        """
-        return {
-            'retry_timeout_milliseconds': channel.retry_timeout_milliseconds,
-            'stream_delay_seconds': channel.stream_delay_seconds,
-            'channel_id': channel.id,
-        }
+    Use a connections factory or repository that creates them, e.g.
+    ``ChannelRepositoryBuilder(SimpleDistributedApplicationChannel).listeners(SimpleDistributedApplicationListener)``.
+    """

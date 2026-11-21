@@ -6,17 +6,29 @@
 
 pip install eric-sse
 
+*Versioning*
+
+Starting from 3.0.0, the project follows [semantic versioning](https://semver.org/).
+
 *Related packages*
+
+Not yet updated for 3.0.0: use them with eric-sse 2.x.
 
 * https://pypi.org/project/eric-redis-queues/ Redis integration
 * https://pypi.org/project/eric-api/ FastApi microservice
 
 *Features*
 
-* Send to one listener and broadcast
+* Send to one connection or broadcast to all of them
 * SSE format was adopted by design, making the library suitable for such kind of model
-* Callbacks and threading support
+* Async streaming that waits for messages without polling, and hooks to customise channels
+* Listener callbacks, and parallel message processing in an executor
+* Optional persistence layer, with pluggable storage engines and a builder that wires it
+* Error handlers, with Dead Letter and Reliable Queue (explicit ack) patterns
 * Sockets server prefab for offline inter process communication
+* Profiling decorators for queues and listeners
+* Contracts: test suites to verify your own storages, queues and channels
+* Python 3.10 to 3.14
 
 *Possible applications*
 
@@ -26,7 +38,8 @@ pip install eric-sse
 *Documentation*
 
 * Reference https://laxertu.github.io/eric/docs.html
-* A good example of usage is eric api service definition: https://github.com/laxertu/eric-api/blob/master/eric_api.py
+* Tutorials https://laxertu.github.io/eric/tutorials.html
+* A good example of usage is eric api service definition: https://github.com/laxertu/eric-api/blob/master/eric_api.py (eric-sse 2.x)
 * Some more example about other usages of the library: https://github.com/laxertu/eric/tree/master/examples
 
 

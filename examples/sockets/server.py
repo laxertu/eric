@@ -1,4 +1,4 @@
-from asyncio import run, CancelledError
+from asyncio import run
 
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import Message
@@ -23,18 +23,15 @@ async def main():
     server.cc.register(channel)
 
     listener = ExampleServerListener()
-    channel.register_listener(listener)
+    connection = channel.register_listener(listener)
 
     print(f"Test an example delivery on an hello world with:")
     print("")
     print(f'python sender.py {channel.id}')
-    print(f'python receiver.py {channel.id} {listener.id}')
+    print(f'python receiver.py {channel.id} {connection.id}')
     print("")
     await server.main()
 
 
 if __name__ == '__main__':
-    try:
-        run(main())
-    except CancelledError:
-        exit(0)
+    run(main())  # Ctrl+C or SIGTERM shut the server down gracefully
