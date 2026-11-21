@@ -153,9 +153,8 @@
 
 <li class="toctree-l2"><a class="reference internal" href="error_handling.html">Error handling</a></li>
 
-<li class="toctree-l2"><a class="reference internal" href="queue_patterns.html">Queue patterns</a></li>
-
-
+<li class="toctree-l2"><a class="reference internal" href="dead_letter.html">Dead Letter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reliable_queue.html">Reliable Queue</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contracts.html">Verifying custom implementations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="howto_repository.html">How to test a custom channel repository</a></li>
 </ul>
@@ -372,7 +371,7 @@ document.write(`
 <li><p>Queue is generic on the type of messages pushed and popped, Queue[MIn, MOut], e.g. Queue[SignedMessage, SignedMessage]. They differ when a queue transforms messages: ReliableQueue is a Queue[MessageContract, ReliableMessage]. InMemoryQueue[M] is a Queue[M, M]. Plain Queue holds any message</p></li>
 <li><p>Added the Reliable Queue pattern to queue_patterns: ReliableQueue keeps popped messages in flight, wrapped in a ReliableMessage with an id, until ack(). nack() and a visibility timeout put them back in the queue. In-flight messages are kept in a KvStorage</p></li>
 <li><p>DeadLetter exposes the original message id</p></li>
-<li><p>Docs: added Queue patterns page, documenting Dead Letter and Reliable Queue</p></li>
+<li><p>Docs: added Dead Letter and Reliable Queue pages</p></li>
 <li><p>MessageQueueListener is generic on the type of messages it handles, e.g. MessageQueueListener[SignedMessage]. SimpleDistributedApplicationListener is a MessageQueueListener[SignedMessage]</p></li>
 <li><p>AbstractChannel is generic on the type of messages it dispatches and delivers, AbstractChannel[MIn, MOut], as its queues are Queue[MIn, MOut] and its listeners MessageQueueListener[MOut]: dispatch, broadcast and before_dispatch use MIn, deliver_next, wait_next and adapt use MOut. SSEChannel and DataProcessingChannel are generic too, SimpleDistributedApplicationChannel is an SSEChannel[SignedMessage, SignedMessage]. Plain channels, listeners and queues handle any message</p></li>
 <li><p>BREAKING: stream errors are no longer adapted as ‘error’ messages: message_stream() yields them through the new abstract AbstractChannel.adapt_error(exception). Channels extending AbstractChannel directly must implement it; SSEChannel and DataProcessingChannel return {‘event’: ‘error’, ‘data’: {‘error’: exception class name, ‘message’: str(exception)}}, plus ‘retry’ for SSEChannel</p></li>
