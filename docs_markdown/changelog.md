@@ -62,7 +62,6 @@
 * message_stream() yields a StoppedListenerException through adapt_error() and ends, as for invalid listener or channel errors
 * Added AbstractChannel.on_wait_timeout(listener) hook, called by message_stream() each time it waits wait_timeout_seconds with no message. Not an error: nothing is yielded. Does nothing by default
 * Added profiling module: ProfiledQueue and ProfiledListener wrap a queue or a listener and record number of calls and total time of push, pop, wait_pop and on_message, in CallStats objects
-* Docs: added Profiling page
 * BREAKING: removed KvStorage.fetch_all. fetch_by_prefix(‘’) returns all items: storages wrapped in a PrefixedStorage, as ChannelRepositoryBuilder does, never had their fetch_all called
 * Tests: added ChannelRepositoryContract (test/repository_contract.py), use case tests built from a ChannelRepositoryBuilder that every storage or custom repository has to pass
 * BREAKING: KvListenerRepository and ChannelRepositoryBuilder.listeners() take a listener_factory instead of a listener_class: any callable returning a listener, as queues already do, so listeners needing arguments, e.g. ProfiledListener, can be created through the Builder. Passing a class still works; only the listener_class keyword is gone

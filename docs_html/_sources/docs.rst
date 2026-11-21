@@ -123,8 +123,7 @@ Where to go next
 ----------------
 
 * :doc:`tutorials`: two complete programs, in memory and persisted with SQLite.
-* :doc:`persistence`, :doc:`error_handling`, :doc:`queue_patterns`, :doc:`profiling` and :doc:`contracts`: one topic
-  each.
+* :doc:`persistence`, :doc:`error_handling`, :doc:`queue_patterns` and :doc:`contracts`: one topic each.
 * :doc:`class_reference`: every class, generated from the source code.
 
 Overview
@@ -142,6 +141,5 @@ Overview
    persistence
    error_handling
    queue_patterns
-   profiling
    contracts
    howto_repository
