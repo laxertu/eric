@@ -1,0 +1,59 @@
+<a id="profiling"></a>
+
+# Profiling
+
+The `eric_sse.profiling` module measures how much time queues and listeners take, without changing them:
+[`ProfiledQueue`](reference/profiling.md#eric_sse.profiling.ProfiledQueue) and [`ProfiledListener`](reference/profiling.md#eric_sse.profiling.ProfiledListener) wrap an existing queue or
+listener, delegate every call to it, and record each call of its main methods in a
+[`CallStats`](reference/profiling.md#eric_sse.profiling.CallStats):
+
+* `calls`: number of calls, including the ones that raised;
+* `total_time`: their total time, in seconds;
+* `mean_time`: mean time per call, in seconds.
+
+Stats are exposed by these getters:
+
+* [`ProfiledQueue`](reference/profiling.md#eric_sse.profiling.ProfiledQueue): `push_stats`, `pop_stats`, `wait_pop_stats`;
+* [`ProfiledListener`](reference/profiling.md#eric_sse.profiling.ProfiledListener): `on_message_stats`.
+
+**Usage**
+
+```python
+from eric_sse.connection import Connection
+from eric_sse.prefabs import SSEChannel
+from eric_sse.profiling import ProfiledListener, ProfiledQueue
+from eric_sse.queues import InMemoryQueue
+
+channel = SSEChannel()
+queue = ProfiledQueue(InMemoryQueue())
+listener = ProfiledListener(MyListener())
+channel.register_connection(Connection(listener=listener, queue=queue))
+
+# ... dispatch and stream messages
+
+print(queue.push_stats.calls, queue.push_stats.mean_time)
+print(listener.on_message_stats.total_time)
+```
+
+A [`ProfiledListener`](reference/profiling.md#eric_sse.profiling.ProfiledListener) delegates `on_registered`, `start`, `stop` and `is_running` to
+the listener it wraps, so it can be used in its place. To profile every connection of the channels built by a repository, give the
+[`ChannelRepositoryBuilder`](reference/persistence.md#eric_sse.builder.ChannelRepositoryBuilder) factories of profiled listeners and queues:
+
+```python
+channels = (
+    ChannelRepositoryBuilder(SSEChannel)
+    .listeners(lambda: ProfiledListener(MyListener()))
+    .queues(lambda: ProfiledQueue(InMemoryQueue()))
+    .build()
+)
+```
+
+**What is measured**
+
+* Times include waiting: a [`wait_pop()`](reference/entities.md#eric_sse.queues.Queue.wait_pop), or a [`pop()`](reference/entities.md#eric_sse.queues.Queue.pop) with a
+  timeout, lasts until a message arrives or the timeout expires. In a stream, `wait_pop_stats` includes idle time.
+* Calls that raise are counted and timed too, e.g. empty pops, then the exception is re-raised.
+
+For whole-scenario timings, see the benchmarks in the [Developers section](devs.md).
+
+See [Profiling](reference/profiling.md) for the classes.

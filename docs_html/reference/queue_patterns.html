@@ -1,0 +1,882 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Queue patterns &#8212; eric-sse  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/queue_patterns';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Profiling" href="profiling.html" />
+    <link rel="prev" title="Error handlers" href="handlers.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">eric-sse  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../docs.html">Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../persistence.html">Persistence</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../error_handling.html">Error handling</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../queue_patterns.html">Queue patterns</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../profiling.html">Profiling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contracts.html">Verifying custom implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../howto_repository.html">How to test a custom channel repository</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../class_reference.html">Class reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="entities.html">Entities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prefabs.html">Prefabs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persistence.html">Persistence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handlers.html">Error handlers</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Queue patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profiling.html">Profiling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../devs.html">Developers section</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/laxertu/eric" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/laxertu/eric/issues/new?title=Issue%20on%20page%20%2Freference/queue_patterns.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Queue patterns</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetter"><code class="docutils literal notranslate"><span class="pre">DeadLetter</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetter.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetter.connection_id"><code class="docutils literal notranslate"><span class="pre">connection_id</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetter.message"><code class="docutils literal notranslate"><span class="pre">message</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetter.error"><code class="docutils literal notranslate"><span class="pre">error</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetter.id"><code class="docutils literal notranslate"><span class="pre">id</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetter.type"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetter.payload"><code class="docutils literal notranslate"><span class="pre">payload</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetterHandler"><code class="docutils literal notranslate"><span class="pre">DeadLetterHandler</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetterHandler.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetterHandler.queue"><code class="docutils literal notranslate"><span class="pre">queue</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetterHandler.handle_push_error"><code class="docutils literal notranslate"><span class="pre">handle_push_error()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetterHandler.handle_on_message_error"><code class="docutils literal notranslate"><span class="pre">handle_on_message_error()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetterHandler._dead_letter"><code class="docutils literal notranslate"><span class="pre">_dead_letter()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableMessage"><code class="docutils literal notranslate"><span class="pre">ReliableMessage</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableMessage.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableMessage.id"><code class="docutils literal notranslate"><span class="pre">id</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableMessage.message"><code class="docutils literal notranslate"><span class="pre">message</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableMessage.deliveries"><code class="docutils literal notranslate"><span class="pre">deliveries</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableMessage.type"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableMessage.payload"><code class="docutils literal notranslate"><span class="pre">payload</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableQueue"><code class="docutils literal notranslate"><span class="pre">ReliableQueue</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableQueue.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableQueue.push"><code class="docutils literal notranslate"><span class="pre">push()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableQueue.pop"><code class="docutils literal notranslate"><span class="pre">pop()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableQueue.wait_pop"><code class="docutils literal notranslate"><span class="pre">wait_pop()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableQueue.ack"><code class="docutils literal notranslate"><span class="pre">ack()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableQueue.nack"><code class="docutils literal notranslate"><span class="pre">nack()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableQueue.requeue_expired"><code class="docutils literal notranslate"><span class="pre">requeue_expired()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableQueue.in_flight"><code class="docutils literal notranslate"><span class="pre">in_flight()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-eric_sse.queue_patterns">
+<span id="queue-patterns"></span><h1>Queue patterns<a class="headerlink" href="#module-eric_sse.queue_patterns" title="Link to this heading">#</a></h1>
+<p>Messaging patterns built on queues and <a class="reference internal" href="handlers.html#module-eric_sse.handlers" title="eric_sse.handlers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">handlers</span></code></a>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.DeadLetter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DeadLetter</span></span><a class="headerlink" href="#eric_sse.queue_patterns.DeadLetter" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageContract</span></code></a></p>
+<p>A message that could not be delivered or processed, plus where it was going and why it failed.</p>
+<p>It wraps the original message: <a class="reference internal" href="#eric_sse.queue_patterns.DeadLetter.id" title="eric_sse.queue_patterns.DeadLetter.id"><code class="xref py py-attr docutils literal notranslate"><span class="pre">id</span></code></a>, <a class="reference internal" href="#eric_sse.queue_patterns.DeadLetter.type" title="eric_sse.queue_patterns.DeadLetter.type"><code class="xref py py-attr docutils literal notranslate"><span class="pre">type</span></code></a> and <a class="reference internal" href="#eric_sse.queue_patterns.DeadLetter.payload" title="eric_sse.queue_patterns.DeadLetter.payload"><code class="xref py py-attr docutils literal notranslate"><span class="pre">payload</span></code></a> are the original ones,
+and <a class="reference internal" href="#eric_sse.queue_patterns.DeadLetter.message" title="eric_sse.queue_patterns.DeadLetter.message"><code class="xref py py-attr docutils literal notranslate"><span class="pre">message</span></code></a> keeps its class, e.g. a <a class="reference internal" href="entities.html#eric_sse.message.SignedMessage" title="eric_sse.message.SignedMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">SignedMessage</span></code></a> with its sender.</p>
+<p>To redeliver it: <code class="docutils literal notranslate"><span class="pre">channel.dispatch(dead_letter.connection_id,</span> <span class="pre">dead_letter.message)</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>) – Id of the connection the message was meant for.</p></li>
+<li><p><strong>message</strong> (<a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>) – The original message.</p></li>
+<li><p><strong>error</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>) – Description of the error, e.g. <code class="docutils literal notranslate"><span class="pre">repr()</span></code> of the exception.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.DeadLetter.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.queue_patterns.DeadLetter.__init__" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>message</strong> (<a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>)</p></li>
+<li><p><strong>error</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.DeadLetter.connection_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connection_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></em><a class="headerlink" href="#eric_sse.queue_patterns.DeadLetter.connection_id" title="Link to this definition">#</a></dt>
+<dd><p>Id of the connection the message was meant for.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.DeadLetter.message">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><span class="pre">MessageContract</span></a></em><a class="headerlink" href="#eric_sse.queue_patterns.DeadLetter.message" title="Link to this definition">#</a></dt>
+<dd><p>The original message.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.DeadLetter.error">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">error</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></em><a class="headerlink" href="#eric_sse.queue_patterns.DeadLetter.error" title="Link to this definition">#</a></dt>
+<dd><p>Description of the error.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.DeadLetter.id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></em><a class="headerlink" href="#eric_sse.queue_patterns.DeadLetter.id" title="Link to this definition">#</a></dt>
+<dd><p>Optional message identifier, e.g. the “id” field of an SSE event. None if the message has none.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.DeadLetter.type">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></em><a class="headerlink" href="#eric_sse.queue_patterns.DeadLetter.type" title="Link to this definition">#</a></dt>
+<dd><p>Message type</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.DeadLetter.payload">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><span class="pre">list</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></em><a class="headerlink" href="#eric_sse.queue_patterns.DeadLetter.payload" title="Link to this definition">#</a></dt>
+<dd><p>Message payload</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.DeadLetterHandler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DeadLetterHandler</span></span><a class="headerlink" href="#eric_sse.queue_patterns.DeadLetterHandler" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="handlers.html#eric_sse.handlers.QueuingErrorHandler" title="eric_sse.handlers.QueuingErrorHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">QueuingErrorHandler</span></code></a>, <a class="reference internal" href="handlers.html#eric_sse.handlers.ListenerErrorHandler" title="eric_sse.handlers.ListenerErrorHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ListenerErrorHandler</span></code></a></p>
+<p>Dead Letter pattern: messages that could not be delivered or processed are pushed to a dead letter queue,
+wrapped in a <a class="reference internal" href="#eric_sse.queue_patterns.DeadLetter" title="eric_sse.queue_patterns.DeadLetter"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeadLetter</span></code></a>.</p>
+<p>A message is dead-lettered when:</p>
+<ul class="simple">
+<li><p>pushing it to a listener’s queue fails, see <a class="reference internal" href="#eric_sse.queue_patterns.DeadLetterHandler.handle_push_error" title="eric_sse.queue_patterns.DeadLetterHandler.handle_push_error"><code class="xref py py-meth docutils literal notranslate"><span class="pre">handle_push_error()</span></code></a>;</p></li>
+<li><p>the listener’s <a class="reference internal" href="entities.html#eric_sse.listener.MessageQueueListener.on_message" title="eric_sse.listener.MessageQueueListener.on_message"><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_message()</span></code></a> fails, see <a class="reference internal" href="#eric_sse.queue_patterns.DeadLetterHandler.handle_on_message_error" title="eric_sse.queue_patterns.DeadLetterHandler.handle_on_message_error"><code class="xref py py-meth docutils literal notranslate"><span class="pre">handle_on_message_error()</span></code></a>.</p></li>
+</ul>
+<p>Pop errors are not dead-lettered: no message is available when they occur.</p>
+<p>Register the same instance for both kinds of errors:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dead_letters</span> <span class="o">=</span> <span class="n">DeadLetterHandler</span><span class="p">()</span>
+<span class="n">channel</span><span class="o">.</span><span class="n">add_queuing_error_handler</span><span class="p">(</span><span class="n">dead_letters</span><span class="p">)</span>
+<span class="n">channel</span><span class="o">.</span><span class="n">add_listener_error_handler</span><span class="p">(</span><span class="n">dead_letters</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or, for every channel of a repository, with
+<a class="reference internal" href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder.queuing_error_handler" title="eric_sse.builder.ChannelRepositoryBuilder.queuing_error_handler"><code class="xref py py-meth docutils literal notranslate"><span class="pre">queuing_error_handler()</span></code></a> and
+<a class="reference internal" href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder.listener_error_handler" title="eric_sse.builder.ChannelRepositoryBuilder.listener_error_handler"><code class="xref py py-meth docutils literal notranslate"><span class="pre">listener_error_handler()</span></code></a>.</p>
+<p>If pushing to the dead letter queue fails too, the error is logged and the message is lost:
+the handler never raises, so the original error is the one the channel re-raises or logs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>queue</strong> (<a class="reference internal" href="entities.html#eric_sse.queues.Queue" title="eric_sse.queues.Queue"><em>Queue</em></a>) – The dead letter queue. Defaults to an <a class="reference internal" href="entities.html#eric_sse.queues.InMemoryQueue" title="eric_sse.queues.InMemoryQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">InMemoryQueue</span></code></a>.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.DeadLetterHandler.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.queue_patterns.DeadLetterHandler.__init__" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>queue</strong> (<a class="reference internal" href="entities.html#eric_sse.queues.Queue" title="eric_sse.queues.Queue"><em>Queue</em></a><em>[</em><a class="reference internal" href="#eric_sse.queue_patterns.DeadLetter" title="eric_sse.queue_patterns.DeadLetter"><em>DeadLetter</em></a><em>, </em><a class="reference internal" href="#eric_sse.queue_patterns.DeadLetter" title="eric_sse.queue_patterns.DeadLetter"><em>DeadLetter</em></a><em>] </em><em>| </em><em>None</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.DeadLetterHandler.queue">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">queue</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="entities.html#eric_sse.queues.Queue" title="eric_sse.queues.Queue"><span class="pre">Queue</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#eric_sse.queue_patterns.DeadLetter" title="eric_sse.queue_patterns.DeadLetter"><span class="pre">DeadLetter</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#eric_sse.queue_patterns.DeadLetter" title="eric_sse.queue_patterns.DeadLetter"><span class="pre">DeadLetter</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#eric_sse.queue_patterns.DeadLetterHandler.queue" title="Link to this definition">#</a></dt>
+<dd><p>The dead letter queue, e.g. to inspect or redeliver its messages.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.DeadLetterHandler.handle_push_error">
+<span class="sig-name descname"><span class="pre">handle_push_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.queue_patterns.DeadLetterHandler.handle_push_error" title="Link to this definition">#</a></dt>
+<dd><p>Called when pushing <strong>msg</strong> to the queue of connection <strong>connection_id</strong> fails. The exception is re-raised afterwards.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>msg</strong> (<a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>)</p></li>
+<li><p><strong>exception</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#Exception" title="(in Python v3.15)"><em>Exception</em></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.DeadLetterHandler.handle_on_message_error">
+<span class="sig-name descname"><span class="pre">handle_on_message_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.queue_patterns.DeadLetterHandler.handle_on_message_error" title="Link to this definition">#</a></dt>
+<dd><p>Called when <a class="reference internal" href="entities.html#eric_sse.listener.MessageQueueListener.on_message" title="eric_sse.listener.MessageQueueListener.on_message"><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_message()</span></code></a> of connection <strong>connection_id</strong> fails.
+The exception is not re-raised: <strong>msg</strong> is delivered anyway.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>msg</strong> (<a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>)</p></li>
+<li><p><strong>exception</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#Exception" title="(in Python v3.15)"><em>Exception</em></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.DeadLetterHandler._dead_letter">
+<span class="sig-name descname"><span class="pre">_dead_letter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.queue_patterns.DeadLetterHandler._dead_letter" title="Link to this definition">#</a></dt>
+<dd><p>Pushes <strong>msg</strong> to the dead letter queue, wrapped in a <a class="reference internal" href="#eric_sse.queue_patterns.DeadLetter" title="eric_sse.queue_patterns.DeadLetter"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeadLetter</span></code></a>. Override to change what is stored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>msg</strong> (<a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>)</p></li>
+<li><p><strong>exception</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#Exception" title="(in Python v3.15)"><em>Exception</em></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.ReliableMessage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ReliableMessage</span></span><a class="headerlink" href="#eric_sse.queue_patterns.ReliableMessage" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageContract</span></code></a></p>
+<p>A message popped from a <a class="reference internal" href="#eric_sse.queue_patterns.ReliableQueue" title="eric_sse.queue_patterns.ReliableQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReliableQueue</span></code></a>: the original message plus an id to acknowledge it with.</p>
+<p><a class="reference internal" href="#eric_sse.queue_patterns.ReliableMessage.type" title="eric_sse.queue_patterns.ReliableMessage.type"><code class="xref py py-attr docutils literal notranslate"><span class="pre">type</span></code></a> and <a class="reference internal" href="#eric_sse.queue_patterns.ReliableMessage.payload" title="eric_sse.queue_patterns.ReliableMessage.payload"><code class="xref py py-attr docutils literal notranslate"><span class="pre">payload</span></code></a> are the original ones, and <a class="reference internal" href="#eric_sse.queue_patterns.ReliableMessage.message" title="eric_sse.queue_patterns.ReliableMessage.message"><code class="xref py py-attr docutils literal notranslate"><span class="pre">message</span></code></a> keeps its class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>) – Id to pass to <a class="reference internal" href="#eric_sse.queue_patterns.ReliableQueue.ack" title="eric_sse.queue_patterns.ReliableQueue.ack"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ReliableQueue.ack()</span></code></a> or <a class="reference internal" href="#eric_sse.queue_patterns.ReliableQueue.nack" title="eric_sse.queue_patterns.ReliableQueue.nack"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ReliableQueue.nack()</span></code></a>.</p></li>
+<li><p><strong>message</strong> (<a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>) – The original message.</p></li>
+<li><p><strong>deliveries</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><em>int</em></a>) – How many times the message has been popped, this time included.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.ReliableMessage.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deliveries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.queue_patterns.ReliableMessage.__init__" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>message_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>message</strong> (<a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>)</p></li>
+<li><p><strong>deliveries</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><em>int</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.ReliableMessage.id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></em><a class="headerlink" href="#eric_sse.queue_patterns.ReliableMessage.id" title="Link to this definition">#</a></dt>
+<dd><p>Id to acknowledge the message with. It replaces the original message’s id, if any.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.ReliableMessage.message">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><span class="pre">MessageContract</span></a></em><a class="headerlink" href="#eric_sse.queue_patterns.ReliableMessage.message" title="Link to this definition">#</a></dt>
+<dd><p>The original message.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.ReliableMessage.deliveries">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">deliveries</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a></em><a class="headerlink" href="#eric_sse.queue_patterns.ReliableMessage.deliveries" title="Link to this definition">#</a></dt>
+<dd><p>How many times the message has been popped: more than 1 means it is a redelivery.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.ReliableMessage.type">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></em><a class="headerlink" href="#eric_sse.queue_patterns.ReliableMessage.type" title="Link to this definition">#</a></dt>
+<dd><p>Message type</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.ReliableMessage.payload">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">payload</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><span class="pre">dict</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><span class="pre">list</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></em><a class="headerlink" href="#eric_sse.queue_patterns.ReliableMessage.payload" title="Link to this definition">#</a></dt>
+<dd><p>Message payload</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.ReliableQueue">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ReliableQueue</span></span><a class="headerlink" href="#eric_sse.queue_patterns.ReliableQueue" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="entities.html#eric_sse.queues.Queue" title="eric_sse.queues.Queue"><code class="xref py py-class docutils literal notranslate"><span class="pre">Queue</span></code></a>[<a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageContract</span></code></a>, <a class="reference internal" href="#eric_sse.queue_patterns.ReliableMessage" title="eric_sse.queue_patterns.ReliableMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReliableMessage</span></code></a>]</p>
+<p>Reliable Queue pattern: a popped message isn’t removed, it is moved to an in-flight storage until it is acknowledged.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#eric_sse.queue_patterns.ReliableQueue.pop" title="eric_sse.queue_patterns.ReliableQueue.pop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pop()</span></code></a> and <a class="reference internal" href="#eric_sse.queue_patterns.ReliableQueue.wait_pop" title="eric_sse.queue_patterns.ReliableQueue.wait_pop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">wait_pop()</span></code></a> return a <a class="reference internal" href="#eric_sse.queue_patterns.ReliableMessage" title="eric_sse.queue_patterns.ReliableMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReliableMessage</span></code></a>;</p></li>
+<li><p><a class="reference internal" href="#eric_sse.queue_patterns.ReliableQueue.ack" title="eric_sse.queue_patterns.ReliableQueue.ack"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ack()</span></code></a> removes it for good, once it has been handled, e.g. when the client confirms it got it;</p></li>
+<li><p><a class="reference internal" href="#eric_sse.queue_patterns.ReliableQueue.nack" title="eric_sse.queue_patterns.ReliableQueue.nack"><code class="xref py py-meth docutils literal notranslate"><span class="pre">nack()</span></code></a> puts it back in the queue at once;</p></li>
+<li><p>messages not acknowledged within <strong>visibility_timeout</strong> seconds are put back in the queue by <a class="reference internal" href="#eric_sse.queue_patterns.ReliableQueue.requeue_expired" title="eric_sse.queue_patterns.ReliableQueue.requeue_expired"><code class="xref py py-meth docutils literal notranslate"><span class="pre">requeue_expired()</span></code></a>,
+that <a class="reference internal" href="#eric_sse.queue_patterns.ReliableQueue.pop" title="eric_sse.queue_patterns.ReliableQueue.pop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pop()</span></code></a> and <a class="reference internal" href="#eric_sse.queue_patterns.ReliableQueue.wait_pop" title="eric_sse.queue_patterns.ReliableQueue.wait_pop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">wait_pop()</span></code></a> call before popping.</p></li>
+</ul>
+<p>Delivery is <em>at least once</em>: a message acknowledged after its visibility timeout may already have been put back,
+and is delivered again. Re-queued messages go to the end of the queue.</p>
+<p>It wraps another queue, that keeps the messages waiting to be popped, and a <a class="reference internal" href="persistence.html#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">KvStorage</span></code></a>
+for in-flight messages. With durable ones, unacknowledged messages survive a restart.
+It can be pickled if both can, so it can be persisted by a queue repository.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>queue</strong> (<a class="reference internal" href="entities.html#eric_sse.queues.Queue" title="eric_sse.queues.Queue"><em>Queue</em></a>) – Queue of messages waiting to be popped. Defaults to an <a class="reference internal" href="entities.html#eric_sse.queues.InMemoryQueue" title="eric_sse.queues.InMemoryQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">InMemoryQueue</span></code></a>.</p></li>
+<li><p><strong>visibility_timeout</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><em>float</em></a><em> | </em><em>None</em>) – Seconds a popped message can stay unacknowledged. None: until <a class="reference internal" href="#eric_sse.queue_patterns.ReliableQueue.nack" title="eric_sse.queue_patterns.ReliableQueue.nack"><code class="xref py py-meth docutils literal notranslate"><span class="pre">nack()</span></code></a>.</p></li>
+<li><p><strong>in_flight</strong> (<a class="reference internal" href="persistence.html#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><em>KvStorage</em></a>) – Storage of popped messages not yet acknowledged. Defaults to an <a class="reference internal" href="persistence.html#eric_sse.repository.InMemoryStorage" title="eric_sse.repository.InMemoryStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">InMemoryStorage</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.ReliableQueue.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">queue</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">visibility_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_flight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.queue_patterns.ReliableQueue.__init__" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>queue</strong> (<a class="reference internal" href="entities.html#eric_sse.queues.Queue" title="eric_sse.queues.Queue"><em>Queue</em></a><em>[</em><a class="reference internal" href="#eric_sse.queue_patterns.ReliableMessage" title="eric_sse.queue_patterns.ReliableMessage"><em>ReliableMessage</em></a><em>, </em><a class="reference internal" href="#eric_sse.queue_patterns.ReliableMessage" title="eric_sse.queue_patterns.ReliableMessage"><em>ReliableMessage</em></a><em>] </em><em>| </em><em>None</em>)</p></li>
+<li><p><strong>visibility_timeout</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><em>float</em></a><em> | </em><em>None</em>)</p></li>
+<li><p><strong>in_flight</strong> (<a class="reference internal" href="persistence.html#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><em>KvStorage</em></a><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.ReliableQueue.push">
+<span class="sig-name descname"><span class="pre">push</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.queue_patterns.ReliableQueue.push" title="Link to this definition">#</a></dt>
+<dd><p>Pushes <strong>message</strong>, wrapped in a <a class="reference internal" href="#eric_sse.queue_patterns.ReliableMessage" title="eric_sse.queue_patterns.ReliableMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReliableMessage</span></code></a> with a new id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>message</strong> (<a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.ReliableQueue.pop">
+<span class="sig-name descname"><span class="pre">pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.queue_patterns.ReliableQueue.pop" title="Link to this definition">#</a></dt>
+<dd><p>Next message from the queue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><em>float</em></a>) – Seconds to wait for a message. With 0 it returns immediately.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#eric_sse.queue_patterns.ReliableMessage" title="eric_sse.queue_patterns.ReliableMessage"><em>ReliableMessage</em></a></p>
+</dd>
+</dl>
+<p>Raises a <a class="reference internal" href="exceptions.html#eric_sse.exception.NoMessagesException" title="eric_sse.exception.NoMessagesException"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoMessagesException</span></code></a> if no message is available, after waiting
+<strong>timeout</strong> seconds.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.ReliableQueue.wait_pop">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wait_pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.queue_patterns.ReliableQueue.wait_pop" title="Link to this definition">#</a></dt>
+<dd><p>Waits for the next message without blocking the event loop.</p>
+<p>The default implementation runs <a class="reference internal" href="#eric_sse.queue_patterns.ReliableQueue.pop" title="eric_sse.queue_patterns.ReliableQueue.pop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pop()</span></code></a> with <strong>timeout</strong> in a worker thread, so it takes one thread
+per waiting call. Override it with a native async wait when possible.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><em>float</em></a>) – Seconds to wait for a message.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#eric_sse.queue_patterns.ReliableMessage" title="eric_sse.queue_patterns.ReliableMessage"><em>ReliableMessage</em></a></p>
+</dd>
+</dl>
+<p>Raises a <a class="reference internal" href="exceptions.html#eric_sse.exception.NoMessagesException" title="eric_sse.exception.NoMessagesException"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoMessagesException</span></code></a> if no message arrives within <strong>timeout</strong>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.ReliableQueue.ack">
+<span class="sig-name descname"><span class="pre">ack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.queue_patterns.ReliableQueue.ack" title="Link to this definition">#</a></dt>
+<dd><p>Acknowledges a popped message, that is removed for good.</p>
+<p>Returns False if it isn’t in flight: unknown, already acknowledged, or put back in the queue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>message_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.ReliableQueue.nack">
+<span class="sig-name descname"><span class="pre">nack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.queue_patterns.ReliableQueue.nack" title="Link to this definition">#</a></dt>
+<dd><p>Puts a popped message back in the queue at once.</p>
+<p>Returns False if it isn’t in flight: unknown, already acknowledged, or put back in the queue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>message_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.ReliableQueue.requeue_expired">
+<span class="sig-name descname"><span class="pre">requeue_expired</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.queue_patterns.ReliableQueue.requeue_expired" title="Link to this definition">#</a></dt>
+<dd><p>Puts back in the queue messages not acknowledged within the visibility timeout. Returns how many.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.queue_patterns.ReliableQueue.in_flight">
+<span class="sig-name descname"><span class="pre">in_flight</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.queue_patterns.ReliableQueue.in_flight" title="Link to this definition">#</a></dt>
+<dd><p>Popped messages not yet acknowledged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)">list</a>[<a class="reference internal" href="#eric_sse.queue_patterns.ReliableMessage" title="eric_sse.queue_patterns.ReliableMessage"><em>ReliableMessage</em></a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="handlers.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Error handlers</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="profiling.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Profiling</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetter"><code class="docutils literal notranslate"><span class="pre">DeadLetter</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetter.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetter.connection_id"><code class="docutils literal notranslate"><span class="pre">connection_id</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetter.message"><code class="docutils literal notranslate"><span class="pre">message</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetter.error"><code class="docutils literal notranslate"><span class="pre">error</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetter.id"><code class="docutils literal notranslate"><span class="pre">id</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetter.type"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetter.payload"><code class="docutils literal notranslate"><span class="pre">payload</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetterHandler"><code class="docutils literal notranslate"><span class="pre">DeadLetterHandler</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetterHandler.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetterHandler.queue"><code class="docutils literal notranslate"><span class="pre">queue</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetterHandler.handle_push_error"><code class="docutils literal notranslate"><span class="pre">handle_push_error()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetterHandler.handle_on_message_error"><code class="docutils literal notranslate"><span class="pre">handle_on_message_error()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.DeadLetterHandler._dead_letter"><code class="docutils literal notranslate"><span class="pre">_dead_letter()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableMessage"><code class="docutils literal notranslate"><span class="pre">ReliableMessage</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableMessage.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableMessage.id"><code class="docutils literal notranslate"><span class="pre">id</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableMessage.message"><code class="docutils literal notranslate"><span class="pre">message</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableMessage.deliveries"><code class="docutils literal notranslate"><span class="pre">deliveries</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableMessage.type"><code class="docutils literal notranslate"><span class="pre">type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableMessage.payload"><code class="docutils literal notranslate"><span class="pre">payload</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableQueue"><code class="docutils literal notranslate"><span class="pre">ReliableQueue</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableQueue.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableQueue.push"><code class="docutils literal notranslate"><span class="pre">push()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableQueue.pop"><code class="docutils literal notranslate"><span class="pre">pop()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableQueue.wait_pop"><code class="docutils literal notranslate"><span class="pre">wait_pop()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableQueue.ack"><code class="docutils literal notranslate"><span class="pre">ack()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableQueue.nack"><code class="docutils literal notranslate"><span class="pre">nack()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableQueue.requeue_expired"><code class="docutils literal notranslate"><span class="pre">requeue_expired()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.queue_patterns.ReliableQueue.in_flight"><code class="docutils literal notranslate"><span class="pre">in_flight()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Luca Stretti
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

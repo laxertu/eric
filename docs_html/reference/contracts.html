@@ -1,0 +1,903 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Contracts &#8212; eric-sse  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/contracts';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Exceptions" href="exceptions.html" />
+    <link rel="prev" title="Profiling" href="profiling.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">eric-sse  documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../docs.html">Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../persistence.html">Persistence</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../error_handling.html">Error handling</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../queue_patterns.html">Queue patterns</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../profiling.html">Profiling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contracts.html">Verifying custom implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../howto_repository.html">How to test a custom channel repository</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../class_reference.html">Class reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="entities.html">Entities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prefabs.html">Prefabs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persistence.html">Persistence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handlers.html">Error handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="queue_patterns.html">Queue patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="profiling.html">Profiling</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../devs.html">Developers section</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/laxertu/eric" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/laxertu/eric/issues/new?title=Issue%20on%20page%20%2Freference/contracts.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Contracts</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.contracts.repository">Repositories</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.repository.ChannelRepositoryContract"><code class="docutils literal notranslate"><span class="pre">ChannelRepositoryContract</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.repository.ChannelRepositoryContract.create_builder"><code class="docutils literal notranslate"><span class="pre">create_builder()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.repository.ChannelRepositoryContract.channel_data"><code class="docutils literal notranslate"><span class="pre">channel_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.contracts.channel">Channels</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.channel.ChannelContract"><code class="docutils literal notranslate"><span class="pre">ChannelContract</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.channel.ChannelContract.create_builder"><code class="docutils literal notranslate"><span class="pre">create_builder()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.channel.ChannelContract.channel_data"><code class="docutils literal notranslate"><span class="pre">channel_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.contracts.error_handling">Error handling</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.error_handling.ChannelErrorHandlingContract"><code class="docutils literal notranslate"><span class="pre">ChannelErrorHandlingContract</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.error_handling.ChannelErrorHandlingContract.create_builder"><code class="docutils literal notranslate"><span class="pre">create_builder()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.error_handling.ChannelErrorHandlingContract.channel_data"><code class="docutils literal notranslate"><span class="pre">channel_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.contracts.queue">Queues</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.queue.QueueContract"><code class="docutils literal notranslate"><span class="pre">QueueContract</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.queue.QueueContract.create_builder"><code class="docutils literal notranslate"><span class="pre">create_builder()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.queue.QueueContract.channel_data"><code class="docutils literal notranslate"><span class="pre">channel_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.contracts.reliable_queue">Reliable queues</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.reliable_queue.ReliableQueueContract"><code class="docutils literal notranslate"><span class="pre">ReliableQueueContract</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.reliable_queue.ReliableQueueContract.create_builder"><code class="docutils literal notranslate"><span class="pre">create_builder()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.reliable_queue.ReliableQueueContract.channel_data"><code class="docutils literal notranslate"><span class="pre">channel_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.contracts.doubles">Test doubles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.BrokenQueue"><code class="docutils literal notranslate"><span class="pre">BrokenQueue</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.BrokenQueue.pop"><code class="docutils literal notranslate"><span class="pre">pop()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.BrokenQueue.wait_pop"><code class="docutils literal notranslate"><span class="pre">wait_pop()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.BrokenListener"><code class="docutils literal notranslate"><span class="pre">BrokenListener</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.BrokenListener.on_message"><code class="docutils literal notranslate"><span class="pre">on_message()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.RecordingQueuingErrorHandler"><code class="docutils literal notranslate"><span class="pre">RecordingQueuingErrorHandler</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.RecordingQueuingErrorHandler.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.RecordingQueuingErrorHandler.handle_push_error"><code class="docutils literal notranslate"><span class="pre">handle_push_error()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.RecordingQueuingErrorHandler.handle_pop_error"><code class="docutils literal notranslate"><span class="pre">handle_pop_error()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.RecordingListenerErrorHandler"><code class="docutils literal notranslate"><span class="pre">RecordingListenerErrorHandler</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.RecordingListenerErrorHandler.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.RecordingListenerErrorHandler.handle_on_message_error"><code class="docutils literal notranslate"><span class="pre">handle_on_message_error()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="contracts">
+<h1>Contracts<a class="headerlink" href="#contracts" title="Link to this heading">#</a></h1>
+<section id="module-eric_sse.contracts.repository">
+<span id="repositories"></span><h2>Repositories<a class="headerlink" href="#module-eric_sse.contracts.repository" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.contracts.repository.ChannelRepositoryContract">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ChannelRepositoryContract</span></span><a class="headerlink" href="#eric_sse.contracts.repository.ChannelRepositoryContract" title="Link to this definition">#</a></dt>
+<dd><p>Use cases every channel repository has to satisfy, whatever its storages or custom repositories.</p>
+<p>The fixture is a <a class="reference internal" href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelRepositoryBuilder</span></code></a>: to check a custom part, subclass this
+together with <code class="docutils literal notranslate"><span class="pre">TestCase</span></code> and return a builder configured with it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">RedisStorageTestCase</span><span class="p">(</span><span class="n">ChannelRepositoryContract</span><span class="p">,</span> <span class="n">TestCase</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_builder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ChannelRepositoryBuilder</span><span class="p">(</span><span class="n">SSEChannel</span><span class="p">,</span> <span class="n">RedisStorage</span><span class="p">())</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">channel_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;retry_timeout_milliseconds&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Not a <code class="docutils literal notranslate"><span class="pre">TestCase</span></code> itself, so the abstract class is not collected.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.contracts.repository.ChannelRepositoryContract.create_builder">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_builder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.contracts.repository.ChannelRepositoryContract.create_builder" title="Link to this definition">#</a></dt>
+<dd><p>Returns the builder under test. Called once per test.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><em>ChannelRepositoryBuilder</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.contracts.repository.ChannelRepositoryContract.channel_data">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channel_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.contracts.repository.ChannelRepositoryContract.channel_data" title="Link to this definition">#</a></dt>
+<dd><p>Returns the data passed to the built repository’s <code class="docutils literal notranslate"><span class="pre">create</span></code> to create a channel of the builder’s
+channel class. Without <code class="docutils literal notranslate"><span class="pre">channel_id</span></code>: tests that need a given id add it, the other ones need generated ids,
+so that each call creates a different channel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-eric_sse.contracts.channel">
+<span id="channels"></span><h2>Channels<a class="headerlink" href="#module-eric_sse.contracts.channel" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.contracts.channel.ChannelContract">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ChannelContract</span></span><a class="headerlink" href="#eric_sse.contracts.channel.ChannelContract" title="Link to this definition">#</a></dt>
+<dd><p>Use cases every channel class has to satisfy: managing connections and delivering messages.</p>
+<p>The fixture is a <a class="reference internal" href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelRepositoryBuilder</span></code></a> for the channel class:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyChannelTestCase</span><span class="p">(</span><span class="n">ChannelContract</span><span class="p">,</span> <span class="n">IsolatedAsyncioTestCase</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_builder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ChannelRepositoryBuilder</span><span class="p">(</span><span class="n">MyChannel</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">channel_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>Streamed events are compared with the channel’s own <code class="docutils literal notranslate"><span class="pre">adapt</span></code>, as their format is up to each channel.
+Not a <code class="docutils literal notranslate"><span class="pre">TestCase</span></code> itself, so the abstract class is not collected.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.contracts.channel.ChannelContract.create_builder">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_builder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.contracts.channel.ChannelContract.create_builder" title="Link to this definition">#</a></dt>
+<dd><p>Returns the builder under test. Called once per test.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><em>ChannelRepositoryBuilder</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.contracts.channel.ChannelContract.channel_data">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channel_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.contracts.channel.ChannelContract.channel_data" title="Link to this definition">#</a></dt>
+<dd><p>Returns the data passed to the built repository’s <code class="docutils literal notranslate"><span class="pre">create</span></code>, see <code class="docutils literal notranslate"><span class="pre">ChannelRepositoryContract</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-eric_sse.contracts.error_handling">
+<span id="error-handling"></span><h2>Error handling<a class="headerlink" href="#module-eric_sse.contracts.error_handling" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.contracts.error_handling.ChannelErrorHandlingContract">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ChannelErrorHandlingContract</span></span><a class="headerlink" href="#eric_sse.contracts.error_handling.ChannelErrorHandlingContract" title="Link to this definition">#</a></dt>
+<dd><p>Use cases every channel class has to satisfy when queues and listeners fail.</p>
+<p>The fixture is a <a class="reference internal" href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelRepositoryBuilder</span></code></a> for the channel class. Tests replace its
+listeners and queues with failing ones where needed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyChannelTestCase</span><span class="p">(</span><span class="n">ChannelErrorHandlingContract</span><span class="p">,</span> <span class="n">IsolatedAsyncioTestCase</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_builder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ChannelRepositoryBuilder</span><span class="p">(</span><span class="n">MyChannel</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">channel_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>Not a <code class="docutils literal notranslate"><span class="pre">TestCase</span></code> itself, so the abstract class is not collected.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.contracts.error_handling.ChannelErrorHandlingContract.create_builder">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_builder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.contracts.error_handling.ChannelErrorHandlingContract.create_builder" title="Link to this definition">#</a></dt>
+<dd><p>Returns the builder under test. Called once per scenario.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><em>ChannelRepositoryBuilder</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.contracts.error_handling.ChannelErrorHandlingContract.channel_data">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channel_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.contracts.error_handling.ChannelErrorHandlingContract.channel_data" title="Link to this definition">#</a></dt>
+<dd><p>Returns the data passed to the built repository’s <code class="docutils literal notranslate"><span class="pre">create</span></code>, see <code class="docutils literal notranslate"><span class="pre">ChannelRepositoryContract</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-eric_sse.contracts.queue">
+<span id="queues"></span><h2>Queues<a class="headerlink" href="#module-eric_sse.contracts.queue" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.contracts.queue.QueueContract">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">QueueContract</span></span><a class="headerlink" href="#eric_sse.contracts.queue.QueueContract" title="Link to this definition">#</a></dt>
+<dd><p>Use cases every <a class="reference internal" href="entities.html#eric_sse.queues.Queue" title="eric_sse.queues.Queue"><code class="xref py py-class docutils literal notranslate"><span class="pre">Queue</span></code></a> implementation has to satisfy.</p>
+<p>The fixture is a <a class="reference internal" href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelRepositoryBuilder</span></code></a> creating queues of the class under test:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">RedisQueueTestCase</span><span class="p">(</span><span class="n">QueueContract</span><span class="p">,</span> <span class="n">IsolatedAsyncioTestCase</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_builder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ChannelRepositoryBuilder</span><span class="p">(</span><span class="n">SSEChannel</span><span class="p">)</span><span class="o">.</span><span class="n">queues</span><span class="p">(</span><span class="n">RedisQueue</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">channel_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>Not a <code class="docutils literal notranslate"><span class="pre">TestCase</span></code> itself, so the abstract class is not collected.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.contracts.queue.QueueContract.create_builder">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_builder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.contracts.queue.QueueContract.create_builder" title="Link to this definition">#</a></dt>
+<dd><p>Returns the builder under test. Called once per test.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><em>ChannelRepositoryBuilder</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.contracts.queue.QueueContract.channel_data">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channel_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.contracts.queue.QueueContract.channel_data" title="Link to this definition">#</a></dt>
+<dd><p>Returns the data passed to the built repository’s <code class="docutils literal notranslate"><span class="pre">create</span></code>, see <code class="docutils literal notranslate"><span class="pre">ChannelRepositoryContract</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-eric_sse.contracts.reliable_queue">
+<span id="reliable-queues"></span><h2>Reliable queues<a class="headerlink" href="#module-eric_sse.contracts.reliable_queue" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.contracts.reliable_queue.ReliableQueueContract">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ReliableQueueContract</span></span><a class="headerlink" href="#eric_sse.contracts.reliable_queue.ReliableQueueContract" title="Link to this definition">#</a></dt>
+<dd><p>Use cases every <a class="reference internal" href="queue_patterns.html#eric_sse.queue_patterns.ReliableQueue" title="eric_sse.queue_patterns.ReliableQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReliableQueue</span></code></a> setup has to satisfy, whatever its inner queue
+and in-flight storage.</p>
+<p>The fixture is a <a class="reference internal" href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelRepositoryBuilder</span></code></a> whose queues are reliable queues with the
+given visibility timeout:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">RedisReliableQueueTestCase</span><span class="p">(</span><span class="n">ReliableQueueContract</span><span class="p">,</span> <span class="n">IsolatedAsyncioTestCase</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_builder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visibility_timeout</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ChannelRepositoryBuilder</span><span class="p">(</span><span class="n">SSEChannel</span><span class="p">,</span> <span class="n">RedisStorage</span><span class="p">())</span><span class="o">.</span><span class="n">queues</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="n">ReliableQueue</span><span class="p">(</span><span class="n">RedisQueue</span><span class="p">(),</span> <span class="n">visibility_timeout</span><span class="o">=</span><span class="n">visibility_timeout</span><span class="p">,</span> <span class="n">in_flight</span><span class="o">=</span><span class="n">RedisStorage</span><span class="p">())</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">channel_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{}</span>
+</pre></div>
+</div>
+<p>Concrete classes must be <code class="docutils literal notranslate"><span class="pre">IsolatedAsyncioTestCase</span></code>, as some use cases are async.
+Not a <code class="docutils literal notranslate"><span class="pre">TestCase</span></code> itself, so the abstract class is not collected.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.contracts.reliable_queue.ReliableQueueContract.create_builder">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_builder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">visibility_timeout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.contracts.reliable_queue.ReliableQueueContract.create_builder" title="Link to this definition">#</a></dt>
+<dd><p>Returns the builder under test, creating reliable queues with <strong>visibility_timeout</strong>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>visibility_timeout</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><em>float</em></a><em> | </em><em>None</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="persistence.html#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><em>ChannelRepositoryBuilder</em></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.contracts.reliable_queue.ReliableQueueContract.channel_data">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">channel_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.contracts.reliable_queue.ReliableQueueContract.channel_data" title="Link to this definition">#</a></dt>
+<dd><p>Returns the data passed to the built repository’s <code class="docutils literal notranslate"><span class="pre">create</span></code>, see <code class="docutils literal notranslate"><span class="pre">ChannelRepositoryContract</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-eric_sse.contracts.doubles">
+<span id="test-doubles"></span><h2>Test doubles<a class="headerlink" href="#module-eric_sse.contracts.doubles" title="Link to this heading">#</a></h2>
+<p>Test doubles used by contracts, e.g. parts that always fail and error handlers recording what they handle.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.contracts.doubles.BrokenQueue">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BrokenQueue</span></span><a class="headerlink" href="#eric_sse.contracts.doubles.BrokenQueue" title="Link to this definition">#</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.contracts.doubles.BrokenQueue.pop">
+<span class="sig-name descname"><span class="pre">pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.contracts.doubles.BrokenQueue.pop" title="Link to this definition">#</a></dt>
+<dd><p>Next message from the queue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><em>float</em></a>) – Seconds to wait for a message. With 0 it returns immediately.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a></p>
+</dd>
+</dl>
+<p>Raises a <a class="reference internal" href="exceptions.html#eric_sse.exception.NoMessagesException" title="eric_sse.exception.NoMessagesException"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoMessagesException</span></code></a> if no message is available, after waiting
+<strong>timeout</strong> seconds.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.contracts.doubles.BrokenQueue.wait_pop">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wait_pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.contracts.doubles.BrokenQueue.wait_pop" title="Link to this definition">#</a></dt>
+<dd><p>Waits for the next message without blocking the event loop.</p>
+<p>The default implementation runs <a class="reference internal" href="#eric_sse.contracts.doubles.BrokenQueue.pop" title="eric_sse.contracts.doubles.BrokenQueue.pop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pop()</span></code></a> with <strong>timeout</strong> in a worker thread, so it takes one thread
+per waiting call. Override it with a native async wait when possible.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><em>float</em></a>) – Seconds to wait for a message.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a></p>
+</dd>
+</dl>
+<p>Raises a <a class="reference internal" href="exceptions.html#eric_sse.exception.NoMessagesException" title="eric_sse.exception.NoMessagesException"><code class="xref py py-class docutils literal notranslate"><span class="pre">NoMessagesException</span></code></a> if no message arrives within <strong>timeout</strong>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.contracts.doubles.BrokenListener">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BrokenListener</span></span><a class="headerlink" href="#eric_sse.contracts.doubles.BrokenListener" title="Link to this definition">#</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.contracts.doubles.BrokenListener.on_message">
+<span class="sig-name descname"><span class="pre">on_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.contracts.doubles.BrokenListener.on_message" title="Link to this definition">#</a></dt>
+<dd><p>Event handler. It executes when a message is delivered to client</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>msg</strong> (<a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.contracts.doubles.RecordingQueuingErrorHandler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RecordingQueuingErrorHandler</span></span><a class="headerlink" href="#eric_sse.contracts.doubles.RecordingQueuingErrorHandler" title="Link to this definition">#</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.contracts.doubles.RecordingQueuingErrorHandler.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.contracts.doubles.RecordingQueuingErrorHandler.__init__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.contracts.doubles.RecordingQueuingErrorHandler.handle_push_error">
+<span class="sig-name descname"><span class="pre">handle_push_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.contracts.doubles.RecordingQueuingErrorHandler.handle_push_error" title="Link to this definition">#</a></dt>
+<dd><p>Called when pushing <strong>msg</strong> to the queue of connection <strong>connection_id</strong> fails. The exception is re-raised afterwards.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>msg</strong> (<a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>)</p></li>
+<li><p><strong>exception</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#Exception" title="(in Python v3.15)"><em>Exception</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.contracts.doubles.RecordingQueuingErrorHandler.handle_pop_error">
+<span class="sig-name descname"><span class="pre">handle_pop_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.contracts.doubles.RecordingQueuingErrorHandler.handle_pop_error" title="Link to this definition">#</a></dt>
+<dd><p>Called when popping from the queue of connection <strong>connection_id</strong> fails. The exception is re-raised afterwards.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>exception</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#Exception" title="(in Python v3.15)"><em>Exception</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="eric_sse.contracts.doubles.RecordingListenerErrorHandler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RecordingListenerErrorHandler</span></span><a class="headerlink" href="#eric_sse.contracts.doubles.RecordingListenerErrorHandler" title="Link to this definition">#</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.contracts.doubles.RecordingListenerErrorHandler.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.contracts.doubles.RecordingListenerErrorHandler.__init__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="eric_sse.contracts.doubles.RecordingListenerErrorHandler.handle_on_message_error">
+<span class="sig-name descname"><span class="pre">handle_on_message_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.contracts.doubles.RecordingListenerErrorHandler.handle_on_message_error" title="Link to this definition">#</a></dt>
+<dd><p>Called when <a class="reference internal" href="entities.html#eric_sse.listener.MessageQueueListener.on_message" title="eric_sse.listener.MessageQueueListener.on_message"><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_message()</span></code></a> of connection <strong>connection_id</strong> fails.
+The exception is not re-raised: <strong>msg</strong> is delivered anyway.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection_id</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>)</p></li>
+<li><p><strong>msg</strong> (<a class="reference internal" href="entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><em>MessageContract</em></a>)</p></li>
+<li><p><strong>exception</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/exceptions.html#Exception" title="(in Python v3.15)"><em>Exception</em></a>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="profiling.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Profiling</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="exceptions.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Exceptions</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.contracts.repository">Repositories</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.repository.ChannelRepositoryContract"><code class="docutils literal notranslate"><span class="pre">ChannelRepositoryContract</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.repository.ChannelRepositoryContract.create_builder"><code class="docutils literal notranslate"><span class="pre">create_builder()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.repository.ChannelRepositoryContract.channel_data"><code class="docutils literal notranslate"><span class="pre">channel_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.contracts.channel">Channels</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.channel.ChannelContract"><code class="docutils literal notranslate"><span class="pre">ChannelContract</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.channel.ChannelContract.create_builder"><code class="docutils literal notranslate"><span class="pre">create_builder()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.channel.ChannelContract.channel_data"><code class="docutils literal notranslate"><span class="pre">channel_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.contracts.error_handling">Error handling</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.error_handling.ChannelErrorHandlingContract"><code class="docutils literal notranslate"><span class="pre">ChannelErrorHandlingContract</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.error_handling.ChannelErrorHandlingContract.create_builder"><code class="docutils literal notranslate"><span class="pre">create_builder()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.error_handling.ChannelErrorHandlingContract.channel_data"><code class="docutils literal notranslate"><span class="pre">channel_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.contracts.queue">Queues</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.queue.QueueContract"><code class="docutils literal notranslate"><span class="pre">QueueContract</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.queue.QueueContract.create_builder"><code class="docutils literal notranslate"><span class="pre">create_builder()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.queue.QueueContract.channel_data"><code class="docutils literal notranslate"><span class="pre">channel_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.contracts.reliable_queue">Reliable queues</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.reliable_queue.ReliableQueueContract"><code class="docutils literal notranslate"><span class="pre">ReliableQueueContract</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.reliable_queue.ReliableQueueContract.create_builder"><code class="docutils literal notranslate"><span class="pre">create_builder()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.reliable_queue.ReliableQueueContract.channel_data"><code class="docutils literal notranslate"><span class="pre">channel_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-eric_sse.contracts.doubles">Test doubles</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.BrokenQueue"><code class="docutils literal notranslate"><span class="pre">BrokenQueue</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.BrokenQueue.pop"><code class="docutils literal notranslate"><span class="pre">pop()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.BrokenQueue.wait_pop"><code class="docutils literal notranslate"><span class="pre">wait_pop()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.BrokenListener"><code class="docutils literal notranslate"><span class="pre">BrokenListener</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.BrokenListener.on_message"><code class="docutils literal notranslate"><span class="pre">on_message()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.RecordingQueuingErrorHandler"><code class="docutils literal notranslate"><span class="pre">RecordingQueuingErrorHandler</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.RecordingQueuingErrorHandler.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.RecordingQueuingErrorHandler.handle_push_error"><code class="docutils literal notranslate"><span class="pre">handle_push_error()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.RecordingQueuingErrorHandler.handle_pop_error"><code class="docutils literal notranslate"><span class="pre">handle_pop_error()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.RecordingListenerErrorHandler"><code class="docutils literal notranslate"><span class="pre">RecordingListenerErrorHandler</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.RecordingListenerErrorHandler.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#eric_sse.contracts.doubles.RecordingListenerErrorHandler.handle_on_message_error"><code class="docutils literal notranslate"><span class="pre">handle_on_message_error()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Luca Stretti
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

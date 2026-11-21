@@ -2,6 +2,84 @@
 
 # Changelog
 
+3.0.0 (unreleased)
+
+* Python 3.12, 3.13 and 3.14 support, tested in CI
+* FIX: SocketServer shutdown no longer hangs on Python 3.12+ (SIGTERM was ignored): it closes every client connection when its command is done, and ends open streams (‘l’, ‘w’) on shutdown. SocketClient.stream closes its connection when the stream ends
+* SocketServer.shutdown() returns when the shutdown is complete, and main() returns after it instead of raising CancelledError. Signal handlers are removed on shutdown
+* BREAKING: SocketServer.cc is an instance attribute, so servers no longer share channels. Pass a ChannelContainer as channels to the constructor to give a server existing channels. connect_callback and handle_command are instance methods
+* SocketServer accepts a channel_factory, used by the ‘c’ verb, e.g. lambda: repository.create({}). Creates plain SSEChannel by default
+* Contracts ship with the library, in eric_sse.contracts: ChannelRepositoryContract, ChannelContract, ChannelErrorHandlingContract, QueueContract and ReliableQueueContract moved there from test/, with the test doubles they use (eric_sse.contracts.doubles). Docs: added Verifying custom implementations page
+* Docs: added Tutorials, with a complete in-memory example and a persistence one with a custom KvStorage (SQLite). Both are in examples/ and run by the test suite
+* Added KvListenerRepository and KvQueueRepository to repository module
+* FIX: SimpleDistributedApplicationListener.set_action now rejects reserved action names ‘start’ and ‘stop’
+* FIX: AbstractChannelRepository.delete no longer fails with InMemoryStorage when channel has connections
+* KvStorage.fetch_by_prefix implementations must now tolerate deletions while results are iterated
+* Added PrefixedStorage, a namespaced view of a KvStorage
+* Listener and queue repositories now create the instances they persist: added create() to ListenerRepositoryInterface and QueueRepositoryInterface. KvListenerRepository accepts a listener_class, KvQueueRepository a queue_factory
+* ConnectionRepositoryInterface is now a ConnectionsFactory: ConnectionRepository.create() delegates to listeners and queues repositories. create() methods never persist
+* Channel repositories inject their connections repository as connections_factory into the channels they build. Removed connections_factory from AbstractChannelRepository constructor and ChannelRepositoryInterface
+* Channels describe their own persisted state: added AbstractChannel.to_dict() and from_dict(). SSEChannel and DataProcessingChannel extend to_dict()
+* AbstractChannelRepository and SSEChannelRepository replaced by a concrete ChannelRepository(storage, connections_repository, channel_class), covering every channel type. persist() raises a TypeError on channels of other classes
+* DataProcessingChannel accepts channel_id and connections_factory
+* Added ChannelRepositoryBuilder (builder module): wires channel, connections, listeners and queues repositories over one storage, with per-part overrides
+* Connection, ConnectionsFactory, KvListenerRepository and KvQueueRepository are now generic on listener and queue types
+* FIX: ConnectionRepository.load_all no longer returns connections of channels whose id starts with the given channel id
+* Removed facade module
+* KvQueueRepository and InMemoryQueue docs: a queue class decides what of its state is serialised; InMemoryQueue is in-process only
+* Removed unused attribute from InMemoryQueue
+* BREAKING: Queue.pop() accepts a timeout (seconds, default 0: return immediately). Queue implementations must accept it
+* Added Queue.wait_pop(timeout), an async wait for the next message. The default runs pop() in a worker thread; InMemoryQueue waits natively, without threads or polling, and its push() wakes the waiting consumer from any thread. InMemoryQueue has a single consumer: concurrent wait_pop() calls on the same queue are not supported
+* Added AbstractChannel.wait_next(listener_id, timeout), async counterpart of deliver_next()
+* Added channel hooks, overridable methods that do nothing by default: on_listener_added, on_listener_removed, on_stream_start, on_stream_end, before_dispatch (transform or drop messages, broadcast included) and on_error (return False to end the stream)
+* After an unexpected error, message_stream() waits wait_timeout_seconds before trying again, so a failing backend no longer makes it spin
+* message_stream() starts the listener itself: no more listener.start() before streaming. Stopping the listener still ends the stream
+* BREAKING: watch() is an async generator: use “async for m in channel.watch()”. Its listener is removed when the stream ends
+* Error messages yield by message_stream() have a serialisable payload, {‘error’: exception class name, ‘message’: str(exception)}, instead of the exception. The stream ends after an invalid listener or channel error, instead of repeating it forever
+* add_listener() and register_listener() go through register_connection(), so subclasses can set up every new connection in one place
+* FIX: SimpleDistributedApplicationChannel sets itself on listeners created by add_listener() or loaded from persistence, not only on register_listener(). dispatch_to() on a listener without channel raises an InvalidChannelException
+* Added ConnectionRepositoryInterface.load_ids(channel_id): connection ids without loading listeners and queues. ChannelRepository.persist() and delete() use it, so they no longer load every listener and queue of the channel
+* ChannelRepository.delete() is idempotent and no longer loads the channel
+* message_stream waits for messages instead of polling, so idle streams no longer consume CPU. It checks whether its listener is still running every AbstractChannel.wait_timeout_seconds (default 1). stream_delay_seconds is now only an optional pause after each delivered message
+* Added error handlers (handlers module): QueuingErrorHandler (push and pop errors) and ListenerErrorHandler (on_message errors), registered with AbstractChannel.add_queuing_error_handler() and add_listener_error_handler(), or on every channel of a repository with ChannelRepositoryBuilder.queuing_error_handler() and listener_error_handler(). Handler methods receive the listener id. Errors are re-raised after handlers, or logged where the channel swallows them. Handlers are not persisted
+* Added queue_patterns module with the Dead Letter pattern: DeadLetterHandler pushes messages whose push or on_message fails to a dead letter queue, wrapped in a DeadLetter carrying the original message, the listener id it was meant for and the error
+* Docs: added Error handling page
+* BREAKING: removed UniqueMessage. MessageContract has an optional id property (None by default): Message and SignedMessage accept msg_id
+* SSEChannel.adapt() adds the SSE “id” field to messages with an id
+* Queue is generic on the type of messages pushed and popped, Queue[MIn, MOut], e.g. Queue[SignedMessage, SignedMessage]. They differ when a queue transforms messages: ReliableQueue is a Queue[MessageContract, ReliableMessage]. InMemoryQueue[M] is a Queue[M, M]. Plain Queue holds any message
+* Added the Reliable Queue pattern to queue_patterns: ReliableQueue keeps popped messages in flight, wrapped in a ReliableMessage with an id, until ack(). nack() and a visibility timeout put them back in the queue. In-flight messages are kept in a KvStorage
+* DeadLetter exposes the original message id
+* Docs: added Queue patterns page, documenting Dead Letter and Reliable Queue
+* MessageQueueListener is generic on the type of messages it handles, e.g. MessageQueueListener[SignedMessage]. SimpleDistributedApplicationListener is a MessageQueueListener[SignedMessage]
+* AbstractChannel is generic on the type of messages it dispatches and delivers, AbstractChannel[MIn, MOut], as its queues are Queue[MIn, MOut] and its listeners MessageQueueListener[MOut]: dispatch, broadcast and before_dispatch use MIn, deliver_next, wait_next and adapt use MOut. SSEChannel and DataProcessingChannel are generic too, SimpleDistributedApplicationChannel is an SSEChannel[SignedMessage, SignedMessage]. Plain channels, listeners and queues handle any message
+* BREAKING: stream errors are no longer adapted as ‘error’ messages: message_stream() yields them through the new abstract AbstractChannel.adapt_error(exception). Channels extending AbstractChannel directly must implement it; SSEChannel and DataProcessingChannel return {‘event’: ‘error’, ‘data’: {‘error’: exception class name, ‘message’: str(exception)}}, plus ‘retry’ for SSEChannel
+* Added InternalStreamError to exceptions module: message_stream() yields it instead of unexpected errors, hiding their details from clients. Before, their payload was None
+* Docs: added Stream errors section to Error handling page
+* Added MessageQueueListener.on_registered(channel) hook, called by AbstractChannel.register_connection() for every listener, including listeners created or loaded from persistence. Does nothing by default
+* BREAKING: SimpleDistributedApplicationListener.set_channel() removed: the listener keeps its channel in on_registered(), so it works on any channel, not only on SimpleDistributedApplicationChannel
+* Added benchmarks, run with pyperformance (optional Poetry group “benchmark”): see Developers section. First one: builder_dispatch
+* FIX: InMemoryQueue.wait_pop() raised a NoMessagesException on timeout even if a message had just arrived, with its wake-up still pending. It now checks the queue after waiting
+* BREAKING: added StoppedListenerException to exceptions module. AbstractChannel.deliver_next() and wait_next() raise it when the listener is not running, also if its queue is empty: before, they raised a NoMessagesException. NoMessagesException now only means an empty queue
+* message_stream() yields a StoppedListenerException through adapt_error() and ends, as for invalid listener or channel errors
+* Added AbstractChannel.on_wait_timeout(listener) hook, called by message_stream() each time it waits wait_timeout_seconds with no message. Not an error: nothing is yielded. Does nothing by default
+* Added profiling module: ProfiledQueue and ProfiledListener wrap a queue or a listener and record number of calls and total time of push, pop, wait_pop and on_message, in CallStats objects
+* Docs: added Profiling page
+* BREAKING: removed KvStorage.fetch_all. fetch_by_prefix(‘’) returns all items: storages wrapped in a PrefixedStorage, as ChannelRepositoryBuilder does, never had their fetch_all called
+* Tests: added ChannelRepositoryContract (test/repository_contract.py), use case tests built from a ChannelRepositoryBuilder that every storage or custom repository has to pass
+* BREAKING: KvListenerRepository and ChannelRepositoryBuilder.listeners() take a listener_factory instead of a listener_class: any callable returning a listener, as queues already do, so listeners needing arguments, e.g. ProfiledListener, can be created through the Builder. Passing a class still works; only the listener_class keyword is gone
+* FIX: DataProcessingChannel.process_queue() bypassed error handlers and processed queues of stopped listeners. It now handles errors as deliver_next() does, in the channel’s process also with a ProcessPoolExecutor: listener errors are logged and passed to error handlers, and the message is yielded anyway; queue errors are passed to error handlers and re-raised after the messages already popped are yielded
+* BREAKING: DataProcessingChannel.process_queue() raises a StoppedListenerException if the listener is not running, and listener errors no longer propagate. Removed DataProcessingChannel._invoke_callback_and_return()
+* Added AbstractChannel._pop_next(listener_id) and \_on_listener_error(listener_id, msg, exception), the two halves of deliver_next(), for subclasses that notify listeners their own way, e.g. in an executor
+* BREAKING: connections are what channels identify; listeners have no id any more. Removed MessageQueueListener.id and its listener_id parameter. dispatch(), deliver_next(), wait_next(), message_stream(), DataProcessingChannel.process_queue(), before_dispatch() and error handlers take a connection id, DeadLetter.listener_id is DeadLetter.connection_id. Connection.id is also the key used by repositories, so clients can load a listener or a queue with the id they hold, e.g. to acknowledge a ReliableMessage
+* BREAKING: AbstractChannel.add_listener() replaced by add_connection(), returning the Connection. register_listener() returns the Connection too. remove_listener() and get_listener() replaced by remove_connection() and get_connection(). SocketClient.remove_listener() replaced by remove_connection()
+* BREAKING: channel hooks receive the Connection: on_listener_added and on_listener_removed are now on_connection_added and on_connection_removed; on_stream_start, on_stream_end, on_wait_timeout and on_error take a Connection instead of a listener
+* BREAKING: MessageQueueListener.on_registered(channel, connection_id) also receives the connection id. SimpleDistributedApplicationListener signs messages with it, and dispatch_to() takes the receiver’s connection id
+* BREAKING: removed InvalidListenerException: a missing connection raises an InvalidConnectionException
+* ListenerRepositoryInterface and QueueRepositoryInterface are now generic on listener and queue types
+* FIX: channel ids containing ‘:’ no longer mix connections of different channels, e.g. deleting channel a deleted the listeners and queues of channel a:b. ConnectionRepository percent-encodes channel ids in its keys; generated ids are unchanged
+* FIX: AbstractChannel.broadcast() failed when a hook or an error handler removed a connection meanwhile
+* FIX: examples/tutorial_kv_storage.py used ChannelRepositoryBuilder with an outdated signature
+
 2.1.1
 
 * Added InvalidConnectionException and ItemNotFound to exceptions module

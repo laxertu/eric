@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Reference &#8212; eric-sse  documentation</title>
+    <title>Guide &#8212; eric-sse  documentation</title>
   
   
   
@@ -43,7 +43,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'docs';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Entities" href="entities.html" />
+    <link rel="next" title="Persistence" href="persistence.html" />
     <link rel="prev" title="The lightweight library for async messaging nobody expects." href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -149,19 +149,29 @@
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="entities.html">Entities</a></li>
-
-
-
-
-<li class="toctree-l2"><a class="reference internal" href="prefabs.html">Prefabs</a></li>
-
-
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Guide</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="persistence.html">Persistence</a></li>
 
+<li class="toctree-l2"><a class="reference internal" href="error_handling.html">Error handling</a></li>
 
-<li class="toctree-l2"><a class="reference internal" href="exceptions.html">Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="queue_patterns.html">Queue patterns</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="profiling.html">Profiling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html">Verifying custom implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto_repository.html">How to test a custom channel repository</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="class_reference.html">Class reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/entities.html">Entities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/prefabs.html">Prefabs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/persistence.html">Persistence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/handlers.html">Error handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/queue_patterns.html">Queue patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/profiling.html">Profiling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/exceptions.html">Exceptions</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="devs.html">Developers section</a></li>
@@ -290,7 +300,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -301,11 +313,25 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Reference</h1>
+    <h1>Guide</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-first-example">A first example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-model">The model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-a-message-travels">How a message travels</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prefabs">Prefabs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#making-it-yours">Making it yours</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#where-to-go-next">Where to go next</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -315,50 +341,150 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="reference">
-<h1>Reference<a class="headerlink" href="#reference" title="Link to this heading">#</a></h1>
-<p><strong>Introduction</strong></p>
-<p>If you just want a simple, inmemory SSE service, base building blocks are already available.</p>
-<p>The following code creates a Server Side Events channel and attaches a listener to it.
+  <section id="guide">
+<h1>Guide<a class="headerlink" href="#guide" title="Link to this heading">#</a></h1>
+<p>Eric is a toolkit for async messaging: <strong>channels</strong> deliver <strong>messages</strong> to their subscribers, called
+<strong>connections</strong>, and stream them to clients in the channel’s output format. The format of the prefabs is the one of
+Server Sent Events, so a web server can return a channel’s stream as it is.</p>
+<p>Everything works in memory out of the box. Persistence, durable queues, error handling and custom channels are
+optional parts you add when you need them.</p>
+<section id="a-first-example">
+<h2>A first example<a class="headerlink" href="#a-first-example" title="Link to this heading">#</a></h2>
+<p>The following code creates a channel, subscribes to it, sends a message and streams it.
 <a class="reference external" href="https://github.com/laxertu/eric/blob/master/examples/inmemory.py">Here</a> is the complete example.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">eric_sse.message</span><span class="w"> </span><span class="kn">import</span> <span class="n">Message</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">eric_sse.message</span><span class="w"> </span><span class="kn">import</span> <span class="n">Message</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">eric_sse.prefabs</span><span class="w"> </span><span class="kn">import</span> <span class="n">SSEChannel</span>
 
 <span class="n">channel</span> <span class="o">=</span> <span class="n">SSEChannel</span><span class="p">()</span>
-<span class="n">listener</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">add_listener</span><span class="p">()</span>
-<span class="n">listener</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-<span class="n">channel</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">listener</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">Message</span><span class="p">(</span><span class="n">msg_type</span><span class="o">=</span><span class="s1">&#39;welcome&#39;</span><span class="p">,</span> <span class="n">msg_payload</span><span class="o">=</span><span class="s1">&#39;Hello!&#39;</span><span class="p">))</span>
+<span class="n">connection</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">add_connection</span><span class="p">()</span>
+<span class="n">channel</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">Message</span><span class="p">(</span><span class="n">msg_type</span><span class="o">=</span><span class="s1">&#39;welcome&#39;</span><span class="p">,</span> <span class="n">msg_payload</span><span class="o">=</span><span class="s1">&#39;Hello!&#39;</span><span class="p">))</span>
 
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
-    <span class="k">async</span> <span class="k">for</span> <span class="n">sse_event</span> <span class="ow">in</span> <span class="n">channel</span><span class="o">.</span><span class="n">message_stream</span><span class="p">(</span><span class="n">listener</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">for</span> <span class="n">sse_event</span> <span class="ow">in</span> <span class="n">channel</span><span class="o">.</span><span class="n">message_stream</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">id</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Received message: </span><span class="si">{</span><span class="n">sse_event</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </pre></div>
 </div>
-<p><strong>Overview</strong></p>
+</section>
+<section id="the-model">
+<h2>The model<a class="headerlink" href="#the-model" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>A <strong>message</strong> (<a class="reference internal" href="reference/entities.html#eric_sse.message.MessageContract" title="eric_sse.message.MessageContract"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageContract</span></code></a>) has a type, a payload and an optional id.
+<a class="reference internal" href="reference/entities.html#eric_sse.message.Message" title="eric_sse.message.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code></a> is the plain one, <a class="reference internal" href="reference/entities.html#eric_sse.message.SignedMessage" title="eric_sse.message.SignedMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">SignedMessage</span></code></a> adds a sender.</p></li>
+<li><p>A <strong>channel</strong> (<a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a>) is where messages are sent: to one connection with
+<a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel.dispatch" title="eric_sse.entities.AbstractChannel.dispatch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dispatch()</span></code></a>, or to all of them with
+<a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel.broadcast" title="eric_sse.entities.AbstractChannel.broadcast"><code class="xref py py-meth docutils literal notranslate"><span class="pre">broadcast()</span></code></a>. It decides the output format through
+<a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel.adapt" title="eric_sse.entities.AbstractChannel.adapt"><code class="xref py py-meth docutils literal notranslate"><span class="pre">adapt()</span></code></a>.</p></li>
+<li><p>A <strong>connection</strong> (<a class="reference internal" href="reference/entities.html#eric_sse.connection.Connection" title="eric_sse.connection.Connection"><code class="xref py py-class docutils literal notranslate"><span class="pre">Connection</span></code></a>) is a subscription to a channel: a listener and its own
+queue, with an id. <a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel.add_connection" title="eric_sse.entities.AbstractChannel.add_connection"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_connection()</span></code></a> creates one,
+<a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel.register_listener" title="eric_sse.entities.AbstractChannel.register_listener"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_listener()</span></code></a> creates one around your listener.</p></li>
+<li><p>A <strong>listener</strong> (<a class="reference internal" href="reference/entities.html#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a>) is what the subscriber does with each message, in
+<a class="reference internal" href="reference/entities.html#eric_sse.listener.MessageQueueListener.on_message" title="eric_sse.listener.MessageQueueListener.on_message"><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_message()</span></code></a>. It does nothing by default.</p></li>
+<li><p>A <strong>queue</strong> (<a class="reference internal" href="reference/entities.html#eric_sse.queues.Queue" title="eric_sse.queues.Queue"><code class="xref py py-class docutils literal notranslate"><span class="pre">Queue</span></code></a>) is where a connection’s messages wait until they are consumed.
+<a class="reference internal" href="reference/entities.html#eric_sse.queues.InMemoryQueue" title="eric_sse.queues.InMemoryQueue"><code class="xref py py-class docutils literal notranslate"><span class="pre">InMemoryQueue</span></code></a> is the default.</p></li>
+</ul>
+</section>
+<section id="how-a-message-travels">
+<h2>How a message travels<a class="headerlink" href="#how-a-message-travels" title="Link to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>dispatch / broadcast ──&gt; before_dispatch hook ──&gt; connection&#39;s queue
+                                                        │
+                 client &lt;── adapt &lt;── on_message &lt;── consumer
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dispatch</span></code> or <code class="docutils literal notranslate"><span class="pre">broadcast</span></code> passes the message to the
+<a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel.before_dispatch" title="eric_sse.entities.AbstractChannel.before_dispatch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">before_dispatch()</span></code></a> hook, that can change it or drop it, then pushes it to
+the queue of each recipient connection. Sending never waits for consumers.</p></li>
+<li><p>A consumer pops the message from the queue, the connection’s listener receives it in <code class="docutils literal notranslate"><span class="pre">on_message</span></code>, and the
+channel adapts it to its output format.</p></li>
+</ol>
+<p>There are three ways to consume a connection’s messages:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel.message_stream" title="eric_sse.entities.AbstractChannel.message_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">message_stream()</span></code></a>: an async stream, what a web server returns to a client.
+It starts the listener, waits for messages without consuming CPU, and ends when the listener is stopped.</p></li>
+<li><p><a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel.deliver_next" title="eric_sse.entities.AbstractChannel.deliver_next"><code class="xref py py-meth docutils literal notranslate"><span class="pre">deliver_next()</span></code></a> and
+<a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel.wait_next" title="eric_sse.entities.AbstractChannel.wait_next"><code class="xref py py-meth docutils literal notranslate"><span class="pre">wait_next()</span></code></a>: one message at a time, synchronous or async, for code that
+pulls messages itself. They require a started listener.</p></li>
+<li><p><a class="reference internal" href="reference/prefabs.html#eric_sse.prefabs.DataProcessingChannel.process_queue" title="eric_sse.prefabs.DataProcessingChannel.process_queue"><code class="xref py py-meth docutils literal notranslate"><span class="pre">process_queue()</span></code></a>: runs the listener on every queued message in parallel,
+in an executor, see <a class="reference internal" href="reference/prefabs.html#eric_sse.prefabs.DataProcessingChannel" title="eric_sse.prefabs.DataProcessingChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataProcessingChannel</span></code></a>.</p></li>
+</ul>
+</section>
+<section id="prefabs">
+<h2>Prefabs<a class="headerlink" href="#prefabs" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="reference/prefabs.html#eric_sse.prefabs.SSEChannel" title="eric_sse.prefabs.SSEChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SSEChannel</span></code></a>: Server Sent Events output, the general purpose channel.</p></li>
+<li><p><a class="reference internal" href="reference/prefabs.html#eric_sse.prefabs.DataProcessingChannel" title="eric_sse.prefabs.DataProcessingChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataProcessingChannel</span></code></a>: processes queued messages in parallel and streams the results to
+the client that pushed them.</p></li>
+<li><p><a class="reference internal" href="reference/prefabs.html#eric_sse.prefabs.SimpleDistributedApplicationChannel" title="eric_sse.prefabs.SimpleDistributedApplicationChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimpleDistributedApplicationChannel</span></code></a>: a mediator between listeners that communicate with
+each other through actions.</p></li>
+<li><p><a class="reference internal" href="reference/prefabs.html#eric_sse.servers.SocketServer" title="eric_sse.servers.SocketServer"><code class="xref py py-class docutils literal notranslate"><span class="pre">SocketServer</span></code></a> and <a class="reference internal" href="reference/prefabs.html#eric_sse.clients.SocketClient" title="eric_sse.clients.SocketClient"><code class="xref py py-class docutils literal notranslate"><span class="pre">SocketClient</span></code></a>: drive channels from other
+processes through a Unix socket.</p></li>
+</ul>
+</section>
+<section id="making-it-yours">
+<h2>Making it yours<a class="headerlink" href="#making-it-yours" title="Link to this heading">#</a></h2>
+<p>Each part has its own extension point, so you only replace what you need:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>To change</p></th>
+<th class="head"><p>Do this</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>What happens when a message arrives</p></td>
+<td><p>Subclass <a class="reference internal" href="reference/entities.html#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a> and override <code class="docutils literal notranslate"><span class="pre">on_message</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>The output format</p></td>
+<td><p>Override <a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel.adapt" title="eric_sse.entities.AbstractChannel.adapt"><code class="xref py py-meth docutils literal notranslate"><span class="pre">adapt()</span></code></a> and
+<a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel.adapt_error" title="eric_sse.entities.AbstractChannel.adapt_error"><code class="xref py py-meth docutils literal notranslate"><span class="pre">adapt_error()</span></code></a>, or extend
+<a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p>Channel behaviour: subscriptions, streams, filtering, errors</p></td>
+<td><p>Override the channel’s hooks, e.g. <code class="docutils literal notranslate"><span class="pre">on_connection_added</span></code>, <code class="docutils literal notranslate"><span class="pre">on_stream_end</span></code>, <code class="docutils literal notranslate"><span class="pre">before_dispatch</span></code>,
+<code class="docutils literal notranslate"><span class="pre">on_error</span></code>. They do nothing by default</p></td>
+</tr>
+<tr class="row-odd"><td><p>Where messages wait, e.g. a durable backend</p></td>
+<td><p>Implement a <a class="reference internal" href="reference/entities.html#eric_sse.queues.Queue" title="eric_sse.queues.Queue"><code class="xref py py-class docutils literal notranslate"><span class="pre">Queue</span></code></a>: only <code class="docutils literal notranslate"><span class="pre">push</span></code> and <code class="docutils literal notranslate"><span class="pre">pop(timeout)</span></code> are required</p></td>
+</tr>
+<tr class="row-even"><td><p>Where channels and connections are stored</p></td>
+<td><p>Implement a <a class="reference internal" href="reference/persistence.html#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">KvStorage</span></code></a> and give it to a
+<a class="reference internal" href="reference/persistence.html#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelRepositoryBuilder</span></code></a>, see <a class="reference internal" href="persistence.html"><span class="doc">Persistence</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>What happens when a queue or a listener fails</p></td>
+<td><p>Register error handlers, or use the Dead Letter and Reliable Queue patterns, see <a class="reference internal" href="error_handling.html"><span class="doc">Error handling</span></a> and
+<a class="reference internal" href="queue_patterns.html"><span class="doc">Queue patterns</span></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Persistence is always explicit: channels and their connections are stored when you call <code class="docutils literal notranslate"><span class="pre">persist</span></code> on a repository,
+never implicitly. Messages are stored by queues themselves, so sending never needs a <code class="docutils literal notranslate"><span class="pre">persist</span></code>.</p>
+<p>When you write your own storage, queue or channel, check it with the test suites in <a class="reference internal" href="contracts.html"><span class="doc">Verifying custom implementations</span></a>. <a class="reference internal" href="howto_repository.html"><span class="doc">How to test a custom channel repository</span></a>
+shows how, step by step.</p>
+</section>
+<section id="where-to-go-next">
+<h2>Where to go next<a class="headerlink" href="#where-to-go-next" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="tutorials.html"><span class="doc">Tutorials</span></a>: two complete programs, in memory and persisted with SQLite.</p></li>
+<li><p><a class="reference internal" href="persistence.html"><span class="doc">Persistence</span></a>, <a class="reference internal" href="error_handling.html"><span class="doc">Error handling</span></a>, <a class="reference internal" href="queue_patterns.html"><span class="doc">Queue patterns</span></a>, <a class="reference internal" href="profiling.html"><span class="doc">Profiling</span></a> and <a class="reference internal" href="contracts.html"><span class="doc">Verifying custom implementations</span></a>: one topic
+each.</p></li>
+<li><p><a class="reference internal" href="class_reference.html"><span class="doc">Class reference</span></a>: every class, generated from the source code.</p></li>
+</ul>
+</section>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
 <a class="reference internal image-reference" href="_images/overview.png"><img alt="_images/overview.png" src="_images/overview.png" style="width: 673.5px; height: 345.5px;" />
 </a>
 <div class="line-block">
 <div class="line">thanks a lot <a class="reference external" href="https://excalidraw.com">https://excalidraw.com</a> !!</div>
 </div>
-<p><strong>What is this?</strong></p>
-<p>Eric is basically a toolkit for building async message management applications, paying special attention to Server Side Events based ones.
-Its main components are:</p>
-<ul class="simple">
-<li><p>A core model with a set of abstractions and prefabs that give support to SSE and more.</p></li>
-<li><p>A persistence layer composed by a set of interfaces and base classes for building concrete layers</p></li>
-</ul>
-<p><a class="reference internal" href="entities.html#eric_sse.connection.ConnectionsFactory" title="eric_sse.connection.ConnectionsFactory"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectionsFactory</span></code></a> is shared between components. Persistence uses it to create objects after data fetch, while channels create connections when receiving new subscriptions.</p>
-<p><strong>Prefabs</strong></p>
-<ul class="simple">
-<li><p><a class="reference internal" href="prefabs.html#eric_sse.prefabs.SSEChannel" title="eric_sse.prefabs.SSEChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SSEChannel</span></code></a> Server side Events support</p></li>
-<li><p><a class="reference internal" href="prefabs.html#eric_sse.prefabs.DataProcessingChannel" title="eric_sse.prefabs.DataProcessingChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataProcessingChannel</span></code></a> Launches parallel tasks when consuming queues and dispatches results to client who pushed them</p></li>
-<li><p><a class="reference internal" href="prefabs.html#eric_sse.prefabs.SimpleDistributedApplicationChannel" title="eric_sse.prefabs.SimpleDistributedApplicationChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SimpleDistributedApplicationChannel</span></code></a> Acts like a Mediator between listeners that communicate each other</p></li>
-</ul>
 <div class="toctree-wrapper compound">
 </div>
+</section>
 </section>
 
 
@@ -382,11 +508,11 @@ Its main components are:</p>
       </div>
     </a>
     <a class="right-next"
-       href="entities.html"
+       href="persistence.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Entities</p>
+        <p class="prev-next-title">Persistence</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -396,6 +522,27 @@ Its main components are:</p>
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-first-example">A first example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-model">The model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-a-message-travels">How a message travels</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prefabs">Prefabs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#making-it-yours">Making it yours</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#where-to-go-next">Where to go next</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
