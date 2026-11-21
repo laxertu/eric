@@ -116,7 +116,8 @@ Each part has its own extension point, so you only replace what you need:
 Persistence is always explicit: channels and their connections are stored when you call ``persist`` on a repository,
 never implicitly. Messages are stored by queues themselves, so sending never needs a ``persist``.
 
-When you write your own storage, queue or channel, check it with the test suites in :doc:`contracts`.
+When you write your own storage, queue or channel, check it with the test suites in :doc:`contracts`. :doc:`howto_repository`
+shows how, step by step.
 
 Where to go next
 ----------------
@@ -143,3 +144,4 @@ Overview
    queue_patterns
    profiling
    contracts
+   howto_repository

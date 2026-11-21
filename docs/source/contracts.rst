@@ -41,6 +41,8 @@ reuse them in your own tests.
 How to verify an implementation
 -------------------------------
 
+For a step by step guide, with the repository contract as example, see :doc:`howto_repository`.
+
 Every contract takes a :class:`~eric_sse.builder.ChannelRepositoryBuilder` as fixture, so you only need to write a
 builder configured with your parts:
 
