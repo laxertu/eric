@@ -146,7 +146,7 @@ Each test is a use case, and its name says what your part must do:
 * **Queues can’t be stored.** If your storage serialises values, e.g. with `pickle`, the default
   [`InMemoryQueue`](reference/entities.md#eric_sse.queues.InMemoryQueue) fails, as it can only live in memory. Give the builder a durable queue with
   `.queues(factory)`, that stores its messages itself, and test it with
-  [`QueueContract`](reference/contracts.md#eric_sse.contracts.queue.QueueContract). See the `SqliteQueue` of [Persistence with a custom KvStorage](tutorial_kv_storage.md) for an example.
+  [`QueueContract`](reference/contracts.md#eric_sse.contracts.queue.QueueContract). See the `SqliteQueue` of the [Tutorials](tutorials.md) for an example.
 
 <a id="keep-it-in-your-suite"></a>
 

@@ -25,7 +25,7 @@ Subclasses that notify listeners their own way get the same behaviour by popping
 :meth:`~eric_sse.entities.AbstractChannel._pop_next` and passing listener errors to
 :meth:`~eric_sse.entities.AbstractChannel._on_listener_error`.
 
-See :doc:`dead_letter` for a handler that implements a common pattern.
+See :doc:`queue_patterns` for handlers that implement common patterns, like Dead Letter.
 
 Stream errors
 =============

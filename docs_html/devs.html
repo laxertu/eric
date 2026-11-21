@@ -154,20 +154,15 @@
 
 <li class="toctree-l2"><a class="reference internal" href="error_handling.html">Error handling</a></li>
 
-<li class="toctree-l2 has-children"><a class="reference internal" href="queuing_patterns.html">Queuing patterns</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="dead_letter.html">Dead Letter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reliable_queue.html">Reliable Queue</a></li>
-</ul>
-</details></li>
+<li class="toctree-l2"><a class="reference internal" href="queue_patterns.html">Queue patterns</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="profiling.html">Profiling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contracts.html">Verifying custom implementations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="howto_repository.html">How to test a custom channel repository</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="tutorials.html">Tutorials</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorial_in_memory.html">In-memory application</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial_kv_storage.html">Persistence with a custom KvStorage</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="class_reference.html">Class reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="reference/entities.html">Entities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reference/prefabs.html">Prefabs</a></li>
@@ -339,6 +334,20 @@ document.write(`
 <p>Testing:</p>
 <ul class="simple">
 <li><p>run_tests.sh</p></li>
+</ul>
+<p>Benchmarks:</p>
+<p>Benchmarks are in <code class="docutils literal notranslate"><span class="pre">benchmarks/</span></code>, run with <a class="reference external" href="https://pyperformance.readthedocs.io/">pyperformance</a>, an optional
+dependency. <code class="docutils literal notranslate"><span class="pre">benchmarks/MANIFEST</span></code> lists them; each one is a <code class="docutils literal notranslate"><span class="pre">bm_&lt;name&gt;/</span></code> directory with a <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>
+and a <code class="docutils literal notranslate"><span class="pre">run_benchmark.py</span></code>.</p>
+<ul class="simple">
+<li><p>Install: <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">install</span> <span class="pre">--with</span> <span class="pre">benchmark</span></code></p></li>
+<li><p>Run all: <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">pyperformance</span> <span class="pre">run</span> <span class="pre">--manifest</span> <span class="pre">benchmarks/MANIFEST</span> <span class="pre">-o</span> <span class="pre">results.json</span></code>. pyperformance creates its own virtual environment in <code class="docutils literal notranslate"><span class="pre">./venv</span></code>; benchmarks import <code class="docutils literal notranslate"><span class="pre">eric_sse</span></code> from the working tree</p></li>
+<li><p>Run one, without pyperformance: <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">python</span> <span class="pre">benchmarks/bm_builder_dispatch/run_benchmark.py</span></code></p></li>
+<li><p>Compare two results: <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">pyperformance</span> <span class="pre">compare</span> <span class="pre">before.json</span> <span class="pre">after.json</span></code></p></li>
+</ul>
+<p>Available benchmarks:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">builder_dispatch</span></code>: 10000 messages dispatched to one listener of a channel built with <code class="docutils literal notranslate"><span class="pre">ChannelRepositoryBuilder</span></code> defaults, then delivered</p></li>
 </ul>
 </section>
 

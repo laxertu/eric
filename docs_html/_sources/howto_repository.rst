@@ -135,7 +135,7 @@ Each test is a use case, and its name says what your part must do:
 * **Queues can't be stored.** If your storage serialises values, e.g. with ``pickle``, the default
   :class:`~eric_sse.queues.InMemoryQueue` fails, as it can only live in memory. Give the builder a durable queue with
   ``.queues(factory)``, that stores its messages itself, and test it with
-  :class:`~eric_sse.contracts.queue.QueueContract`. See the ``SqliteQueue`` of :doc:`tutorial_kv_storage` for an example.
+  :class:`~eric_sse.contracts.queue.QueueContract`. See the ``SqliteQueue`` of the :doc:`tutorials` for an example.
 
 6. Keep it in your suite
 ------------------------
