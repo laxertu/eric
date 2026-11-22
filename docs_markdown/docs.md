@@ -119,11 +119,3 @@ shows how, step by step.
 * [Persistence](persistence.md), [Error handling](error_handling.md), [Dead Letter](dead_letter.md), [Reliable Queue](reliable_queue.md) and [Verifying custom implementations](contracts.md): one
   topic each.
 * [Class reference](class_reference.md): every class, generated from the source code.
-
-<a id="overview"></a>
-
-## Overview
-
-![image](_static/overview.png)
-thanks a lot [https://excalidraw.com](https://excalidraw.com) !!
-<br/>

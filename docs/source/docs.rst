@@ -127,13 +127,6 @@ Where to go next
   topic each.
 * :doc:`class_reference`: every class, generated from the source code.
 
-Overview
---------
-
-.. image:: _static/overview.png
-   :scale: 50 %
-
-| thanks a lot https://excalidraw.com !!
 
 .. toctree::
    :maxdepth: 2

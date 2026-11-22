@@ -1,12 +1,16 @@
 #!/bin/bash
 # shellcheck disable=SC2164
 
-CURRENT_VERSION="$(poetry version --short)"
-mkdir -p docs_archive
-rm -rf docs_archive/"$CURRENT_VERSION"
-cp -rf docs_markdown/  docs_archive/"$CURRENT_VERSION"
-
-git add docs_archive/"$CURRENT_VERSION"
+#CURRENT_VERSION="$(poetry version --short)"
+#ARCHIVE_DIR="docs_archive/$CURRENT_VERSION"
+#mkdir -p docs_archive
+#if [ -d "$ARCHIVE_DIR" ]; then
+#  echo "$ARCHIVE_DIR already exists, skipping archive step"
+#else
+#  echo "Creating $ARCHIVE_DIR"
+#  cp -rf docs_markdown/ "$ARCHIVE_DIR"
+#  git add "$ARCHIVE_DIR"
+#fi
 
 cd docs
 rm -rf build/html/
