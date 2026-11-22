@@ -38,7 +38,7 @@ Not yet updated for 3.0.0: use them with eric-sse 2.x.
 
 *Documentation*
 
-* Reference https://laxertu.github.io/eric/docs.html
+* Reference https://laxertu.github.io/eric
 * Tutorials https://laxertu.github.io/eric/tutorials.html
 * A good example of usage is eric api service definition: https://github.com/laxertu/eric-api/blob/master/eric_api.py (eric-sse 2.x)
 * Some more example about other usages of the library: https://github.com/laxertu/eric/tree/master/examples

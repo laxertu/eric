@@ -18,6 +18,11 @@ The lightweight library for async messaging nobody expects.
 
 * pip install eric-sse
 
+*Versioning*
+
+Starting from 3.0.0, the project follows [semantic versioning](https://semver.org/).
+
+
 *Features*
 
 * Send to one connection or broadcast to all of them

@@ -8,13 +8,6 @@ Persistence
 Base classes for channels and connections repositories.
 The main idea is that a repository relies on some KV storage engine abstraction, and uses it for storing its own configuration, and its correspondant composites repositories to build final objects to return.
 
-To build a persistence layer is needed to provide an implementation to some of above abstractions, and use them to build a custom ChannelRepository
-
-**Suggestions**
-
-If your implementation uses objects that are directly persistable by storage engine you are using, cleanest manner of implementing your custom layer is to simply
-give an implementation to a :class:`~eric_sse.repository.KvStorage` and just use it in all composite repositories.
-Otherwise you should implement a dump strategy inside repositories themselves, e.g. when queues hold a client connection that can't be serialised by pickle.
 
 Builder
 =======
