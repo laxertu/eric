@@ -30,7 +30,7 @@
 * Home [https://github.com/laxertu/eric](https://github.com/laxertu/eric)
 * Tutorials: [Tutorials](tutorials.md)
 * Examples [https://github.com/laxertu/eric/tree/master/examples](https://github.com/laxertu/eric/tree/master/examples)
-* Docs archive, previous versions: [https://github.com/laxertu/eric/tree/master/docs_archive](https://github.com/laxertu/eric/tree/master/docs_archive)
+* Previous versions: docs_archive
 * Api service definition: [https://github.com/laxertu/eric-api/blob/master/eric_api.py](https://github.com/laxertu/eric-api/blob/master/eric_api.py) (eric-sse 2.x)
 
 *Trivia*

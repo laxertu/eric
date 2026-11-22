@@ -21,8 +21,7 @@ Not yet updated for 3.0.0: use them with eric-sse 2.x.
 
 * Send to one connection or broadcast to all of them
 * SSE format was adopted by design, making the library suitable for such kind of model
-* Async streaming that waits for messages without polling, and hooks to customise channels
-* Listener callbacks, and parallel message processing in an executor
+* Parallel message processing in an executor
 * Optional persistence layer, with pluggable storage engines and a builder that wires it
 * Error handlers, with Dead Letter and Reliable Queue (explicit ack) patterns
 * Sockets server prefab for offline inter process communication
@@ -32,7 +31,7 @@ Not yet updated for 3.0.0: use them with eric-sse 2.x.
 
 *Possible applications*
 
-* Message delivery mechanisms based on SSE
+* Message delivery mechanisms based on Server Side Events model
 * Message queue processing (logging, ETL, http based notification systems, etc)
 
 *Documentation*
