@@ -28,3 +28,9 @@ cp -rf build/markdown/ ../docs_markdown/
 
 # patch
 cp -rf source/_static ../docs_markdown/_static
+
+# coverage badge, published with the html docs
+cd ..
+pytest -q --no-header --cov=eric_sse --cov-report=xml --ignore=examples
+genbadge coverage -i coverage.xml -o docs_html/coverage.svg
+rm -f .coverage coverage.xml

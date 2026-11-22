@@ -2,6 +2,8 @@
 
 # The lightweight library for async messaging nobody expects.
 
+![coverage](https://laxertu.github.io/eric/coverage.svg)
+
 *Installation*
 
 pip install eric-sse
