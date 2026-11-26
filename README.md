@@ -28,8 +28,7 @@ Not yet updated for 3.0.0: use them with eric-sse 2.x.
 * Error handlers, with Dead Letter and Reliable Queue (explicit ack) patterns
 * Sockets server prefab for offline inter process communication
 * Profiling decorators for queues and listeners
-* Contracts: test suites to verify your own storages, queues and channels
-* Python 3.10 to 3.14
+* Contracts for [integration tests](https://laxertu.github.io/eric/howto_repository.html): a collection of test suites to verify your own storages, queues and channels
 
 *Possible applications*
 
@@ -38,7 +37,7 @@ Not yet updated for 3.0.0: use them with eric-sse 2.x.
 
 *Documentation*
 
-* Reference https://laxertu.github.io/eric
+* Reference https://laxertu.github.io/eric/docs.html
 * Tutorials https://laxertu.github.io/eric/tutorials.html
 * A good example of usage is eric api service definition: https://github.com/laxertu/eric-api/blob/master/eric_api.py (eric-sse 2.x)
 * Some more example about other usages of the library: https://github.com/laxertu/eric/tree/master/examples
