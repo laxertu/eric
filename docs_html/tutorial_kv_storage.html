@@ -345,12 +345,14 @@ with storages that keep objects in process.</p></li>
 </ul>
 <p><a class="reference internal" href="reference/persistence.html#eric_sse.builder.ChannelRepositoryBuilder" title="eric_sse.builder.ChannelRepositoryBuilder"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelRepositoryBuilder</span></code></a> wires the rest. It gives channels, connections, listeners and
 queues their own key prefix in one storage, and returns a channel repository.</p>
-<p>Persistence is always explicit: <code class="docutils literal notranslate"><span class="pre">create()</span></code> only builds a channel, and <code class="docutils literal notranslate"><span class="pre">persist()</span></code> stores it with its
-connections. <code class="docutils literal notranslate"><span class="pre">dispatch()</span></code> and <code class="docutils literal notranslate"><span class="pre">broadcast()</span></code> never need a <code class="docutils literal notranslate"><span class="pre">persist()</span></code>.</p>
-<p>A queue only has to implement <code class="docutils literal notranslate"><span class="pre">pop(timeout)</span></code> and <code class="docutils literal notranslate"><span class="pre">push()</span></code>. The inherited
+<p>Persistence is always explicit: <a class="reference internal" href="reference/persistence.html#eric_sse.repository.ChannelRepository.create" title="eric_sse.repository.ChannelRepository.create"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create()</span></code></a> only builds a channel, and
+<a class="reference internal" href="reference/persistence.html#eric_sse.repository.ChannelRepository.persist" title="eric_sse.repository.ChannelRepository.persist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">persist()</span></code></a> stores it with its connections.
+<a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel.dispatch" title="eric_sse.entities.AbstractChannel.dispatch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dispatch()</span></code></a> and <a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel.broadcast" title="eric_sse.entities.AbstractChannel.broadcast"><code class="xref py py-meth docutils literal notranslate"><span class="pre">broadcast()</span></code></a> never
+need a <code class="docutils literal notranslate"><span class="pre">persist()</span></code>.</p>
+<p>A queue only has to implement <a class="reference internal" href="reference/entities.html#eric_sse.queues.Queue.pop" title="eric_sse.queues.Queue.pop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pop()</span></code></a> and <a class="reference internal" href="reference/entities.html#eric_sse.queues.Queue.push" title="eric_sse.queues.Queue.push"><code class="xref py py-meth docutils literal notranslate"><span class="pre">push()</span></code></a>. The inherited
 <a class="reference internal" href="reference/entities.html#eric_sse.queues.Queue.wait_pop" title="eric_sse.queues.Queue.wait_pop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">wait_pop()</span></code></a> runs <code class="docutils literal notranslate"><span class="pre">pop</span></code> in a worker thread, so streams never block the event loop.
 Override it if your backend can wait asynchronously.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""</span>
 <span class="sd">Tutorial: persistence with a custom KvStorage.</span>
 
 <span class="sd">Channels, listeners and messages survive an application restart, using SQLite from the standard library.</span>
@@ -362,7 +364,7 @@ Override it if your backend can wait asynchronously.</p>
 <span class="sd">  push and pop, so dispatch and broadcast never require a persist.</span>
 
 <span class="sd">Run it with: python examples/tutorial_kv_storage.py</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span>
@@ -387,12 +389,12 @@ Override it if your backend can wait asynchronously.</p>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">SqliteStorage</span><span class="p">(</span><span class="n">KvStorage</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Values are pickled, so any picklable object can be stored.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Values are pickled, so any picklable object can be stored."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__db_path</span> <span class="o">=</span> <span class="n">db_path</span>
         <span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="n">connect</span><span class="p">(</span><span class="n">db_path</span><span class="p">))</span> <span class="k">as</span> <span class="n">db</span><span class="p">:</span>
-            <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;CREATE TABLE IF NOT EXISTS kv (key TEXT PRIMARY KEY, value BLOB)&#39;</span><span class="p">)</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">'CREATE TABLE IF NOT EXISTS kv (key TEXT PRIMARY KEY, value BLOB)'</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sql</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">())</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">]:</span>
         <span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__db_path</span><span class="p">))</span> <span class="k">as</span> <span class="n">db</span><span class="p">:</span>
@@ -400,51 +402,51 @@ Override it if your backend can wait asynchronously.</p>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">fetch_by_prefix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
         <span class="c1"># Results are fetched all at once, so callers can delete keys while iterating (a KvStorage requirement)</span>
-        <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__query</span><span class="p">(</span><span class="s1">&#39;SELECT value FROM kv WHERE substr(key, 1, ?) = ?&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">),</span> <span class="n">prefix</span><span class="p">))</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__query</span><span class="p">(</span><span class="s1">'SELECT value FROM kv WHERE substr(key, 1, ?) = ?'</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">),</span> <span class="n">prefix</span><span class="p">))</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">value</span><span class="p">,)</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">upsert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__query</span><span class="p">(</span><span class="s1">&#39;INSERT OR REPLACE INTO kv (key, value) VALUES (?, ?)&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__query</span><span class="p">(</span><span class="s1">'INSERT OR REPLACE INTO kv (key, value) VALUES (?, ?)'</span><span class="p">,</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">fetch_one</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-        <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__query</span><span class="p">(</span><span class="s1">&#39;SELECT value FROM kv WHERE key = ?&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">key</span><span class="p">,))</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__query</span><span class="p">(</span><span class="s1">'SELECT value FROM kv WHERE key = ?'</span><span class="p">,</span> <span class="p">(</span><span class="n">key</span><span class="p">,))</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">rows</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">ItemNotFound</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__query</span><span class="p">(</span><span class="s1">&#39;DELETE FROM kv WHERE key = ?&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">key</span><span class="p">,))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__query</span><span class="p">(</span><span class="s1">'DELETE FROM kv WHERE key = ?'</span><span class="p">,</span> <span class="p">(</span><span class="n">key</span><span class="p">,))</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">SqliteQueue</span><span class="p">(</span><span class="n">Queue</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A durable queue. When the storage pickles it, only its identity (database path and queue id) is saved:</span>
 <span class="sd">    its messages stay in the messages table.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">db_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">db_path</span> <span class="o">=</span> <span class="n">db_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">queue_id</span> <span class="o">=</span> <span class="n">generate_uuid</span><span class="p">()</span>
         <span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="n">connect</span><span class="p">(</span><span class="n">db_path</span><span class="p">))</span> <span class="k">as</span> <span class="n">db</span><span class="p">:</span>
             <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                <span class="s1">&#39;CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY AUTOINCREMENT, queue_id TEXT, message BLOB)&#39;</span>
+                <span class="s1">'CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY AUTOINCREMENT, queue_id TEXT, message BLOB)'</span>
             <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="n">MessageContract</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_path</span><span class="p">))</span> <span class="k">as</span> <span class="n">db</span><span class="p">:</span>
-            <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;INSERT INTO messages (queue_id, message) VALUES (?, ?)&#39;</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">queue_id</span><span class="p">,</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">message</span><span class="p">)))</span>
+            <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">'INSERT INTO messages (queue_id, message) VALUES (?, ?)'</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">queue_id</span><span class="p">,</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">message</span><span class="p">)))</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MessageContract</span><span class="p">:</span>
         <span class="n">deadline</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">+</span> <span class="n">timeout</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="k">with</span> <span class="n">closing</span><span class="p">(</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">db_path</span><span class="p">))</span> <span class="k">as</span> <span class="n">db</span><span class="p">:</span>
-                <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;BEGIN IMMEDIATE&#39;</span><span class="p">)</span>  <span class="c1"># Locks the database, so two consumers can&#39;t pop the same message</span>
+                <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">'BEGIN IMMEDIATE'</span><span class="p">)</span>  <span class="c1"># Locks the database, so two consumers can't pop the same message</span>
                 <span class="n">row</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
-                    <span class="s1">&#39;SELECT id, message FROM messages WHERE queue_id = ? ORDER BY id LIMIT 1&#39;</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">queue_id</span><span class="p">,)</span>
+                    <span class="s1">'SELECT id, message FROM messages WHERE queue_id = ? ORDER BY id LIMIT 1'</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">queue_id</span><span class="p">,)</span>
                 <span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">row</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;DELETE FROM messages WHERE id = ?&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
-                <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;COMMIT&#39;</span><span class="p">)</span>
+                    <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">'DELETE FROM messages WHERE id = ?'</span><span class="p">,</span> <span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
+                <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">'COMMIT'</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">row</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">deadline</span><span class="p">:</span>
@@ -464,31 +466,31 @@ Override it if your backend can wait asynchronously.</p>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">first_run</span><span class="p">(</span><span class="n">db_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates and persists a channel with one connection, then dispatches messages.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Creates and persists a channel with one connection, then dispatches messages."""</span>
     <span class="n">repository</span> <span class="o">=</span> <span class="n">build_repository</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>
 
     <span class="c1"># Nothing is persisted implicitly: create() only builds the channel, persist() stores it with its connections</span>
-    <span class="n">channel</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">create</span><span class="p">({</span><span class="s1">&#39;retry_timeout_milliseconds&#39;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">})</span>
+    <span class="n">channel</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">create</span><span class="p">({</span><span class="s1">'retry_timeout_milliseconds'</span><span class="p">:</span> <span class="mi">1000</span><span class="p">})</span>
     <span class="n">connection</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">add_connection</span><span class="p">()</span>
     <span class="n">repository</span><span class="o">.</span><span class="n">persist</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
 
     <span class="c1"># No persist needed: SqliteQueue writes messages itself</span>
-    <span class="n">channel</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">Message</span><span class="p">(</span><span class="n">msg_type</span><span class="o">=</span><span class="s1">&#39;greeting&#39;</span><span class="p">,</span> <span class="n">msg_payload</span><span class="o">=</span><span class="s1">&#39;hello&#39;</span><span class="p">))</span>
-    <span class="n">channel</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">Message</span><span class="p">(</span><span class="n">msg_type</span><span class="o">=</span><span class="s1">&#39;greeting&#39;</span><span class="p">,</span> <span class="n">msg_payload</span><span class="o">=</span><span class="s1">&#39;are you still there?&#39;</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;First run: persisted channel </span><span class="si">{</span><span class="n">channel</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s1"> and dispatched 2 messages&#39;</span><span class="p">)</span>
+    <span class="n">channel</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">Message</span><span class="p">(</span><span class="n">msg_type</span><span class="o">=</span><span class="s1">'greeting'</span><span class="p">,</span> <span class="n">msg_payload</span><span class="o">=</span><span class="s1">'hello'</span><span class="p">))</span>
+    <span class="n">channel</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">Message</span><span class="p">(</span><span class="n">msg_type</span><span class="o">=</span><span class="s1">'greeting'</span><span class="p">,</span> <span class="n">msg_payload</span><span class="o">=</span><span class="s1">'are you still there?'</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'First run: persisted channel </span><span class="si">{</span><span class="n">channel</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s1"> and dispatched 2 messages'</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">channel</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">connection</span><span class="o">.</span><span class="n">id</span>
 
 
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">second_run</span><span class="p">(</span><span class="n">db_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">connection_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A new process would start here: everything is loaded from the database.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""A new process would start here: everything is loaded from the database."""</span>
     <span class="n">repository</span> <span class="o">=</span> <span class="n">build_repository</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>
     <span class="n">channel</span> <span class="o">=</span> <span class="n">repository</span><span class="o">.</span><span class="n">load_one</span><span class="p">(</span><span class="n">channel_id</span><span class="p">)</span>
     <span class="n">listener</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">get_connection</span><span class="p">(</span><span class="n">connection_id</span><span class="p">)</span><span class="o">.</span><span class="n">listener</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Second run: loaded channel with retry timeout </span><span class="si">{</span><span class="n">channel</span><span class="o">.</span><span class="n">retry_timeout_milliseconds</span><span class="si">}</span><span class="s1"> ms&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Second run: loaded channel with retry timeout </span><span class="si">{</span><span class="n">channel</span><span class="o">.</span><span class="n">retry_timeout_milliseconds</span><span class="si">}</span><span class="s1"> ms'</span><span class="p">)</span>
 
     <span class="n">received</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">async</span> <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">channel</span><span class="o">.</span><span class="n">message_stream</span><span class="p">(</span><span class="n">connection_id</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;  </span><span class="si">{</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;event&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">event</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'  </span><span class="si">{</span><span class="n">event</span><span class="p">[</span><span class="s2">"event"</span><span class="p">]</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">event</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
         <span class="n">received</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">if</span> <span class="n">received</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">listener</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
@@ -499,12 +501,12 @@ Override it if your backend can wait asynchronously.</p>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
     <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmp</span><span class="p">:</span>
-        <span class="n">db_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">/</span> <span class="s1">&#39;eric.db&#39;</span><span class="p">)</span>
+        <span class="n">db_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">/</span> <span class="s1">'eric.db'</span><span class="p">)</span>
         <span class="n">channel_id</span><span class="p">,</span> <span class="n">connection_id</span> <span class="o">=</span> <span class="n">first_run</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>
         <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">second_run</span><span class="p">(</span><span class="n">db_path</span><span class="p">,</span> <span class="n">channel_id</span><span class="p">,</span> <span class="n">connection_id</span><span class="p">))</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
 </pre></div>
 </div>

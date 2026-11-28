@@ -17,10 +17,12 @@ The persistence layer needs two pieces from you:
 [`ChannelRepositoryBuilder`](reference/persistence.md#eric_sse.builder.ChannelRepositoryBuilder) wires the rest. It gives channels, connections, listeners and
 queues their own key prefix in one storage, and returns a channel repository.
 
-Persistence is always explicit: `create()` only builds a channel, and `persist()` stores it with its
-connections. `dispatch()` and `broadcast()` never need a `persist()`.
+Persistence is always explicit: [`create()`](reference/persistence.md#eric_sse.repository.ChannelRepository.create) only builds a channel, and
+[`persist()`](reference/persistence.md#eric_sse.repository.ChannelRepository.persist) stores it with its connections.
+[`dispatch()`](reference/entities.md#eric_sse.entities.AbstractChannel.dispatch) and [`broadcast()`](reference/entities.md#eric_sse.entities.AbstractChannel.broadcast) never
+need a `persist()`.
 
-A queue only has to implement `pop(timeout)` and `push()`. The inherited
+A queue only has to implement [`pop()`](reference/entities.md#eric_sse.queues.Queue.pop) and [`push()`](reference/entities.md#eric_sse.queues.Queue.push). The inherited
 [`wait_pop()`](reference/entities.md#eric_sse.queues.Queue.wait_pop) runs `pop` in a worker thread, so streams never block the event loop.
 Override it if your backend can wait asynchronously.
 

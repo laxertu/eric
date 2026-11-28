@@ -96,16 +96,17 @@ Each part has its own extension point, so you only replace what you need:
    * - To change
      - Do this
    * - What happens when a message arrives
-     - Subclass :class:`~eric_sse.listener.MessageQueueListener` and override ``on_message``
+     - Subclass :class:`~eric_sse.listener.MessageQueueListener` and override :meth:`~eric_sse.listener.MessageQueueListener.on_message`
    * - The output format
      - Override :meth:`~eric_sse.entities.AbstractChannel.adapt` and
        :meth:`~eric_sse.entities.AbstractChannel.adapt_error`, or extend
        :class:`~eric_sse.entities.AbstractChannel`
    * - Channel behaviour: subscriptions, streams, filtering, errors
-     - Override the channel's hooks, e.g. ``on_connection_added``, ``on_stream_end``, ``before_dispatch``,
-       ``on_error``. They do nothing by default
+     - Override the channel's hooks, e.g. :meth:`~eric_sse.entities.AbstractChannel.on_connection_added`,
+       :meth:`~eric_sse.entities.AbstractChannel.on_stream_end`, :meth:`~eric_sse.entities.AbstractChannel.before_dispatch`,
+       :meth:`~eric_sse.entities.AbstractChannel.on_error`. They do nothing by default
    * - Where messages wait, e.g. a durable backend
-     - Implement a :class:`~eric_sse.queues.Queue`: only ``push`` and ``pop(timeout)`` are required
+     - Implement a :class:`~eric_sse.queues.Queue`: only :meth:`~eric_sse.queues.Queue.push` and :meth:`~eric_sse.queues.Queue.pop` are required
    * - Where channels and connections are stored
      - Implement a :class:`~eric_sse.repository.KvStorage` and give it to a
        :class:`~eric_sse.builder.ChannelRepositoryBuilder`, see :doc:`persistence`
@@ -113,7 +114,7 @@ Each part has its own extension point, so you only replace what you need:
      - Register error handlers, see :doc:`error_handling`, or use the :doc:`dead_letter` and :doc:`reliable_queue`
        patterns
 
-Persistence is always explicit: channels and their connections are stored when you call ``persist`` on a repository,
+Persistence is always explicit: channels and their connections are stored when you call :meth:`~eric_sse.repository.ChannelRepository.persist` on a repository,
 never implicitly. Messages are stored by queues themselves, so sending never needs a ``persist``.
 
 When you write your own storage, queue or channel, check it with the test suites in :doc:`contracts`. :doc:`howto_repository`

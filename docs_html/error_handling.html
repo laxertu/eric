@@ -352,7 +352,7 @@ Then the channel either re-raises them or, where it swallows them (e.g. a listen
 
 <span class="k">class</span><span class="w"> </span><span class="nc">AlertOnFailure</span><span class="p">(</span><span class="n">ListenerErrorHandler</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">handle_on_message_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection_id</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">exception</span><span class="p">):</span>
-        <span class="n">send_alert</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">connection_id</span><span class="si">}</span><span class="s1"> failed on </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">exception</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">send_alert</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">connection_id</span><span class="si">}</span><span class="s1"> failed on </span><span class="si">{</span><span class="n">msg</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">exception</span><span class="si">!r}</span><span class="s1">'</span><span class="p">)</span>
 
 <span class="n">channel</span><span class="o">.</span><span class="n">add_listener_error_handler</span><span class="p">(</span><span class="n">AlertOnFailure</span><span class="p">())</span>
 </pre></div>
@@ -380,9 +380,9 @@ stream goes on, after a pause of <a class="reference internal" href="reference/e
 </ul>
 <p><a class="reference internal" href="reference/prefabs.html#eric_sse.prefabs.SSEChannel" title="eric_sse.prefabs.SSEChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SSEChannel</span></code></a> sends them as SSE events of type <code class="docutils literal notranslate"><span class="pre">error</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;event&quot;</span><span class="p">:</span> <span class="s2">&quot;error&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;retry&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-    <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;InternalStreamError&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Internal error&quot;</span><span class="p">}</span>
+    <span class="s2">"event"</span><span class="p">:</span> <span class="s2">"error"</span><span class="p">,</span>
+    <span class="s2">"retry"</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="s2">"data"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"error"</span><span class="p">:</span> <span class="s2">"InternalStreamError"</span><span class="p">,</span> <span class="s2">"message"</span><span class="p">:</span> <span class="s2">"Internal error"</span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>

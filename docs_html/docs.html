@@ -363,13 +363,13 @@ optional parts you add when you need them.</p>
 
 <span class="n">channel</span> <span class="o">=</span> <span class="n">SSEChannel</span><span class="p">()</span>
 <span class="n">connection</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">add_connection</span><span class="p">()</span>
-<span class="n">channel</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">Message</span><span class="p">(</span><span class="n">msg_type</span><span class="o">=</span><span class="s1">&#39;welcome&#39;</span><span class="p">,</span> <span class="n">msg_payload</span><span class="o">=</span><span class="s1">&#39;Hello!&#39;</span><span class="p">))</span>
+<span class="n">channel</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">Message</span><span class="p">(</span><span class="n">msg_type</span><span class="o">=</span><span class="s1">'welcome'</span><span class="p">,</span> <span class="n">msg_payload</span><span class="o">=</span><span class="s1">'Hello!'</span><span class="p">))</span>
 
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
     <span class="k">async</span> <span class="k">for</span> <span class="n">sse_event</span> <span class="ow">in</span> <span class="n">channel</span><span class="o">.</span><span class="n">message_stream</span><span class="p">(</span><span class="n">connection</span><span class="o">.</span><span class="n">id</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Received message: </span><span class="si">{</span><span class="n">sse_event</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Received message: </span><span class="si">{</span><span class="n">sse_event</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">'__main__'</span><span class="p">:</span>
     <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </pre></div>
 </div>
@@ -394,7 +394,7 @@ queue, with an id. <a class="reference internal" href="reference/entities.html#e
 </section>
 <section id="how-a-message-travels">
 <h2>How a message travels<a class="headerlink" href="#how-a-message-travels" title="Link to this heading">#</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>dispatch / broadcast ──&gt; before_dispatch hook ──&gt; connection&#39;s queue
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>dispatch / broadcast ──&gt; before_dispatch hook ──&gt; connection's queue
                                                         │
                  client &lt;── adapt &lt;── on_message &lt;── consumer
 </pre></div>
@@ -440,7 +440,7 @@ processes through a Unix socket.</p></li>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>What happens when a message arrives</p></td>
-<td><p>Subclass <a class="reference internal" href="reference/entities.html#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a> and override <code class="docutils literal notranslate"><span class="pre">on_message</span></code></p></td>
+<td><p>Subclass <a class="reference internal" href="reference/entities.html#eric_sse.listener.MessageQueueListener" title="eric_sse.listener.MessageQueueListener"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageQueueListener</span></code></a> and override <a class="reference internal" href="reference/entities.html#eric_sse.listener.MessageQueueListener.on_message" title="eric_sse.listener.MessageQueueListener.on_message"><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_message()</span></code></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>The output format</p></td>
 <td><p>Override <a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel.adapt" title="eric_sse.entities.AbstractChannel.adapt"><code class="xref py py-meth docutils literal notranslate"><span class="pre">adapt()</span></code></a> and
@@ -448,11 +448,12 @@ processes through a Unix socket.</p></li>
 <a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel" title="eric_sse.entities.AbstractChannel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractChannel</span></code></a></p></td>
 </tr>
 <tr class="row-even"><td><p>Channel behaviour: subscriptions, streams, filtering, errors</p></td>
-<td><p>Override the channel’s hooks, e.g. <code class="docutils literal notranslate"><span class="pre">on_connection_added</span></code>, <code class="docutils literal notranslate"><span class="pre">on_stream_end</span></code>, <code class="docutils literal notranslate"><span class="pre">before_dispatch</span></code>,
-<code class="docutils literal notranslate"><span class="pre">on_error</span></code>. They do nothing by default</p></td>
+<td><p>Override the channel’s hooks, e.g. <a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel.on_connection_added" title="eric_sse.entities.AbstractChannel.on_connection_added"><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_connection_added()</span></code></a>,
+<a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel.on_stream_end" title="eric_sse.entities.AbstractChannel.on_stream_end"><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_stream_end()</span></code></a>, <a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel.before_dispatch" title="eric_sse.entities.AbstractChannel.before_dispatch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">before_dispatch()</span></code></a>,
+<a class="reference internal" href="reference/entities.html#eric_sse.entities.AbstractChannel.on_error" title="eric_sse.entities.AbstractChannel.on_error"><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_error()</span></code></a>. They do nothing by default</p></td>
 </tr>
 <tr class="row-odd"><td><p>Where messages wait, e.g. a durable backend</p></td>
-<td><p>Implement a <a class="reference internal" href="reference/entities.html#eric_sse.queues.Queue" title="eric_sse.queues.Queue"><code class="xref py py-class docutils literal notranslate"><span class="pre">Queue</span></code></a>: only <code class="docutils literal notranslate"><span class="pre">push</span></code> and <code class="docutils literal notranslate"><span class="pre">pop(timeout)</span></code> are required</p></td>
+<td><p>Implement a <a class="reference internal" href="reference/entities.html#eric_sse.queues.Queue" title="eric_sse.queues.Queue"><code class="xref py py-class docutils literal notranslate"><span class="pre">Queue</span></code></a>: only <a class="reference internal" href="reference/entities.html#eric_sse.queues.Queue.push" title="eric_sse.queues.Queue.push"><code class="xref py py-meth docutils literal notranslate"><span class="pre">push()</span></code></a> and <a class="reference internal" href="reference/entities.html#eric_sse.queues.Queue.pop" title="eric_sse.queues.Queue.pop"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pop()</span></code></a> are required</p></td>
 </tr>
 <tr class="row-even"><td><p>Where channels and connections are stored</p></td>
 <td><p>Implement a <a class="reference internal" href="reference/persistence.html#eric_sse.repository.KvStorage" title="eric_sse.repository.KvStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">KvStorage</span></code></a> and give it to a
@@ -465,7 +466,7 @@ patterns</p></td>
 </tbody>
 </table>
 </div>
-<p>Persistence is always explicit: channels and their connections are stored when you call <code class="docutils literal notranslate"><span class="pre">persist</span></code> on a repository,
+<p>Persistence is always explicit: channels and their connections are stored when you call <a class="reference internal" href="reference/persistence.html#eric_sse.repository.ChannelRepository.persist" title="eric_sse.repository.ChannelRepository.persist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">persist()</span></code></a> on a repository,
 never implicitly. Messages are stored by queues themselves, so sending never needs a <code class="docutils literal notranslate"><span class="pre">persist</span></code>.</p>
 <p>When you write your own storage, queue or channel, check it with the test suites in <a class="reference internal" href="contracts.html"><span class="doc">Verifying custom implementations</span></a>. <a class="reference internal" href="howto_repository.html"><span class="doc">How to test a custom channel repository</span></a>
 shows how, step by step.</p>

@@ -417,7 +417,7 @@ together with <code class="docutils literal notranslate"><span class="pre">TestC
         <span class="k">return</span> <span class="n">ChannelRepositoryBuilder</span><span class="p">(</span><span class="n">SSEChannel</span><span class="p">,</span> <span class="n">RedisStorage</span><span class="p">())</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">channel_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;retry_timeout_milliseconds&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">'retry_timeout_milliseconds'</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>Not a <code class="docutils literal notranslate"><span class="pre">TestCase</span></code> itself, so the abstract class is not collected.</p>
@@ -628,7 +628,8 @@ Not a <code class="docutils literal notranslate"><span class="pre">TestCase</spa
 <dl class="py class">
 <dt class="sig sig-object py" id="eric_sse.contracts.doubles.BrokenQueue">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BrokenQueue</span></span><a class="headerlink" href="#eric_sse.contracts.doubles.BrokenQueue" title="Link to this definition">#</a></dt>
-<dd><dl class="py method">
+<dd><p>Fails on every operation. Holds no state, so serialising storages can persist it.</p>
+<dl class="py method">
 <dt class="sig sig-object py" id="eric_sse.contracts.doubles.BrokenQueue.pop">
 <span class="sig-name descname"><span class="pre">pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#eric_sse.contracts.doubles.BrokenQueue.pop" title="Link to this definition">#</a></dt>
 <dd><p>Next message from the queue.</p>

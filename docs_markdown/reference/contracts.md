@@ -241,6 +241,8 @@ Test doubles used by contracts, e.g. parts that always fail and error handlers r
 
 ### *class* BrokenQueue
 
+Fails on every operation. Holds no state, so serialising storages can persist it.
+
 <a id="eric_sse.contracts.doubles.BrokenQueue.pop"></a>
 
 #### pop(timeout=0)

@@ -16,10 +16,12 @@ The persistence layer needs two pieces from you:
 :class:`~eric_sse.builder.ChannelRepositoryBuilder` wires the rest. It gives channels, connections, listeners and
 queues their own key prefix in one storage, and returns a channel repository.
 
-Persistence is always explicit: ``create()`` only builds a channel, and ``persist()`` stores it with its
-connections. ``dispatch()`` and ``broadcast()`` never need a ``persist()``.
+Persistence is always explicit: :meth:`~eric_sse.repository.ChannelRepository.create` only builds a channel, and
+:meth:`~eric_sse.repository.ChannelRepository.persist` stores it with its connections.
+:meth:`~eric_sse.entities.AbstractChannel.dispatch` and :meth:`~eric_sse.entities.AbstractChannel.broadcast` never
+need a ``persist()``.
 
-A queue only has to implement ``pop(timeout)`` and ``push()``. The inherited
+A queue only has to implement :meth:`~eric_sse.queues.Queue.pop` and :meth:`~eric_sse.queues.Queue.push`. The inherited
 :meth:`~eric_sse.queues.Queue.wait_pop` runs ``pop`` in a worker thread, so streams never block the event loop.
 Override it if your backend can wait asynchronously.
 

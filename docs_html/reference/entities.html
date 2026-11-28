@@ -697,7 +697,7 @@ Then they must pass listener errors to <a class="reference internal" href="#eric
 <dd><p>Channel configuration to be persisted. Keys must be constructor parameters, see <a class="reference internal" href="#eric_sse.entities.AbstractChannel.from_dict" title="eric_sse.entities.AbstractChannel.from_dict"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_dict()</span></code></a>.</p>
 <p>Subclasses with additional configuration should extend it:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-    <span class="k">return</span> <span class="p">{</span><span class="o">**</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span> <span class="s1">&#39;my_param&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">my_param</span><span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="o">**</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span> <span class="s1">'my_param'</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">my_param</span><span class="p">}</span>
 </pre></div>
 </div>
 <dl class="field-list simple">

@@ -368,7 +368,7 @@ satisfy, whatever its parts. Your part is valid when all of them pass.</p>
         <span class="k">return</span> <span class="n">ChannelRepositoryBuilder</span><span class="p">(</span><span class="n">SSEChannel</span><span class="p">,</span> <span class="n">InMemoryStorage</span><span class="p">())</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">channel_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;stream_delay_seconds&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;retry_timeout_milliseconds&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">'stream_delay_seconds'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'retry_timeout_milliseconds'</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>You extend <a class="reference internal" href="reference/contracts.html#eric_sse.contracts.repository.ChannelRepositoryContract" title="eric_sse.contracts.repository.ChannelRepositoryContract"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChannelRepositoryContract</span></code></a> together with <code class="docutils literal notranslate"><span class="pre">unittest.TestCase</span></code>,
@@ -399,7 +399,7 @@ class. Leave <code class="docutils literal notranslate"><span class="pre">channe
         <span class="k">return</span> <span class="n">ChannelRepositoryBuilder</span><span class="p">(</span><span class="n">SSEChannel</span><span class="p">,</span> <span class="n">MyStorage</span><span class="p">())</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">channel_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;retry_timeout_milliseconds&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">'retry_timeout_milliseconds'</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>To test only some parts, keep the defaults for the others and give the builder yours:</p>
