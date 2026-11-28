@@ -2,10 +2,12 @@
 from eric_sse.handlers import QueuingErrorHandler, ListenerErrorHandler
 from eric_sse.listener import MessageQueueListener
 from eric_sse.message import MessageContract
-from eric_sse.queues import InMemoryQueue
+from eric_sse.queues import Queue
 
 
-class BrokenQueue(InMemoryQueue):
+class BrokenQueue(Queue):
+    """Fails on every operation. Holds no state, so serialising storages can persist it."""
+
     def push(self, message: MessageContract) -> None:
         raise RuntimeError('push failed')
 

@@ -20,7 +20,7 @@ The lightweight library for async messaging nobody expects.
 
 *Versioning*
 
-Starting from 3.0.0, the project follows [semantic versioning](https://semver.org/).
+Starting from 3.0.0, the project follows `semantic versioning <https://semver.org/>`_.
 
 
 *Features*

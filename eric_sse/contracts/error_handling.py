@@ -169,7 +169,7 @@ class ChannelErrorHandlingContract(ABC):
         connection = subscribe(channel)
         channel.register_connection(Connection(listener=MessageQueueListener(), queue=BrokenQueue()))
 
-        with self.assertLogs(level=logging.DEBUG) as logs:
+        with self.assertLogs('eric_sse', level=logging.DEBUG) as logs:
             channel.broadcast(Message(msg_type='test'))
             channel.deliver_next(connection.id)
 
